@@ -1,7 +1,7 @@
 """ generalpackager will work on many levels, this level will be 'cloned repository level'. """
 from generalfile import Path
 import importlib
-from generallibrary import attributes_to_readme, remove_duplicates, comma_and_and
+from generallibrary import attributes_to_markdown, remove_duplicates, comma_and_and
 from itertools import chain
 import pandas
 
@@ -14,49 +14,13 @@ import sys
 
 class RepoMarkdown:
     """ All markdown specific repository methods. """
-    def __init__(self, all_repos_root, repo_name):
-        self.repo_name = repo_name
+    name, version, description, install_requires, extras_require, full, classifiers = ..., ..., ..., ..., ..., ..., ...
+    def __init__(self, repo_root):
+        self.repo_root = Path(repo_root).absolute()
 
-        self.all_repos_root = Path(all_repos_root).absolute()
-        self.repo_root = self.all_repos_root / repo_name
-
-        self.ps = self.import_package_specific()
-
-    def import_package_specific(self):
-        """ Dynamically import package specific dictionary.
-
-            :rtype: dict """
-        ps = getattr(importlib.import_module("package_specific", package=f".{self.repo_name}"), "ps")
-
-        ps["extras_require"]["full"] = remove_duplicates([package for package in chain(*list(ps["extras_require"].values()))])
-
-        return ps
-
-    def get_install(self):
-        """ Get install text. """
-        lines = [
-            f"## Installation",
-            "```",
-            f'pip install {self.ps["name"]}',
-            "```",
-        ]
-
-        if len(self.ps["extras_require"]) > 1:
-            rows = [{
-                "Name": extra,
-                "Installation": f"`pip install {self.ps['name']}[{extra}]`",
-                "Packages": comma_and_and(*requires, period=False),
-            } for extra, requires in self.ps["extras_require"].items()]
-
-            df = pandas.DataFrame(rows)
-            lines.extend(["#### Extras", df.to_markdown(index=False)])
-
-
-        return "\n".join(lines)
-
-    def get_attributes(self):
-        """ Get attributes text. """
-        return attributes_to_readme(sys.modules[self.repo_name], print_out=False, return_lines=False)
+        ps = Path("package_specific.json").read()
+        for key, value in ps.items():
+            setattr(self, key, value)
 
     def get_badges(self):
         """ Get badge image urls text. """
@@ -72,8 +36,36 @@ class RepoMarkdown:
             platforms,
             workflow,
             lgtm_alerts,
-        ]).replace("PACKAGE", self.repo_name)
+        ]).replace("PACKAGE", self.name)
         # ]).replace("PACKAGE", "generallibrary")
+
+    def get_install(self):
+        """ Get install text. """
+        lines = [
+            f"## Installation",
+            "```",
+            f'pip install {self.name}',
+            "```",
+        ]
+
+        if len(self.extras_require) > 1:
+            rows = [{
+                "Name": extra,
+                "Installation": f"`pip install {self.name}[{extra}]`",
+                "Packages": comma_and_and(*requires, period=False),
+            } for extra, requires in self.extras_require.items()]
+
+            df = pandas.DataFrame(rows)
+            lines.extend(["#### Extras", df.to_markdown(index=False)])
+
+
+        return "\n".join(lines)
+
+    def get_attributes(self):
+        """ Get attributes text. """
+        return attributes_to_markdown(sys.modules[self.name], print_out=False, return_lines=False)
+
+
 
 
     def create_readme(self, content):
@@ -84,3 +76,16 @@ class RepoMarkdown:
 
 
 
+
+
+
+
+    # def import_package_specific(self):
+    #     """ Dynamically import package specific dictionary.
+    #
+    #         :rtype: dict """
+    #     ps = getattr(importlib.import_module("package_specific", package=f".{self.repo_name}"), "ps")
+    #
+    #     ps["extras_require"]["full"] = remove_duplicates([package for package in chain(*list(ps["extras_require"].values()))])
+    #
+    #     return ps

@@ -5,7 +5,7 @@ from generalfile import Path
 
 
 
-repoMarkdown = RepoMarkdown("A:\Programming\Python", "generalpackager")
+repoMarkdown = RepoMarkdown("A:/Programming/Python/generalpackager")
 
 repoMarkdown.create_readme([
     repoMarkdown.get_badges(),
