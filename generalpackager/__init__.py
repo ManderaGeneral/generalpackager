@@ -1,2 +1,2 @@
 
-from generalpackager.repo import RepoMarkdown
+from generalpackager.repo import RepoMarkdown, GitHub, Barren

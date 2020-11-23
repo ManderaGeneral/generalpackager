@@ -5,18 +5,31 @@
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/ManderaGeneral/generalpackager.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ManderaGeneral/generalpackager/alerts/)
 
 # Package: generalpackager
-Easily manage packages cross platform.
+Tools for managing package metadata.
 
 ## Installation
 ```
 pip install generalpackager
 ```
+#### Extras
+| Name    | Command                                | Extra packages                    |
+|:--------|:---------------------------------------|:----------------------------------|
+| testing | `pip install generalpackager[testing]` | `hello`, `there` and `foo`        |
+| another | `pip install generalpackager[another]` | `omg` and `hello`                 |
+| full    | `pip install generalpackager[full]`    | `hello`, `there`, `foo` and `omg` |
 
 ## Attributes of module generalpackager
 
-| Module   | Name                                              | Type   |   Attributes | Explanation                               |
-|:---------|:--------------------------------------------------|:-------|-------------:|:------------------------------------------|
-| repo     | [RepoMarkdown](#Attributes-of-class-RepoMarkdown) | class  |           13 | All markdown specific repository methods. |
+| Module   | Name                                              | Type   |   Attributes | Explanation                                                           |
+|:---------|:--------------------------------------------------|:-------|-------------:|:----------------------------------------------------------------------|
+| repo     | [Barren](#Attributes-of-class-Barren)             | class  |            1 | Contains methods that don't require repository or installed packages. |
+| repo     | [RepoMarkdown](#Attributes-of-class-RepoMarkdown) | class  |           13 | All markdown specific repository methods.                             |
+
+#### Attributes of class Barren
+
+| Module   | Name       | Type   | Explanation                |
+|:---------|:-----------|:-------|:---------------------------|
+| repo     | get_badges | method | Get badge image urls text. |
 
 #### Attributes of class RepoMarkdown
 
@@ -31,14 +44,15 @@ pip install generalpackager
 |          | version          | variable | Variable of type 'ellipsis'.             |
 | repo     | create_readme    | method   | Create README.                           |
 | repo     | get_attributes   | method   | Get attributes text.                     |
-| repo     | get_badges       | method   | Get badge image urls text.               |
+| repo     | get_badges       | method   | Redirect to `Barren.get_badges`.         |
 | repo     | get_description  | method   | Get description text.                    |
 | repo     | get_install      | method   | Get install text.                        |
 | repo     | get_todos        | method   | Search package files for to do comments. |
 
 ## Todo
- - repo.py
+ - `repo.py`
    - Plan hierarchy.
-   - Categorize methods into classes, `get_badges` doesn't require a cloned repository for example.
    - Publish this packages.
    - Make GitHub actions use this package with `shared` repo.
+ - `__init__.py`
+   - test

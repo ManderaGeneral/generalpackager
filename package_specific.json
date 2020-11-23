@@ -1,16 +1,21 @@
 {
     "name": "generalpackager",
     "version": "0.0.1",
-    "description": "Easily manage packages cross platform.",
+    "description": "Tools for managing package metadata.",
     "install_requires": [
         "generalfile",
         "generallibrary",
         "pandas"
     ],
     "extras_require": {
-        "testing": ["hello", "there", "foo"]
+        "testing": ["hello", "there", "foo"],
+        "another": ["omg", "hello"]
     },
     "classifiers": [
         "Development Status :: 2 - Pre-Alpha"
+    ],
+    "topics": [
+        "packager",
+        "tools"
     ]
 }
