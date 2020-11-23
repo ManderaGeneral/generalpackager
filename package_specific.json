@@ -1,14 +1,16 @@
 {
-  "name": "generalpackager",
-  "version": "0.0.1",
-  "description": "Easily manage packages cross platform.",
-  "install_requires": [
-    "generalfile",
-    "generallibrary",
-    "pandas"
-  ],
-  "extras_require": {
-  "full": []
-}, "classifiers": [
-  "Development Status :: 2 - Pre-Alpha"
-]}
+    "name": "generalpackager",
+    "version": "0.0.1",
+    "description": "Easily manage packages cross platform.",
+    "install_requires": [
+        "generalfile",
+        "generallibrary",
+        "pandas"
+    ],
+    "extras_require": {
+        "testing": ["hello", "there", "foo"]
+    },
+    "classifiers": [
+        "Development Status :: 2 - Pre-Alpha"
+    ]
+}

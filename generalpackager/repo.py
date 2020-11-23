@@ -1,11 +1,13 @@
-""" generalpackager will work on many levels, this level will be 'cloned repository level'. """
+""" generalpackager will work on many levels, this level will be 'cloned repository level'.
+    Todo: Plan hierarchy.
+    Todo: Categorize methods into classes, `get_badges` doesn't require a cloned repository for example.
+    Todo: Publish this packages.
+    Todo: Make GitHub actions use this package with `shared` repo. """
 from generalfile import Path
-import importlib
-from generallibrary import attributes_to_markdown, remove_duplicates, comma_and_and
-from itertools import chain
+from generallibrary import attributes_to_markdown, comma_and_and, addToListInDict
 import pandas
-
 import sys
+import re
 
 
 # Current: setup.py runs code to fill info during runtime
@@ -18,7 +20,7 @@ class RepoMarkdown:
     def __init__(self, repo_root):
         self.repo_root = Path(repo_root).absolute()
 
-        ps = Path("package_specific.json").read()
+        ps = (self.repo_root / "package_specific.json").read()
         for key, value in ps.items():
             setattr(self, key, value)
 
@@ -51,8 +53,8 @@ class RepoMarkdown:
         if len(self.extras_require) > 1:
             rows = [{
                 "Name": extra,
-                "Installation": f"`pip install {self.name}[{extra}]`",
-                "Packages": comma_and_and(*requires, period=False),
+                "Command": f"`pip install {self.name}[{extra}]`",
+                "Extra packages": comma_and_and(*requires, period=False),
             } for extra, requires in self.extras_require.items()]
 
             df = pandas.DataFrame(rows)
@@ -61,16 +63,44 @@ class RepoMarkdown:
 
         return "\n".join(lines)
 
+    def get_description(self):
+        """ Get description text. """
+        lines = [
+            f"# Package: {self.name}",
+            self.description,
+        ]
+        return "\n".join(lines)
+
+
     def get_attributes(self):
         """ Get attributes text. """
         return attributes_to_markdown(sys.modules[self.name], print_out=False, return_lines=False)
 
+    def get_todos(self):
+        """ Search package files for to do comments. """
+        base_path = self.repo_root / self.name
+        todos = {}
+        for path in base_path.get_paths_recursive(include_folders=False):
+            if "_" in path:
+                continue
+            module = path.remove_start(base_path)
+            for todo in re.findall("todo+: (.+)", path.text.read(), re.I):
+                filtered_todo = re.sub('[" ]*$', "", todo)
+                addToListInDict(todos, module, filtered_todo)
 
+        if todos:
+            lines = ["## Todo"]
+            for module, todos in todos.items():
+                lines.append(f" - {module}")
+                lines.extend([f"   - {todo}" for todo in todos])
+
+            return "\n".join(lines)
 
 
     def create_readme(self, content):
         """ Create README. """
         readme = self.repo_root / "README.md"
+        content = [x for x in content if x]
         readme.text.write("\n\n".join(content), overwrite=True)
 
 
