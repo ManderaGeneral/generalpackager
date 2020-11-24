@@ -6,7 +6,7 @@ from generalfile import Path
 
 from pprint import pprint
 
-# gitHub = GitHub("ManderaGeneral", "generallibrary")
+# gitHub = APIGitHub("ManderaGeneral", "generallibrary")
 # topics = gitHub.get_topics()
 #
 # print(topics)
@@ -19,9 +19,8 @@ from pprint import pprint
 # HERE ** Create method to update topics to what's in PS
 
 
-# localRepo = LocalRepo("A:/Programming/Python/generalpackager")
-# localRepo = LocalRepo("A:/Programming/Python/generallibrary")
-
+localRepo = APILocalRepo("A:/Programming/Python/generalpackager")
+# localRepo = APILocalRepo("A:/Programming/Python/generallibrary")
 
 
 # localRepo.create_readme([
@@ -38,10 +37,6 @@ from pprint import pprint
 
 
 
-
-markdown = Markdown("hello", "there", "yo")
-
-print(markdown)
 
 
 

@@ -23,7 +23,7 @@ pip install generalpackager
 | Module   | Name                                              | Type   |   Attributes | Explanation                                                           |
 |:---------|:--------------------------------------------------|:-------|-------------:|:----------------------------------------------------------------------|
 | repo     | [Barren](#Attributes-of-class-Barren)             | class  |            1 | Contains methods that don't require repository or installed packages. |
-| repo     | [LocalRepo](#Attributes-of-class-localRepo) | class  |           13 | All markdown specific repository methods.                             |
+| repo     | [APILocalRepo](#Attributes-of-class-localRepo) | class  |           13 | All markdown specific repository methods.                             |
 
 #### Attributes of class Barren
 
@@ -31,7 +31,7 @@ pip install generalpackager
 |:---------|:-----------|:-------|:---------------------------|
 | repo     | get_badges | method | Get badge image urls text. |
 
-#### Attributes of class LocalRepo
+#### Attributes of class APILocalRepo
 
 | Module   | Name             | Type     | Explanation                              |
 |:---------|:-----------------|:---------|:-----------------------------------------|
@@ -53,6 +53,6 @@ pip install generalpackager
  - `repo.py`
    - Plan hierarchy.
    - Publish this packages.
-   - Make GitHub actions use this package with `shared` repo.
+   - Make APIGitHub actions use this package with `shared` repo.
  - `__init__.py`
    - test
