@@ -23,7 +23,7 @@ pip install generalpackager
 | Module   | Name                                              | Type   |   Attributes | Explanation                                                           |
 |:---------|:--------------------------------------------------|:-------|-------------:|:----------------------------------------------------------------------|
 | repo     | [Barren](#Attributes-of-class-Barren)             | class  |            1 | Contains methods that don't require repository or installed packages. |
-| repo     | [RepoMarkdown](#Attributes-of-class-RepoMarkdown) | class  |           13 | All markdown specific repository methods.                             |
+| repo     | [LocalRepo](#Attributes-of-class-localRepo) | class  |           13 | All markdown specific repository methods.                             |
 
 #### Attributes of class Barren
 
@@ -31,7 +31,7 @@ pip install generalpackager
 |:---------|:-----------|:-------|:---------------------------|
 | repo     | get_badges | method | Get badge image urls text. |
 
-#### Attributes of class RepoMarkdown
+#### Attributes of class LocalRepo
 
 | Module   | Name             | Type     | Explanation                              |
 |:---------|:-----------------|:---------|:-----------------------------------------|

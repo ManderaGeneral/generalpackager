@@ -20,7 +20,7 @@
     - Todo: Make GitHub actions use this package with `shared` repo.
     """
 from generalfile import Path
-from generallibrary import attributes_to_markdown, comma_and_and, addToListInDict, remove_duplicates
+from generallibrary import attributes_to_markdown, comma_and_and, addToListInDict, remove_duplicates, TreeDiagram, initBases
 import pandas
 import sys
 import re
@@ -54,6 +54,45 @@ class Barren:
 
 
 
+@initBases
+class Markdown(TreeDiagram):
+    """ Section for a markdown file, contains all MD specific methods. """
+    def __init__(self, header=None, *lines, hashtags=None, parent=None):
+        if hashtags is None:
+            hashtags = 2
+
+        self.header = header
+        self.lines = lines
+        self.hashtags = hashtags
+
+    def section_lines(self):
+        """ Get a list of all lines in this section. """
+        lines = list(self.lines)
+        if self.header:
+            lines.insert(0, f"{'#' * self.hashtags} {self.header}")
+        return lines
+
+    def all_lines(self):
+        """ Get a list of all lines in this entire Markdown by iterating all children. """
+        lines = self.section_lines()
+
+        for markdown in self.get_all():
+            lines.extend(markdown.section_lines())  # HERE ** Try this, see if we can put extra newline between sections
+
+        return lines
+
+    def add(self, part):
+        """ Add a part to this markdown"""
+        self.parts.append(part)
+
+    def add_code(self, header, *lines, hashtags=None):
+        """ Add a code part. """
+        Markdown(header, "```", *lines, "```", hashtags=hashtags, parent=self)
+
+    def __str__(self):
+        return '\n'.join(self.all_lines())
+
+
 class GitHub:
     """ All GitHub specific methods. """
     headers = {
@@ -66,7 +105,7 @@ class GitHub:
         self.name = name
 
     def get_topics(self):
-        """ Fetch topics. """
+        """ Fetch topics as a list. """
         return requests.get(f"https://api.github.com/repos/{self.owner}/{self.name}/topics", headers=self.headers).json().get("names")
 
     def set_topics(self, topics):
@@ -76,25 +115,31 @@ class GitHub:
         return requests.put(url, auth=(self.owner, self.token), headers=self.headers, data=data)
 
 
-# ['library', 'tools', 'python37', 'python38', 'windows7', 'windows10', 'linux', 'mac', 'travis-ci']
 
-class RepoMarkdown:
+class LocalRepo:
     """ All markdown specific repository methods. """
-    name, version, description, install_requires, extras_require, full, classifiers = ..., ..., ..., ..., ..., ..., ...
+    name, version, description, install_requires, extras_require, classifiers = ..., ..., ..., ..., ..., ...
     def __init__(self, repo_root):
         self.repo_root = Path(repo_root).absolute()
 
-        ps = (self.repo_root / "package_specific.json").read()
-        for key, value in ps.items():
-            setattr(self, key, value)
-        # Todo: Assert package_specific has all values after it's read.
-
+        self._load_package_specific()
 
         # Todo: Update `topics` in PS with shareds'. Not sure if we do that in `packager` or `shared` yet.
         self.extras_require["full"] = remove_duplicates([package for package in chain(*list(self.extras_require.values()))])
 
-    def get_install(self):
+    def _load_package_specific(self):
+        ps = (self.repo_root / "package_specific.json").read()
+        for key, value in ps.items():
+            setattr(self, key, value)
+        for key, value in LocalRepo.__dict__.items():
+            if value is ... and getattr(self, key) is ...:
+                raise AssertionError(f"{key} isn't defined")
+
+
+    def get_install_section(self):
         """ Get install text. """
+        section = Markdown()
+
         lines = [
             f"## Installation",
             "```",
