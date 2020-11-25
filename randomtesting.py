@@ -19,9 +19,13 @@ from pprint import pprint
 # HERE ** Create method to update topics to what's in PS
 
 
-localRepo = APILocalRepo("A:/Programming/Python/generalpackager")
-# localRepo = APILocalRepo("A:/Programming/Python/generallibrary")
+apiLocalRepo = APILocalRepo("A:/Programming/Python/generalpackager")
+generatorReadme = GeneratorReadme(apiLocalRepo)
 
+generatorReadme.create_readme()
+
+
+# localRepo = APILocalRepo("A:/Programming/Python/generallibrary")
 
 # localRepo.create_readme([
 #     localRepo.get_badges(),

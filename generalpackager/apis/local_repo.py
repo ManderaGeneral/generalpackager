@@ -26,22 +26,24 @@ import sys
 import re
 from itertools import chain
 
+from generalpackager.apis.shared import _API
 
-class APILocalRepo:
+
+class APILocalRepo(_API):
     """ All markdown specific repository methods.
         Todo: Update `topics` in PS with shareds'. Not sure if we do that in `packager` or `shared` yet. """
     name, version, description, install_requires, extras_require, classifiers = ..., ..., ..., ..., ..., ...
-    fetched_keys = [key for key in locals() if not key.startswith("_")]
-
-    def _load_package_specific(self):
-        ps = (self.repo_root / "package_specific.json").read()
-        for key in self.fetched_keys:
-            setattr(self, key, ps[key])
-        self.extras_require["full"] = remove_duplicates([package for package in chain(*list(self.extras_require.values()))])
 
     def __init__(self, repo_root):
         self.repo_root = Path(repo_root).absolute()
-        self._load_package_specific()
+        self.load_package_specific()
+
+    def load_package_specific(self):
+        """ Load dict in package_specific.json. """
+        ps = (self.repo_root / "package_specific.json").read()
+        for key in self.get_api_attrs().keys():
+            setattr(self, key, ps[key])
+        self.extras_require["full"] = remove_duplicates([package for package in chain(*list(self.extras_require.values()))])
 
     def get_description(self):
         """ Get description text. """

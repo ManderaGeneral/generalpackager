@@ -1,22 +1,25 @@
 
 from generallibrary import Markdown, comma_and_and, deco_default_self_args
 import pandas
-from generalpackager import APILocalRepo, APIGitHub
+
 
 class GeneratorReadme:
     """ Contains methods to generate readme sections from arguments.
-        Arguments can come from hardcode, or an API. """
+        Arguments can come from argument, or an added API instance. """
 
-    apis_classes = APILocalRepo, APIGitHub
+    def __init__(self, *apis):
+        self._apis = []
+        for api in apis:
+            self.add_api_instance(api)
 
-    def __init__(self, localRepo=None, gitHub=None):
-        self.localRepo = localRepo
-        self.gitHub = gitHub
-
-    def _set_api_attributes(self):
-        attrs_list = [{key: value for key in api.fetched_keys} for api in self.apis_classes]  # HERE ** Figure out how to access possibly shared attrs
-        for api in self.apis_classes:
-
+    def add_api_instance(self, api):
+        """ Add an api instance to load it's attrs into this instance.
+            These attributes are used automatically by `@deco_default_self_args`. """
+        for key, value in api.get_api_attrs().items():
+            self_value = getattr(self, key, None)
+            if self_value is not None and self_value != value:
+                raise AttributeError(f"API {api} {key} mismatch: {value} != {self_value}")
+            setattr(self, key, value)
 
     @deco_default_self_args
     def get_badges(self, name):
@@ -36,18 +39,12 @@ class GeneratorReadme:
         ]
         l = [badge.replace("PACKAGE", name) for badge in l]
 
-        return Markdown(header=None, *l)
+        return Markdown(*l)
 
+    @deco_default_self_args
     def get_installation(self, name, extras_require):
         """ Get install text. """
-        section = Markdown()
-
-        lines = [
-            f"## Installation",
-            "```",
-            f'pip install {name}',
-            "```",
-        ]
+        markdown = Markdown(header="Installation").add_code_lines(f'pip install {name}')
 
         if len(extras_require) > 1:
             rows = [{
@@ -56,6 +53,27 @@ class GeneratorReadme:
                 "Extra packages": comma_and_and(*[f"`{x}`" for x in requires], period=False),
             } for extra, requires in extras_require.items()]
 
-            df = pandas.DataFrame(rows)
-            lines.extend(["#### Extras", df.to_markdown(index=False)])
-        return "\n".join(lines)
+            Markdown(pandas.DataFrame(rows).to_markdown(index=False), header="Extras", hashtags=4, parent=markdown)
+
+        return markdown
+
+    def create_readme(self):
+        """ Create readme using added APIs. """
+        markdown = Markdown()
+        self.get_badges().set_parent(markdown)
+        self.get_installation().set_parent(markdown)
+        print(markdown)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
