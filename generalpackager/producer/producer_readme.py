@@ -2,7 +2,7 @@
 from generallibrary import Markdown, comma_and_and, deco_default_self_args, initBases
 import pandas
 
-from generalpackager.producers.producer import Producer
+from generalpackager.producer.producer import Producer
 
 
 @initBases

@@ -22,6 +22,8 @@ apiLocalRepo = APILocalRepo("A:/Programming/Python/generalpackager")
 apiGitHub = APIGitHub("ManderaGeneral", "generallibrary")
 generatorReadme = ProducerReadme(apiLocalRepo, apiGitHub)
 
+
+
 # generatorReadme.create_readme()
 # generatorReadme.get_topics()
 
@@ -41,11 +43,15 @@ generatorReadme = ProducerReadme(apiLocalRepo, apiGitHub)
 
 
 
+repoLocal = RepoLocal("A:/Programming/Python/generalpackager")
+
+repoGlobal = RepoGlobal("generalpackager")
 
 
 
+# HERE ** Redo structure
 
-
+repoGlobal.set_topics(repoLocal.topics, apply_defaults=True)
 
 
 

@@ -19,16 +19,6 @@ class Producer:
 
                 setattr(self, key, value)
 
-        self.load_default_attrs()
-
-    @deco_default_self_args
-    def load_default_attrs(self):
-        """ Load default values into attrs. """
-        extras_require = getattr(self, "extras_require")
-        if extras_require is not ...:
-            extras_require["full"] = remove_duplicates([package for package in chain(*list(extras_require.values()))])
-
-
     @deco_default_self_args
     def get_badges_list(self, name):
         """ Get badges list. """

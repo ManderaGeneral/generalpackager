@@ -21,10 +21,9 @@
     - Todo: Generate setup.py
     """
 from generalfile import Path
-from generallibrary import attributes_to_markdown, addToListInDict, remove_duplicates
+from generallibrary import attributes_to_markdown, addToListInDict
 import sys
 import re
-from itertools import chain
 
 from generalpackager.api.api import _API
 
@@ -41,16 +40,7 @@ class APILocalRepo(_API):
     def load(self):
         """ Load dict in package_specific.json into self's attrs. """
         ps = (self.repo_root / "package_specific.json").read()
-        for key in self.get_api_attrs().keys():
-            setattr(self, key, ps[key])
-
-        self.load_default_values()  # HERE ** I think this should be in _API so that all values are done once they get to producers
-
-    def load_default_values(self):
-        """ Load default values into self's attrs. """
-        self.extras_require["full"] = remove_duplicates([package for package in chain(*list(self.extras_require.values()))])
-
-        default_topics = "python37", "python38", "windows7", "windows10", "linux", "macos", "unittest", "github-actions"  # Python versions...
+        self.set_api_attrs({key: ps[key] for key in self.get_api_attrs()})
 
     def get_attributes(self):
         """ Get attributes text. """
