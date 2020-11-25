@@ -3,7 +3,6 @@ import generallibrary
 from generalpackager import *
 from generalfile import Path
 
-
 from pprint import pprint
 
 # gitHub = APIGitHub("ManderaGeneral", "generallibrary")
@@ -20,10 +19,11 @@ from pprint import pprint
 
 
 apiLocalRepo = APILocalRepo("A:/Programming/Python/generalpackager")
-generatorReadme = GeneratorReadme(apiLocalRepo)
+apiGitHub = APIGitHub("ManderaGeneral", "generallibrary")
+generatorReadme = ProducerReadme(apiLocalRepo, apiGitHub)
 
-generatorReadme.create_readme()
-
+# generatorReadme.create_readme()
+# generatorReadme.get_topics()
 
 # localRepo = APILocalRepo("A:/Programming/Python/generallibrary")
 
@@ -37,8 +37,6 @@ generatorReadme.create_readme()
 
 
 # ['library', 'tools', 'python37', 'python38', 'windows7', 'windows10', 'linux', 'mac', 'travis-ci']
-
-
 
 
 

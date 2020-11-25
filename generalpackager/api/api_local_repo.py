@@ -26,7 +26,7 @@ import sys
 import re
 from itertools import chain
 
-from generalpackager.apis.shared import _API
+from generalpackager.api.api import _API
 
 
 class APILocalRepo(_API):
@@ -36,22 +36,21 @@ class APILocalRepo(_API):
 
     def __init__(self, repo_root):
         self.repo_root = Path(repo_root).absolute()
-        self.load_package_specific()
+        self.load()
 
-    def load_package_specific(self):
-        """ Load dict in package_specific.json. """
+    def load(self):
+        """ Load dict in package_specific.json into self's attrs. """
         ps = (self.repo_root / "package_specific.json").read()
         for key in self.get_api_attrs().keys():
             setattr(self, key, ps[key])
+
+        self.load_default_values()  # HERE ** I think this should be in _API so that all values are done once they get to producers
+
+    def load_default_values(self):
+        """ Load default values into self's attrs. """
         self.extras_require["full"] = remove_duplicates([package for package in chain(*list(self.extras_require.values()))])
 
-    def get_description(self):
-        """ Get description text. """
-        lines = [
-            f"# Package: {self.name}",
-            self.description,
-        ]
-        return "\n".join(lines)
+        default_topics = "python37", "python38", "windows7", "windows10", "linux", "macos", "unittest", "github-actions"  # Python versions...
 
     def get_attributes(self):
         """ Get attributes text. """
