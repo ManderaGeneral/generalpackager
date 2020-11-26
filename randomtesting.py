@@ -5,6 +5,50 @@ from generalfile import Path
 
 from pprint import pprint
 
+
+
+
+class _Repo:
+    pass
+
+@initBases
+class RepoGitHub(_Repo):
+
+
+
+
+
+
+
+
+
+
+repoLocal = RepoLocal("A:/Programming/Python/generalpackager")
+repoPypi = RepoPypi("generalpackager", "0.6.2")
+repoGitHub = RepoGitHub("ManderaGeneral", "generallibrary")
+
+
+
+
+
+repoGitHub.set_topics(repoLocal.topics)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # gitHub = APIGitHub("ManderaGeneral", "generallibrary")
 # topics = gitHub.get_topics()
 #
@@ -18,9 +62,9 @@ from pprint import pprint
 # HERE ** Create method to update topics to what's in PS
 
 
-apiLocalRepo = APILocalRepo("A:/Programming/Python/generalpackager")
-apiGitHub = APIGitHub("ManderaGeneral", "generallibrary")
-generatorReadme = ProducerReadme(apiLocalRepo, apiGitHub)
+# apiLocalRepo = APILocalRepo("A:/Programming/Python/generalpackager")
+# apiGitHub = APIGitHub("ManderaGeneral", "generallibrary")
+# generatorReadme = ProducerReadme(apiLocalRepo, apiGitHub)
 
 
 
@@ -38,20 +82,13 @@ generatorReadme = ProducerReadme(apiLocalRepo, apiGitHub)
 # ])
 
 
-# ['library', 'tools', 'python37', 'python38', 'windows7', 'windows10', 'linux', 'mac', 'travis-ci']
 
 
 
 
-repoLocal = RepoLocal("A:/Programming/Python/generalpackager")
-
-repoGlobal = RepoGlobal("generalpackager")
 
 
 
-# HERE ** Redo structure
-
-repoGlobal.set_topics(repoLocal.topics, apply_defaults=True)
 
 
 
