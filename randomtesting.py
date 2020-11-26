@@ -5,33 +5,23 @@ from generalfile import Path
 
 from pprint import pprint
 
-
-
-
-class _Repo:
-    pass
-
-@initBases
-class RepoGitHub(_Repo):
+import json
 
 
 
 
+# repo = LocalRepo("A:/Programming/Python/generalpackager")
+# print(repo.get_package_paths())
 
 
+gitHub = GitHub("ManderaGeneral", "generallibrary")
+# gitHub = GitHub("Mandera", "Mandera")
 
+# x = gitHub.get_description()
+# pprint(x)
 
+pprint(json.loads(gitHub.set_description("bar")))
 
-
-repoLocal = RepoLocal("A:/Programming/Python/generalpackager")
-repoPypi = RepoPypi("generalpackager", "0.6.2")
-repoGitHub = RepoGitHub("ManderaGeneral", "generallibrary")
-
-
-
-
-
-repoGitHub.set_topics(repoLocal.topics)
 
 
 
