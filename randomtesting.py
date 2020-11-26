@@ -17,10 +17,15 @@ import json
 gitHub = GitHub("ManderaGeneral", "generallibrary")
 # gitHub = GitHub("Mandera", "Mandera")
 
-# x = gitHub.get_description()
-# pprint(x)
 
-pprint(json.loads(gitHub.set_description("bar")))
+print(gitHub.get_description())
+print(gitHub.get_topics())
+
+gitHub.set_topics(gitHub.get_topics() + ["foobar"])
+gitHub.set_description("tesing")
+
+
+# pprint(json.loads(gitHub.set_description("helloo").text))
 
 
 

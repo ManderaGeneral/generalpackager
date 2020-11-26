@@ -14,42 +14,41 @@ class GitHub:
         """ Get a list of topics in the GitHub repository.
 
             :rtype: list[str] """
-        return self._request_get("topics")["names"]
+        return self._request(method="get", endpoint="topics").json()["names"]
 
     def set_topics(self, topics):
         """ Set a list of topics for the GitHub repository. """
-        return self._request_set("topics", names=topics)
+        return self._request(method="put", endpoint="topics", names=topics)
 
 
     def get_description(self):
         """ Get a string of description in the GitHub repository.
 
             :rtype: list[str] """
-        return self._request_get("")
+        return self._request(method="get").json()["description"]
 
     def set_description(self, description):
         """ Set a description for the GitHub repository. """
-        return self._request_set("", name=self.repo, description=description)
+        return self._request(method="patch", name=self.repo, description=description)
 
 
 
     def _token(self):
         return os.environ['packager_github_api']
 
-    def _request(self, endpoint, get_or_put, **kwargs):
+    def _request(self, method, endpoint=None, **data):
+        method = getattr(requests, method)
+
         url = f"https://api.github.com/repos/{self.owner}/{self.repo}"
         if endpoint:
             url += f"/{endpoint}"
 
-        headers={"Accept": "application/vnd.github.mercy-preview+json"}
-        return get_or_put(url=url, headers=headers, **kwargs).text
+        kwargs = {
+            "headers": {"Accept": "application/vnd.github.mercy-preview+json"},
+            "auth": (self.owner, self._token()),
+        }
+        if data:
+            # kwargs["data"] = data
+            kwargs["data"] = json.dumps(data)
 
-    def _request_get(self, endpoint):
-        return self._request(endpoint=endpoint, get_or_put=requests.get)
-
-    def _request_set(self, endpoint, **data):
-        print(json.dumps(data))
-        return self._request(endpoint=endpoint, get_or_put=requests.patch, auth=(self.owner, self._token()), data=json.dumps(data))
-
-
-
+        return method(url=url, **kwargs)
