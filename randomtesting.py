@@ -5,36 +5,24 @@ from generalfile import Path
 
 from pprint import pprint
 
-import json
 
 
 
-
-# repo = LocalRepo("A:/Programming/Python/generalpackager")
-# print(repo.get_package_paths())
+packager = Packager("A:/Programming/Python/generallibrary")
 
 
-gitHub = GitHub("ManderaGeneral", "generallibrary")
-# gitHub = GitHub("Mandera", "Mandera")
+packager.generate_readme()
+
+# ps = (repo.path / "package_specific.cfg").cfg.read()
+# ps = (repo.path / "metadata.json").write(ps["setup"], overwrite=True)
+# print(ps)
 
 
-print(gitHub.get_description())
-print(gitHub.get_topics())
-
-gitHub.set_topics(gitHub.get_topics() + ["foobar"])
-gitHub.set_description("tesing")
-
-
-# pprint(json.loads(gitHub.set_description("helloo").text))
-
-
-
-
-
-
-
-
-
+# gitHub = GitHub("ManderaGeneral", "generallibrary")
+# print(gitHub.get_description())
+# print(gitHub.get_topics())
+# gitHub.set_topics(gitHub.get_topics() + ["foobar"])
+# gitHub.set_description("tesing")
 
 
 
