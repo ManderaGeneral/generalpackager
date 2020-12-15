@@ -2,12 +2,13 @@
 
 from generallibrary import initBases, Markdown, comma_and_and
 from generalfile import Path
-from generalpackager import LocalRepo, GitHub, PyPI
+from generalpackager import LocalRepo, LocalModule, GitHub, PyPI
 
 import pandas
+import importlib
 
 
-class _Readme:
+class _PackagerMarkdown:
     """ Contains methods to generate readme sections from arguments. """
     def get_badges_list(self):
         """ Get badges list.
@@ -46,8 +47,12 @@ class _Readme:
 
         return markdown
 
+    def get_attributes_markdown(self, parent=None):
+        """ Get attributes markdown.
 
-
+            :param Packager self:
+            :param parent: """
+        return self.localmodule.get_attributes()
 
 
     def get_topics_markdown(self, parent=None):
@@ -74,10 +79,12 @@ class _Readme:
             :param Packager self: """
         markdown = Markdown()
 
-        self.get_badges_markdown(parent=markdown)
-        self.get_installation_markdown(parent=markdown)
 
-        # 1.1 HERE ** Expand with more methods
+        self.get_attributes_markdown(parent=markdown)
+        # self.get_badges_markdown(parent=markdown)
+        # self.get_installation_markdown(parent=markdown)
+
+        # 2 HERE ** Expand with more methods
 
         print(markdown)
 
@@ -103,7 +110,7 @@ class _Metadata:
 
 
 @initBases
-class Packager(_Readme):
+class Packager(_PackagerMarkdown):
     """ Uses APIs to manage 'general' package.
         Todo: Allow github, pypi or local repo not to exist in any combination. """
     def __init__(self, name, repos_path=None):
@@ -115,7 +122,9 @@ class Packager(_Readme):
 
         self.github = GitHub(name=name)
         self.localrepo = LocalRepo(path=repos_path / name)
+        self.localmodule = LocalModule(module=importlib.import_module(name=name))
         self.pypi = PyPI(name=name)
+
 
         self.metadata = _Metadata(packager=self)
 
