@@ -5,13 +5,23 @@ from generalfile import Path
 
 from pprint import pprint
 
+"""
+Would be nice not having to install a repo package to use methods.
+    Instead of using get_lines on an imported module we can read python files as text.
+"""
+
+
+# 1 HERE ** Packager.setup_all() - Generate readme, update topics and description in github,
 
 
 
-packager = Packager("A:/Programming/Python/generallibrary")
+
+packager = Packager("generalpackager")
+
+packager.setup_all()
 
 
-packager.generate_readme()
+# packager.generate_readme()
 
 # ps = (repo.path / "package_specific.cfg").cfg.read()
 # ps = (repo.path / "metadata.json").write(ps["setup"], overwrite=True)
@@ -40,9 +50,6 @@ packager.generate_readme()
 #
 # result = gitHub.set_topics(topics)
 # print(result.json())
-
-
-# HERE ** Create method to update topics to what's in PS
 
 
 # apiLocalRepo = APILocalRepo("A:/Programming/Python/generalpackager")

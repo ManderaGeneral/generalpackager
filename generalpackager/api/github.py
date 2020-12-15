@@ -6,10 +6,12 @@ import json
 
 class GitHub:
     """ Tools to interface a GitHub Repository. """
-    def __init__(self, owner, repo, token=None):
+    def __init__(self, name, owner="ManderaGeneral", token=None):
+        self.name = name
         self.owner = owner
-        self.repo = repo
         self.token = os.environ['packager_github_api'] if token is None else token
+
+        assert self._request(method="get").status_code == 200  # Checks name, owner and token all in one
 
     def get_topics(self):
         """ Get a list of topics in the GitHub repository.
@@ -18,7 +20,9 @@ class GitHub:
         return self._request(method="get", endpoint="topics").json()["names"]
 
     def set_topics(self, topics):
-        """ Set a list of topics for the GitHub repository. """
+        """ Set a list of topics for the GitHub repository.
+
+            :param list topics: """
         return self._request(method="put", endpoint="topics", names=topics)
 
 
@@ -30,13 +34,14 @@ class GitHub:
 
     def set_description(self, description):
         """ Set a description for the GitHub repository. """
-        return self._request(method="patch", name=self.repo, description=description)
+        return self._request(method="patch", name=self.name, description=description)
 
 
     def _request(self, method, endpoint=None, **data):
+        """ :rtype: requests.Response """
         method = getattr(requests, method)
 
-        url = f"https://api.github.com/repos/{self.owner}/{self.repo}"
+        url = f"https://api.github.com/repos/{self.owner}/{self.name}"
         if endpoint:
             url += f"/{endpoint}"
 

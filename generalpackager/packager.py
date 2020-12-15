@@ -1,15 +1,14 @@
-
+""" Methods specific for my general packages. """
 
 from generallibrary import initBases, Markdown, comma_and_and
 from generalfile import Path
-from generalpackager import LocalRepo
+from generalpackager import LocalRepo, GitHub, PyPI
 
 import pandas
 
 
 class _Readme:
     """ Contains methods to generate readme sections from arguments. """
-
     def get_badges_list(self):
         """ Get badges list.
 
@@ -22,75 +21,162 @@ class _Readme:
 
         return [badge.replace("PACKAGE", self.name) for badge in (pypi_version, python_version, platforms, workflow, lgtm_alerts)]
 
-    def get_badges_markdown(self):
+    def get_badges_markdown(self, parent=None):
         """ Get badges markdown.
 
-            :param Packager self: """
-        return Markdown(*self.get_badges_list())
+            :param Packager self:
+            :param parent: """
+        return Markdown(*self.get_badges_list(), parent=parent)
 
-    def get_installation_markdown(self, name, extras_require):
+    def get_installation_markdown(self, parent=None):
         """ Get install markdown.
 
-            :param Packager self: """
-        markdown = Markdown(header="Installation").add_code_lines(f'pip install {name}')
+            :param Packager self:
+            :param parent: """
+        markdown = Markdown(header="Installation", parent=parent).add_code_lines(f'pip install {self.name}')
 
-        if len(extras_require) > 1:
+        if len(self.metadata.extras_require) > 1:
             rows = [{
                 "Name": extra,
-                "Command": f"`pip install {name}[{extra}]`",
+                "Command": f"`pip install {self.name}[{extra}]`",
                 "Extra packages": comma_and_and(*[f"`{x}`" for x in requires], period=False),
-            } for extra, requires in extras_require.items()]
+            } for extra, requires in self.metadata.extras_require.items()]
 
             Markdown(pandas.DataFrame(rows).to_markdown(index=False), header="Extras", hashtags=4, parent=markdown)
 
         return markdown
 
-    def get_topics_markdown(self, topics):
+
+
+
+
+    def get_topics_markdown(self, parent=None):
         """ Get topics markdown.
 
-            :param Packager self: """
-        print(topics)
+            :param Packager self:
+            :param parent: """
+        print(self.metadata.topics)
 
-    def get_description_markdown(self, name, description):
+    def get_description_markdown(self, parent=None):
         """ Get description text.
 
-            :param Packager self: """
-
+            :param Packager self:
+            :param parent: """
         lines = [
-            f"# Package: {name}",
-            description,
+            f"# Package: {self.name}",
+            self.metadata.description,
         ]
         return "\n".join(lines)
-
 
     def generate_readme(self):
         """ Create readme using added APIs indirectly.
 
             :param Packager self: """
-        l = [
-            self.get_badges_markdown(),
-            self.get_installation_markdown(),
-        ]
-
         markdown = Markdown()
-        for md in l:
-            md.set_parent(markdown)
+
+        self.get_badges_markdown(parent=markdown)
+        self.get_installation_markdown(parent=markdown)
+
+        # 1.1 HERE ** Expand with more methods
+
         print(markdown)
 
 
 class _Metadata:
-    name, version, description, install_requires, extras_require, classifiers = ..., ..., ..., ..., ..., ...
+    name = ...
+    version = ...
+    description = ...
+    install_requires = ...
+    extras_require = ...
+    classifiers = ...
+    topics = ...
+
     def __init__(self, packager):
         self.packager = packager
-        # HERE ** Load metadata values into here, then use through readme methods above
+
+        for key, value in self.packager.localrepo.get_metadata_path().read().items():
+            setattr(self, key, value)
+
+        for key in dir(self):
+            if getattr(self, key) is Ellipsis:
+                raise AssertionError(f"Key '{key}' for {self.packager}'s metadata is still ...")
+
 
 @initBases
 class Packager(_Readme):
-    """ Uses APIs to manage 'general' package. """
-    def __init__(self, repo_path=None):
-        self.repo_path = None if repo_path is None else Path(repo_path)
+    """ Uses APIs to manage 'general' package.
+        Todo: Allow github, pypi or local repo not to exist in any combination. """
+    def __init__(self, name, repos_path=None):
+        if repos_path is None:
+            repos_path = Path().absolute().parent()
 
-        # One of the options to get localRepo
-        self.localRepo = LocalRepo(self.repo_path)
+        self.name = name
+        self.repos_path = repos_path
+
+        self.github = GitHub(name=name)
+        self.localrepo = LocalRepo(path=repos_path / name)
+        self.pypi = PyPI(name=name)
 
         self.metadata = _Metadata(packager=self)
+
+        assert self.metadata.name == self.name
+
+    def setup_all(self):
+        """ Called by GitHub Actions when a commit is pushed. """
+        self.generate_readme()
+        # print(self.localRepo.get_todos())
+        # print(self.localRepo.get_metadata_path().read())
+        # GitHub(self.localRepo.name).set_topics(["testing"])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

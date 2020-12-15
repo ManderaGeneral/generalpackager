@@ -1,6 +1,8 @@
 
 from generalfile import Path
 from setuptools import find_namespace_packages
+from generallibrary import addToListInDict
+import re
 
 
 class LocalRepo:
@@ -20,13 +22,13 @@ class LocalRepo:
         return self.path / "metadata.json"
 
     def get_package_paths(self):
-        """ Get a list of Paths pointing to each folder containing a Python file, aka `namespace package`. """
+        """ Get a list of Paths pointing to each folder containing a Python file in this local repo, aka `namespace package`. """
         return [self.path / pkg.replace(".", "/") for pkg in find_namespace_packages(where=str(self.path))]
 
     @classmethod
-    def get_local_repos(cls, path):
-        """ Return a list of local repos in given folder by looking for a setup.py file. """
-        return [file.parent() for file in Path(path).get_paths_in_folder() if cls.path_is_repo(file)]
+    def get_local_repos(cls, folder_path):
+        """ Return a list of local repos in given folder. """
+        return [path for path in Path(folder_path).get_paths_in_folder() if cls.path_is_repo(path)]
 
     @classmethod
     def path_is_repo(cls, path):
@@ -35,6 +37,62 @@ class LocalRepo:
         if path.is_file():
             return False
         for file in path.get_paths_in_folder():
-            if file.name() == "setup.py":
+            if file.name() in ("metadata.json", "setup.py"):
                 return True
         return False
+
+    def get_todos(self):
+        """ Get a dict of cleaned up todo strings in a list.
+            Todo: Finish get_todos.
+
+            :rtype: dict[list[str]] """
+        todos = {}
+        for path in self.path.get_paths_recursive():
+            try:
+                text = path.text.read()
+            except UnicodeDecodeError:
+                continue
+
+            for todo in re.findall("todo+: (.+)", text, re.I):
+                addToListInDict(todos, path.stem(), re.sub('[" ]*$', "", todo))
+        return todos
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

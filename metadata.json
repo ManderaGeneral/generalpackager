@@ -5,7 +5,8 @@
     "install_requires": [
         "generalfile",
         "generallibrary",
-        "pandas"
+        "pandas",
+        "requests"
     ],
     "extras_require": {
         "testing": ["hello", "there", "foo"],
