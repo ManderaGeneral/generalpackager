@@ -5,7 +5,7 @@
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/ManderaGeneral/generalpackager.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ManderaGeneral/generalpackager/alerts/)
 
 # Package: generalpackager
-Tools for managing package metadata.
+Tools for managing package metadata. [Test](#another)
 
 ## Installation
 ```
@@ -15,7 +15,7 @@ pip install generalpackager
 | Name    | Command                                | Extra packages                    |
 |:--------|:---------------------------------------|:----------------------------------|
 | testing | `pip install generalpackager[testing]` | `hello`, `there` and `foo`        |
-| another | `pip install generalpackager[another]` | `omg` and `hello`                 |
+| # another | `pip install generalpackager[another]` | `omg` and `hello`                 |
 | full    | `pip install generalpackager[full]`    | `hello`, `there`, `foo` and `omg` |
 
 ## Attributes of module generalpackager
