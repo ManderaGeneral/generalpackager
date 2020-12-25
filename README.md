@@ -5,7 +5,7 @@
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/ManderaGeneral/generalpackager.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ManderaGeneral/generalpackager/alerts/)
 
 # Package: generalpackager
-Tools for managing package metadata. [Test](#:~:text=tall generalpackager[a)
+Tools for managing package metadata. [Test](#:~:text=generalpackager)
 
 ## Installation
 ```
