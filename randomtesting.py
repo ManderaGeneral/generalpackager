@@ -8,17 +8,19 @@ from pprint import pprint
 """
 Would be nice not having to install a repo package to use methods.
     Instead of using get_lines on an imported module we can read python files as text.
+
+Moving markdown methods from Packager and removing parent argument.
+Having attribute documenation in readme might actually be pretty nice, makes looking in commit history easier for one.
 """
 
 
 # 1 HERE ** Packager.setup_all() - Generate readme, update topics and description in github,
 
 
-
-
+# packager = Packager("generallibrary")
 packager = Packager("generalpackager")
-
 packager.setup_all()
+
 
 
 # packager.generate_readme()

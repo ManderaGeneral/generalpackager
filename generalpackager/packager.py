@@ -4,7 +4,6 @@ from generallibrary import initBases, Markdown, comma_and_and
 from generalfile import Path
 from generalpackager import LocalRepo, LocalModule, GitHub, PyPI
 
-import pandas
 import importlib
 
 
@@ -37,23 +36,15 @@ class _PackagerMarkdown:
         markdown = Markdown(header="Installation", parent=parent).add_code_lines(f'pip install {self.name}')
 
         if len(self.metadata.extras_require) > 1:
-            rows = [{
+            list_of_dicts = [{
                 "Name": extra,
                 "Command": f"`pip install {self.name}[{extra}]`",
                 "Extra packages": comma_and_and(*[f"`{x}`" for x in requires], period=False),
             } for extra, requires in self.metadata.extras_require.items()]
 
-            Markdown(pandas.DataFrame(rows).to_markdown(index=False), header="Extras", hashtags=4, parent=markdown)
+            Markdown(header="Extras", parent=markdown).add_table_lines(list_of_dicts=list_of_dicts)
 
         return markdown
-
-    def get_attributes_markdown(self, parent=None):
-        """ Get attributes markdown.
-
-            :param Packager self:
-            :param parent: """
-        return self.localmodule.get_attributes()
-
 
     def get_topics_markdown(self, parent=None):
         """ Get topics markdown.
@@ -80,7 +71,8 @@ class _PackagerMarkdown:
         markdown = Markdown()
 
 
-        self.get_attributes_markdown(parent=markdown)
+        self.localmodule.get_attributes_markdown()
+
         # self.get_badges_markdown(parent=markdown)
         # self.get_installation_markdown(parent=markdown)
 
@@ -115,7 +107,7 @@ class Packager(_PackagerMarkdown):
         Todo: Allow github, pypi or local repo not to exist in any combination. """
     def __init__(self, name, repos_path=None):
         if repos_path is None:
-            repos_path = Path().absolute().parent()
+            repos_path = Path().absolute().get_parent()
 
         self.name = name
         self.repos_path = repos_path
@@ -125,7 +117,6 @@ class Packager(_PackagerMarkdown):
         self.localmodule = LocalModule(module=importlib.import_module(name=name))
         self.pypi = PyPI(name=name)
 
-
         self.metadata = _Metadata(packager=self)
 
         assert self.metadata.name == self.name
@@ -133,6 +124,7 @@ class Packager(_PackagerMarkdown):
     def setup_all(self):
         """ Called by GitHub Actions when a commit is pushed. """
         self.generate_readme()
+
         # print(self.localRepo.get_todos())
         # print(self.localRepo.get_metadata_path().read())
         # GitHub(self.localRepo.name).set_topics(["testing"])
