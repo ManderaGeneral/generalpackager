@@ -1,4 +1,5 @@
 
+from generallibrary import TreeDiagram
 import generallibrary
 from generalpackager import *
 from generalfile import Path
@@ -17,7 +18,9 @@ Having attribute documenation in readme might actually be pretty nice, makes loo
 # 1 HERE ** Packager.setup_all() - Generate readme, update topics and description in github,
 
 
-# packager = Packager("generallibrary")
+# TreeDiagram(parent=TreeDiagram()).get_parent().view(custom_repr=lambda x: "hello\nthere")
+
+
 packager = Packager("generalpackager")
 packager.setup_all()
 

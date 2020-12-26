@@ -24,6 +24,10 @@ class LocalModule:
     def _custom_repr(self, objInfo):
         return objInfo.name
 
+    @staticmethod
+    def _doc(objInfo):
+        return objInfo.doc(only_first_line=True, require_sentence=True)  # 3 HERE ** Fix docs (Just run randomtesting)
+
     def get_attributes_markdown(self):
         """ Get attributes markdown.
             One table for each class and one for all functions. """
@@ -43,20 +47,22 @@ class LocalModule:
 
         list_of_dicts = [{
                 "Name": objInfo.name,
-                "Doc": objInfo.doc()
+                "Doc": self._doc(objInfo)
             } for objInfo in namespace]
-        Markdown(header="Namespace", parent=markdown).add_table_lines(list_of_dicts=list_of_dicts)
+        Markdown(header="Public namespace of package", parent=markdown).add_table_lines(list_of_dicts=list_of_dicts)
 
         for objInfo_class in classes:
             list_of_dicts = [{
-                    "Name": objInfo.name,
-                    "Doc": objInfo.doc()
+                    "Method": objInfo.name,
+                    "Doc": self._doc(objInfo)
                 } for objInfo in objInfo_class.get_children()]
-            Markdown(header=objInfo_class.name, parent=markdown).add_table_lines(list_of_dicts=list_of_dicts)
+            Markdown(header=f"Class: {objInfo_class.name}", parent=markdown).add_table_lines(list_of_dicts=list_of_dicts)
 
-        # print(markdown)
+        # Markdown(markdown.view(print_out=False, custom_repr=self._custom_repr), header="Navigation", parent=markdown)#.set_index(0)
 
-        Markdown(markdown.view(print_out=False, custom_repr=self._custom_repr), header="Navigation", parent=markdown).set_index(0)  # 3 HERE ** set index
+        # markdown.view()
+
+        print(markdown)
 
         return markdown
 
