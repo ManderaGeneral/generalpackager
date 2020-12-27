@@ -8,7 +8,8 @@ import importlib
 
 
 class _PackagerMarkdown:
-    """ Contains methods to generate readme sections from arguments. """
+    """ Contains methods to generate readme sections from arguments.
+        Todo: Inherit future crawler class for pypi and github. """
     def get_badges_list(self):
         """ Get badges list.
 
@@ -19,21 +20,21 @@ class _PackagerMarkdown:
         workflow = "[![workflow Actions Status](https://github.com/ManderaGeneral/PACKAGE/workflows/workflow/badge.svg)](https://github.com/ManderaGeneral/PACKAGE/actions)"
         lgtm_alerts = "[![Total alerts](https://img.shields.io/lgtm/alerts/g/ManderaGeneral/PACKAGE.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ManderaGeneral/PACKAGE/alerts/)"
 
+        # 3 HERE ** Put in table like GitHub profile
+
         return [badge.replace("PACKAGE", self.name) for badge in (pypi_version, python_version, platforms, workflow, lgtm_alerts)]
 
-    def get_badges_markdown(self, parent=None):
+    def get_badges_markdown(self):
         """ Get badges markdown.
 
-            :param Packager self:
-            :param parent: """
-        return Markdown(*self.get_badges_list(), parent=parent)
+            :param Packager self: """
+        return Markdown(*self.get_badges_list())
 
-    def get_installation_markdown(self, parent=None):
+    def get_installation_markdown(self):
         """ Get install markdown.
 
-            :param Packager self:
-            :param parent: """
-        markdown = Markdown(header="Installation", parent=parent).add_code_lines(f'pip install {self.name}')
+            :param Packager self: """
+        markdown = Markdown(header="Installation").add_code_lines(f'pip install {self.name}')
 
         if len(self.metadata.extras_require) > 1:
             list_of_dicts = [{
@@ -64,21 +65,29 @@ class _PackagerMarkdown:
         ]
         return "\n".join(lines)
 
+    def get_table_of_contents(self, markdown):
+        """ Get table of contents markdown.
+
+            :param Packager self:
+            :param markdown: """
+        lines = markdown.view(custom_repr=lambda md: md.header, print_out=False).splitlines()
+        return Markdown(header="Table of contents", parent=markdown).add_code_lines(*lines)
+
     def generate_readme(self):
-        """ Create readme using added APIs indirectly.
+        """ Create readme markdown object.
 
             :param Packager self: """
-        markdown = Markdown()
-
-
-        self.localmodule.get_attributes_markdown()
-
-        # self.get_badges_markdown(parent=markdown)
-        # self.get_installation_markdown(parent=markdown)
-
         # 2 HERE ** Expand with more methods
 
-        print(markdown)
+        markdown = Markdown(header=self.name)
+
+        self.get_installation_markdown().set_parent(parent=markdown)
+        self.localmodule.get_attributes_markdown().set_parent(parent=markdown)
+
+        self.get_table_of_contents(markdown=markdown).set_index(index=0)
+        self.get_badges_markdown().set_parent(parent=markdown).set_index(index=0)
+
+        return markdown
 
 
 class _Metadata:
@@ -123,7 +132,9 @@ class Packager(_PackagerMarkdown):
 
     def setup_all(self):
         """ Called by GitHub Actions when a commit is pushed. """
-        self.generate_readme()
+        self.localrepo.get_readme_path().text.write(self.generate_readme(), overwrite=True)
+
+        # print(self.localrepo.get_readme_path().text.read())
 
         # print(self.localRepo.get_todos())
         # print(self.localRepo.get_metadata_path().read())

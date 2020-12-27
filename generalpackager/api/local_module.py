@@ -26,44 +26,42 @@ class LocalModule:
 
     @staticmethod
     def _doc(objInfo):
-        return objInfo.doc(only_first_line=True, require_sentence=True)  # 3 HERE ** Fix docs (Just run randomtesting)
+        return objInfo.doc(only_first_line=True, require_sentence=True)
 
     def get_attributes_markdown(self):
         """ Get attributes markdown.
             One table for each class and one for all functions. """
         # self.objInfo.view()
 
-        markdown = Markdown(header="Attributes")
+        attributes = Markdown(header="Public attributes")
 
-        namespace = []
+        namespace_objInfos = []
         classes = []
 
         for objInfo in self.objInfo.get_children():  # type: ObjInfo
-            namespace.append(objInfo)
+            namespace_objInfos.append(objInfo)
 
             if objInfo.is_class() and objInfo.get_children():
                 classes.append(objInfo)
 
 
         list_of_dicts = [{
-                "Name": objInfo.name,
+                "Name": f"[{objInfo.name}](#class:-{objInfo.name})",
                 "Doc": self._doc(objInfo)
-            } for objInfo in namespace]
-        Markdown(header="Public namespace of package", parent=markdown).add_table_lines(list_of_dicts=list_of_dicts)
+            } for objInfo in namespace_objInfos]
+        namespace = Markdown(header="Namespace", parent=attributes)
+        namespace.add_table_lines(list_of_dicts=list_of_dicts)
+        namespace.lines.append("<hr>")
 
         for objInfo_class in classes:
             list_of_dicts = [{
                     "Method": objInfo.name,
                     "Doc": self._doc(objInfo)
                 } for objInfo in objInfo_class.get_children()]
-            Markdown(header=f"Class: {objInfo_class.name}", parent=markdown).add_table_lines(list_of_dicts=list_of_dicts)
+            Markdown(header=f"Class: {objInfo_class.name}", parent=namespace).add_table_lines(list_of_dicts=list_of_dicts)
 
         # Markdown(markdown.view(print_out=False, custom_repr=self._custom_repr), header="Navigation", parent=markdown)#.set_index(0)
-
         # markdown.view()
-
-        print(markdown)
-
-        return markdown
+        return attributes
 
 
