@@ -10,25 +10,19 @@ import importlib
 class _PackagerMarkdown:
     """ Contains methods to generate readme sections from arguments.
         Todo: Inherit future crawler class for pypi and github. """
-    def get_badges_list(self):
-        """ Get badges list.
+    def get_badges_dict(self):
+        """ Get badges as a dict.
 
             :param Packager self: """
-        pypi_version = "[![PyPI version shields.io](https://img.shields.io/pypi/v/PACKAGE.svg)](https://pypi.org/project/PACKAGE/)"
-        python_version = "[![PyPI pyversions](https://img.shields.io/pypi/pyversions/PACKAGE.svg)](https://pypi.python.org/pypi/PACKAGE/)"
-        platforms = "[![Generic badge](https://img.shields.io/badge/platforms-Windows%20|%20Ubuntu%20|%20MacOS-blue.svg)](https://shields.io/)"
-        workflow = "[![workflow Actions Status](https://github.com/ManderaGeneral/PACKAGE/workflows/workflow/badge.svg)](https://github.com/ManderaGeneral/PACKAGE/actions)"
-        lgtm_alerts = "[![Total alerts](https://img.shields.io/lgtm/alerts/g/ManderaGeneral/PACKAGE.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ManderaGeneral/PACKAGE/alerts/)"
-
-        # 3 HERE ** Put in table like GitHub profile
-
-        return [badge.replace("PACKAGE", self.name) for badge in (pypi_version, python_version, platforms, workflow, lgtm_alerts)]
-
-    def get_badges_markdown(self):
-        """ Get badges markdown.
-
-            :param Packager self: """
-        return Markdown(*self.get_badges_list())
+        badges = {
+            "UnitTests": "[![workflow Actions Status](https://github.com/ManderaGeneral/PACKAGE/workflows/workflow/badge.svg)](https://github.com/ManderaGeneral/PACKAGE/actions)",
+            "Alerts": "[![Total alerts](https://img.shields.io/lgtm/alerts/g/ManderaGeneral/PACKAGE.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ManderaGeneral/PACKAGE/alerts/)",
+            "Commit": "![GitHub last commit](https://img.shields.io/github/last-commit/ManderaGeneral/PACKAGE)",
+            "Release": "[![PyPI version shields.io](https://img.shields.io/pypi/v/PACKAGE.svg)](https://pypi.org/project/PACKAGE/)",
+            "Python": "[![PyPI pyversions](https://img.shields.io/pypi/pyversions/PACKAGE.svg)](https://pypi.python.org/pypi/PACKAGE/)",
+            "Operating System": "[![Generic badge](https://img.shields.io/badge/platforms-Windows%20%7C%20Ubuntu%20%7C%20MacOS-blue.svg)](https://shields.io/)",
+        }
+        return {key: value.replace("PACKAGE", self.name) for key, value in badges.items()}
 
     def get_installation_markdown(self):
         """ Get install markdown.
@@ -43,7 +37,7 @@ class _PackagerMarkdown:
                 "Extra packages": comma_and_and(*[f"`{x}`" for x in requires], period=False),
             } for extra, requires in self.metadata.extras_require.items()]
 
-            Markdown(header="Extras", parent=markdown).add_table_lines(list_of_dicts=list_of_dicts)
+            Markdown(header="Extras", parent=markdown).add_table_lines(*list_of_dicts)
 
         return markdown
 
@@ -66,27 +60,34 @@ class _PackagerMarkdown:
         return "\n".join(lines)
 
     def get_table_of_contents(self, markdown):
-        """ Get table of contents markdown.
+        """ Get table of contents lines.
 
             :param Packager self:
             :param markdown: """
-        lines = markdown.view(custom_repr=lambda md: md.header, print_out=False).splitlines()
-        return Markdown(header="Table of contents", parent=markdown).add_code_lines(*lines)
+        return markdown.view(custom_repr=lambda md: md.header, print_out=False).splitlines()
 
     def generate_readme(self):
         """ Create readme markdown object.
 
             :param Packager self: """
-        # 2 HERE ** Expand with more methods
-
         markdown = Markdown(header=self.name)
 
+        # Badges
+        Markdown(header="Badges", parent=markdown).add_table_lines(self.get_badges_dict())
+
+        # Table of contents
+        table_of_contents = Markdown(header="Table of contents", parent=markdown)
+
+        # Installation
         self.get_installation_markdown().set_parent(parent=markdown)
+
+        # Todos
+        Markdown(header="Todos", parent=markdown).add_table_lines(*self.localrepo.get_todos())
+
+        # Attributes
         self.localmodule.get_attributes_markdown().set_parent(parent=markdown)
 
-        self.get_table_of_contents(markdown=markdown).set_index(index=0)
-        self.get_badges_markdown().set_parent(parent=markdown).set_index(index=0)
-
+        table_of_contents.add_code_lines(*self.get_table_of_contents(markdown))
         return markdown
 
 
@@ -133,6 +134,8 @@ class Packager(_PackagerMarkdown):
     def setup_all(self):
         """ Called by GitHub Actions when a commit is pushed. """
         self.localrepo.get_readme_path().text.write(self.generate_readme(), overwrite=True)
+
+        # 1 HERE ** Update github topics and description
 
         # print(self.localrepo.get_readme_path().text.read())
 

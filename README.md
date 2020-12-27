@@ -1,16 +1,18 @@
 # generalpackager
 
-[![PyPI version shields.io](https://img.shields.io/pypi/v/generalpackager.svg)](https://pypi.org/project/generalpackager/)
-[![PyPI pyversions](https://img.shields.io/pypi/pyversions/generalpackager.svg)](https://pypi.python.org/pypi/generalpackager/)
-[![Generic badge](https://img.shields.io/badge/platforms-Windows%20|%20Ubuntu%20|%20MacOS-blue.svg)](https://shields.io/)
-[![workflow Actions Status](https://github.com/ManderaGeneral/generalpackager/workflows/workflow/badge.svg)](https://github.com/ManderaGeneral/generalpackager/actions)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/ManderaGeneral/generalpackager.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ManderaGeneral/generalpackager/alerts/)
+## Badges
+| UnitTests                                                                                                                                                               | Alerts                                                                                                                                                                                | Commit                                                                                          | Release                                                                                                                    | Python                                                                                                                          | Operating System                                                                                                              |
+|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------|
+| [![workflow Actions Status](https://github.com/ManderaGeneral/generalpackager/workflows/workflow/badge.svg)](https://github.com/ManderaGeneral/generalpackager/actions) | [![Total alerts](https://img.shields.io/lgtm/alerts/g/ManderaGeneral/generalpackager.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ManderaGeneral/generalpackager/alerts/) | ![GitHub last commit](https://img.shields.io/github/last-commit/ManderaGeneral/generalpackager) | [![PyPI version shields.io](https://img.shields.io/pypi/v/generalpackager.svg)](https://pypi.org/project/generalpackager/) | [![PyPI pyversions](https://img.shields.io/pypi/pyversions/generalpackager.svg)](https://pypi.python.org/pypi/generalpackager/) | [![Generic badge](https://img.shields.io/badge/platforms-Windows%20%7C%20Ubuntu%20%7C%20MacOS-blue.svg)](https://shields.io/) |
 
 ## Table of contents
 ```
 generalpackager
+├─ Badges
+├─ Table of contents
 ├─ Installation
 │  └─ Extras
+├─ Todos
 └─ Public attributes
    └─ Namespace
       ├─ Class: GitHub
@@ -30,16 +32,23 @@ pip install generalpackager
 | testing | `pip install generalpackager[testing]` | `hello`, `there` and `foo` |
 | another | `pip install generalpackager[another]` | `omg` and `hello`          |
 
+## Todos
+| Module        | Message                                                           |
+|:--------------|:------------------------------------------------------------------|
+| packager.py   | Inherit future crawler class for pypi and github.                 |
+| packager.py   | Allow github, pypi or local repo not to exist in any combination. |
+| local_repo.py | Finish get_todos.                                                 |
+
 ## Public attributes
 
 ### Namespace
 | Name                               | Doc                                                     |
 |:-----------------------------------|:--------------------------------------------------------|
-| [GitHub](#class:-GitHub)           | Tools to interface a GitHub Repository.                 |
-| [LocalModule](#class:-LocalModule) | Tools to interface a Local Python Module.               |
-| [LocalRepo](#class:-LocalRepo)     | Tools to help Path interface a Local Python Repository. |
-| [Packager](#class:-Packager)       | Uses APIs to manage 'general' package.                  |
-| [PyPI](#class:-PyPI)               | Tools to interface pypi.org.                            |
+| [GitHub](#Class:-GitHub)           | Tools to interface a GitHub Repository.                 |
+| [LocalModule](#Class:-LocalModule) | Tools to interface a Local Python Module.               |
+| [LocalRepo](#Class:-LocalRepo)     | Tools to help Path interface a Local Python Repository. |
+| [Packager](#Class:-Packager)       | Uses APIs to manage 'general' package.                  |
+| PyPI                               | Tools to interface pypi.org.                            |
 <hr>
 
 #### Class: GitHub
@@ -62,17 +71,16 @@ pip install generalpackager
 | get_metadata_path | Get a Path instance pointing to README, regardless if it exists.                                                  |
 | get_package_paths | Get a list of Paths pointing to each folder containing a Python file in this local repo, aka `namespace package`. |
 | get_readme_path   | Get a Path instance pointing to README, regardless if it exists.                                                  |
-| get_todos         | Get a dict of cleaned up todo strings in a list.                                                                  |
+| get_todos         | Get a list of dicts containing cleaned up todos.                                                                  |
 | path_is_repo      | Return whether this path is a local repo.                                                                         |
 
 #### Class: Packager
 | Method                    | Doc                                               |
 |:--------------------------|:--------------------------------------------------|
 | generate_readme           | Create readme markdown object.                    |
-| get_badges_list           | Get badges list.                                  |
-| get_badges_markdown       | Get badges markdown.                              |
+| get_badges_dict           | Get badges as a dict.                             |
 | get_description_markdown  | Get description text.                             |
 | get_installation_markdown | Get install markdown.                             |
-| get_table_of_contents     | Get table of contents markdown.                   |
+| get_table_of_contents     | Get table of contents lines.                      |
 | get_topics_markdown       | Get topics markdown.                              |
 | setup_all                 | Called by GitHub Actions when a commit is pushed. |

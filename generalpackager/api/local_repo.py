@@ -42,19 +42,21 @@ class LocalRepo:
         return False
 
     def get_todos(self):
-        """ Get a dict of cleaned up todo strings in a list.
-            Todo: Finish get_todos.
+        """ Get a list of dicts containing cleaned up todos.
 
             :rtype: dict[list[str]] """
-        todos = {}
+        todos = []
         for path in self.path.get_paths_recursive():
             try:
                 text = path.text.read()
-            except UnicodeDecodeError:
+            except:
                 continue
 
             for todo in re.findall("todo+: (.+)", text, re.I):
-                addToListInDict(todos, path.stem(), re.sub('[" ]*$', "", todo))
+                todos.append({
+                    "Module": path.name(),
+                    "Message": re.sub('[" ]*$', "", todo),
+                })
         return todos
 
 

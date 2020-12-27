@@ -34,34 +34,58 @@ class LocalModule:
         # self.objInfo.view()
 
         attributes = Markdown(header="Public attributes")
-
-        namespace_objInfos = []
-        classes = []
-
-        for objInfo in self.objInfo.get_children():  # type: ObjInfo
-            namespace_objInfos.append(objInfo)
-
-            if objInfo.is_class() and objInfo.get_children():
-                classes.append(objInfo)
-
-
-        list_of_dicts = [{
-                "Name": f"[{objInfo.name}](#class:-{objInfo.name})",
-                "Doc": self._doc(objInfo)
-            } for objInfo in namespace_objInfos]
         namespace = Markdown(header="Namespace", parent=attributes)
-        namespace.add_table_lines(list_of_dicts=list_of_dicts)
+
+        namespace_objInfos = self.objInfo.get_children()
+        namespace_dicts = []
+
+        for objInfo in namespace_objInfos:  # type: ObjInfo
+            objInfo_children = objInfo.get_children()
+            added_class_namespace = objInfo.is_class() and objInfo_children
+            if added_class_namespace:
+                class_dicts = []
+                for objInfo_child in objInfo_children:  # type: ObjInfo
+                    class_dicts.append({
+                        "Method": objInfo_child.name,
+                        "Doc": self._doc(objInfo_child),
+                    })
+                Markdown(header=f"Class: {objInfo.name}", parent=namespace).add_table_lines(*class_dicts)
+
+            namespace_dicts.append({
+                "Name": Markdown.link(text=objInfo.name, url=f"Class: {objInfo.name}", enabled=added_class_namespace),
+                "Doc": self._doc(objInfo),
+            })
+
+        namespace.add_table_lines(*namespace_dicts)
         namespace.lines.append("<hr>")
 
-        for objInfo_class in classes:
-            list_of_dicts = [{
-                    "Method": objInfo.name,
-                    "Doc": self._doc(objInfo)
-                } for objInfo in objInfo_class.get_children()]
-            Markdown(header=f"Class: {objInfo_class.name}", parent=namespace).add_table_lines(list_of_dicts=list_of_dicts)
-
-        # Markdown(markdown.view(print_out=False, custom_repr=self._custom_repr), header="Navigation", parent=markdown)#.set_index(0)
-        # markdown.view()
         return attributes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

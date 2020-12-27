@@ -15,7 +15,6 @@ Having attribute documenation in readme might actually be pretty nice, makes loo
 """
 
 
-# 1 HERE ** Packager.setup_all() - Generate readme, update topics and description in github,
 
 
 # TreeDiagram(parent=TreeDiagram()).get_parent().view(custom_repr=lambda x: "hello\nthere")
@@ -23,7 +22,6 @@ Having attribute documenation in readme might actually be pretty nice, makes loo
 
 packager = Packager("generalpackager")
 packager.setup_all()
-
 
 
 # packager.generate_readme()
