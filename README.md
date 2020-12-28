@@ -11,7 +11,7 @@
       ├─ [Class: GitHub](#Class:-GitHub)  
       ├─ [Class: LocalModule](#Class:-LocalModule)  
       ├─ [Class: LocalRepo](#Class:-LocalRepo)  
-      └─ [Class: Packager](#Class:-Packager)
+      └─ [Class: Packager](#-Class:-Packager)
 
 ## Description
 Tools to interface GitHub, PyPI, local repos and local modules.
