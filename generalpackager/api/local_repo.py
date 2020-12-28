@@ -73,7 +73,7 @@ class LocalRepo:
         # print(repo.index.)
 
         repo.git.add(all=True)
-        repo.index.commit("Weird error from os.")
+        repo.index.commit("Working but it added .idea.")
         remote = repo.remote()
         remote.set_url(f"https://Mandera:{os.environ['packager_github_api']}@github.com/ManderaGeneral/generalpackager.git")
         remote.push()
