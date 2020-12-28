@@ -66,11 +66,14 @@ class LocalRepo:
         """ Commit and push this local repo to GitHub. """
         repo = Repo(str(self.path))
 
-        files = [str(path.relative()) for path in self.path.get_paths_recursive() if not any([string in path for string in (".git", ".idea", "__pycache__")])]
+        # files = [str(path.relative()) for path in self.path.get_paths_recursive() if not any([string in path for string in (".git", ".idea", "__pycache__")])]
         # print(files)
-        repo.index.add(files)
-        repo.index.commit("Testing auto commit.")
+        # repo.index.add(files)
 
+        # print(repo.index.)
+
+        repo.git.add(update=True)
+        repo.index.commit("Testing auto file add.")
         remote = repo.remote()
         remote.set_url(f"https://Mandera:{os.environ['packager_github_api']}@github.com/ManderaGeneral/generalpackager.git")
         remote.push()
