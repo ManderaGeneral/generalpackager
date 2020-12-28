@@ -8,10 +8,10 @@
 ├─ [Todos](#Todos)  
 └─ [Public attributes](#Public-attributes)  
    └─ [Namespace](#Namespace)  
-      ├─ [Class: GitHub](#Class:-GitHub)  
-      ├─ [Class: LocalModule](#Class:-LocalModule)  
-      ├─ [Class: LocalRepo](#Class:-LocalRepo)  
-      └─ [Class: Packager](#Class:-Packager)
+      ├─ [Class: GitHub](#Class-GitHub)  
+      ├─ [Class: LocalModule](#Class-LocalModule)  
+      ├─ [Class: LocalRepo](#Class-LocalRepo)  
+      └─ [Class: Packager](#Class-Packager)
 
 ## Description
 Tools to interface GitHub, PyPI, local repos and local modules.
@@ -41,13 +41,13 @@ pip install generalpackager
 ## Public attributes
 
 ### Namespace
-| Name                               | Doc                                                     |
-|:-----------------------------------|:--------------------------------------------------------|
-| [GitHub](#Class:-GitHub)           | Tools to interface a GitHub Repository.                 |
-| [LocalModule](#Class:-LocalModule) | Tools to interface a Local Python Module.               |
-| [LocalRepo](#Class:-LocalRepo)     | Tools to help Path interface a Local Python Repository. |
-| [Packager](#Class:-Packager)       | Uses APIs to manage 'general' package.                  |
-| PyPI                               | Tools to interface pypi.org.                            |
+| Name                              | Doc                                                     |
+|:----------------------------------|:--------------------------------------------------------|
+| [GitHub](#Class-GitHub)           | Tools to interface a GitHub Repository.                 |
+| [LocalModule](#Class-LocalModule) | Tools to interface a Local Python Module.               |
+| [LocalRepo](#Class-LocalRepo)     | Tools to help Path interface a Local Python Repository. |
+| [Packager](#Class-Packager)       | Uses APIs to manage 'general' package.                  |
+| PyPI                              | Tools to interface pypi.org.                            |
 <hr>
 
 #### Class: GitHub
