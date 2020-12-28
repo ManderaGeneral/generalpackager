@@ -72,10 +72,9 @@ class LocalRepo:
         repo.index.commit("Testing auto commit.")
 
         remote = repo.remote()
-        print(f"https://Mandera:{os.environ['packager_github_api']}@github.com/ManderaGeneral/generalpackager.git")
-        # remote.set_url()
+        remote.set_url(f"https://Mandera:{os.environ['packager_github_api']}@github.com/ManderaGeneral/generalpackager.git")
+        remote.push()
 
-        # remote.push(verbose=True)
         # remote.set_url("")
 
 
