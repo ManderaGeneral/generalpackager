@@ -80,6 +80,8 @@ class _PackagerMarkdown:
 
         return markdown
 
+
+class _PackagerGitHub:
     def sync_github_metadata(self):
         """ Sync GitHub with local metadata.
 
@@ -87,7 +89,6 @@ class _PackagerMarkdown:
         self.github.set_website(f"https://pypi.org/project/{self.name}/")
         self.github.set_description(self.metadata.description)
         self.github.set_topics(self.metadata.topics)
-
 
 
 class _Metadata:
@@ -111,7 +112,7 @@ class _Metadata:
 
 
 @initBases
-class Packager(_PackagerMarkdown):
+class Packager(_PackagerMarkdown, _PackagerGitHub):
     """ Uses APIs to manage 'general' package.
         Todo: Allow github, pypi or local repo not to exist in any combination. """
     def __init__(self, name, repos_path=None):
@@ -132,14 +133,14 @@ class Packager(_PackagerMarkdown):
 
     def setup_all(self):
         """ Called by GitHub Actions when a commit is pushed. """
-        self.localrepo.get_readme_path().text.write(self.generate_readme(), overwrite=True)
-        # self.commit_and_push()
+        # self.localrepo.get_readme_path().text.write(self.generate_readme(), overwrite=True)
+        self.localrepo.commit_and_push()
 
-        self.sync_github_metadata()
+        # self.sync_github_metadata()
 
-        # HERE ** TOC links
-        # 2 HERE ** Release history from commits
-        # 3 HERE ** Generate classifiers from topics
+        # HERE ** Commit and push
+        # HERE ** Release history from commits
+        # HERE ** Generate classifiers from topics
 
 
 

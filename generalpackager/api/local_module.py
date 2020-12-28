@@ -47,17 +47,17 @@ class LocalModule:
                 for objInfo_child in objInfo_children:  # type: ObjInfo
                     class_dicts.append({
                         "Method": objInfo_child.name,
-                        "Doc": self._doc(objInfo_child),
+                        "First line of documentation": self._doc(objInfo_child),
                     })
                 Markdown(header=f"Class: {objInfo.name}", parent=namespace).add_table_lines(*class_dicts)
 
             namespace_dicts.append({
                 "Name": Markdown.link(text=objInfo.name, url=f"Class: {objInfo.name}", enabled=added_class_namespace),
-                "Doc": self._doc(objInfo),
+                "First line of documentation": self._doc(objInfo),
             })
 
         namespace.add_table_lines(*namespace_dicts)
-        namespace.lines.append("<hr>")
+        # namespace.lines.append("<hr>")
 
         return attributes
 

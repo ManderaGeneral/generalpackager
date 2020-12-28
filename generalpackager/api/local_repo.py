@@ -2,6 +2,8 @@
 from generalfile import Path
 from setuptools import find_namespace_packages
 import re
+from git import Repo
+import os
 
 
 class LocalRepo:
@@ -60,7 +62,19 @@ class LocalRepo:
                 })
         return todos
 
+    def commit_and_push(self):
+        """ Commit and push this local repo to GitHub. """
+        repo = Repo(str(self.path / ".git"))
 
+        files = [str(path) for path in self.path.get_paths_recursive() if not any([string in path for string in (".git", ".idea", "__pycache__")])]
+
+        repo.index.add(files)
+        repo.index.commit("Testing auto commit.")
+
+        # print(repo.index)
+        # remote = repo.remote()
+        # remote.push()
+        # remote.set_url("")
 
 
 

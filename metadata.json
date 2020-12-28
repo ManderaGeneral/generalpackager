@@ -6,7 +6,8 @@
         "generalfile",
         "generallibrary",
         "pandas",
-        "requests"
+        "requests",
+        "gitpython"
     ],
     "extras_require": {
         "testing": ["hello", "there", "foo"],
