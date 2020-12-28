@@ -64,9 +64,9 @@ class LocalRepo:
 
     def commit_and_push(self):
         """ Commit and push this local repo to GitHub. """
-        repo = Repo(str(self.path / ".git"))
+        repo = Repo(str(self.path))
 
-        files = [str(path) for path in self.path.get_paths_recursive() if not any([string in path for string in (".git", ".idea", "__pycache__")])]
+        files = [str(path.relative()) for path in self.path.get_paths_recursive() if not any([string in path for string in (".git", ".idea", "__pycache__")])]
         print(files)
         repo.index.add(files)
         repo.index.commit("Testing auto commit.")
