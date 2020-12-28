@@ -46,7 +46,8 @@ class _PackagerMarkdown:
 
             :param Packager self:
             :param parent_markdown: """
-        markdown = Markdown(parent_markdown.view(custom_repr=lambda md: md.link(md.header, href=True), print_out=False).replace("\n", "  \n"))
+        lines = parent_markdown.view(custom_repr=lambda md: md.link(md.header, href=True), print_out=False).replace("\n", "  \n")
+        markdown = Markdown(lines, header="Navigation")
         markdown.wrap_with_tags("pre")
         return markdown
 
@@ -74,7 +75,8 @@ class _PackagerMarkdown:
         self.localmodule.get_attributes_markdown().set_parent(parent=markdown)
 
         # Table of contents
-        self.get_table_of_contents_markdown(parent_markdown=markdown).set_parent(parent=markdown).set_index(0)
+        self.get_table_of_contents_markdown(parent_markdown=markdown).set_parent(parent=markdown)
+
         # Markdown().add_code_lines(*self.get_table_of_contents(markdown)).set_parent(parent=markdown).set_index(0)
         # Markdown(*self.get_table_of_contents(markdown)).set_parent(parent=markdown).set_index(0)
 
@@ -134,11 +136,11 @@ class Packager(_PackagerMarkdown, _PackagerGitHub):
     def setup_all(self):
         """ Called by GitHub Actions when a commit is pushed. """
         # self.localrepo.get_readme_path().text.write(self.generate_readme(), overwrite=True)
+        # HERE ** Add .idea to git ignore
         self.localrepo.commit_and_push()
 
         # self.sync_github_metadata()
 
-        # HERE ** Commit and push
         # HERE ** Release history from commits
         # HERE ** Generate classifiers from topics
 
