@@ -59,6 +59,8 @@ class _PackagerMarkdown:
             :param Packager self: """
         markdown = Markdown(header=self.name)
 
+        table_of_contents = Markdown(header="Table of contents", parent=markdown)
+
         # Description
         Markdown(self.metadata.description, header="Description", parent=markdown)
 
@@ -75,7 +77,9 @@ class _PackagerMarkdown:
         self.localmodule.get_attributes_markdown().set_parent(parent=markdown)
 
         # Table of contents
-        self.get_table_of_contents_markdown(parent_markdown=markdown).set_parent(parent=markdown)
+
+        self.get_table_of_contents_markdown(parent_markdown=markdown).set_parent(parent=markdown).set_index(0)
+        table_of_contents.remove()
 
         # Markdown().add_code_lines(*self.get_table_of_contents(markdown)).set_parent(parent=markdown).set_index(0)
         # Markdown(*self.get_table_of_contents(markdown)).set_parent(parent=markdown).set_index(0)
@@ -136,11 +140,12 @@ class Packager(_PackagerMarkdown, _PackagerGitHub):
     def setup_all(self):
         """ Called by GitHub Actions when a commit is pushed. """
         # self.localrepo.get_readme_path().text.write(self.generate_readme(), overwrite=True)
-        # HERE ** Add .idea to git ignore
+
         self.localrepo.commit_and_push()
 
         # self.sync_github_metadata()
 
+        # HERE ** Add .idea to git ignore with code
         # HERE ** Release history from commits
         # HERE ** Generate classifiers from topics
 
