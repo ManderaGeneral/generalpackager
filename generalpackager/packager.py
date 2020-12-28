@@ -53,7 +53,7 @@ class _PackagerMarkdown:
 
             :param Packager self:
             :param markdown: """
-        return markdown.view(custom_repr=lambda md: md.link(md.header), spacer=" ", print_out=False).replace("\n", "  \n").splitlines()
+        return markdown.view(custom_repr=lambda md: md.link(md.header), spacer=" ", print_out=False).replace("\n", "  \n").splitlines()
 
     def generate_readme(self):
         """ Create readme markdown object.
