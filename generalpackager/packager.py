@@ -139,11 +139,11 @@ class Packager(_PackagerMarkdown, _PackagerGitHub):
 
     def setup_all(self):
         """ Called by GitHub Actions when a commit is pushed. """
-        # self.localrepo.get_readme_path().text.write(self.generate_readme(), overwrite=True)
+        self.localrepo.get_readme_path().text.write(self.generate_readme(), overwrite=True)
 
         self.localrepo.commit_and_push()
 
-        # self.sync_github_metadata()
+        self.sync_github_metadata()
 
         # HERE ** Add .idea to git ignore with code
         # HERE ** Release history from commits

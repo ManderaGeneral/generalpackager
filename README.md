@@ -1,7 +1,9 @@
 # generalpackager
 
+## Navigation
 <pre>
 <a href='#generalpackager'>generalpackager</a>  
+├─ <a href='#Table-of-contents'>Table of contents</a>  
 ├─ <a href='#Description'>Description</a>  
 ├─ <a href='#Badges'>Badges</a>  
 ├─ <a href='#Installation'>Installation</a>  
@@ -43,17 +45,16 @@ pip install generalpackager
 ## Public attributes
 
 ### Namespace
-| Name                              | Doc                                                     |
+| Name                              | First line of documentation                             |
 |:----------------------------------|:--------------------------------------------------------|
 | [GitHub](#Class-GitHub)           | Tools to interface a GitHub Repository.                 |
 | [LocalModule](#Class-LocalModule) | Tools to interface a Local Python Module.               |
 | [LocalRepo](#Class-LocalRepo)     | Tools to help Path interface a Local Python Repository. |
 | [Packager](#Class-Packager)       | Uses APIs to manage 'general' package.                  |
 | PyPI                              | Tools to interface pypi.org.                            |
-<hr>
 
 #### Class: GitHub
-| Method          | Doc                                                   |
+| Method          | First line of documentation                           |
 |:----------------|:------------------------------------------------------|
 | get_description | Get a string of description in the GitHub repository. |
 | get_topics      | Get a list of topics in the GitHub repository.        |
@@ -63,13 +64,14 @@ pip install generalpackager
 | set_website     | Set a website for the GitHub repository.              |
 
 #### Class: LocalModule
-| Method                  | Doc                      |
-|:------------------------|:-------------------------|
-| get_attributes_markdown | Get attributes markdown. |
+| Method                  | First line of documentation   |
+|:------------------------|:------------------------------|
+| get_attributes_markdown | Get attributes markdown.      |
 
 #### Class: LocalRepo
-| Method            | Doc                                                                                                               |
+| Method            | First line of documentation                                                                                       |
 |:------------------|:------------------------------------------------------------------------------------------------------------------|
+| commit_and_push   | Commit and push this local repo to GitHub.                                                                        |
 | get_local_repos   | Return a list of local repos in given folder.                                                                     |
 | get_metadata_path | Get a Path instance pointing to README, regardless if it exists.                                                  |
 | get_package_paths | Get a list of Paths pointing to each folder containing a Python file in this local repo, aka `namespace package`. |
@@ -78,7 +80,7 @@ pip install generalpackager
 | path_is_repo      | Return whether this path is a local repo.                                                                         |
 
 #### Class: Packager
-| Method                         | Doc                                               |
+| Method                         | First line of documentation                       |
 |:-------------------------------|:--------------------------------------------------|
 | generate_readme                | Create readme markdown object.                    |
 | get_badges_dict                | Get badges as a dict.                             |
