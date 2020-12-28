@@ -9,7 +9,7 @@
    └─ [Namespace](#Namespace)  
       ├─ [Class: GitHub](#Class:-GitHub)  
       ├─ [Class: LocalModule](#Class:-LocalModule)  
-      ├─ [Class: LocalRepo](#Class:-LocalRepo)  
+      ├─ [Class: LocalRepo](#Class-LocalRepo)  
       └─ [Class: Packager](#class-packager)
 
 ## Description
