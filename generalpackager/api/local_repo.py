@@ -1,7 +1,6 @@
 
 from generalfile import Path
 from setuptools import find_namespace_packages
-from generallibrary import addToListInDict
 import re
 
 

@@ -1,7 +1,7 @@
 {
     "name": "generalpackager",
     "version": "0.0.1",
-    "description": "Tools for managing package metadata.",
+    "description": "Tools to interface GitHub, PyPI, local repos and local modules.",
     "install_requires": [
         "generalfile",
         "generallibrary",

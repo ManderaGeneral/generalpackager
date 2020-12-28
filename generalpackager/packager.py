@@ -48,23 +48,12 @@ class _PackagerMarkdown:
             :param parent: """
         print(self.metadata.topics)
 
-    def get_description_markdown(self, parent=None):
-        """ Get description text.
-
-            :param Packager self:
-            :param parent: """
-        lines = [
-            f"# Package: {self.name}",
-            self.metadata.description,
-        ]
-        return "\n".join(lines)
-
     def get_table_of_contents(self, markdown):
         """ Get table of contents lines.
 
             :param Packager self:
             :param markdown: """
-        return markdown.view(custom_repr=lambda md: md.header, print_out=False).splitlines()
+        return markdown.view(custom_repr=lambda md: md.link(md.header), print_out=False).splitlines()
 
     def generate_readme(self):
         """ Create readme markdown object.
@@ -72,11 +61,11 @@ class _PackagerMarkdown:
             :param Packager self: """
         markdown = Markdown(header=self.name)
 
+        # Description
+        Markdown(self.metadata.description, header="Description", parent=markdown)
+
         # Badges
         Markdown(header="Badges", parent=markdown).add_table_lines(self.get_badges_dict())
-
-        # Table of contents
-        table_of_contents = Markdown(header="Table of contents", parent=markdown)
 
         # Installation
         self.get_installation_markdown().set_parent(parent=markdown)
@@ -87,8 +76,19 @@ class _PackagerMarkdown:
         # Attributes
         self.localmodule.get_attributes_markdown().set_parent(parent=markdown)
 
-        table_of_contents.add_code_lines(*self.get_table_of_contents(markdown))
+        # Table of contents
+        Markdown().add_code_lines(*self.get_table_of_contents(markdown)).set_parent(parent=markdown).set_index(0)
+
         return markdown
+
+    def sync_github_metadata(self):
+        """ Sync GitHub with local metadata.
+
+            :param Packager self: """
+        self.github.set_website(f"https://pypi.org/project/{self.name}/")
+        self.github.set_description(self.metadata.description)
+        self.github.set_topics(self.metadata.topics)
+
 
 
 class _Metadata:
@@ -134,14 +134,15 @@ class Packager(_PackagerMarkdown):
     def setup_all(self):
         """ Called by GitHub Actions when a commit is pushed. """
         self.localrepo.get_readme_path().text.write(self.generate_readme(), overwrite=True)
+        # self.commit_and_push()
 
-        # 1 HERE ** Update github topics and description
+        # self.sync_github_metadata()
 
-        # print(self.localrepo.get_readme_path().text.read())
+        # HERE ** TOC links
+        # 2 HERE ** Release history from commits
+        # 3 HERE ** Generate classifiers from topics
 
-        # print(self.localRepo.get_todos())
-        # print(self.localRepo.get_metadata_path().read())
-        # GitHub(self.localRepo.name).set_topics(["testing"])
+
 
 
 

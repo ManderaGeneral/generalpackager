@@ -13,6 +13,17 @@ class GitHub:
 
         assert self._request(method="get").status_code == 200  # Checks name, owner and token all in one
 
+    def get_website(self):
+        """ Get website specified in repository details.
+
+            :rtype: list[str] """
+        return self._request(method="get").json()["homepage"]
+
+    def set_website(self, website):
+        """ Set a website for the GitHub repository. """
+        return self._request(method="patch", name=self.name, homepage=website)
+
+
     def get_topics(self):
         """ Get a list of topics in the GitHub repository.
 
