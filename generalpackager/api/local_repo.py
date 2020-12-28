@@ -72,7 +72,7 @@ class LocalRepo:
         repo.index.commit("Testing auto commit.")
 
         remote = repo.remote()
-        print(remote.exists())
+        print(remote.urls)
 
         # remote.push(verbose=True)
         # remote.set_url("")
