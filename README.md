@@ -3,7 +3,7 @@
 ## Navigation
 <pre>
 <a href='#generalpackager'>generalpackager</a>  
-├─ <a href='#Table-of-contents'>Table of contents</a>  
+├─ <a href='#Navigation'>Navigation</a>  
 ├─ <a href='#Description'>Description</a>  
 ├─ <a href='#Badges'>Badges</a>  
 ├─ <a href='#Installation'>Installation</a>  

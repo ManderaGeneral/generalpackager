@@ -41,13 +41,13 @@ class _PackagerMarkdown:
 
         return markdown
 
-    def get_table_of_contents_markdown(self, parent_markdown):
+    def get_table_of_contents_markdown(self, markdown):
         """ Get table of contents lines.
 
             :param Packager self:
-            :param parent_markdown: """
-        lines = parent_markdown.view(custom_repr=lambda md: md.link(md.header, href=True), print_out=False).replace("\n", "  \n")
-        markdown = Markdown(lines, header="Navigation")
+            :param markdown: """
+        parent_markdown = markdown.get_parent(-1)
+        markdown.add_lines(parent_markdown.view(custom_repr=lambda md: md.link(md.header, href=True), print_out=False).replace("\n", "  \n"))
         markdown.wrap_with_tags("pre")
         return markdown
 
@@ -59,7 +59,7 @@ class _PackagerMarkdown:
             :param Packager self: """
         markdown = Markdown(header=self.name)
 
-        table_of_contents = Markdown(header="Table of contents", parent=markdown)
+        table_of_contents = Markdown(header="Navigation", parent=markdown)
 
         # Description
         Markdown(self.metadata.description, header="Description", parent=markdown)
@@ -78,8 +78,8 @@ class _PackagerMarkdown:
 
         # Table of contents
 
-        self.get_table_of_contents_markdown(parent_markdown=markdown).set_parent(parent=markdown).set_index(0)
-        table_of_contents.remove()
+        self.get_table_of_contents_markdown(markdown=table_of_contents)
+
 
         # Markdown().add_code_lines(*self.get_table_of_contents(markdown)).set_parent(parent=markdown).set_index(0)
         # Markdown(*self.get_table_of_contents(markdown)).set_parent(parent=markdown).set_index(0)
