@@ -53,7 +53,7 @@ class _PackagerMarkdown:
 
             :param Packager self:
             :param markdown: """
-        return markdown.view(custom_repr=lambda md: md.link(md.header), print_out=False).splitlines()
+        return markdown.view(custom_repr=lambda md: md.link(md.header), spacer=" ", print_out=False).replace("\n", "  \n").splitlines()
 
     def generate_readme(self):
         """ Create readme markdown object.
@@ -77,7 +77,7 @@ class _PackagerMarkdown:
         self.localmodule.get_attributes_markdown().set_parent(parent=markdown)
 
         # Table of contents
-        Markdown().add_code_lines(*self.get_table_of_contents(markdown)).set_parent(parent=markdown).set_index(0)
+        Markdown(*self.get_table_of_contents(markdown)).set_parent(parent=markdown).set_index(0)
 
         return markdown
 

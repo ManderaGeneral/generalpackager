@@ -1,19 +1,17 @@
 # generalpackager
 
-```markdown
-[generalpackager](#generalpackager)
-├─ [Description](#Description)
-├─ [Badges](#Badges)
-├─ [Installation](#Installation)
-│  └─ [Extras](#Extras)
-├─ [Todos](#Todos)
-└─ [Public attributes](#Public-attributes)
-   └─ [Namespace](#Namespace)
-      ├─ [Class: GitHub](#Class:-GitHub)
-      ├─ [Class: LocalModule](#Class:-LocalModule)
-      ├─ [Class: LocalRepo](#Class:-LocalRepo)
-      └─ [Class: Packager](#Class:-Packager)
-```
+[generalpackager](#generalpackager)  
+├─ [Description](#Description)  
+├─ [Badges](#Badges)  
+├─ [Installation](#Installation)  
+│  └─ [Extras](#Extras)  
+├─ [Todos](#Todos)  
+└─ [Public attributes](#Public-attributes)  
+   └─ [Namespace](#Namespace)  
+      ├─ [Class: GitHub](#Class:-GitHub)  
+      ├─ [Class: LocalModule](#Class:-LocalModule)  
+      ├─ [Class: LocalRepo](#Class:-LocalRepo)  
+      └─ [Class: Packager](#Class:-Packager)
 
 ## Description
 Tools to interface GitHub, PyPI, local repos and local modules.
