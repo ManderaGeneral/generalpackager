@@ -71,8 +71,8 @@ class LocalRepo:
         repo.index.add(files)
         repo.index.commit("Testing auto commit.")
 
-        remote = repo.remote(name="origin")
-        remote.push()
+        remote = repo.remote()
+        remote.push(verbose=True)
         # remote.set_url("")
 
 
