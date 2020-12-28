@@ -67,12 +67,12 @@ class LocalRepo:
         repo = Repo(str(self.path / ".git"))
 
         files = [str(path) for path in self.path.get_paths_recursive() if not any([string in path for string in (".git", ".idea", "__pycache__")])]
-
+        print(files)
         repo.index.add(files)
         repo.index.commit("Testing auto commit.")
 
-        remote = repo.remote()
-        remote.push()
+        # remote = repo.remote()
+        # remote.push()
         # remote.set_url("")
 
 
