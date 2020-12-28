@@ -1,5 +1,5 @@
 # generalpackager
-<code><pre>
+<code>
 [generalpackager](#generalpackager)
 ├─ [Description](#Description)
 ├─ [Badges](#Badges)
@@ -12,7 +12,7 @@
       ├─ [Class: LocalModule](#Class-LocalModule)
       ├─ [Class: LocalRepo](#Class-LocalRepo)
       └─ [Class: Packager](#Class-Packager)
-</pre></code>
+</code>
 
 ## Description
 Tools to interface GitHub, PyPI, local repos and local modules.
