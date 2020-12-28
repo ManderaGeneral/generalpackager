@@ -41,19 +41,16 @@ class _PackagerMarkdown:
 
         return markdown
 
-    def get_topics_markdown(self, parent=None):
-        """ Get topics markdown.
-
-            :param Packager self:
-            :param parent: """
-        print(self.metadata.topics)
-
-    def get_table_of_contents(self, markdown):
+    def get_table_of_contents_markdown(self, parent_markdown):
         """ Get table of contents lines.
 
             :param Packager self:
-            :param markdown: """
-        return markdown.view(custom_repr=lambda md: md.link(md.header), spacer=" ", print_out=False).replace("\n", "  \n").splitlines()
+            :param parent_markdown: """
+        markdown = Markdown(parent_markdown.view(custom_repr=lambda md: md.link(md.header, href=True), print_out=False).replace("\n", "  \n"))
+        markdown.wrap_with_tags("pre")
+        return markdown
+
+
 
     def generate_readme(self):
         """ Create readme markdown object.
@@ -77,7 +74,9 @@ class _PackagerMarkdown:
         self.localmodule.get_attributes_markdown().set_parent(parent=markdown)
 
         # Table of contents
-        Markdown(*self.get_table_of_contents(markdown)).set_parent(parent=markdown).set_index(0)
+        self.get_table_of_contents_markdown(parent_markdown=markdown).set_parent(parent=markdown).set_index(0)
+        # Markdown().add_code_lines(*self.get_table_of_contents(markdown)).set_parent(parent=markdown).set_index(0)
+        # Markdown(*self.get_table_of_contents(markdown)).set_parent(parent=markdown).set_index(0)
 
         return markdown
 
