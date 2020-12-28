@@ -135,7 +135,7 @@ class Packager(_PackagerMarkdown):
         self.localrepo.get_readme_path().text.write(self.generate_readme(), overwrite=True)
         # self.commit_and_push()
 
-        # self.sync_github_metadata()
+        self.sync_github_metadata()
 
         # HERE ** TOC links
         # 2 HERE ** Release history from commits

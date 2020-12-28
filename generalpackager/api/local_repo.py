@@ -50,6 +50,8 @@ class LocalRepo:
                 text = path.text.read()
             except:
                 continue
+            if path.name().lower() in ("shelved.patch", "readme.md"):
+                continue
 
             for todo in re.findall("todo+: (.+)", text, re.I):
                 todos.append({
