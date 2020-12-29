@@ -41,16 +41,14 @@ class _PackagerMarkdown:
 
         return markdown
 
-    def get_table_of_contents_markdown(self, markdown):
-        """ Get table of contents lines.
+    def configure_table_of_contents_markdown(self, markdown):
+        """ Configure table of contents lines from markdown.
 
             :param Packager self:
             :param markdown: """
         parent_markdown = markdown.get_parent(-1)
-        markdown.add_lines(parent_markdown.view(custom_repr=lambda md: md.link(md.header, href=True), print_out=False).replace("\n", "  \n"))
-        markdown.wrap_with_tags("pre")
+        markdown.add_pre_lines(parent_markdown.view(custom_repr=lambda md: md.link(md.header, href=True), print_out=False))
         return markdown
-
 
 
     def generate_readme(self):
@@ -74,11 +72,10 @@ class _PackagerMarkdown:
         Markdown(header="Todos", parent=markdown).add_table_lines(*self.localrepo.get_todos())
 
         # Attributes
-        self.localmodule.get_attributes_markdown().set_parent(parent=markdown)
+        self.localmodule.get_attributes_markdown(packager=self).set_parent(parent=markdown)
 
         # Table of contents
-
-        self.get_table_of_contents_markdown(markdown=table_of_contents)
+        self.configure_table_of_contents_markdown(markdown=table_of_contents)
 
 
         # Markdown().add_code_lines(*self.get_table_of_contents(markdown)).set_parent(parent=markdown).set_index(0)
@@ -121,12 +118,13 @@ class _Metadata:
 class Packager(_PackagerMarkdown, _PackagerGitHub):
     """ Uses APIs to manage 'general' package.
         Todo: Allow github, pypi or local repo not to exist in any combination. """
-    def __init__(self, name, repos_path=None):
+    def __init__(self, name, repos_path=None, commit_sha="master"):
         if repos_path is None:
             repos_path = Path().absolute().get_parent()
 
         self.name = name
         self.repos_path = repos_path
+        self.commit_sha = commit_sha
 
         self.github = GitHub(name=name)
         self.localrepo = LocalRepo(path=repos_path / name)
@@ -141,9 +139,8 @@ class Packager(_PackagerMarkdown, _PackagerGitHub):
         """ Called by GitHub Actions when a commit is pushed. """
         self.localrepo.get_readme_path().text.write(self.generate_readme(), overwrite=True)
 
-        self.localrepo.commit_and_push()
-
-        self.sync_github_metadata()
+        # self.localrepo.commit_and_push()
+        # self.sync_github_metadata()
 
         # HERE ** Add .idea to git ignore with code
         # HERE ** Release history from commits
