@@ -23,7 +23,9 @@ Having attribute documenation in readme might actually be pretty nice, makes loo
 
 
 packager = Packager("generalpackager")
-packager.setup_all()
+
+# packager.setup_all()
+print(packager.metadata.get_classifiers())
 
 
 

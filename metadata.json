@@ -13,11 +13,9 @@
         "testing": ["hello", "there", "foo"],
         "another": ["omg", "hello"]
     },
-    "classifiers": [
-        "Development Status :: 2 - Pre-Alpha"
-    ],
     "topics": [
-        "packager",
-        "tools"
+        "tool",
+        "python38",
+        "library"
     ]
 }

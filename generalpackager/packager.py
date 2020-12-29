@@ -51,6 +51,24 @@ class _PackagerMarkdown:
         return markdown
 
 
+    def _attr_repr(self, objInfo):
+        """ :param Packager self: """
+        text = objInfo.nice_repr()
+        owner = self.github.owner
+        repo_name = self.name
+        file_path = objInfo.module_path(repo_name=repo_name)
+        line = objInfo.get_definition_line()
+        commit_sha = self.commit_sha
+
+        return Markdown.link_github_code(text=text, owner=owner, repo_name=repo_name, file_path=file_path, line=line, commit_sha=commit_sha)
+
+    def get_attributes_markdown(self):
+        """ Get a recursive view of attributes markdown.
+
+            :param Packager self: """
+        view_str = self.localmodule.objInfo.view(custom_repr=self._attr_repr, print_out=False)
+        return Markdown(header="Attributes").add_pre_lines(view_str)
+
     def generate_readme(self):
         """ Create readme markdown object.
 
@@ -67,7 +85,7 @@ class _PackagerMarkdown:
         Markdown(header="Badges", parent=markdown).add_table_lines(self.get_badges_dict())
 
         # Attributes
-        self.localmodule.get_attributes_markdown(packager=self).set_parent(parent=markdown)
+        self.get_attributes_markdown().set_parent(parent=markdown)
 
         # Todos
         Markdown(header="Todos", parent=markdown).add_table_lines(*self.localrepo.get_todos())
@@ -81,7 +99,7 @@ class _PackagerGitHub:
         """ Sync GitHub with local metadata.
 
             :param Packager self: """
-        self.github.set_website(f"https://pypi.org/project/{self.name}/")
+        self.github.set_website(self.pypi.url)
         self.github.set_description(self.metadata.description)
         self.github.set_topics(self.metadata.topics)
 
@@ -92,7 +110,6 @@ class _Metadata:
     description = ...
     install_requires = ...
     extras_require = ...
-    classifiers = ...
     topics = ...
 
     def __init__(self, packager):
@@ -104,6 +121,41 @@ class _Metadata:
         for key in dir(self):
             if getattr(self, key) is Ellipsis:
                 raise AssertionError(f"Key '{key}' for {self.packager}'s metadata is still ...")
+
+    _lib = {
+        "planning": "Development Status :: 1 - Planning",
+        "pre-alpha": "Development Status :: 2 - Pre-Alpha",
+        "alpha": "Development Status :: 3 - Alpha",
+        "beta": "Development Status :: 4 - Beta",
+        "production/Stable": "Development Status :: 5 - Production/Stable",
+        "mature": "Development Status :: 6 - Mature",
+        "inactive": "Development Status :: 7 - Inactive",
+
+        "utility": "Topic :: Utilities",
+
+        "tool": "Topic :: Software Development :: Build Tools",
+        "library": "Topic :: Software Development :: Libraries",
+        "gui": "Topic :: Software Development :: User Interfaces",
+        
+        "file-manager": "Topic :: Desktop Environment :: File Managers",
+
+        "mit-license": "License :: OSI Approved :: MIT License",
+
+        "windows": "Operating System :: Microsoft :: Windows",
+        "macos": "Operating System :: MacOS",
+        "linux": "Operating System :: POSIX :: Linux",
+    }
+
+    def _convert_topic(self, topic):
+        if topic.startswith("python"):
+            major = topic[6]
+            minor = topic[7:]
+            return f"Programming Language :: Python :: {major}.{minor}"
+        return self._lib[topic]
+
+    def get_classifiers(self):
+        """ Get a list of classifiers generated from topics. """
+        return [self._convert_topic(topic) for topic in self.topics]
 
 
 @initBases
@@ -130,12 +182,13 @@ class Packager(_PackagerMarkdown, _PackagerGitHub):
     def setup_all(self):
         """ Called by GitHub Actions when a commit is pushed.
             Todo: Generate a release history from commit history.
-            Todo: Generate classifiers from topics. """
+            Todo: Generate setup.py """
         (self.localrepo.path / ".git/info/exclude").text.write("/.idea/", overwrite=True)
         self.localrepo.get_readme_path().text.write(self.generate_readme(), overwrite=True)
         self.localrepo.commit_and_push()
-
         self.sync_github_metadata()
+
+
 
 
 
