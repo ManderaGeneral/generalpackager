@@ -34,8 +34,7 @@ class LocalModule:
 
     def get_attributes_markdown(self, packager):
         """ Get attributes markdown.
-            One table for each class and one for all functions.
-            Todo: Remove Namespaces if we get code links working. """
+            One table for each class and one for all functions. """
 
         view_str = self.objInfo.view(custom_repr=lambda objInfo, packager=packager: self._attr_repr(objInfo, packager), print_out=False)
         return Markdown(header="Attributes").add_pre_lines(view_str)

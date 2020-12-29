@@ -55,18 +55,16 @@ class _PackagerMarkdown:
         """ Create readme markdown object.
 
             :param Packager self: """
-        markdown = Markdown(header=self.name)
+        markdown = Markdown(self.metadata.description, header=self.name)
 
+        # Table of contents
         table_of_contents = Markdown(header="Navigation", parent=markdown)
-
-        # Description
-        Markdown(self.metadata.description, header="Description", parent=markdown)
-
-        # Badges
-        Markdown(header="Badges", parent=markdown).add_table_lines(self.get_badges_dict())
 
         # Installation
         self.get_installation_markdown().set_parent(parent=markdown)
+
+        # Badges
+        Markdown(header="Badges", parent=markdown).add_table_lines(self.get_badges_dict())
 
         # Attributes
         self.localmodule.get_attributes_markdown(packager=self).set_parent(parent=markdown)
@@ -74,13 +72,7 @@ class _PackagerMarkdown:
         # Todos
         Markdown(header="Todos", parent=markdown).add_table_lines(*self.localrepo.get_todos())
 
-        # Table of contents
         self.configure_table_of_contents_markdown(markdown=table_of_contents)
-
-
-        # Markdown().add_code_lines(*self.get_table_of_contents(markdown)).set_parent(parent=markdown).set_index(0)
-        # Markdown(*self.get_table_of_contents(markdown)).set_parent(parent=markdown).set_index(0)
-
         return markdown
 
 
@@ -136,14 +128,14 @@ class Packager(_PackagerMarkdown, _PackagerGitHub):
         assert self.metadata.name == self.name
 
     def setup_all(self):
-        """ Called by GitHub Actions when a commit is pushed. """
+        """ Called by GitHub Actions when a commit is pushed.
+            Todo: Generate a release history from commit history.
+            Todo: Generate classifiers from topics. """
+        (self.localrepo.path / ".git/info/exclude").text.write("/.idea/", overwrite=True)
         self.localrepo.get_readme_path().text.write(self.generate_readme(), overwrite=True)
         self.localrepo.commit_and_push()
-        self.sync_github_metadata()
 
-        # HERE ** Add .idea to git ignore with code
-        # HERE ** Release history from commits
-        # HERE ** Generate classifiers from topics
+        self.sync_github_metadata()
 
 
 
