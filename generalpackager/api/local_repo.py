@@ -38,7 +38,7 @@ class LocalRepo:
         if path.is_file():
             return False
         for file in path.get_paths_in_folder():
-            if file.name() in ("metadata.json", "setup.py"):
+            if file.name() in ("metadata.json", "setup_template.py"):
                 return True
         return False
 
@@ -80,6 +80,9 @@ class LocalRepo:
 
         # remote.set_url("")
 
+    def git_exclude(self, *lines):
+        """ Overwrite git exclude file with given lines. """
+        return (self.path / ".git/info/exclude").text.write("\n".join(lines), overwrite=True)
 
 
 

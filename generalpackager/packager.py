@@ -1,6 +1,6 @@
 """ Methods specific for my general packages. """
 
-from generallibrary import initBases, Markdown, comma_and_and
+from generallibrary import initBases, Markdown, comma_and_and, CodeLine
 from generalfile import Path
 from generalpackager import LocalRepo, LocalModule, GitHub, PyPI
 
@@ -70,10 +70,11 @@ class _PackagerMarkdown:
         return Markdown(header="Attributes").add_pre_lines(view_str)
 
     def generate_readme(self):
-        """ Create readme markdown object.
+        """ Generate readme markdown and overwrite README.md in local repo.
 
             :param Packager self: """
         markdown = Markdown(self.metadata.description, header=self.name)
+        markdown.add_table_lines(self.get_badges_dict())
 
         # Table of contents
         table_of_contents = Markdown(header="Navigation", parent=markdown)
@@ -82,7 +83,7 @@ class _PackagerMarkdown:
         self.get_installation_markdown().set_parent(parent=markdown)
 
         # Badges
-        Markdown(header="Badges", parent=markdown).add_table_lines(self.get_badges_dict())
+        # Markdown(header="Badges", parent=markdown).add_table_lines(self.get_badges_dict())
 
         # Attributes
         self.get_attributes_markdown().set_parent(parent=markdown)
@@ -91,10 +92,36 @@ class _PackagerMarkdown:
         Markdown(header="Todos", parent=markdown).add_table_lines(*self.localrepo.get_todos())
 
         self.configure_table_of_contents_markdown(markdown=table_of_contents)
-        return markdown
+
+        self.localrepo.get_readme_path().text.write(markdown, overwrite=True)
+
+
+class _PackagerFiles:
+    """ Generates setup, license and gitexclude. """
+    def generate_setup(self):
+        """ Generate setup.py and overwrite local repo.
+
+            :param Packager self: """
+        # HERE ** Run randomtesting.py - Also testing TreeDiagram.add(child)
+        top = CodeLine()
+        top.add(CodeLine("from setuptools import setup, find_namespace_packages"))
+
+        setup = top.add(CodeLine("setup("))
+        setup.add(CodeLine(f"author='{self.author}',"))
+        top.add(CodeLine(")"))
+
+        top.print()
+
+
+    def generate_git_exclude(self):
+        """ Generate git exclude file.
+
+            :param Packager self: """
+        self.localrepo.git_exclude("/.idea/")
 
 
 class _PackagerGitHub:
+    """ Sync metadata. """
     def sync_github_metadata(self):
         """ Sync GitHub with local metadata.
 
@@ -159,9 +186,16 @@ class _Metadata:
 
 
 @initBases
-class Packager(_PackagerMarkdown, _PackagerGitHub):
+class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles):
     """ Uses APIs to manage 'general' package.
+        Contains methods that require more than one API as well as methods specific for ManderaGeneral.
         Todo: Allow github, pypi or local repo not to exist in any combination. """
+
+    author = 'Rickard "Mandera" Abraham'
+    license = "mit-license"
+    python = "3.8", "3.9"
+    os = "windows", "macos", "linux"
+
     def __init__(self, name, repos_path=None, commit_sha="master"):
         if repos_path is None:
             repos_path = Path().absolute().get_parent()
@@ -182,11 +216,12 @@ class Packager(_PackagerMarkdown, _PackagerGitHub):
     def setup_all(self):
         """ Called by GitHub Actions when a commit is pushed.
             Todo: Generate a release history from commit history.
-            Todo: Generate setup.py """
-        (self.localrepo.path / ".git/info/exclude").text.write("/.idea/", overwrite=True)
-        self.localrepo.get_readme_path().text.write(self.generate_readme(), overwrite=True)
-        self.localrepo.commit_and_push()
-        self.sync_github_metadata()
+            Todo: Generate setup_template.py """
+        # self.generate_git_exclude()
+        # self.generate_readme()
+        # self.localrepo.commit_and_push()
+        # self.sync_github_metadata()
+        self.generate_setup()
 
 
 
