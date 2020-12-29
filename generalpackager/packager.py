@@ -68,11 +68,11 @@ class _PackagerMarkdown:
         # Installation
         self.get_installation_markdown().set_parent(parent=markdown)
 
-        # Todos
-        Markdown(header="Todos", parent=markdown).add_table_lines(*self.localrepo.get_todos())
-
         # Attributes
         self.localmodule.get_attributes_markdown(packager=self).set_parent(parent=markdown)
+
+        # Todos
+        Markdown(header="Todos", parent=markdown).add_table_lines(*self.localrepo.get_todos())
 
         # Table of contents
         self.configure_table_of_contents_markdown(markdown=table_of_contents)
@@ -138,9 +138,8 @@ class Packager(_PackagerMarkdown, _PackagerGitHub):
     def setup_all(self):
         """ Called by GitHub Actions when a commit is pushed. """
         self.localrepo.get_readme_path().text.write(self.generate_readme(), overwrite=True)
-
-        # self.localrepo.commit_and_push()
-        # self.sync_github_metadata()
+        self.localrepo.commit_and_push()
+        self.sync_github_metadata()
 
         # HERE ** Add .idea to git ignore with code
         # HERE ** Release history from commits

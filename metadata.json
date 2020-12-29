@@ -1,7 +1,7 @@
 {
     "name": "generalpackager",
     "version": "0.0.1",
-    "description": "Tools to interface GitHub, PyPI, local repos and local modules.",
+    "description": "Tools to interface GitHub, PyPI and local modules / repos. Used for generating files to keep projects dry and synced.",
     "install_requires": [
         "generalfile",
         "generallibrary",

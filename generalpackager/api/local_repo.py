@@ -73,7 +73,7 @@ class LocalRepo:
         # print(repo.index.)
 
         repo.git.add(A=True)
-        repo.index.commit("Working but it added .idea.")
+        repo.index.commit("Automatic commit.")
         remote = repo.remote()
         remote.set_url(f"https://Mandera:{os.environ['packager_github_api']}@github.com/ManderaGeneral/generalpackager.git")
         remote.push()
