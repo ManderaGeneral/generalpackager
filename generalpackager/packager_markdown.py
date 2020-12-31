@@ -45,7 +45,6 @@ class _PackagerMarkdown:
         markdown.add_pre_lines(parent_markdown.view(custom_repr=lambda md: md.link(md.header, href=True), print_out=False))
         return markdown
 
-
     def _attr_repr(self, objInfo):
         """ :param generalpackager.Packager self: """
         text = objInfo.nice_repr()
@@ -66,6 +65,7 @@ class _PackagerMarkdown:
 
     def generate_readme(self):
         """ Generate readme markdown and overwrite README.md in local repo.
+            Todo: Add footnote to readme with date and commit if specified.
 
             :param generalpackager.Packager self: """
         markdown = Markdown(self.metadata.description, header=self.name)

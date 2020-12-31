@@ -37,8 +37,14 @@ class _PackagerFiles:
 
         setup = top.add(CodeLine("setup("))
         for key, value in setup_kwargs.items():
-            # setup.add(CodeLine(f"{key}={json.dumps(value)},"))
-            setup.add(CodeLine(f"{key}={value},"))
+            if isinstance(value, list):
+                list_ = setup.add(CodeLine(f"{key}=["))
+                for item in value:
+                    list_.add(CodeLine(f"'{item}',"))
+                setup.add(CodeLine("],"))
+            else:
+                setup.add(CodeLine(f"{key}={value},"))
+
         top.add(CodeLine(")", space_after=1))
 
         self.generate_file(self.localrepo.get_setup_path(), top.text(watermark=False))

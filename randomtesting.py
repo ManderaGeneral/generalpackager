@@ -16,7 +16,6 @@ Having attribute documenation in readme might actually be pretty nice, makes loo
 
 
 
-
 # TreeDiagram(parent=TreeDiagram()).get_parent().view(custom_repr=lambda x: "hello\nthere")
 
 
