@@ -47,6 +47,7 @@ class _PackagerMarkdown:
 
     def _attr_repr(self, objInfo):
         """ :param generalpackager.Packager self: """
+        # print(objInfo)
         text = objInfo.nice_repr()
         owner = self.github.owner
         repo_name = self.name

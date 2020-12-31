@@ -50,7 +50,6 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
         self.generate_readme()
         self.generate_setup()
         self.localrepo.commit_and_push()
-
         self.sync_github_metadata()
 
 

@@ -1,5 +1,5 @@
 
-from generallibrary import ObjInfo, Markdown
+from generallibrary import ObjInfo
 
 
 class LocalModule:
@@ -15,7 +15,7 @@ class LocalModule:
 
     def _filter(self, objInfo):
         """ :param ObjInfo objInfo: """
-        return objInfo.public() and not objInfo.is_module()
+        return objInfo.public() and (objInfo.is_class() or objInfo.is_method())
 
     def _generate_attributes(self):
         self.objInfo.get_attrs(depth=-1)
