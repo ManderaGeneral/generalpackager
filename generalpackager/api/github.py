@@ -13,6 +13,14 @@ class GitHub:
 
         assert self._request(method="get").status_code == 200  # Checks name, owner and token all in one
 
+    def url(self):
+        """ Get static URL from owner and name. """
+        return f"https://github.com/{self.owner}/{self.name}"
+
+    def api_url(self, endpoint=None):
+        """ Get URL from owner, name and enpoint. """
+        return "/".join(("https://api.github.com", "repos", self.owner, self.name) + ((endpoint, ) if endpoint else ()))
+
     def get_website(self):
         """ Get website specified in repository details.
 
@@ -47,14 +55,9 @@ class GitHub:
         """ Set a description for the GitHub repository. """
         return self._request(method="patch", name=self.name, description=description)
 
-
     def _request(self, method, endpoint=None, **data):
         """ :rtype: requests.Response """
         method = getattr(requests, method)
-
-        url = f"https://api.github.com/repos/{self.owner}/{self.name}"
-        if endpoint:
-            url += f"/{endpoint}"
 
         kwargs = {
             "headers": {"Accept": "application/vnd.github.mercy-preview+json"},
@@ -64,4 +67,4 @@ class GitHub:
             # kwargs["data"] = data
             kwargs["data"] = json.dumps(data)
 
-        return method(url=url, **kwargs)
+        return method(url=self.api_url(endpoint=endpoint), **kwargs)

@@ -15,12 +15,20 @@ class LocalRepo:
         self.name = self.path.parts()[-1]
 
     def get_readme_path(self):
-        """ Get a Path instance pointing to README, regardless if it exists. """
+        """ Get a Path instance pointing to README.md, regardless if it exists. """
         return self.path / "README.md"
 
     def get_metadata_path(self):
-        """ Get a Path instance pointing to README, regardless if it exists. """
+        """ Get a Path instance pointing to metadata.json, regardless if it exists. """
         return self.path / "metadata.json"
+
+    def get_git_exclude_path(self):
+        """ Get a Path instance pointing to .git/info/exclude, regardless if it exists. """
+        return self.path / ".git/info/exclude"
+
+    def get_setup_path(self):
+        """ Get a Path instance pointing to setup.py, regardless if it exists. """
+        return self.path / "setup.py"
 
     def get_package_paths(self):
         """ Get a list of Paths pointing to each folder containing a Python file in this local repo, aka `namespace package`. """
@@ -80,9 +88,6 @@ class LocalRepo:
 
         # remote.set_url("")
 
-    def git_exclude(self, *lines):
-        """ Overwrite git exclude file with given lines. """
-        return (self.path / ".git/info/exclude").text.write("\n".join(lines), overwrite=True)
 
 
 
