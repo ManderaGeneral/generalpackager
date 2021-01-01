@@ -46,7 +46,8 @@ class _PackagerMarkdown:
         return markdown
 
     def _attr_repr(self, objInfo):
-        """ :param generalpackager.Packager self: """
+        """ :param generalpackager.Packager self:
+            :param generallibrary.ObjInfo objInfo: """
         # print(objInfo)
         text = objInfo.nice_repr()
         owner = self.github.owner
@@ -54,6 +55,11 @@ class _PackagerMarkdown:
         file_path = objInfo.module_path(repo_name=repo_name)
         line = objInfo.get_definition_line()
         commit_sha = self.commit_sha
+
+        print(objInfo.module().__name__)
+
+        # HERE 1 ** Will falsely link when class is defined in library (TreeDiagram)
+        # Make ObjInfo handle modules to allow us to get top module from any ObjInfo
 
         return Markdown.link_github_code(text=text, owner=owner, repo_name=repo_name, file_path=file_path, line=line, commit_sha=commit_sha)
 
