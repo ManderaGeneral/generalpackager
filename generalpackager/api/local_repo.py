@@ -46,7 +46,7 @@ class LocalRepo:
         if path.is_file():
             return False
         for file in path.get_paths_in_folder():
-            if file.name() in ("metadata.json", "setup_template.py"):
+            if file.name() in ("metadata.json", "setup.py"):
                 return True
         return False
 

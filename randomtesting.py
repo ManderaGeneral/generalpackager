@@ -1,5 +1,5 @@
 
-from generallibrary import TreeDiagram
+from generallibrary import TreeDiagram, ObjInfo
 import generallibrary
 from generalpackager import *
 from generalfile import Path
@@ -19,10 +19,15 @@ Having attribute documenation in readme might actually be pretty nice, makes loo
 # TreeDiagram(parent=TreeDiagram()).get_parent().view(custom_repr=lambda x: "hello\nthere")
 
 
-packager = Packager("generalpackager")
 
-packager.setup_all()
+
+
+packager = Packager("generalpackager")
+print(packager._attr_repr(packager.localmodule.objInfo.get_child_by_key_values(name="TreeDiagram")))
+# packager.setup_all()
+
 # print(packager.metadata.get_classifiers())
+
 
 
 
