@@ -4,7 +4,8 @@ from generallibrary import Markdown, comma_and_and, current_date_and_time
 
 class _PackagerMarkdown:
     """ Contains methods to generate readme sections from arguments.
-        Todo: Inherit future crawler class for pypi and github. """
+        Todo: Inherit future crawler class for pypi and github.
+        Todo: Use Packager.os for badges. """
     def get_badges_dict(self):
         """ Get badges as a dict.
 

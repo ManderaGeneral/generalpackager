@@ -23,13 +23,13 @@ Having attribute documenation in readme might actually be pretty nice, makes loo
 
 # objInfo.get_parent(-1).view(custom_repr=lambda objInfo: objInfo.module())
 
-packager = Packager("generalpackager")
-packager.setup_all()
+# packager = Packager("generalpackager")
+# packager.setup_all()
 
 # print(packager.metadata.get_classifiers())
 
 
-
+# print(datetime.now(timezone(timedelta(), "CET")).strftime("%Y-%m-%d %H:%M %Z"))
 
 
 
