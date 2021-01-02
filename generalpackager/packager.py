@@ -48,11 +48,11 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
     def setup_all(self):
         """ Called by GitHub Actions when a commit is pushed.
             Todo: Generate a release history from commit history. """
-        self.generate_git_exclude()
+        # self.generate_git_exclude()
         self.generate_readme()
-        self.generate_setup()
-        self.localrepo.commit_and_push()
-        self.sync_github_metadata()
+        # self.generate_setup()
+        # self.localrepo.commit_and_push()
+        # self.sync_github_metadata()
 
 
 

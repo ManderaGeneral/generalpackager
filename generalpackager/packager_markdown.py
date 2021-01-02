@@ -51,13 +51,15 @@ class _PackagerMarkdown:
             :param generalpackager.Packager self:
             :param generallibrary.ObjInfo objInfo: """
         text = objInfo.nice_repr()
-        owner = self.github.owner
-        repo_name = self.name
-        file_path = objInfo.module().__name__
-        line = objInfo.get_definition_line()
         commit_sha = self.commit_sha
+        file_path = f'{objInfo.module().__name__.replace(".", "/")}{"/__init__" if objInfo.is_module() else ""}.py'
+        line = objInfo.get_definition_line()
 
-        return Markdown.link_github_code(text=text, owner=owner, repo_name=repo_name, file_path=file_path, line=line, commit_sha=commit_sha)
+        url = f"{self.github.url()}/blob/{commit_sha}/{file_path}#L{line}"
+
+        # self.github.assert_url_up(url=url)  # Wont work for private repos or new files, would have to check after the fact.
+
+        return Markdown.link(text=text, url=url, href=True)
 
     def get_attributes_markdown(self):
         """ Get a recursive view of attributes markdown.

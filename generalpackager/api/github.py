@@ -11,7 +11,13 @@ class GitHub:
         self.owner = owner
         self.token = os.environ['packager_github_api'] if token is None else token
 
-        assert self._request(method="get").status_code == 200  # Checks name, owner and token all in one
+        self.assert_url_up()  # Checks name, owner and token all in one
+
+    def assert_url_up(self, url=None):
+        """ Assert that url is working. """
+        status_code = self._request(url=url).status_code
+        if status_code != 200:
+            raise AssertionError(f"Request for url '{url}' status code {status_code} != 200.")
 
     def url(self):
         """ Get static URL from owner and name. """
@@ -55,16 +61,17 @@ class GitHub:
         """ Set a description for the GitHub repository. """
         return self._request(method="patch", name=self.name, description=description)
 
-    def _request(self, method, endpoint=None, **data):
+    def _request(self, method="get", url=None, endpoint=None, **data):
         """ :rtype: requests.Response """
-        method = getattr(requests, method)
+        method = getattr(requests, method.lower())
 
         kwargs = {
             "headers": {"Accept": "application/vnd.github.mercy-preview+json"},
             "auth": (self.owner, self.token),
         }
         if data:
-            # kwargs["data"] = data
             kwargs["data"] = json.dumps(data)
 
-        return method(url=self.api_url(endpoint=endpoint), **kwargs)
+        if url is None:
+            url = self.api_url(endpoint=endpoint)
+        return method(url=url, **kwargs)
