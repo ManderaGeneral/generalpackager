@@ -53,7 +53,7 @@ class _PackagerMarkdown:
         text = objInfo.nice_repr()
         owner = self.github.owner
         repo_name = self.name
-        file_path = objInfo.module().__name__.replace(".", "/")
+        file_path = objInfo.module().__name__
         line = objInfo.get_definition_line()
         commit_sha = self.commit_sha
 
@@ -72,7 +72,8 @@ class _PackagerMarkdown:
 
             :param generalpackager.Packager self: """
         markdown = Markdown(self.metadata.description, header=self.name)
-        markdown.add_table_lines(self.get_badges_dict())
+        markdown.add_lines(*self.get_badges_dict().values())
+        # markdown.add_table_lines(self.get_badges_dict())
 
         # Table of contents
         contents = Markdown(header="Contents", parent=markdown)
