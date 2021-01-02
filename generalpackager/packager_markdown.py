@@ -1,5 +1,5 @@
 
-from generallibrary import Markdown, comma_and_and
+from generallibrary import Markdown, comma_and_and, current_date_and_time
 
 
 class _PackagerMarkdown:
@@ -93,5 +93,7 @@ class _PackagerMarkdown:
         Markdown(header="Todos", parent=markdown).add_table_lines(*self.localrepo.get_todos())
 
         self.configure_contents_markdown(markdown=contents)
+
+        Markdown(f"Generated {current_date_and_time()} for commit '{self.commit_sha}'.", parent=markdown).wrap_with_tags("sup")
 
         self.generate_file(self.localrepo.get_readme_path(), markdown)

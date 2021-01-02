@@ -46,8 +46,7 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
         assert self.metadata.name == self.name
 
     def setup_all(self):
-        """ Called by GitHub Actions when a commit is pushed.
-            Todo: Generate a release history from commit history. """
+        """ Called by GitHub Actions when a commit is pushed. """
         self.generate_git_exclude()
         self.generate_readme()
         self.generate_setup()

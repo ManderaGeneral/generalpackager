@@ -59,13 +59,17 @@ pip install generalpackager
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_metadata.py#L16'>Method: get_topics</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager.py#L48'>Method: setup_all</a>
 │  └─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_github.py#L5'>Method: sync_github_metadata</a>
-└─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/pypi.py#L3'>Class: PyPI</a>
+└─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/pypi.py#L5'>Class: PyPI</a>
 </pre>
 
 ## Todos
 | Module               | Message                                                           |
 |:---------------------|:------------------------------------------------------------------|
 | packager.py          | Allow github, pypi or local repo not to exist in any combination. |
-| packager.py          | Generate a release history from commit history.                   |
 | packager_markdown.py | Inherit future crawler class for pypi and github.                 |
 | packager_markdown.py | Add footnote to readme with date and commit if specified.         |
+| pypi.py              | Method to upload to PyPI.                                         |
+
+<sup>
+Generated 2021-01-02 12:04 for commit 'master'.
+</sup>
