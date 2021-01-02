@@ -74,5 +74,5 @@ pip install generalpackager
 | pypi.py              | Method to upload to PyPI.                                         |
 
 <sup>
-Generated 2021-01-02 16:02  for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
+Generated 2021-01-02 16:29 CET for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
 </sup>
