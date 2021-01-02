@@ -15,7 +15,8 @@ class LocalModule:
 
     def _filter(self, objInfo):
         """ :param ObjInfo objInfo: """
-        return objInfo.public() and (objInfo.is_class() or objInfo.is_method())
+        is_part_of_module = getattr(objInfo.module(), "__name__", "").startswith(self.module.__name__)
+        return objInfo.public() and (objInfo.is_class() or objInfo.is_method()) and is_part_of_module
 
     def _generate_attributes(self):
         self.objInfo.get_attrs(depth=-1)

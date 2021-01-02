@@ -21,10 +21,10 @@ Having attribute documenation in readme might actually be pretty nice, makes loo
 
 
 
+# objInfo.get_parent(-1).view(custom_repr=lambda objInfo: objInfo.module())
 
 packager = Packager("generalpackager")
-print(packager._attr_repr(packager.localmodule.objInfo.get_child_by_key_values(name="TreeDiagram")))
-# packager.setup_all()
+packager.setup_all()
 
 # print(packager.metadata.get_classifiers())
 
