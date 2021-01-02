@@ -55,10 +55,14 @@ class _PackagerMarkdown:
         file_path = f'{objInfo.module().__name__.replace(".", "/")}{"/__init__" if objInfo.is_module() else ""}.py'
         line = objInfo.get_definition_line()
 
-        url = f"{self.github.url()}/blob/{commit_sha}/{file_path}#L{line}"
+        return self.github_link(text=text, suffix=f"blob/{commit_sha}/{file_path}#L{line}")
 
-        # self.github.assert_url_up(url=url)  # Wont work for private repos or new files, would have to check after the fact.
-
+    def github_link(self, text, suffix):
+        """ :param generalpackager.Packager self:
+            :param text:
+            :param suffix: """
+        url = f"{self.github.url()}/{suffix}"
+        # self.assert_url_up(url=url)  # Wont work for private repos or new files, would have to check after the fact.
         return Markdown.link(text=text, url=url, href=True)
 
     def get_attributes_markdown(self):
@@ -68,23 +72,30 @@ class _PackagerMarkdown:
         view_str = self.localmodule.objInfo.view(custom_repr=self._attr_repr, print_out=False)
         return Markdown(header="Attributes").add_pre_lines(view_str)
 
+    def get_footnote_markdown(self):
+        """ Get a markdown for footnote containing date, time and commit link.
+
+            :param generalpackager.Packager self: """
+        line = f"Generated {current_date_and_time()} for commit {self.github_link(text=self.commit_sha, suffix=f'commit/{self.commit_sha}')}."
+        return Markdown(line).wrap_with_tags("sup")
+
+
     def generate_readme(self):
         """ Generate readme markdown and overwrite README.md in local repo.
             Todo: Add footnote to readme with date and commit if specified.
 
             :param generalpackager.Packager self: """
+        # Description
         markdown = Markdown(self.metadata.description, header=self.name)
-        markdown.add_lines(*self.get_badges_dict().values())
-        # markdown.add_table_lines(self.get_badges_dict())
 
-        # Table of contents
+        # Badges
+        markdown.add_lines(*self.get_badges_dict().values())
+
+        # Table of contents - Skeleton
         contents = Markdown(header="Contents", parent=markdown)
 
         # Installation
         self.get_installation_markdown().set_parent(parent=markdown)
-
-        # Badges
-        # Markdown(header="Badges", parent=markdown).add_table_lines(self.get_badges_dict())
 
         # Attributes
         self.get_attributes_markdown().set_parent(parent=markdown)
@@ -92,8 +103,11 @@ class _PackagerMarkdown:
         # Todos
         Markdown(header="Todos", parent=markdown).add_table_lines(*self.localrepo.get_todos())
 
+        # Table of contents - Configuration
         self.configure_contents_markdown(markdown=contents)
 
-        Markdown(f"Generated {current_date_and_time()} for commit '{self.commit_sha}'.", parent=markdown).wrap_with_tags("sup")
+        # Footnote
+        self.get_footnote_markdown().set_parent(parent=markdown)
 
+        # Create actual readme file
         self.generate_file(self.localrepo.get_readme_path(), markdown)
