@@ -9,10 +9,7 @@
         "requests",
         "gitpython"
     ],
-    "extras_require": {
-        "testing": ["hello", "there", "foo"],
-        "another": ["omg", "hello"]
-    },
+    "extras_require": {},
     "topics": [
         "tool",
         "library"

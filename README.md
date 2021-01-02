@@ -10,7 +10,6 @@ Tools to interface GitHub, PyPI and local modules / repos. Used for generating f
 <a href='#generalpackager'>generalpackager</a>
 ├─ <a href='#Contents'>Contents</a>
 ├─ <a href='#Installation'>Installation</a>
-│  └─ <a href='#Extras'>Extras</a>
 ├─ <a href='#Attributes'>Attributes</a>
 └─ <a href='#Todos'>Todos</a>
 </pre>
@@ -19,12 +18,6 @@ Tools to interface GitHub, PyPI and local modules / repos. Used for generating f
 ```
 pip install generalpackager
 ```
-
-### Extras
-| Name    | Command                                | Extra packages             |
-|:--------|:---------------------------------------|:---------------------------|
-| testing | `pip install generalpackager[testing]` | `hello`, `there` and `foo` |
-| another | `pip install generalpackager[another]` | `omg` and `hello`          |
 
 ## Attributes
 <pre>
@@ -53,18 +46,16 @@ pip install generalpackager
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_markdown#L39'>Method: configure_contents_markdown</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files#L7'>Method: generate_file</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files#L52'>Method: generate_git_exclude</a>
-│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_markdown#L74'>Method: generate_readme</a>
+│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_markdown#L69'>Method: generate_readme</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files#L15'>Method: generate_setup</a>
-│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_markdown#L67'>Method: get_attributes_markdown</a>
+│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_markdown#L62'>Method: get_attributes_markdown</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_markdown#L8'>Method: get_badges_dict</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_metadata#L26'>Method: get_classifiers</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_markdown#L22'>Method: get_installation_markdown</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_metadata#L16'>Method: get_topics</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager#L48'>Method: setup_all</a>
 │  └─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_github#L5'>Method: sync_github_metadata</a>
-├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/pypi#L3'>Class: PyPI</a>
-└─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager#L12'>Class: Testing</a>
-   └─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager#L13'>Method: hello</a>
+└─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/pypi#L3'>Class: PyPI</a>
 </pre>
 
 ## Todos

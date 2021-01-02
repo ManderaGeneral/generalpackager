@@ -19,7 +19,7 @@ setup(
     license="mit-license",
     python_requires="==3.8.*, ==3.9.*",
     packages=find_namespace_packages(),
-    extras_require={'testing': ['hello', 'there', 'foo'], 'another': ['omg', 'hello']},
+    extras_require={},
     classifiers=[
         'Topic :: Software Development :: Build Tools',
         'Topic :: Software Development :: Libraries',
