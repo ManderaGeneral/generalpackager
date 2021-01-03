@@ -16,5 +16,5 @@ class _PackagerPypi:
 
             :param generalpackager.Packager self: """
         self.create_sdist()
-        subprocess.call("twine upload dist/*")
+        subprocess.call("twine upload dist/* --skip-existing")
 

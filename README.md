@@ -74,23 +74,7 @@ pip install generalpackager
 | packager_markdown.py | Inherit future crawler class for pypi and github.                 |
 | packager_markdown.py | Use Packager.os for badges.                                       |
 | pypi.py              | Method to upload to PyPI.                                         |
-| packager.py          | Allow github, pypi or local repo not to exist in any combination. |
-| packager_markdown.py | Inherit future crawler class for pypi and github.                 |
-| packager_markdown.py | Use Packager.os for badges.                                       |
-| pypi.py              | Method to upload to PyPI.                                         |
-| packager.py          | Allow github, pypi or local repo not to exist in any combination. |
-| packager_markdown.py | Inherit future crawler class for pypi and github.                 |
-| packager_markdown.py | Use Packager.os for badges.                                       |
-| pypi.py              | Method to upload to PyPI.                                         |
-| packager.py          | Allow github, pypi or local repo not to exist in any combination. |
-| packager_markdown.py | Inherit future crawler class for pypi and github.                 |
-| packager_markdown.py | Use Packager.os for badges.                                       |
-| pypi.py              | Method to upload to PyPI.                                         |
-| packager.py          | Allow github, pypi or local repo not to exist in any combination. |
-| packager_markdown.py | Inherit future crawler class for pypi and github.                 |
-| packager_markdown.py | Use Packager.os for badges.                                       |
-| pypi.py              | Method to upload to PyPI.                                         |
 
 <sup>
-Generated 2021-01-03 11:51 CET for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
+Generated 2021-01-03 11:56 CET for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
 </sup>
