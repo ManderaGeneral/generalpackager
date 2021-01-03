@@ -57,6 +57,7 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
         self.sync_github_metadata()
         self.upload()
 
+        # self.localrepo.bump_version()
 
 
 

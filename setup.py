@@ -22,7 +22,7 @@ setup(
     url="https://github.com/ManderaGeneral/generalpackager",
     license="mit",
     python_requires="==3.8.*, ==3.9.*",
-    packages=find_namespace_packages(),
+    packages=[path for path in find_namespace_packages() if not path.startswith("build") and not path.startswith("dist")],
     extras_require={},
     classifiers=[
         'Topic :: Software Development :: Build Tools',
