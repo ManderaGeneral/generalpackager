@@ -9,6 +9,7 @@ from generalpackager.packager_files import _PackagerFiles
 from generalpackager.packager_github import _PackagerGitHub
 from generalpackager.packager_markdown import _PackagerMarkdown
 from generalpackager.packager_metadata import _PackagerMetadata
+from generalpackager.packager_pypi import _PackagerPypi
 
 import importlib
 
@@ -16,13 +17,13 @@ import importlib
 
 
 @initBases
-class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata):
+class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi):
     """ Uses APIs to manage 'general' package.
         Contains methods that require more than one API as well as methods specific for ManderaGeneral.
         Todo: Allow github, pypi or local repo not to exist in any combination. """
 
     author = 'Rickard "Mandera" Abraham'
-    license = "mit-license"
+    license = "mit"
     python = "3.8", "3.9"
     os = "windows", "macos", "linux"
 
@@ -47,12 +48,13 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
 
     def setup_all(self):
         """ Called by GitHub Actions when a commit is pushed. """
-        self.generate_git_exclude()
-        self.generate_readme()
-        self.generate_setup()
-        self.localrepo.commit_and_push()
-        self.sync_github_metadata()
-
+        # self.generate_git_exclude()
+        # self.generate_readme()
+        # self.generate_setup()
+        # self.generate_license()
+        # self.localrepo.commit_and_push()
+        # self.sync_github_metadata()
+        self.upload()
 
 
 

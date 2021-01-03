@@ -19,12 +19,13 @@ Having attribute documenation in readme might actually be pretty nice, makes loo
 # TreeDiagram(parent=TreeDiagram()).get_parent().view(custom_repr=lambda x: "hello\nthere")
 
 
-
-
 # objInfo.get_parent(-1).view(custom_repr=lambda objInfo: objInfo.module())
+
+
 
 packager = Packager("generalpackager")
 packager.setup_all()
+
 
 # print(packager.metadata.get_classifiers())
 
@@ -45,12 +46,6 @@ packager.setup_all()
 # print(gitHub.get_topics())
 # gitHub.set_topics(gitHub.get_topics() + ["foobar"])
 # gitHub.set_description("tesing")
-
-
-
-
-
-
 
 
 

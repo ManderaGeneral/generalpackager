@@ -15,9 +15,9 @@ class GitHub:
 
     def assert_url_up(self, url=None):
         """ Assert that url is working. """
-        status_code = self._request(url=url).status_code
-        if status_code != 200:
-            raise AssertionError(f"Request for url '{url}' status code {status_code} != 200.")
+        response = self._request(url=url)
+        if response.status_code != 200:
+            raise AssertionError(f"Request for url '{url}' status code {response.status_code} != 200.")
 
     def url(self):
         """ Get static URL from owner and name. """

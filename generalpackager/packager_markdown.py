@@ -1,5 +1,5 @@
 
-from generallibrary import Markdown, comma_and_and, current_date_and_time
+from generallibrary import Markdown, comma_and_and, current_datetime_formatted
 
 
 class _PackagerMarkdown:
@@ -77,13 +77,12 @@ class _PackagerMarkdown:
         """ Get a markdown for footnote containing date, time and commit link.
 
             :param generalpackager.Packager self: """
-        line = f"Generated {current_date_and_time()} for commit {self.github_link(text=self.commit_sha, suffix=f'commit/{self.commit_sha}')}."
+        line = f"Generated {current_datetime_formatted()} for commit {self.github_link(text=self.commit_sha, suffix=f'commit/{self.commit_sha}')}."
         return Markdown(line).wrap_with_tags("sup")
 
 
     def generate_readme(self):
         """ Generate readme markdown and overwrite README.md in local repo.
-            Todo: Add footnote to readme with date and commit if specified.
 
             :param generalpackager.Packager self: """
         # Description
@@ -92,7 +91,7 @@ class _PackagerMarkdown:
         # Badges
         markdown.add_lines(*self.get_badges_dict().values())
 
-        # Table of contents - Skeleton
+        # Table of contents - Placeholder
         contents = Markdown(header="Contents", parent=markdown)
 
         # Installation

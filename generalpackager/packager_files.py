@@ -1,5 +1,6 @@
 
-from generallibrary import CodeLine
+from generallibrary import CodeLine, current_datetime
+from generalfile import Path
 
 
 class _PackagerFiles:
@@ -54,3 +55,15 @@ class _PackagerFiles:
 
             :param generalpackager.Packager self: """
         self.generate_file(self.localrepo.get_git_exclude_path(), "\n".join(self.git_exclude_lines))
+
+    def generate_license(self):
+        """ Generate LICENSE by using Packager.license.
+
+            :param generalpackager.Packager self: """
+        text = Path(self.repos_path / f"generalpackager/generalpackager/licenses/{self.license}").text.read()
+        assert "$" in text
+        text = text.replace("$year", str(current_datetime().year))
+        text = text.replace("$author", self.author)
+        assert "$" not in text
+
+        self.generate_file(self.localrepo.get_license_path(), text)

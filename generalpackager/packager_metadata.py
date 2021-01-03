@@ -19,7 +19,7 @@ class _PackagerMetadata:
             :param generalpackager.Packager self: """
         topics = self.metadata.topics.copy()
         topics.extend([f"python{ver.replace('.', '')}" for ver in self.python])
-        topics.append(self.license)
+        topics.append(f"{self.license}-license")
         topics.extend(self.os)
         return topics
 
