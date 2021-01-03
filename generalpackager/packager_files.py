@@ -20,9 +20,11 @@ class _PackagerFiles:
         setup_kwargs = {
             "name": f'"{self.metadata.name}"',
             "author": f"'{self.author}'",
+            "author_email": f'"{self.email}"',
             "version": f'"{self.metadata.version}"',
             "description": f'"{self.metadata.description}"',
             "long_description": f"Path(r'{self.localrepo.get_readme_path()}').read_text()",
+            "long_description_content_type": '"text/markdown"',
             "install_requires": self.metadata.install_requires,
             "url": f'"{self.github.url()}"',
             "license": f'"{self.license}"',

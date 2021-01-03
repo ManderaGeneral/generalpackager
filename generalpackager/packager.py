@@ -23,6 +23,7 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
         Todo: Allow github, pypi or local repo not to exist in any combination. """
 
     author = 'Rickard "Mandera" Abraham'
+    email = "rickard.abraham@gmail.com"
     license = "mit"
     python = "3.8", "3.9"
     os = "windows", "macos", "linux"
@@ -48,12 +49,12 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
 
     def setup_all(self):
         """ Called by GitHub Actions when a commit is pushed. """
-        # self.generate_git_exclude()
-        # self.generate_readme()
-        # self.generate_setup()
-        # self.generate_license()
-        # self.localrepo.commit_and_push()
-        # self.sync_github_metadata()
+        self.generate_git_exclude()
+        self.generate_readme()
+        self.generate_setup()
+        self.generate_license()
+        self.localrepo.commit_and_push()
+        self.sync_github_metadata()
         self.upload()
 
 
