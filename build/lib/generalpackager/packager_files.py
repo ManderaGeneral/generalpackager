@@ -29,7 +29,7 @@ class _PackagerFiles:
             "url": f'"{self.github.url()}"',
             "license": f'"{self.license}"',
             "python_requires": f'"{", ".join([f"=={ver}.*" for ver in self.python])}"',
-            "packages": "find_namespace_packages()",
+            "packages": 'find_namespace_packages(exclude=("build*", "dist*"))',
             "extras_require": self.metadata.extras_require,
             "classifiers": self.get_classifiers(),
         }

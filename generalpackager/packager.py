@@ -4,7 +4,6 @@ from generallibrary import initBases
 from generalfile import Path
 from generalpackager import LocalRepo, LocalModule, GitHub, PyPI
 
-from generalpackager.metadata import _Metadata
 from generalpackager.packager_files import _PackagerFiles
 from generalpackager.packager_github import _PackagerGitHub
 from generalpackager.packager_markdown import _PackagerMarkdown
@@ -43,21 +42,18 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
         self.localmodule = LocalModule(module=importlib.import_module(name=name))
         self.pypi = PyPI(name=name)
 
-        self.metadata = _Metadata(packager=self)
+        assert self.localrepo.name == self.name
 
-        assert self.metadata.name == self.name
-
-    def setup_all(self):
+    def setup_all(self, message=None):
         """ Called by GitHub Actions when a commit is pushed. """
+        self.localrepo.bump_version()
         self.generate_git_exclude()
         self.generate_readme()
         self.generate_setup()
         self.generate_license()
-        self.localrepo.commit_and_push()
+        self.localrepo.commit_and_push(message=message)
         self.sync_github_metadata()
         self.upload()
-
-        # self.localrepo.bump_version()
 
 
 

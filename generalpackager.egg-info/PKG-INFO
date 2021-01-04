@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: generalpackager
-Version: 0.0.2
+Version: 0.0.3
 Summary: Tools to interface GitHub, PyPI and local modules / repos. Used for generating files to keep projects dry and synced.
 Home-page: https://github.com/ManderaGeneral/generalpackager
 Author: Rickard "Mandera" Abraham
@@ -44,6 +44,7 @@ Description: # generalpackager
         │  └─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/github.py#L22'>Method: url</a>
         ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_module.py#L5'>Class: LocalModule</a>
         ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_repo.py#L9'>Class: LocalRepo</a>
+        │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_repo.py#L95'>Method: bump_version</a>
         │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_repo.py#L77'>Method: commit_and_push</a>
         │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_repo.py#L25'>Method: get_git_exclude_path</a>
         │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_repo.py#L33'>Method: get_license_path</a>
@@ -82,9 +83,13 @@ Description: # generalpackager
         | packager_markdown.py | Inherit future crawler class for pypi and github.                 |
         | packager_markdown.py | Use Packager.os for badges.                                       |
         | pypi.py              | Method to upload to PyPI.                                         |
+        | packager.py          | Allow github, pypi or local repo not to exist in any combination. |
+        | packager_markdown.py | Inherit future crawler class for pypi and github.                 |
+        | packager_markdown.py | Use Packager.os for badges.                                       |
+        | pypi.py              | Method to upload to PyPI.                                         |
         
         <sup>
-        Generated 2021-01-03 11:56 CET for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
+        Generated 2021-01-03 12:19 CET for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
         </sup>
 Platform: UNKNOWN
 Classifier: Topic :: Software Development :: Build Tools

@@ -92,7 +92,12 @@ class LocalRepo:
 
         # remote.set_url("")
 
-
+    def bump_version(self):
+        """ Bump micro version in metadata.json. """
+        metadata = self.get_metadata_path().read()
+        # 1 HERE ** Changing metadata should change both file and metadata.*
+        #   Move Packager.metadata to localrepo.metadata
+        #   Automatically define setters for each metadata value to also update file
 
 
 

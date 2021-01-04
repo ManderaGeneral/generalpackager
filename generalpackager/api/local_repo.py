@@ -8,11 +8,41 @@ import os
 
 class LocalRepo:
     """ Tools to help Path interface a Local Python Repository. """
+
+    name = ...
+    version = ...
+    description = ...
+    install_requires = ...
+    extras_require = ...
+    topics = ...
+
+    metadata_keys = [key for key, value in locals().items() if value is Ellipsis]
+
     def __init__(self, path):
         assert self.path_is_repo(path=path)
 
         self.path = Path(path).absolute()
         self.name = self.path.parts()[-1]
+
+        for key, value in self.get_metadata_path().read().items():
+            setattr(self, f"_{key}", value)
+            setattr(LocalRepo, key, property(
+                lambda self, key=key: getattr(self, f"_{key}", ...),
+                lambda self, value, key=key: LocalRepo.metadata_setter(self, value, key),
+            ))
+
+        for key in self.metadata_keys:
+            if getattr(self, key) is Ellipsis:
+                raise AssertionError(f"Key '{key}' for {self}'s metadata is still {Ellipsis}")
+
+    def metadata_setter(self, value, key):
+        """ Set a metadata's key both in instance and json file. """
+        if value != getattr(self, f"_{key}"):
+            metadata = self.get_metadata_path().read()
+            metadata[key] = value
+            self.get_metadata_path().write(metadata, overwrite=True, indent=4)
+
+        setattr(self, f"_{key}", value)
 
     def get_readme_path(self):
         """ Get a Path instance pointing to README.md, regardless if it exists. """
@@ -74,8 +104,11 @@ class LocalRepo:
                 })
         return todos
 
-    def commit_and_push(self):
+    def commit_and_push(self, message=None):
         """ Commit and push this local repo to GitHub. """
+        if message is None:
+            message = "Automatic commit."
+
         repo = Repo(str(self.path))
 
         # files = [str(path.relative()) for path in self.path.get_paths_recursive() if not any([string in path for string in (".git", ".idea", "__pycache__")])]
@@ -85,7 +118,7 @@ class LocalRepo:
         # print(repo.index.)
 
         repo.git.add(A=True)
-        repo.index.commit("Automatic commit.")
+        repo.index.commit(message=message)
         remote = repo.remote()
         remote.set_url(f"https://Mandera:{os.environ['packager_github_api']}@github.com/ManderaGeneral/generalpackager.git")
         remote.push()
@@ -94,10 +127,9 @@ class LocalRepo:
 
     def bump_version(self):
         """ Bump micro version in metadata.json. """
-        metadata = self.get_metadata_path().read()
-        # 1 HERE ** Changing metadata should change both file and metadata.*
-        #   Move Packager.metadata to localrepo.metadata
-        #   Automatically define setters for each metadata value to also update file
+        parts = self.version.split(".")
+        parts[-1] = str(int(parts[-1]) + 1)
+        self.version = ".".join(parts)
 
 
 
