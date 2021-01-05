@@ -18,19 +18,19 @@ class _PackagerFiles:
 
             :param generalpackager.Packager self: """
         setup_kwargs = {
-            "name": f'"{self.metadata.name}"',
+            "name": f'"{self.localrepo.name}"',
             "author": f"'{self.author}'",
             "author_email": f'"{self.email}"',
-            "version": f'"{self.metadata.version}"',
-            "description": f'"{self.metadata.description}"',
+            "version": f'"{self.localrepo.version}"',
+            "description": f'"{self.localrepo.description}"',
             "long_description": f"Path(r'{self.localrepo.get_readme_path()}').read_text(encoding='utf-8')",
             "long_description_content_type": '"text/markdown"',
-            "install_requires": self.metadata.install_requires,
+            "install_requires": self.localrepo.install_requires,
             "url": f'"{self.github.url()}"',
             "license": f'"{self.license}"',
             "python_requires": f'"{", ".join([f"=={ver}.*" for ver in self.python])}"',
             "packages": 'find_namespace_packages(exclude=("build*", "dist*"))',
-            "extras_require": self.metadata.extras_require,
+            "extras_require": self.localrepo.extras_require,
             "classifiers": self.get_classifiers(),
         }
 

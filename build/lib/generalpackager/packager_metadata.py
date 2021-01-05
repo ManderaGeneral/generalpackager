@@ -17,7 +17,7 @@ class _PackagerMetadata:
         """ Get a complete list of topics by using package specific as well as hardcoded magic values.
 
             :param generalpackager.Packager self: """
-        topics = self.metadata.topics.copy()
+        topics = self.localrepo.topics.copy()
         topics.extend([f"python{ver.replace('.', '')}" for ver in self.python])
         topics.append(f"{self.license}-license")
         topics.extend(self.os)

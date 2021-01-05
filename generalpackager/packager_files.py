@@ -69,3 +69,18 @@ class _PackagerFiles:
         assert "$" not in text
 
         self.generate_file(self.localrepo.get_license_path(), text)
+
+    def generate_workflow(self):
+        """ Generate workflow.yml.
+
+            :param generalpackager.Packager self: """
+        workflow = CodeLine()
+        workflow.indent_str = " " * 2
+
+        workflow.add("name: workflow")
+        workflow.add(self.get_triggers())
+
+        jobs = workflow.add("jobs:")
+        jobs.add(self.get_unittest_job())
+
+        self.localrepo.get_workflow_path().text.write(workflow.text(), overwrite=True)

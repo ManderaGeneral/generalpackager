@@ -64,6 +64,10 @@ class LocalRepo:
         """ Get a Path instance pointing to LICENSE, regardless if it exists. """
         return self.path / "LICENSE"
 
+    def get_workflow_path(self):
+        """ Get a Path instance pointing to workflow.yml, regardless if it exists. """
+        return self.path / ".github/workflows/workflow.yml"
+
     def get_package_paths(self):
         """ Get a list of Paths pointing to each folder containing a Python file in this local repo, aka `namespace package`. """
         return [self.path / pkg.replace(".", "/") for pkg in find_namespace_packages(where=str(self.path))]

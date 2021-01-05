@@ -12,7 +12,6 @@ class _PackagerMarkdown:
             :param generalpackager.Packager self: """
         badges = {
             "UnitTests": "[![workflow Actions Status](https://github.com/ManderaGeneral/PACKAGE/workflows/workflow/badge.svg)](https://github.com/ManderaGeneral/PACKAGE/actions)",
-            # "Alerts": "[![Total alerts](https://img.shields.io/lgtm/alerts/g/ManderaGeneral/PACKAGE.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ManderaGeneral/PACKAGE/alerts/)",
             "Commit": "![GitHub last commit](https://img.shields.io/github/last-commit/ManderaGeneral/PACKAGE)",
             "Release": "[![PyPI version shields.io](https://img.shields.io/pypi/v/PACKAGE.svg)](https://pypi.org/project/PACKAGE/)",
             "Python": "[![PyPI pyversions](https://img.shields.io/pypi/pyversions/PACKAGE.svg)](https://pypi.python.org/pypi/PACKAGE/)",
@@ -26,12 +25,12 @@ class _PackagerMarkdown:
             :param generalpackager.Packager self: """
         markdown = Markdown(header="Installation").add_code_lines(f'pip install {self.name}')
 
-        if len(self.metadata.extras_require) > 1:
+        if len(self.localrepo.extras_require) > 1:
             list_of_dicts = [{
                 "Name": extra,
                 "Command": f"`pip install {self.name}[{extra}]`",
                 "Extra packages": comma_and_and(*[f"`{x}`" for x in requires], period=False),
-            } for extra, requires in self.metadata.extras_require.items()]
+            } for extra, requires in self.localrepo.extras_require.items()]
 
             Markdown(header="Extras", parent=markdown).add_table_lines(*list_of_dicts)
 
@@ -86,7 +85,7 @@ class _PackagerMarkdown:
 
             :param generalpackager.Packager self: """
         # Description
-        markdown = Markdown(self.metadata.description, header=self.name)
+        markdown = Markdown(self.localrepo.description, header=self.name)
 
         # Badges
         markdown.add_lines(*self.get_badges_dict().values())

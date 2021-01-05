@@ -9,6 +9,7 @@ from generalpackager.packager_github import _PackagerGitHub
 from generalpackager.packager_markdown import _PackagerMarkdown
 from generalpackager.packager_metadata import _PackagerMetadata
 from generalpackager.packager_pypi import _PackagerPypi
+from generalpackager.packager_workflow import _PackagerWorkflow
 
 import importlib
 
@@ -16,7 +17,7 @@ import importlib
 
 
 @initBases
-class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi):
+class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow):
     """ Uses APIs to manage 'general' package.
         Contains methods that require more than one API as well as methods specific for ManderaGeneral.
         Todo: Allow github, pypi or local repo not to exist in any combination. """
@@ -25,7 +26,7 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
     email = "rickard.abraham@gmail.com"
     license = "mit"
     python = "3.8", "3.9"
-    os = "windows", "macos", "linux"
+    os = "windows", "macos", "ubuntu"
 
     git_exclude_lines = "/.idea/",
 
@@ -44,15 +45,20 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
 
         assert self.localrepo.name == self.name
 
-    def setup_all(self, message=None):
-        """ Called by GitHub Actions when a commit is pushed. """
-        self.localrepo.bump_version()
+    def generate_localfiles(self):
+        """ Generate all local files. """
         self.generate_git_exclude()
         self.generate_readme()
         self.generate_setup()
         self.generate_license()
-        self.localrepo.commit_and_push(message=message)
+        self.generate_workflow()
+
+    def setup_all(self, message=None):
+        """ Called by GitHub Actions when a commit is pushed. """
+        self.localrepo.bump_version()
+        self.generate_localfiles()
         self.sync_github_metadata()
+        self.localrepo.commit_and_push(message=message)
         self.upload()
 
 
