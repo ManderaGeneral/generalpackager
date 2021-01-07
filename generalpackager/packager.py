@@ -14,8 +14,6 @@ from generalpackager.packager_workflow import _PackagerWorkflow
 import importlib
 
 
-
-
 @initBases
 class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow):
     """ Uses APIs to manage 'general' package.
@@ -25,7 +23,7 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
     author = 'Rickard "Mandera" Abraham'
     email = "rickard.abraham@gmail.com"
     license = "mit"
-    python = "3.8", "3.9"
+    python = "3.8", "3.9"  # Only supports basic definition with tuple of major.minor
     os = "windows", "macos", "ubuntu"
 
     git_exclude_lines = "/.idea/",

@@ -21,7 +21,7 @@ setup(
     ],
     url="https://github.com/ManderaGeneral/generalpackager",
     license="mit",
-    python_requires="==3.8.*, ==3.9.*",
+    python_requires=">=3.8, <3.10",
     packages=find_namespace_packages(exclude=("build*", "dist*")),
     extras_require={},
     classifiers=[

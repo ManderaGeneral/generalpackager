@@ -17,6 +17,8 @@ class _PackagerFiles:
         """ Generate setup.py and overwrite local repo.
 
             :param generalpackager.Packager self: """
+        last_version_split = self.python[-1].split(".")
+        last_version_bumped_micro = f"{last_version_split[0]}.{int(last_version_split[1]) + 1}"
         setup_kwargs = {
             "name": f'"{self.localrepo.name}"',
             "author": f"'{self.author}'",
@@ -28,7 +30,7 @@ class _PackagerFiles:
             "install_requires": self.localrepo.install_requires,
             "url": f'"{self.github.url()}"',
             "license": f'"{self.license}"',
-            "python_requires": f'"{", ".join([f"=={ver}.*" for ver in self.python])}"',
+            "python_requires": f'">={self.python[0]}, <{last_version_bumped_micro}"',
             "packages": 'find_namespace_packages(exclude=("build*", "dist*"))',
             "extras_require": self.localrepo.extras_require,
             "classifiers": self.get_classifiers(),
