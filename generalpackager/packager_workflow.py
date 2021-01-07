@@ -20,7 +20,8 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self: """
         on = CodeLine("on:")
         push = on.add("push:")
-        push.add("branches: master")
+        branches = push.add("branches:")
+        branches.add("- master")
         return on
 
     def get_step(self, name, *codelines):
