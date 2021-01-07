@@ -6,10 +6,10 @@ import json
 
 class GitHub:
     """ Tools to interface a GitHub Repository. """
-    def __init__(self, name, owner="ManderaGeneral", token=None):
+    def __init__(self, name, owner="ManderaGeneral"):
         self.name = name
         self.owner = owner
-        self.token = os.environ['packager_github_api'] if token is None else token
+        self.token = os.environ["packager_github_api"]
 
         self.assert_url_up()  # Checks name, owner and token all in one
 
