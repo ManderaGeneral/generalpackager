@@ -6,7 +6,8 @@ from generalfile import Path
 
 
 packager = Packager("generalpackager")
-packager.generate_workflow()
+packager.generate_setup()
+# packager.generate_workflow()
 # packager.setup_all("Added automatic version bumping.")
 
 # HERE ** Next up is workflow generation

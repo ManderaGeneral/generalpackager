@@ -23,7 +23,7 @@ class _PackagerFiles:
             "author_email": f'"{self.email}"',
             "version": f'"{self.localrepo.version}"',
             "description": f'"{self.localrepo.description}"',
-            "long_description": f"Path(r'{self.localrepo.get_readme_path()}').read_text(encoding='utf-8')",
+            "long_description": f"Path(r'{self.localrepo.get_readme_path().relative()}').read_text(encoding='utf-8')",
             "long_description_content_type": '"text/markdown"',
             "install_requires": self.localrepo.install_requires,
             "url": f'"{self.github.url()}"',

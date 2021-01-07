@@ -50,5 +50,5 @@ class _PackagerMetadata:
 
         "windows": "Operating System :: Microsoft :: Windows",
         "macos": "Operating System :: MacOS",
-        "linux": "Operating System :: POSIX :: Linux",
+        "ubuntu": "Operating System :: POSIX :: Linux",
     }
