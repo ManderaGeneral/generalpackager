@@ -26,7 +26,7 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
     python = "3.8", "3.9"  # Only supports basic definition with tuple of major.minor
     os = "windows", "macos", "ubuntu"
 
-    git_exclude_lines = "/.idea/",
+    git_exclude_lines = ".idea/", "build/", "dist/", "*.egg-info/", "__pycache__/"
 
     def __init__(self, name, repos_path=None, commit_sha="master"):
         if repos_path is None:
