@@ -44,10 +44,10 @@ class GitHub:
             :rtype: list[str] """
         return self._request(method="get", endpoint="topics").json()["names"]
 
-    def set_topics(self, topics):
-        """ Set a list of topics for the GitHub repository.
+    def set_topics(self, *topics):
+        """ Set topics for the GitHub repository.
 
-            :param list topics: """
+            :param str topics: """
         return self._request(method="put", endpoint="topics", names=topics)
 
 

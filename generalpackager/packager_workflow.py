@@ -3,6 +3,14 @@ from generallibrary import CodeLine
 
 
 class _PackagerWorkflow:
+    @staticmethod
+    def _var(string):
+        return f"${{{{ {string} }}}}"
+
+    @staticmethod
+    def _contains(haystack, needle):
+        return f"contains({haystack}, {needle})"
+
     _commit_message = "github.event.head_commit.message"
     _skip_str = "'[CI SKIP]'"
     _action_checkout = "actions/checkout@v2"
@@ -10,11 +18,8 @@ class _PackagerWorkflow:
     _matrix_os = "matrix.os"
     _matrix_python_version = "matrix.python-version"
 
-    def _contains(self, haystack, needle):
-        return f"contains({haystack}, {needle})"
-
-    def _var(self, string):
-        return f"${{{{ {string} }}}}"
+    def __init__(self):
+        self._secrets_token = self._var('secrets.ACTIONS_TOKEN')
 
     def get_triggers(self):
         """ :param generalpackager.Packager self: """
@@ -53,7 +58,8 @@ class _PackagerWorkflow:
     def step_run_unittests(self):
         """ :param generalpackager.Packager self: """
         run = CodeLine("run: |")
-        run.add(f"python -m unittest discover {self.name}/test")
+        # run.add(f"python -m unittest discover {self.name}/test")
+        run.add(f"python -c \"from generalpackager.test.main import run_tests; run_tests('{self._secrets_token}')\"")
         return self.get_step(f"Run unittests.", run)
 
 
