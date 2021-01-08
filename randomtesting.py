@@ -16,10 +16,16 @@ from generalfile import Path
 
 # Todo: Automatically insert empty line when indent retracts
 
-# Todo: Idea: Generate test.main file to run all unittests in folder, so that we can give arguments to unittests (Token)
-#   Need to come up with a general solution for this.
-#       How does a package specify which env vars it needs and with what GitHub actions var to fill them with?
-#   python -m generalpackager.test.main <TOKEN>
+
+
+# Class EnvVar in lib
+# Import EnvVar to packager to create an instance of github_token
+# Import github_token throughout package and use like normal
+# Packager's LocalModule will find all EnvVar instances with actions_name defined
+# The name and actions_name for each instance is then used to create the command line to launch test.main.py
+
+
+
 
 
 # Old workflow failed as we got duplicates in dependents for some reason, but I'm thinking we'll ignore that as we're moving to replace it.
@@ -30,7 +36,8 @@ import os
 
 
 def test():
-    print(sys.argv)
+    args = {split[0]: split[1] for arg in sys.argv[1:] if (split := arg.split("="))}
+
 
 
 test()

@@ -2,6 +2,7 @@
 import requests
 import os
 import json
+from generalpackager import github_token
 
 
 class GitHub:

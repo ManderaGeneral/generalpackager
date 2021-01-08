@@ -3,6 +3,7 @@ from generallibrary import CodeLine
 
 
 class _PackagerWorkflow:
+    """ Todo: Clean up variables, create some sort of system. """
     @staticmethod
     def _var(string):
         return f"${{{{ {string} }}}}"
@@ -67,7 +68,7 @@ class _PackagerWorkflow:
     def get_unittest_job(self):
         """ :param generalpackager.Packager self: """
         unittest = CodeLine("unittest:")
-        # unittest.add(f"if: !{self._contains(self._commit_message, self._skip_str)}")
+        unittest.add(f"if: {self._contains(self._commit_message, self._skip_str)}")
         unittest.add(f"runs-on: {self._var(self._matrix_os)}")
 
         strategy = unittest.add("strategy:")
