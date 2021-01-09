@@ -1,6 +1,5 @@
 
 import requests
-import os
 import json
 from generalpackager import github_token
 
@@ -10,7 +9,6 @@ class GitHub:
     def __init__(self, name, owner="ManderaGeneral"):
         self.name = name
         self.owner = owner
-        self.token = os.environ["packager_github_api"]
 
         self.assert_url_up()  # Checks name, owner and token all in one
 
@@ -68,7 +66,7 @@ class GitHub:
 
         kwargs = {
             "headers": {"Accept": "application/vnd.github.mercy-preview+json"},
-            "auth": (self.owner, self.token),
+            "auth": (self.owner, github_token),
         }
         if data:
             kwargs["data"] = json.dumps(data)

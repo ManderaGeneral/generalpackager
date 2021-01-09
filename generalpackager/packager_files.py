@@ -13,8 +13,14 @@ class _PackagerFiles:
             :param text: """
         path.text.write(text, overwrite=True)
 
+    def generate_test_main(self):
+        """ Generate test/main.py.
+
+            :param generalpackager.Packager self: """
+
+
     def generate_setup(self):
-        """ Generate setup.py and overwrite local repo.
+        """ Generate setup.py.
 
             :param generalpackager.Packager self: """
         last_version_split = self.python[-1].split(".")

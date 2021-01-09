@@ -8,20 +8,21 @@ class LocalModule:
         self.module = module
 
         self.objInfo = ObjInfo(self.module)
-        self.objInfo.filters = [self._filter]
-
         assert self.objInfo.is_module()
-        self._generate_attributes()
+        self.objInfo.filters = [self._filter]
+        self.objInfo.get_attrs(depth=-1)
 
     def _filter(self, objInfo):
         """ :param ObjInfo objInfo: """
         is_part_of_module = getattr(objInfo.module(), "__name__", "").startswith(self.module.__name__)
         return objInfo.public() and (objInfo.is_class() or objInfo.is_method()) and is_part_of_module
 
-    def _generate_attributes(self):
-        self.objInfo.get_attrs(depth=-1)
-
-
+    def get_env_vars(self):
+        """ Get a list of EnvVar instances avialable directly in module. """
+        objInfo = ObjInfo(self.module)
+        objInfo.filters = [lambda objInfo: type(objInfo.obj).__name__ == "EnvVar"]
+        objInfo.get_attrs()
+        return [objInfo.obj for objInfo in objInfo.get_children()]
 
 
 

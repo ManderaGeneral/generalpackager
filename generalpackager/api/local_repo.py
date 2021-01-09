@@ -1,14 +1,14 @@
 
 from generalfile import Path
+from generalpackager import github_token
+
 from setuptools import find_namespace_packages
 import re
 from git import Repo
-import os
 
 
 class LocalRepo:
     """ Tools to help Path interface a Local Python Repository. """
-
     name = ...
     version = ...
     description = ...
@@ -124,7 +124,7 @@ class LocalRepo:
         repo.git.add(A=True)
         repo.index.commit(message=message)
         remote = repo.remote()
-        remote.set_url(f"https://Mandera:{os.environ['packager_github_api']}@github.com/ManderaGeneral/generalpackager.git")
+        remote.set_url(f"https://Mandera:{github_token}@github.com/ManderaGeneral/generalpackager.git")
         remote.push()
 
         # remote.set_url("")
