@@ -59,11 +59,9 @@ class _PackagerWorkflow:
     def step_run_unittests(self):
         """ :param generalpackager.Packager self: """
         run = CodeLine("run: |")
-        # run.add(f"python -m unittest discover {self.name}/test")
-        run.add(f"python -c \"from generalpackager.test.main import run_tests; run_tests('{self._secrets_token}')\"")
+        env_vars = " ".join([f"{env_var.name}={env_var.actions_name}" for env_var in self.localmodule.get_env_vars() if env_var.actions_name])
+        run.add(f"python generalpackager/test/main.py {env_vars}")
         return self.get_step(f"Run unittests.", run)
-
-
 
     def get_unittest_job(self):
         """ :param generalpackager.Packager self: """

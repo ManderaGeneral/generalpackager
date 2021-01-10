@@ -50,6 +50,7 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
         self.generate_setup()
         self.generate_license()
         self.generate_workflow()
+        self.generate_test_main()
 
     def setup_all(self, message=None):
         """ Called by GitHub Actions when a commit is pushed. """

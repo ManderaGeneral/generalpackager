@@ -9,12 +9,11 @@ from generalfile import Path
 
 packager = Packager("generalpackager")
 
-print(packager.generate_test_main())
+packager.generate_workflow()
 
 # packager.sync_github_metadata()
 # packager.generate_git_exclude()
 # packager.generate_setup()
-# packager.generate_workflow()
 # packager.setup_all("Trying to make github token work.")
 
 # packager.localrepo.get_git_exclude_path().open_folder()

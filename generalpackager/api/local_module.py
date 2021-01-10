@@ -18,7 +18,9 @@ class LocalModule:
         return objInfo.public() and (objInfo.is_class() or objInfo.is_method()) and is_part_of_module
 
     def get_env_vars(self):
-        """ Get a list of EnvVar instances avialable directly in module. """
+        """ Get a list of EnvVar instances avialable directly in module.
+
+            :rtype: list[generallibrary.EnvVar] """
         objInfo = ObjInfo(self.module)
         objInfo.filters = [lambda objInfo: type(objInfo.obj).__name__ == "EnvVar"]
         objInfo.get_attrs()

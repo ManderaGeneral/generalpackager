@@ -66,7 +66,7 @@ class GitHub:
 
         kwargs = {
             "headers": {"Accept": "application/vnd.github.mercy-preview+json"},
-            "auth": (self.owner, github_token),
+            "auth": (self.owner, github_token.value),
         }
         if data:
             kwargs["data"] = json.dumps(data)
