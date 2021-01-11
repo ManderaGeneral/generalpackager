@@ -3,17 +3,17 @@ from generallibrary import CodeLine
 
 
 class _PackagerWorkflow:
-    """ Todo: Clean up variables, create some sort of system. """
+    """ Afraid to start handling all the logic, might not be worth the time. """
     @staticmethod
     def _var(string):
         return f"${{{{ {string} }}}}"
 
     @staticmethod
-    def _contains(haystack, needle):
-        return f"contains({haystack}, {needle})"
+    def _commit_msg_if(**conditions):
+        checks = [f"contains(github.event.head_commit.message, '[CI {key}]') == {value}" for key, value in conditions.items()]
+        return f"if: {' && '.join(checks)}"
 
     _commit_message = "github.event.head_commit.message"
-    _skip_str = "'[CI SKIP]'"
     _action_checkout = "actions/checkout@v2"
     _action_setup_python = "actions/setup-python@v2"
     _matrix_os = "matrix.os"
@@ -65,22 +65,38 @@ class _PackagerWorkflow:
 
     def get_unittest_job(self):
         """ :param generalpackager.Packager self: """
-        unittest = CodeLine("unittest:")
-        unittest.add(f"if: {self._contains(self._commit_message, self._skip_str)}")
-        unittest.add(f"runs-on: {self._var(self._matrix_os)}")
+        top = CodeLine("unittest:")
+        top.add(self._commit_msg_if(SKIP=False))
+        top.add(f"runs-on: {self._var(self._matrix_os)}")
 
-        strategy = unittest.add("strategy:")
+        strategy = top.add("strategy:")
         matrix = strategy.add("matrix:")
         matrix.add(f"python-version: {list(self.python)}".replace("'", ""))
         matrix.add(f"os: {[f'{os}-latest' for os in self.os]}".replace("'", ""))
 
-        steps = unittest.add("steps:")
+        steps = top.add("steps:")
         steps.add(self.step_checkout())
         steps.add(self.step_setup_python(version=self._var(self._matrix_python_version)))
         steps.add(self.step_install_package())
         steps.add(self.step_run_unittests())
 
-        return unittest
+        return top
+
+    def get_setup_all_job(self):
+        """ :param generalpackager.Packager self: """
+        top = CodeLine("setup_all:")
+        top.add(self._commit_msg_if(SKIP=False))
+        top.add(f"runs-on: ubuntu-latest")
+
+        steps = top.add("steps:")
+        steps.add(self.step_checkout())
+        steps.add(self.step_setup_python(version=self.python[0]))
+
+        # HERE **
+
+        return top
+
+
 
 
 
