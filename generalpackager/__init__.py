@@ -1,7 +1,7 @@
 
 from generallibrary import EnvVar
 
-github_token = EnvVar("packager_github_api", "secrets.ACTIONS_TOKEN")
+github_token = EnvVar("packager_github_api", "secrets.PACKAGER_GITHUB_API")
 
 
 from generalpackager.api.local_repo import LocalRepo
