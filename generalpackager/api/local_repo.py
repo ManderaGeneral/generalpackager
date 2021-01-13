@@ -119,7 +119,7 @@ class LocalRepo:
 
         print("path view:")
         list(self.path.get_paths_recursive(depth=3))
-        self.path.view()
+        self.path.get_parent(-1).view()
 
         repo = Repo(str(self.path))
         print(repo)
