@@ -118,20 +118,13 @@ class LocalRepo:
             message = "Automatic commit."
 
         repo = Repo(str(self.path))
-
-        # files = [str(path.relative()) for path in self.path.get_paths_recursive() if not any([string in path for string in (".git", ".idea", "__pycache__")])]
-        # print(files)
-        # repo.index.add(files)
-
-        # print(repo.index.)
-
         repo.git.add(A=True)
         repo.index.commit(message=message)
         remote = repo.remote()
-        remote.set_url(f"https://Mandera:{github_token}@github.com/ManderaGeneral/generalpackager.git")
-        remote.push()
+        remote.set_url(f"https://Mandera:{github_token}@github.com/ManderaGeneral/{self.name}.git")
+        print("Push:")
+        print(remote.push())
 
-        # remote.set_url("")
 
     def bump_version(self):
         """ Bump micro version in metadata.json. """
