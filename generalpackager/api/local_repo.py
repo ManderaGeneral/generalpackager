@@ -120,7 +120,7 @@ class LocalRepo:
 
         repo = Repo(str(self.path))
         print(repo)
-        repo.git.add(update=True)
+        repo.git.add(A=True)
 
         print(repo.index.diff(None))
         print(repo.index.diff("HEAD"))
