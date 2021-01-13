@@ -51,7 +51,7 @@ pip install generalpackager
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_repo.py#L67'>Method: get_workflow_path</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_repo.py#L38'>Method: metadata_setter</a>
 │  └─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_repo.py#L84'>Method: path_is_repo</a>
-├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager.py#L17'>Class: Packager</a>
+├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager.py#L18'>Class: Packager</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_markdown.py#L39'>Method: configure_contents_markdown</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_pypi.py#L6'>Method: create_sdist</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L8'>Method: generate_file</a>
@@ -90,15 +90,11 @@ pip install generalpackager
 | randomtesting.py     | Automatically insert empty line when indent retracts              |
 | randomtesting.py     | Write [CI MAJOR] in commit message to bump major for example      |
 | randomtesting.py     | Remove test/main.py                                               |
-| packager.py          | Allow github, pypi or local repo not to exist in any combination. |
 | packager_markdown.py | Inherit future crawler class for pypi and github.                 |
 | packager_markdown.py | Use Packager.os for badges.                                       |
-| pypi.py              | Method to upload to PyPI.                                         |
 | packager.py          | Allow github, pypi or local repo not to exist in any combination. |
-| packager_markdown.py | Inherit future crawler class for pypi and github.                 |
-| packager_markdown.py | Use Packager.os for badges.                                       |
 | pypi.py              | Method to upload to PyPI.                                         |
 
 <sup>
-Generated 2021-01-13 13:36 CET for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
+Generated 2021-01-13 13:37 CET for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
 </sup>
