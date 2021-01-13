@@ -39,4 +39,5 @@ packager.generate_workflow()
 
 # Todo: Automatically insert empty line when indent retracts
 # Todo: Write [CI MAJOR] in commit message to bump major for example
+# Todo: Remove test/main.py
 # Old workflow failed as we got duplicates in dependents for some reason, but I'm thinking we'll ignore that as we're moving to replace it.

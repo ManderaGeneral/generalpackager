@@ -50,15 +50,12 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
         self.generate_setup()
         self.generate_license()
         self.generate_workflow()
-        self.generate_test_main()
 
-    def setup_all(self, message=None):
+    def sync_package(self, message=None):
         """ Called by GitHub Actions when a commit is pushed. """
-        # self.localrepo.bump_version()
         self.generate_localfiles()
         self.sync_github_metadata()
         self.localrepo.commit_and_push(message=message)
-        self.upload()
 
 
 

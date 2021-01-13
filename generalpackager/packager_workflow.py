@@ -13,7 +13,7 @@ class _PackagerWorkflow:
         checks = [f"contains(github.event.head_commit.message, '[CI {key}]') == {str(value).lower()}" for key, value in conditions.items()]
         return f"if: {' && '.join(checks)}"
 
-    _commit_message = "github.event.head_commit.message"
+    _commit_msg = "github.event.head_commit.message"
     _action_checkout = "actions/checkout@v2"
     _action_setup_python = "actions/setup-python@v2"
     _matrix_os = "matrix.os"
@@ -56,29 +56,24 @@ class _PackagerWorkflow:
         run.add(f"pip install {' '.join(packages)}")
         return self.get_step(f"Install packages {comma_and_and(*packages)}", run)
 
+    def get_env(self):
+        """ :param generalpackager.Packager self: """
+        env = CodeLine("env:")
+        for env_var in self.localmodule.get_env_vars():
+            if env_var.actions_name:
+                env.add(f"{env_var.name}: {env_var.actions_name}")
+        return env
+
     def step_run_unittests(self):
         """ :param generalpackager.Packager self: """
-        run = CodeLine("run: |")
-        env_vars = " ".join([f"{env_var.name}={env_var.actions_name}" for env_var in self.localmodule.get_env_vars() if env_var.actions_name])
-        run.add(f"python generalpackager/test/main.py {env_vars}")
-        return self.get_step(f"Run unittests.", run)
+        run = f"run: python -m unittest discover {self.name}/test"
+        return self.get_step(f"Run unittests.", run, self.get_env())
 
     def step_sync(self):
         """ :param generalpackager.Packager self: """
-        run = CodeLine("run: |")
-        run.add("ls")
-
-        run.add(f"echo 'from generalpackager import Packager' >> syncer.py")
-        run.add(f"echo 'packager = Packager(\"{self.name}\")' >> syncer.py")
-        run.add(f"echo 'packager.generate_localfiles()' >> syncer.py")
-        run.add(f"echo 'packager.commit_and_push(\"[CI SYNC] {self._var(self._commit_message)}\")' >> syncer.py")
-        run.add(f"echo 'packager.sync_github_metadata()' >> syncer.py")
-
-        run.add("python syncer.py")
-
-
-
-        return self.get_step(f"Generate files, commit them and send requests to GitHub.", run)
+        msg = f"[CI SYNC] {self._var(self._commit_msg)}"
+        run = f'run: python -c \'from generalpackager import Packager; Packager("{self.name}").sync_package("{msg}")\''
+        return self.get_step(f"Sync package.", run, self.get_env())
 
     def get_sync_job(self):
         """ :param generalpackager.Packager self: """

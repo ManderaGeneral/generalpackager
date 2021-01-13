@@ -13,19 +13,6 @@ class _PackagerFiles:
             :param text: """
         path.text.write(text, overwrite=True)
 
-    def generate_test_main(self):
-        """ Generate test/main.py.
-
-            :param generalpackager.Packager self: """
-        main = CodeLine()
-        main.add("import unittest", 1)
-        main.add("from generallibrary import get_launch_options, EnvVar", 1)
-        loop = main.add("for key, value in get_launch_options().items():", 2)
-        loop.add("EnvVar(name=key).value = value")
-        main.add('unittest.TextTestRunner().run(unittest.TestLoader().discover("generalpackager/test"))', 1, 1)
-
-        self.generate_file(self.localrepo.get_test_main_path(), main)
-
     def generate_setup(self):
         """ Generate setup.py.
 

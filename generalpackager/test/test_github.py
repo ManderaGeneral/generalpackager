@@ -6,7 +6,7 @@ from generalpackager import GitHub
 
 
 # Running tests locally:            Set env var 'packager_github_api' to GitHub token, run unittests with PyCharm as usual
-# Running tests in GitHub Actions:  Run test.main.run_tests(token) where token is the available SECRET and will set the env var.
+# Running tests in GitHub Actions:  Run test.main and supply env vars as launch options.
 
 class TestGitHub(unittest.TestCase):
     def test_topics(self):
