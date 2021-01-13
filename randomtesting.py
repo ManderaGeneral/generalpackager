@@ -8,7 +8,8 @@ from generalfile import Path
 
 
 packager = Packager("generalpackager")
-packager.sync_package()
+packager.generate_workflow()
+# packager.sync_package()
 
 # packager.sync_github_metadata()
 # packager.generate_git_exclude()
