@@ -11,7 +11,6 @@ class _PackagerFiles:
             :param generalpackager.Packager self:
             :param path:
             :param text: """
-        print(f"Generating {path}")
         path.text.write(text, overwrite=True)
 
     def generate_setup(self):

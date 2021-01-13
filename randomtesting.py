@@ -8,7 +8,8 @@ from generalfile import Path
 
 
 packager = Packager("generalpackager")
-packager.generate_localfiles()
+packager.generate_workflow()
+# packager.generate_localfiles()
 # packager.sync_package("Testing auto")
 
 # packager.sync_github_metadata()

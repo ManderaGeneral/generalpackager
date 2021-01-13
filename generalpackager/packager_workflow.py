@@ -82,7 +82,7 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self: """
         top = CodeLine("sync:")
         top.add(self._commit_msg_if(SKIP=False, SYNC=False))
-        top.add(f"runs-on: ubuntu-latest")
+        top.add(f"runs-on: windows-latest")
 
         steps = top.add("steps:")
         steps.add(self.step_checkout())
