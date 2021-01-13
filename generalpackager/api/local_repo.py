@@ -118,11 +118,15 @@ class LocalRepo:
             message = "Automatic commit."
 
         repo = Repo(str(self.path))
-        repo.git.add(A=True)
-        repo.index.commit(message=message)
+
+        print(repo.git.add(A=True))
+        print(repo.index.commit(message=message))
+        print(repo.index)
+
         remote = repo.remote()
         remote.set_url(f"https://Mandera:{github_token}@github.com/ManderaGeneral/{self.name}.git")
         remote.push()
+
 
 
     def bump_version(self):
