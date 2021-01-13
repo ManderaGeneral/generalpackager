@@ -20,14 +20,13 @@ jobs:
           pip install .[full] wheel generalpackager
       - name: Generate files, commit them and send requests to GitHub.
         run: |
-          python
-          #!/usr/bin/env python3
-          from generalpackager import Packager
-          packager = Packager('generalpackager')
-          packager.generate_localfiles()
-          packager.commit_and_push("[CI SYNC] ${{ github.event.head_commit.message }}")
-          packager.sync_github_metadata()
-          exit()
+          ls
+          echo 'from generalpackager import Packager' >> syncer.py
+          echo 'packager = Packager("generalpackager")' >> syncer.py
+          echo 'packager.generate_localfiles()' >> syncer.py
+          echo 'packager.commit_and_push("[CI SYNC] ${{ github.event.head_commit.message }}")' >> syncer.py
+          echo 'packager.sync_github_metadata()' >> syncer.py
+          python syncer.py
   unittest:
     if: contains(github.event.head_commit.message, '[CI SKIP]') == false && contains(github.event.head_commit.message, '[CI SYNC]') == true
     runs-on: ${{ matrix.os }}

@@ -66,14 +66,17 @@ class _PackagerWorkflow:
     def step_sync(self):
         """ :param generalpackager.Packager self: """
         run = CodeLine("run: |")
-        run.add(f"python")
-        run.add(f"#!/usr/bin/env python3")
-        run.add(f"from generalpackager import Packager")
-        run.add(f"packager = Packager('{self.name}')")
-        run.add(f"packager.generate_localfiles()")
-        run.add(f'packager.commit_and_push("[CI SYNC] {self._var(self._commit_message)}")')
-        run.add(f"packager.sync_github_metadata()")
-        run.add(f"exit()")
+        run.add("ls")
+
+        run.add(f"echo 'from generalpackager import Packager' >> syncer.py")
+        run.add(f"echo 'packager = Packager(\"{self.name}\")' >> syncer.py")
+        run.add(f"echo 'packager.generate_localfiles()' >> syncer.py")
+        run.add(f"echo 'packager.commit_and_push(\"[CI SYNC] {self._var(self._commit_message)}\")' >> syncer.py")
+        run.add(f"echo 'packager.sync_github_metadata()' >> syncer.py")
+
+        run.add("python syncer.py")
+
+
 
         return self.get_step(f"Generate files, commit them and send requests to GitHub.", run)
 
