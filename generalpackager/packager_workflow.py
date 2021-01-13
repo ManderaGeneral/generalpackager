@@ -1,6 +1,4 @@
 
-import re
-
 from generallibrary import CodeLine, comma_and_and
 
 
@@ -73,8 +71,8 @@ class _PackagerWorkflow:
 
     def step_sync(self):
         """ :param generalpackager.Packager self: """
-        msg = f"[CI SYNC] {self._var(self._commit_msg)}"
-        run = f'run: python -c \'from generalpackager import Packager; Packager("{self.name}").sync_package("{re.escape(msg)}")\''
+        msg = f"[CI SYNC] {self._var(self._commit_msg)}".replace("'", "\\'").replace('"', '\\"')
+        run = f'run: python -c \'from generalpackager import Packager; Packager("{self.name}").sync_package("{msg}")\''
         return self.get_step(f"Sync package.", run, self.get_env())
 
     def get_sync_job(self):
