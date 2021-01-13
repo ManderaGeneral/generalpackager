@@ -67,6 +67,7 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self: """
         run = CodeLine("run: |")
         run.add(f"python")
+        run.add(f"#!/usr/bin/env python3")
         run.add(f"from generalpackager import Packager")
         run.add(f"packager = Packager('{self.name}')")
         run.add(f"packager.generate_localfiles()")

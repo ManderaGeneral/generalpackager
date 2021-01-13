@@ -21,6 +21,7 @@ jobs:
       - name: Generate files, commit them and send requests to GitHub.
         run: |
           python
+          #!/usr/bin/env python3
           from generalpackager import Packager
           packager = Packager('generalpackager')
           packager.generate_localfiles()
