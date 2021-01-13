@@ -116,18 +116,17 @@ class LocalRepo:
         """ Commit and push this local repo to GitHub. """
         if message is None:
             message = "Automatic commit."
-        print("path", self.path)
+
+        print("path view:")
+        list(self.path.get_paths_recursive(depth=3))
+        self.path.view()
 
         repo = Repo(str(self.path))
         print(repo)
         repo.git.add(A=True)
 
-        print(repo.index.diff(None))
         print(repo.index.diff("HEAD"))
-
         repo.index.commit(message=message)
-
-        print(repo.index.diff(None))
         print(repo.index.diff("HEAD"))
 
         remote = repo.remote()
