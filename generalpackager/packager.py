@@ -29,8 +29,9 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
     git_exclude_lines = ".idea/", "build/", "dist/", "*.egg-info/", "__pycache__/"
 
     def __init__(self, name, repos_path=None, commit_sha="master"):
-        if repos_path is None:
-            repos_path = Path().absolute().get_parent()
+        repos_path = Path(repos_path).absolute()
+        while not LocalRepo.get_local_repos(repos_path):
+            repos_path = repos_path.get_parent()
 
         print(f"Repos path {repos_path}")
         print(f"Work dir {Path.get_working_dir()}")
