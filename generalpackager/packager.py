@@ -54,7 +54,7 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
 
     def setup_all(self, message=None):
         """ Called by GitHub Actions when a commit is pushed. """
-        self.localrepo.bump_version()
+        # self.localrepo.bump_version()
         self.generate_localfiles()
         self.sync_github_metadata()
         self.localrepo.commit_and_push(message=message)

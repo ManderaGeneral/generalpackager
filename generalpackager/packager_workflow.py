@@ -1,5 +1,5 @@
 
-from generallibrary import CodeLine
+from generallibrary import CodeLine, comma_and_and
 
 
 class _PackagerWorkflow:
@@ -46,15 +46,15 @@ class _PackagerWorkflow:
             :param version: """
         with_ = CodeLine("with:")
         with_.add(f"python-version: {version}")
-        return self.get_step(f"Setting up python version '{version}'.", f"uses: {self._action_setup_python}", with_)
+        return self.get_step(f"Set up python version {version}", f"uses: {self._action_setup_python}", with_)
 
-    def step_install_package(self):
+    def step_install_package(self, *extra_packages):
         """ :param generalpackager.Packager self: """
+        packages = {".[full]", "wheel"}.union(extra_packages)
         run = CodeLine("run: |")
         run.add("python -m pip install --upgrade pip")
-        run.add("pip install wheel")
-        run.add("pip install .[full]")
-        return self.get_step(f"Install package '{self.name}'.", run)
+        run.add(f"pip install {' '.join(packages)}")
+        return self.get_step(f"Install packages {comma_and_and(*packages)}", run)
 
     def step_run_unittests(self):
         """ :param generalpackager.Packager self: """
@@ -63,10 +63,37 @@ class _PackagerWorkflow:
         run.add(f"python generalpackager/test/main.py {env_vars}")
         return self.get_step(f"Run unittests.", run)
 
+    def step_sync(self):
+        """ :param generalpackager.Packager self: """
+        run = CodeLine("run: |")
+        run.add(f"python")
+        run.add(f"from generalpackager import Packager")
+        run.add(f"packager = Packager('{self.name}')")
+        run.add(f"packager.generate_localfiles()")
+        run.add(f'packager.commit_and_push("[CI SYNC] {self._var(self._commit_message)}")')
+        run.add(f"packager.sync_github_metadata()")
+        run.add(f"exit()")
+
+        return self.get_step(f"Generate files, commit them and send requests to GitHub.", run)
+
+    def get_sync_job(self):
+        """ :param generalpackager.Packager self: """
+        top = CodeLine("sync:")
+        top.add(self._commit_msg_if(SKIP=False, SYNC=False))
+        top.add(f"runs-on: ubuntu-latest")
+
+        steps = top.add("steps:")
+        steps.add(self.step_checkout())
+        steps.add(self.step_setup_python(version=self.python[0]))
+        steps.add(self.step_install_package("generalpackager"))
+        steps.add(self.step_sync())
+
+        return top
+
     def get_unittest_job(self):
         """ :param generalpackager.Packager self: """
         top = CodeLine("unittest:")
-        top.add(self._commit_msg_if(SKIP=False))
+        top.add(self._commit_msg_if(SKIP=False, SYNC=True))
         top.add(f"runs-on: {self._var(self._matrix_os)}")
 
         strategy = top.add("strategy:")
@@ -79,20 +106,6 @@ class _PackagerWorkflow:
         steps.add(self.step_setup_python(version=self._var(self._matrix_python_version)))
         steps.add(self.step_install_package())
         steps.add(self.step_run_unittests())
-
-        return top
-
-    def get_setup_all_job(self):
-        """ :param generalpackager.Packager self: """
-        top = CodeLine("setup_all:")
-        top.add(self._commit_msg_if(SKIP=False))
-        top.add(f"runs-on: ubuntu-latest")
-
-        steps = top.add("steps:")
-        steps.add(self.step_checkout())
-        steps.add(self.step_setup_python(version=self.python[0]))
-
-        # HERE **
 
         return top
 

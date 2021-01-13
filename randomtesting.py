@@ -8,7 +8,6 @@ from generalfile import Path
 
 
 packager = Packager("generalpackager")
-
 packager.generate_workflow()
 
 # packager.sync_github_metadata()
@@ -39,4 +38,5 @@ packager.generate_workflow()
 
 
 # Todo: Automatically insert empty line when indent retracts
+# Todo: Write [CI MAJOR] in commit message to bump major for example
 # Old workflow failed as we got duplicates in dependents for some reason, but I'm thinking we'll ignore that as we're moving to replace it.

@@ -96,7 +96,7 @@ class _PackagerFiles:
         workflow.add(self.get_triggers())
 
         jobs = workflow.add("jobs:")
-        jobs.add(self.get_setup_all_job())
+        jobs.add(self.get_sync_job())
         jobs.add(self.get_unittest_job())
 
 
