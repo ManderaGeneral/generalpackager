@@ -32,6 +32,9 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
         if repos_path is None:
             repos_path = Path().absolute().get_parent()
 
+        print(f"Repos path {repos_path}")
+        print(f"Work dir {Path.get_working_dir()}")
+
         self.name = name
         self.repos_path = repos_path
         self.commit_sha = commit_sha
