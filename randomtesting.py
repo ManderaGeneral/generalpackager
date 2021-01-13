@@ -8,9 +8,7 @@ from generalfile import Path
 
 
 packager = Packager("generalpackager")
-# packager.generate_workflow()
-
-# packager.sync_package()
+packager.sync_package("Testing auto")
 
 # packager.sync_github_metadata()
 # packager.generate_git_exclude()
