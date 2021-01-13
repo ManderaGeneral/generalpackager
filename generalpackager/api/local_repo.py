@@ -1,6 +1,6 @@
 
 from generalfile import Path
-from generalpackager import github_token
+from generalpackager import github_token, GIT_PASSWORD
 
 from setuptools import find_namespace_packages
 import re
@@ -130,7 +130,7 @@ class LocalRepo:
         print(repo.index.diff("HEAD"))
 
         remote = repo.remote()
-        remote.set_url(f"https://Mandera:{github_token}@github.com/ManderaGeneral/{self.name}.git")
+        remote.set_url(f"https://Mandera:{GIT_PASSWORD}@github.com/ManderaGeneral/{self.name}.git")
         remote.push()
 
 
