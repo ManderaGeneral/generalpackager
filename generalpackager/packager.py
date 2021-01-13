@@ -53,6 +53,7 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
 
     def sync_package(self, message=None):
         """ Called by GitHub Actions when a commit is pushed. """
+        print(f"Syncing package {self.name} with path {self.localrepo.path}")
         self.generate_localfiles()
         self.sync_github_metadata()
         self.localrepo.commit_and_push(message=message)
