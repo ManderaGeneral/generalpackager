@@ -14,10 +14,10 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
-      - name: Install packages generalpackager, wheel and .[full].
+      - name: Install packages wheel, generalpackager and .[full].
         run: |
           python -m pip install --upgrade pip
-          pip install generalpackager wheel .[full]
+          pip install wheel generalpackager .[full]
       - name: Sync package.
         run: python -c 'from generalpackager import Packager; Packager("generalpackager").sync_package("[CI SYNC] ${{ github.event.head_commit.message }}")'
         env:
