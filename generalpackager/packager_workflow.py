@@ -10,7 +10,7 @@ class _PackagerWorkflow:
 
     @staticmethod
     def _commit_msg_if(**conditions):
-        checks = [f"contains(github.event.head_commit.message, '[CI {key}]') == {value}" for key, value in conditions.items()]
+        checks = [f"contains(github.event.head_commit.message, '[CI {key}]') == {str(value).lower()}" for key, value in conditions.items()]
         return f"if: {' && '.join(checks)}"
 
     _commit_message = "github.event.head_commit.message"

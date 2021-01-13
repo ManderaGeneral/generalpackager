@@ -5,7 +5,7 @@ on:
       - master
 jobs:
   sync:
-    if: contains(github.event.head_commit.message, '[CI SKIP]') == False && contains(github.event.head_commit.message, '[CI SYNC]') == False
+    if: contains(github.event.head_commit.message, '[CI SKIP]') == false && contains(github.event.head_commit.message, '[CI SYNC]') == false
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository.
@@ -28,7 +28,7 @@ jobs:
           packager.sync_github_metadata()
           exit()
   unittest:
-    if: contains(github.event.head_commit.message, '[CI SKIP]') == False && contains(github.event.head_commit.message, '[CI SYNC]') == True
+    if: contains(github.event.head_commit.message, '[CI SKIP]') == false && contains(github.event.head_commit.message, '[CI SYNC]') == true
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
