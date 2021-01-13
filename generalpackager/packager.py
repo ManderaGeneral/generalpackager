@@ -33,8 +33,8 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
         while not LocalRepo.get_local_repos(repos_path):
             repos_path = repos_path.get_parent()
 
-        print(f"Repos path {repos_path}")
-        print(f"Work dir {Path.get_working_dir()}")
+        list(repos_path.get_paths_recursive(depth=3))
+        repos_path.get_parent(-1).view()
 
         self.name = name
         self.repos_path = repos_path
