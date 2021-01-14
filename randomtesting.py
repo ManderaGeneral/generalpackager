@@ -12,13 +12,13 @@ from generalfile import Path
 
 
 packager = Packager("generalpackager")
-# packager.generate_workflow()
+packager.generate_workflow()
 # packager.generate_localfiles()
 # packager.sync_package("Testing auto")
 
 # packager.sync_github_metadata()
 # packager.generate_git_exclude()
-packager.generate_setup()
+# packager.generate_setup()
 # packager.setup_all("Trying to make github token work.")
 
 # packager.localrepo.get_git_exclude_path().open_folder()
