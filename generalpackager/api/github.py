@@ -1,7 +1,7 @@
 
 import requests
 import json
-from generalpackager import github_token
+from generalpackager import PACKAGER_GITHUB_API
 
 
 class GitHub:
@@ -66,7 +66,7 @@ class GitHub:
 
         kwargs = {
             "headers": {"Accept": "application/vnd.github.mercy-preview+json"},
-            "auth": (self.owner, github_token.value),
+            "auth": (self.owner, PACKAGER_GITHUB_API.value),
         }
         if data:
             kwargs["data"] = json.dumps(data)

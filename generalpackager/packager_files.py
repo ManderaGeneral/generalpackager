@@ -43,11 +43,16 @@ class _PackagerFiles:
 
         setup = top.add(CodeLine("setup("))
         for key, value in setup_kwargs.items():
-            if isinstance(value, list):
+            if isinstance(value, list) and value:
                 list_ = setup.add(CodeLine(f"{key}=["))
                 for item in value:
                     list_.add(CodeLine(f"'{item}',"))
                 setup.add(CodeLine("],"))
+            elif isinstance(value, dict) and value:
+                dict_ = setup.add(CodeLine(f"{key}={{"))
+                for k, v in value.items():
+                    dict_.add(CodeLine(f"'{k}': {v},"))
+                setup.add(CodeLine("},"))
             else:
                 setup.add(CodeLine(f"{key}={value},"))
 

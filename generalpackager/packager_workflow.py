@@ -19,9 +19,6 @@ class _PackagerWorkflow:
     _matrix_os = "matrix.os"
     _matrix_python_version = "matrix.python-version"
 
-    def __init__(self):
-        self._secrets_token = self._var('secrets.ACTIONS_TOKEN')
-
     def get_triggers(self):
         """ :param generalpackager.Packager self: """
         on = CodeLine("on:")
@@ -48,14 +45,28 @@ class _PackagerWorkflow:
         with_.add(f"python-version: {version}")
         return self.get_step(f"Set up python version {version}", f"uses: {self._action_setup_python}", with_)
 
-    def step_install_package_pip(self, *extra_packages):
+    def step_install_necessities(self):
         """ :param generalpackager.Packager self: """
-        packages = list({".[full]", "wheel"}.union(extra_packages))
-        packages.sort()
         run = CodeLine("run: |")
         run.add("python -m pip install --upgrade pip")
+        run.add(f"pip install wheel twine generalpackager")
+        return self.get_step(f"Install necessities pip, wheel, twine and generalpackager", run)
+
+    def step_install_package_pip(self, *packages):
+        """ Supply package name as it's stated on pypi.
+
+            :param generalpackager.Packager self: """
+        run = CodeLine("run: |")
         run.add(f"pip install {' '.join(packages)}")
-        return self.get_step(f"Install packages {comma_and_and(*packages)}", run)
+        return self.get_step(f"Install pip packages {comma_and_and(*packages)}", run)
+
+    def step_install_package_git(self, *author_repo):
+        """ Supply author/repo, e.g. ManderaGeneral/generalpackager
+
+            :param generalpackager.Packager self: """
+        run = CodeLine("run: |")
+        run.add(f"pip install {' '.join([f'git+https://github.com/{pkg}.git' for pkg in author_repo])}")
+        return self.get_step(f"Install git repos {comma_and_and(*author_repo)}", run)
 
     def get_env(self):
         """ :param generalpackager.Packager self: """
@@ -69,6 +80,11 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self: """
         run = f"run: python -m unittest discover {self.name}/test"
         return self.get_step(f"Run unittests.", run, self.get_env())
+
+    def step_run_publish(self):
+        """ :param generalpackager.Packager self: """
+        run = f'run: python -c "from generalpackager import Packager; Packager(\'{self.name}\').upload()"'
+        return self.get_step(f"Publish.", run, self.get_env())
 
     def step_sync(self):
         """ :param generalpackager.Packager self: """
@@ -86,7 +102,8 @@ class _PackagerWorkflow:
         steps = top.add("steps:")
         steps.add(self.step_checkout())
         steps.add(self.step_setup_python(version=self.python[0]))
-        steps.add(self.step_install_package_pip("generalpackager"))
+        steps.add(self.step_install_necessities())
+        steps.add(self.step_install_package_pip(".[full]"))
         steps.add(self.step_sync())
 
         return top
@@ -106,7 +123,8 @@ class _PackagerWorkflow:
         steps = top.add("steps:")
         steps.add(self.step_checkout())
         steps.add(self.step_setup_python(version=self._var(self._matrix_python_version)))
-        steps.add(self.step_install_package_pip())
+        steps.add(self.step_install_necessities())
+        steps.add(self.step_install_package_pip(".[full]"))
         steps.add(self.step_run_unittests())
 
         return top
@@ -119,7 +137,9 @@ class _PackagerWorkflow:
         steps = top.add("steps:")
         steps.add(self.step_checkout())
         steps.add(self.step_setup_python(version=self.python[0]))
-        steps.add(self.step_install_package_pip("generalpackager"))
+        steps.add(self.step_install_necessities())
+        steps.add(self.step_install_package_git(self.name))
+        steps.add(self.step_run_publish())
 
         return top
 

@@ -37,6 +37,10 @@ class LocalRepo:
             if getattr(self, key) is Ellipsis:
                 raise AssertionError(f"Key '{key}' for {self}'s metadata is still {Ellipsis}")
 
+        if self.extras_require:
+            self.extras_require["full"] = list(set().union(*self.extras_require.values()))
+            self.extras_require["full"].sort()
+
     def metadata_setter(self, value, key):
         """ Set a metadata's key both in instance and json file. """
         if value != getattr(self, f"_{key}"):
