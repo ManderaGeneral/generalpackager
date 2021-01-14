@@ -35,7 +35,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.8, 3.9]
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        os: [windows-latest, ubuntu-latest]
     steps:
       - name: Checkout repository.
         uses: actions/checkout@v2
@@ -71,9 +71,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install wheel twine generalpackager
-      - name: Install git repos generalpackager.
+      - name: Install git repos ManderaGeneral/generalpackager.
         run: |
-          pip install git+https://github.com/generalpackager.git
+          pip install git+https://github.com/ManderaGeneral/generalpackager.git
       - name: Publish.
         run: python -c "from generalpackager import Packager; Packager('generalpackager').upload()"
         env:
