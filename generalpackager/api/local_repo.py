@@ -109,7 +109,7 @@ class LocalRepo:
 
             for todo in re.findall("todo+: (.+)", text, re.I):
                 todos.append({
-                    "Module": path,
+                    "Module": path.name(),
                     "Message": re.sub('[" ]*$', "", todo),
                 })
         return todos

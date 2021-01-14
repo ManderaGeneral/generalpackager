@@ -87,5 +87,4 @@ class _PackagerFiles:
         jobs.add(self.get_sync_job())
         jobs.add(self.get_unittest_job())
 
-
-        self.localrepo.get_workflow_path().text.write(workflow.text(), overwrite=True)
+        self.generate_file(self.localrepo.get_workflow_path(), workflow.text())

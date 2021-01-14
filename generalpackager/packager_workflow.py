@@ -95,7 +95,7 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self: """
         top = CodeLine("unittest:")
         top.add("needs: sync")
-        top.add(self._commit_msg_if(SKIP=False))
+        top.add(self._commit_msg_if(SKIP=False, NOTEST=False))
         top.add(f"runs-on: {self._var(self._matrix_os)}")
 
         strategy = top.add("strategy:")
