@@ -93,8 +93,9 @@ pip install generalpackager
 | packager_markdown.py | Inherit future crawler class for pypi and github.                 |
 | packager_markdown.py | Use Packager.os for badges.                                       |
 | packager.py          | Allow github, pypi or local repo not to exist in any combination. |
+| __init__.py          | Rename secrets and cleanup.                                       |
 | pypi.py              | Method to upload to PyPI.                                         |
 
 <sup>
-Generated 2021-01-14 09:02 CET for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/'></a>.
+Generated 2021-01-14 09:07 CET for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/'></a>.
 </sup>
