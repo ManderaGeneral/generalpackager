@@ -6,8 +6,10 @@ import generallibrary
 import generalpackager
 from generalfile import Path
 
+from pprint import pprint
 
 packager = Packager("generalpackager")
+# pprint(packager.localmodule.get_dependencies())  # HERE ** make methods for dependants and dependencies to use for commit chaining
 # packager.upload()
 # packager.generate_readme()
 packager.generate_workflow()

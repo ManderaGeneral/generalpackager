@@ -1,4 +1,6 @@
 
+import pkg_resources
+
 from generallibrary import ObjInfo
 
 
@@ -26,7 +28,9 @@ class LocalModule:
         objInfo.get_attrs()
         return [objInfo.obj for objInfo in objInfo.get_children()]
 
-
+    def get_dependencies(self):
+        """ Get a list dependencies this module has. """
+        return pkg_resources.working_set.by_key[self.module.__name__].requires()
 
 
 

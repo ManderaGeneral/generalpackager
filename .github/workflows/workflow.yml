@@ -32,7 +32,7 @@ jobs:
           PACKAGER_GITHUB_API: ${{ secrets.PACKAGER_GITHUB_API }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
-  sync:
+  sync_and_publish:
     needs: unittest
     if: contains(github.event.head_commit.message, '[CI SKIP]') == false
     runs-on: ubuntu-latest
@@ -50,6 +50,9 @@ jobs:
       - name: Install pip packages .[full]
         run: |
           pip install .[full]
+      - name: Install pip packages generalpackager, generallibrary, generalfile, generalvector, generalgui and generalprocess
+        run: |
+          pip install generalpackager generallibrary generalfile generalvector generalgui generalprocess
       - name: Sync
         run: python -c "from generalpackager import Packager; Packager('generalpackager', commit_sha='${{ github.sha }}').sync_package('[CI SYNC]')"
         env:

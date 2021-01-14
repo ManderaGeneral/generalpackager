@@ -104,9 +104,9 @@ class LocalRepo:
             :rtype: dict[list[str]] """
         todos = []
         for path in self.path.get_paths_recursive():
-            if path.name().lower() in ("shelved.patch", "readme.md") or any([exclude in path for exclude in self.git_exclude_lines]):
+            if path.name().lower() in ("shelved.patch", "readme.md") or any([exclude.replace("*", "") in path for exclude in self.git_exclude_lines]):
                 continue
-
+            print(path)
             try:
                 text = path.text.read()
             except:
