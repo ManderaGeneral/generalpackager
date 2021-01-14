@@ -1,6 +1,8 @@
 
 from generallibrary import EnvVar
 
+# Todo: Rename secrets and cleanup.
+
 github_token = EnvVar("packager_github_api", "secrets.PACKAGER_GITHUB_API")
 GIT_PASSWORD = EnvVar("GIT_PASSWORD", "secrets.GIT_PASSWORD")
 
