@@ -57,3 +57,27 @@ jobs:
           PACKAGER_GITHUB_API: ${{ secrets.PACKAGER_GITHUB_API }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
+  publish:
+    needs: unittest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository.
+        uses: actions/checkout@v2
+      - name: Set up python version 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install necessities pip, wheel, twine and generalpackager
+        run: |
+          python -m pip install --upgrade pip
+          pip install wheel twine generalpackager
+      - name: Install git repos generalpackager.
+        run: |
+          pip install git+https://github.com/generalpackager.git
+      - name: Publish.
+        run: python -c "from generalpackager import Packager; Packager('generalpackager').upload()"
+        env:
+          GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
+          PACKAGER_GITHUB_API: ${{ secrets.PACKAGER_GITHUB_API }}
+          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
+          TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}

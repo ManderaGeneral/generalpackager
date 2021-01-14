@@ -133,6 +133,7 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self: """
         top = CodeLine("publish:")
         top.add("needs: unittest")
+        top.add(f"runs-on: ubuntu-latest")
 
         steps = top.add("steps:")
         steps.add(self.step_checkout())
