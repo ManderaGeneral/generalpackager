@@ -139,7 +139,7 @@ class _PackagerWorkflow:
         steps.add(self.step_checkout())
         steps.add(self.step_setup_python(version=self.python[0]))
         steps.add(self.step_install_necessities())
-        steps.add(self.step_install_package_git(self.name))
+        steps.add(self.step_install_package_git(f"{self.github.owner}/{self.name}"))
         steps.add(self.step_run_publish())
 
         return top
