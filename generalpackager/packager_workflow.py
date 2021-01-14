@@ -75,7 +75,7 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self: """
         # msg = f"[CI SYNC] {self._var(self._commit_msg)}"  # Don't know how to escape ' in ubuntu
         msg = f"[CI SYNC]"
-        run = f'run: python -c "from generalpackager import Packager; Packager(\'{self.name}\', commit_sha=\'{self._var("GITHUB_SHA")}\').sync_package(\'{msg}\')"'
+        run = f'run: python -c "from generalpackager import Packager; Packager(\'{self.name}\', commit_sha=\'{self._var("env.GITHUB_SHA")}\').sync_package(\'{msg}\')"'
         return self.get_step(f"Sync package.", run, self.get_env())
 
     def get_sync_job(self):
