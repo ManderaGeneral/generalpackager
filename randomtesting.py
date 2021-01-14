@@ -6,15 +6,19 @@ import generallibrary
 import generalpackager
 from generalfile import Path
 
+# HERE **
+
+# Got it working finally! long_description relative is wrong. CI SYNC doesnt trigger actions
+
 
 packager = Packager("generalpackager")
-packager.generate_workflow()
+# packager.generate_workflow()
 # packager.generate_localfiles()
 # packager.sync_package("Testing auto")
 
 # packager.sync_github_metadata()
 # packager.generate_git_exclude()
-# packager.generate_setup()
+packager.generate_setup()
 # packager.setup_all("Trying to make github token work.")
 
 # packager.localrepo.get_git_exclude_path().open_folder()

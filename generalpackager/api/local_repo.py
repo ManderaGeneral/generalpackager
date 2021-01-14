@@ -117,23 +117,12 @@ class LocalRepo:
         if message is None:
             message = "Automatic commit."
 
-        print("path view:")
-        list(self.path.get_paths_recursive(depth=3))
-        self.path.get_parent(-1).view()
-
         repo = Repo(str(self.path))
-        print(repo)
         repo.git.add(A=True)
-
-        print(repo.index.diff("HEAD"))
         repo.index.commit(message=message)
-        print(repo.index.diff("HEAD"))
-
         remote = repo.remote()
         remote.set_url(f"https://Mandera:{GIT_PASSWORD}@github.com/ManderaGeneral/{self.name}.git")
         remote.push()
-
-
 
     def bump_version(self):
         """ Bump micro version in metadata.json. """
