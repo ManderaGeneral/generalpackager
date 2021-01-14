@@ -11,7 +11,9 @@
         "wheel",
         "twine"
     ],
-    "extras_require": {},
+    "extras_require": {"test": [
+        "foo"
+    ]},
     "topics": [
         "tool",
         "library"

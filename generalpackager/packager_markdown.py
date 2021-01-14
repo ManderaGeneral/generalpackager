@@ -4,20 +4,19 @@ from generallibrary import Markdown, comma_and_and, current_datetime_formatted
 
 class _PackagerMarkdown:
     """ Contains methods to generate readme sections from arguments.
-        Todo: Inherit future crawler class for pypi and github.
-        Todo: Use Packager.os for badges. """
+        Todo: Inherit future crawler class for pypi and github. """
     def get_badges_dict(self):
         """ Get badges as a dict.
 
             :param generalpackager.Packager self: """
-        badges = {
-            "UnitTests": "[![workflow Actions Status](https://github.com/ManderaGeneral/PACKAGE/workflows/workflow/badge.svg)](https://github.com/ManderaGeneral/PACKAGE/actions)",
-            "Commit": "![GitHub last commit](https://img.shields.io/github/last-commit/ManderaGeneral/PACKAGE)",
-            "Release": "[![PyPI version shields.io](https://img.shields.io/pypi/v/PACKAGE.svg)](https://pypi.org/project/PACKAGE/)",
-            "Python": "[![PyPI pyversions](https://img.shields.io/pypi/pyversions/PACKAGE.svg)](https://pypi.python.org/pypi/PACKAGE/)",
-            "Operating System": "[![Generic badge](https://img.shields.io/badge/platforms-Windows%20%7C%20Ubuntu%20%7C%20MacOS-blue.svg)](https://shields.io/)",
+
+        return {
+            "UnitTests": f"[![workflow Actions Status](https://github.com/ManderaGeneral/{self.name}/workflows/workflow/badge.svg)](https://github.com/ManderaGeneral/{self.name}/actions)",
+            "Commit": f"![GitHub last commit](https://img.shields.io/github/last-commit/ManderaGeneral/{self.name})",
+            "Release": f"[![PyPI version shields.io](https://img.shields.io/pypi/v/{self.name}.svg)](https://pypi.org/project/{self.name}/)",
+            "Python": f"[![PyPI pyversions](https://img.shields.io/pypi/pyversions/{self.name}.svg)](https://pypi.python.org/pypi/{self.name}/)",
+            "Operating System": f"[![Generic badge](https://img.shields.io/badge/platforms-{'%20%7C%20'.join(self.os)}-blue.svg)](https://shields.io/)",
         }
-        return {key: value.replace("PACKAGE", self.name) for key, value in badges.items()}
 
     def get_installation_markdown(self):
         """ Get install markdown.
@@ -25,7 +24,7 @@ class _PackagerMarkdown:
             :param generalpackager.Packager self: """
         markdown = Markdown(header="Installation").add_code_lines(f'pip install {self.name}')
 
-        if len(self.localrepo.extras_require) > 1:
+        if self.localrepo.extras_require:
             list_of_dicts = [{
                 "Name": extra,
                 "Command": f"`pip install {self.name}[{extra}]`",

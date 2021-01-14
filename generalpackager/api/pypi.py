@@ -1,8 +1,7 @@
 
 
 class PyPI:
-    """ Tools to interface pypi.org.
-        Todo: Method to upload to PyPI. """
+    """ Tools to interface pypi.org """
     def __init__(self, name):
         self.name = name
 

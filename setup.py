@@ -23,7 +23,7 @@ setup(
     license="mit",
     python_requires=">=3.8, <3.10",
     packages=find_namespace_packages(exclude=("build*", "dist*")),
-    extras_require={},
+    extras_require={'test': ['foo']},
     classifiers=[
         'Topic :: Software Development :: Build Tools',
         'Topic :: Software Development :: Libraries',

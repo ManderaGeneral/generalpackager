@@ -26,14 +26,12 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
     python = "3.8", "3.9"  # Only supports basic definition with tuple of major.minor
     os = "windows", "macos", "ubuntu"
 
-    git_exclude_lines = ".idea/", "build/", "dist/", "*.egg-info/", "__pycache__/"
+    git_exclude_lines = ".idea", "build", "dist", "*.egg-info", "__pycache__", ".git"
 
     def __init__(self, name, repos_path=None, commit_sha="master"):
         repos_path = Path(repos_path).absolute()
         while not LocalRepo.get_local_repos(repos_path):
             repos_path = repos_path.get_parent()
-
-        # repos_path.set_working_dir()
 
         # print("Repo path view:")
         # list(repos_path.get_paths_recursive(depth=4))
@@ -44,7 +42,7 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
         self.commit_sha = commit_sha
 
         self.github = GitHub(name=name)
-        self.localrepo = LocalRepo(path=repos_path / name)
+        self.localrepo = LocalRepo(path=repos_path / name, git_exclude_lines=self.git_exclude_lines)
         self.localmodule = LocalModule(module=importlib.import_module(name=name))
         self.pypi = PyPI(name=name)
 

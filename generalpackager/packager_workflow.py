@@ -48,7 +48,7 @@ class _PackagerWorkflow:
         with_.add(f"python-version: {version}")
         return self.get_step(f"Set up python version {version}", f"uses: {self._action_setup_python}", with_)
 
-    def step_install_package(self, *extra_packages):
+    def step_install_package_pip(self, *extra_packages):
         """ :param generalpackager.Packager self: """
         packages = list({".[full]", "wheel"}.union(extra_packages))
         packages.sort()
@@ -86,7 +86,7 @@ class _PackagerWorkflow:
         steps = top.add("steps:")
         steps.add(self.step_checkout())
         steps.add(self.step_setup_python(version=self.python[0]))
-        steps.add(self.step_install_package("generalpackager"))
+        steps.add(self.step_install_package_pip("generalpackager"))
         steps.add(self.step_sync())
 
         return top
@@ -95,7 +95,7 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self: """
         top = CodeLine("unittest:")
         top.add("needs: sync")
-        top.add(self._commit_msg_if(SKIP=False, NOTEST=False))
+        top.add(self._commit_msg_if(NOTEST=False))
         top.add(f"runs-on: {self._var(self._matrix_os)}")
 
         strategy = top.add("strategy:")
@@ -106,8 +106,20 @@ class _PackagerWorkflow:
         steps = top.add("steps:")
         steps.add(self.step_checkout())
         steps.add(self.step_setup_python(version=self._var(self._matrix_python_version)))
-        steps.add(self.step_install_package())
+        steps.add(self.step_install_package_pip())
         steps.add(self.step_run_unittests())
+
+        return top
+
+    def get_publish_job(self):
+        """ :param generalpackager.Packager self: """
+        top = CodeLine("publish:")
+        top.add("needs: unittest")
+
+        steps = top.add("steps:")
+        steps.add(self.step_checkout())
+        steps.add(self.step_setup_python(version=self.python[0]))
+        steps.add(self.step_install_package_pip("generalpackager"))
 
         return top
 

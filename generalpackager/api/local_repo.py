@@ -1,6 +1,6 @@
 
 from generalfile import Path
-from generalpackager import github_token, GIT_PASSWORD
+from generalpackager import GIT_PASSWORD
 
 from setuptools import find_namespace_packages
 import re
@@ -18,10 +18,12 @@ class LocalRepo:
 
     metadata_keys = [key for key, value in locals().items() if value is Ellipsis]
 
-    def __init__(self, path):
+    def __init__(self, path, git_exclude_lines):
         assert self.path_is_repo(path=path)
 
         self.path = Path(path).absolute()
+        self.git_exclude_lines = git_exclude_lines
+
         self.name = self.path.parts()[-1]
 
         for key, value in self.get_metadata_path().read().items():
@@ -98,13 +100,12 @@ class LocalRepo:
             :rtype: dict[list[str]] """
         todos = []
         for path in self.path.get_paths_recursive():
+            if path.name().lower() in ("shelved.patch", "readme.md") or any([exclude in path for exclude in self.git_exclude_lines]):
+                continue
+
             try:
                 text = path.text.read()
             except:
-                continue
-            if path.name().lower() in ("shelved.patch", "readme.md"):
-                continue
-            if "build" in path.parts():
                 continue
 
             for todo in re.findall("todo+: (.+)", text, re.I):
