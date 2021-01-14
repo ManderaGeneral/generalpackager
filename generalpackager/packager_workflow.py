@@ -52,7 +52,8 @@ class _PackagerWorkflow:
 
     def step_install_package(self, *extra_packages):
         """ :param generalpackager.Packager self: """
-        packages = {".[full]", "wheel"}.union(extra_packages)
+        packages = list({".[full]", "wheel"}.union(extra_packages))
+        packages.sort()
         run = CodeLine("run: |")
         run.add("python -m pip install --upgrade pip")
         run.add(f"pip install {' '.join(packages)}")

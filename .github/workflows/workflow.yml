@@ -14,12 +14,12 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
-      - name: Install packages generalpackager, .[full] and wheel.
+      - name: Install packages .[full], generalpackager and wheel.
         run: |
           python -m pip install --upgrade pip
-          pip install generalpackager .[full] wheel
+          pip install .[full] generalpackager wheel
       - name: Sync package.
-        run: python -c "from generalpackager import Packager; Packager('generalpackager', commit_sha='${{ GITHUB_SHA }}').sync_package('[CI SYNC]')"
+        run: python -c "from generalpackager import Packager; Packager('generalpackager', commit_sha='${{ env.GITHUB_SHA }}').sync_package('[CI SYNC]')"
         env:
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
           packager_github_api: ${{ secrets.PACKAGER_GITHUB_API }}
