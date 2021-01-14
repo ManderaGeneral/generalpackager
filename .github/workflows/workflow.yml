@@ -4,32 +4,7 @@ on:
     branches:
       - master
 jobs:
-  sync:
-    if: contains(github.event.head_commit.message, '[CI SKIP]') == false
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository.
-        uses: actions/checkout@v2
-      - name: Set up python version 3.8
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-      - name: Install necessities pip, wheel, twine and generalpackager
-        run: |
-          python -m pip install --upgrade pip
-          pip install wheel twine generalpackager
-      - name: Install pip packages .[full].
-        run: |
-          pip install .[full]
-      - name: Sync package.
-        run: python -c "from generalpackager import Packager; Packager('generalpackager', commit_sha='${{ github.sha }}').sync_package('[CI SYNC]')"
-        env:
-          GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
-          PACKAGER_GITHUB_API: ${{ secrets.PACKAGER_GITHUB_API }}
-          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-          TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
   unittest:
-    needs: sync
     if: contains(github.event.head_commit.message, '[CI NOTEST]') == false
     runs-on: ${{ matrix.os }}
     strategy:
@@ -37,7 +12,7 @@ jobs:
         python-version: [3.8, 3.9]
         os: [windows-latest, ubuntu-latest]
     steps:
-      - name: Checkout repository.
+      - name: Checkout repository
         uses: actions/checkout@v2
       - name: Set up python version ${{ matrix.python-version }}
         uses: actions/setup-python@v2
@@ -47,21 +22,22 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install wheel twine generalpackager
-      - name: Install pip packages .[full].
+      - name: Install pip packages .[full]
         run: |
           pip install .[full]
-      - name: Run unittests.
+      - name: Run unittests
         run: python -m unittest discover generalpackager/test
         env:
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
           PACKAGER_GITHUB_API: ${{ secrets.PACKAGER_GITHUB_API }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
-  publish:
+  sync:
     needs: unittest
+    if: contains(github.event.head_commit.message, '[CI SKIP]') == false
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository.
+      - name: Checkout repository
         uses: actions/checkout@v2
       - name: Set up python version 3.8
         uses: actions/setup-python@v2
@@ -71,10 +47,17 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install wheel twine generalpackager
-      - name: Install git repos ManderaGeneral/generalpackager.
+      - name: Install pip packages .[full]
         run: |
-          pip install git+https://github.com/ManderaGeneral/generalpackager.git
-      - name: Publish.
+          pip install .[full]
+      - name: Sync
+        run: python -c "from generalpackager import Packager; Packager('generalpackager', commit_sha='${{ github.sha }}').sync_package('[CI SYNC]')"
+        env:
+          GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
+          PACKAGER_GITHUB_API: ${{ secrets.PACKAGER_GITHUB_API }}
+          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
+          TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
+      - name: Publish
         run: python -c "from generalpackager import Packager; Packager('generalpackager').upload()"
         env:
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}

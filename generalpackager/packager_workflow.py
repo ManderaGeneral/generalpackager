@@ -36,7 +36,7 @@ class _PackagerWorkflow:
 
     def step_checkout(self):
         """ :param generalpackager.Packager self: """
-        return self.get_step("Checkout repository.", "uses: actions/checkout@v2")
+        return self.get_step("Checkout repository", "uses: actions/checkout@v2")
 
     def step_setup_python(self, version):
         """ :param generalpackager.Packager self:
@@ -58,7 +58,7 @@ class _PackagerWorkflow:
             :param generalpackager.Packager self: """
         run = CodeLine("run: |")
         run.add(f"pip install {' '.join(packages)}")
-        return self.get_step(f"Install pip packages {comma_and_and(*packages)}", run)
+        return self.get_step(f"Install pip packages {comma_and_and(*packages, period=False)}", run)
 
     def step_install_package_git(self, *author_repo):
         """ Supply author/repo, e.g. ManderaGeneral/generalpackager
@@ -66,7 +66,7 @@ class _PackagerWorkflow:
             :param generalpackager.Packager self: """
         run = CodeLine("run: |")
         run.add(f"pip install {' '.join([f'git+https://github.com/{pkg}.git' for pkg in author_repo])}")
-        return self.get_step(f"Install git repos {comma_and_and(*author_repo)}", run)
+        return self.get_step(f"Install git repos {comma_and_and(*author_repo, period=False)}", run)
 
     def get_env(self):
         """ :param generalpackager.Packager self: """
@@ -76,42 +76,26 @@ class _PackagerWorkflow:
                 env.add(f"{env_var.name}: {env_var.actions_name}")
         return env
 
-    def step_run_unittests(self):
+    def step_unittests(self):
         """ :param generalpackager.Packager self: """
         run = f"run: python -m unittest discover {self.name}/test"
-        return self.get_step(f"Run unittests.", run, self.get_env())
-
-    def step_run_publish(self):
-        """ :param generalpackager.Packager self: """
-        run = f'run: python -c "from generalpackager import Packager; Packager(\'{self.name}\').upload()"'
-        return self.get_step(f"Publish.", run, self.get_env())
+        return self.get_step(f"Run unittests", run, self.get_env())
 
     def step_sync(self):
         """ :param generalpackager.Packager self: """
         # msg = f"[CI SYNC] {self._var(self._commit_msg)}"  # Don't know how to escape ' in ubuntu
         msg = f"[CI SYNC]"
         run = f'run: python -c "from generalpackager import Packager; Packager(\'{self.name}\', commit_sha=\'{self._var("github.sha")}\').sync_package(\'{msg}\')"'
-        return self.get_step(f"Sync package.", run, self.get_env())
+        return self.get_step(f"Sync", run, self.get_env())
 
-    def get_sync_job(self):
+    def step_publish(self):
         """ :param generalpackager.Packager self: """
-        top = CodeLine("sync:")
-        top.add(self._commit_msg_if(SKIP=False))
-        top.add(f"runs-on: ubuntu-latest")
-
-        steps = top.add("steps:")
-        steps.add(self.step_checkout())
-        steps.add(self.step_setup_python(version=self.python[0]))
-        steps.add(self.step_install_necessities())
-        steps.add(self.step_install_package_pip(".[full]"))
-        steps.add(self.step_sync())
-
-        return top
+        run = f'run: python -c "from generalpackager import Packager; Packager(\'{self.name}\').upload()"'
+        return self.get_step(f"Publish", run, self.get_env())
 
     def get_unittest_job(self):
         """ :param generalpackager.Packager self: """
         top = CodeLine("unittest:")
-        top.add("needs: sync")
         top.add(self._commit_msg_if(NOTEST=False))
         top.add(f"runs-on: {self._var(self._matrix_os)}")
 
@@ -125,22 +109,24 @@ class _PackagerWorkflow:
         steps.add(self.step_setup_python(version=self._var(self._matrix_python_version)))
         steps.add(self.step_install_necessities())
         steps.add(self.step_install_package_pip(".[full]"))
-        steps.add(self.step_run_unittests())
+        steps.add(self.step_unittests())
 
         return top
 
-    def get_publish_job(self):
+    def get_sync_and_publish_job(self):
         """ :param generalpackager.Packager self: """
-        top = CodeLine("publish:")
+        top = CodeLine("sync:")
         top.add("needs: unittest")
+        top.add(self._commit_msg_if(SKIP=False))
         top.add(f"runs-on: ubuntu-latest")
 
         steps = top.add("steps:")
         steps.add(self.step_checkout())
         steps.add(self.step_setup_python(version=self.python[0]))
         steps.add(self.step_install_necessities())
-        steps.add(self.step_install_package_git(f"{self.github.owner}/{self.name}"))
-        steps.add(self.step_run_publish())
+        steps.add(self.step_install_package_pip(".[full]"))
+        steps.add(self.step_sync())
+        steps.add(self.step_publish())
 
         return top
 

@@ -89,9 +89,8 @@ class _PackagerFiles:
         workflow.add(self.get_triggers())
 
         jobs = workflow.add("jobs:")
-        jobs.add(self.get_sync_job())
         jobs.add(self.get_unittest_job())
-        jobs.add(self.get_publish_job())
+        jobs.add(self.get_sync_and_publish_job())
 
         self.generate_file(self.localrepo.get_workflow_path(), workflow.text())
 
