@@ -104,10 +104,12 @@ class LocalRepo:
                 continue
             if path.name().lower() in ("shelved.patch", "readme.md"):
                 continue
+            if "build" in path.parts():
+                continue
 
             for todo in re.findall("todo+: (.+)", text, re.I):
                 todos.append({
-                    "Module": path.name(),
+                    "Module": path,
                     "Message": re.sub('[" ]*$', "", todo),
                 })
         return todos

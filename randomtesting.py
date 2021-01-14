@@ -12,8 +12,8 @@ from generalfile import Path
 
 
 packager = Packager("generalpackager")
-# packager.generate_readme()
-packager.generate_workflow()
+packager.generate_readme()
+# packager.generate_workflow()
 # packager.generate_localfiles()
 # packager.sync_package("Testing auto")
 
