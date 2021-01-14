@@ -17,6 +17,7 @@ class _PackagerFiles:
         """ Generate setup.py.
 
             :param generalpackager.Packager self: """
+        readme_path = self.localrepo.get_readme_path().relative(self.localrepo.path)
         last_version_split = self.python[-1].split(".")
         last_version_bumped_micro = f"{last_version_split[0]}.{int(last_version_split[1]) + 1}"
         setup_kwargs = {
@@ -25,7 +26,7 @@ class _PackagerFiles:
             "author_email": f'"{self.email}"',
             "version": f'"{self.localrepo.version}"',
             "description": f'"{self.localrepo.description}"',
-            "long_description": f"Path(r'{self.localrepo.get_readme_path().relative()}').read_text(encoding='utf-8')",
+            "long_description": f"Path(r'{readme_path}').read_text(encoding='utf-8')",
             "long_description_content_type": '"text/markdown"',
             "install_requires": self.localrepo.install_requires,
             "url": f'"{self.github.url()}"',
