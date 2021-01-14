@@ -22,16 +22,24 @@ class _PackagerMarkdown:
         """ Get install markdown.
 
             :param generalpackager.Packager self: """
-        markdown = Markdown(header="Installation").add_code_lines(f'pip install {self.name}')
+        markdown = Markdown(header="Installation")
 
-        if self.localrepo.extras_require:
-            list_of_dicts = [{
-                "Name": extra,
-                "Command": f"`pip install {self.name}[{extra}]`",
-                "Extra packages": comma_and_and(*[f"`{x}`" for x in requires], period=False),
-            } for extra, requires in self.localrepo.extras_require.items()]
+        dependencies_required = self.localrepo.install_requires.copy()
+        dependencies_optional = list(set().union(*self.localrepo.extras_require.values()))
+        dependencies_optional.sort()
 
-            Markdown(header="Extras", parent=markdown).add_table_lines(*list_of_dicts)
+        options = {self.name: dependencies_required}
+        options.update({f"{self.name}[{key}]": value + dependencies_required for key, value in self.localrepo.extras_require.items()})
+
+        list_of_dicts = []
+
+        for command, packages in options.items():
+            row = {"Command": f"`pip install {command}`"}
+            for dependency in dependencies_required + dependencies_optional:
+                row[Markdown.link(dependency, url=f"https://pypi.org/project/{dependency}", href=True)] = "Yes" if dependency in packages else "-"
+            list_of_dicts.append(row)
+
+        markdown.add_table_lines(*list_of_dicts)
 
         return markdown
 

@@ -11,7 +11,7 @@ class _PackagerFiles:
             :param generalpackager.Packager self:
             :param path:
             :param text: """
-        path.text.write(text, overwrite=True)
+        path.text.write(f"{text}\n", overwrite=True)
 
     def generate_setup(self):
         """ Generate setup.py.
@@ -56,7 +56,7 @@ class _PackagerFiles:
             else:
                 setup.add(CodeLine(f"{key}={value},"))
 
-        top.add(CodeLine(")", space_after=1))
+        top.add(CodeLine(")"))
 
         self.generate_file(self.localrepo.get_setup_path(), top.text())
 

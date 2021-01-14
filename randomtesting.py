@@ -8,10 +8,10 @@ from generalfile import Path
 
 
 packager = Packager("generalpackager")
-# packager.generate_readme()
+packager.generate_readme()
 # packager.generate_workflow()
 # packager.generate_localfiles()
-packager.sync_package("Clead up secrets, testing auto")
+# packager.sync_package("Clead up secrets, testing auto")
 # packager.localrepo.get_todos()
 # packager.sync_github_metadata()
 # packager.generate_git_exclude()
