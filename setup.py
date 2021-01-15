@@ -24,7 +24,6 @@ setup(
     extras_require={},
     classifiers=[
         'Topic :: Software Development :: Build Tools',
-        'Topic :: Software Development :: Libraries',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'License :: OSI Approved :: MIT License',
