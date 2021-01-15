@@ -26,9 +26,10 @@ class LocalRepo:
 
         self.name = self.path.parts()[-1]
 
+
         for key, value in self.get_metadata_path().read().items():
             setattr(self, f"_{key}", value)
-            setattr(LocalRepo, key, property(
+            setattr(LocalRepo, key, property(  # HERE ** Binding to class messes up the next Packager (generallibrary in this case)
                 lambda self, key=key: getattr(self, f"_{key}", ...),
                 lambda self, value, key=key: LocalRepo.metadata_setter(self, value, key),
             ))
@@ -106,7 +107,6 @@ class LocalRepo:
         for path in self.path.get_paths_recursive():
             if path.name().lower() in ("shelved.patch", "readme.md") or any([exclude.replace("*", "") in path for exclude in self.git_exclude_lines]):
                 continue
-            print(path)
             try:
                 text = path.text.read()
             except:

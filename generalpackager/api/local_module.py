@@ -28,9 +28,25 @@ class LocalModule:
         objInfo.get_attrs()
         return [objInfo.obj for objInfo in objInfo.get_children()]
 
-    def get_dependencies(self):
-        """ Get a list dependencies this module has. """
-        return pkg_resources.working_set.by_key[self.module.__name__].requires()
+    @staticmethod
+    def get_all_packages():
+        """ Get a list of all available packages. """
+        return [pkg.project_name for pkg in pkg_resources.working_set]
+
+    def get_dependencies(self, name=None):
+        """ Get a list of dependencies this module has. """
+        if name is None:
+            name = self.module.__name__
+        return list(map(str, pkg_resources.working_set.by_key[name.lower()].requires()))
+
+    def get_dependants(self, name=None):
+        """ Get a list of all available packages. """
+        if name is None:
+            name = self.module.__name__
+        return [pkg for pkg in self.get_all_packages() if name.lower() in self.get_dependencies(name=pkg)]
+
+
+
 
 
 

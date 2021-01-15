@@ -35,7 +35,10 @@ class _PackagerWorkflow:
         return step
 
     def step_checkout(self):
-        """ :param generalpackager.Packager self: """
+        """ Todo: Add token here to see if we can trigger workflow for dependents auto testing.
+            https://github.com/actions/checkout
+
+            :param generalpackager.Packager self: """
         return self.get_step("Checkout repository", "uses: actions/checkout@v2")
 
     def step_setup_python(self, version):
