@@ -1,6 +1,6 @@
 
 from generallibrary import TreeDiagram, ObjInfo
-from generalpackager import Packager, LocalModule, PyPI
+from generalpackager import Packager, LocalModule, PyPI, GitHub
 
 import generallibrary
 import generalpackager
@@ -24,13 +24,38 @@ from generalfile import Path
 
 
 
+
+# def dynamic_property(cls, key, getter, setter):
+#     setattr(cls, key, property(getter, setter))
+#
+#
+# class A:
+#     pass
+#
+# key = "foo"
+# dynamic_property(A, key, lambda self, key=key: getattr(self, f"_{key}", ...), lambda self, value, key=key: setattr(self, f"_{key}", value))
+#
+# a = A()
+# a.foo = 2
+#
+# b = A()
+# b.foo = 3
+#
+# print(a.foo)
+# print(b.foo)
+
+
 class PackageGrp:
     """ Handles a collection of packages. """
     def __init__(self):
-        self.packages = [Packager(name) for name in PyPI.get_users_packages("Mandera")]
+        self.packages = [Packager(name) for name in Packager.get_users_packages()]
 
 
 print(PackageGrp().packages)
+
+# print(PyPI.get_users_packages("Mandera").intersection(GitHub.get_users_packages("ManderaGeneral")))
+# print(PyPI.get_users_packages("Mandera"))
+# print(GitHub.get_users_packages("ManderaGeneral"))
 
 
 # Todo: Write [CI MAJOR] in commit message to bump major for example.

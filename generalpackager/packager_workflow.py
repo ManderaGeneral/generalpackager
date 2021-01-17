@@ -128,7 +128,7 @@ class _PackagerWorkflow:
         steps.add(self.step_setup_python(version=self.python[0]))
         steps.add(self.step_install_necessities())
         steps.add(self.step_install_package_pip(".[full]"))
-        steps.add(self.step_install_package_pip(*self.pypi.get_users_packages()))
+        steps.add(self.step_install_package_pip(*sorted(self.get_users_packages())))
         steps.add(self.step_sync())
         steps.add(self.step_publish())
 

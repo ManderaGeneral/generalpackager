@@ -24,15 +24,8 @@ class LocalRepo:
         self.path = Path(path).absolute()
         self.git_exclude_lines = git_exclude_lines
 
-        self.name = self.path.parts()[-1]
-
-
         for key, value in self.get_metadata_path().read().items():
             setattr(self, f"_{key}", value)
-            setattr(LocalRepo, key, property(  # HERE ** Binding to class messes up the next Packager (generallibrary in this case)
-                lambda self, key=key: getattr(self, f"_{key}", ...),
-                lambda self, value, key=key: LocalRepo.metadata_setter(self, value, key),
-            ))
 
         for key in self.metadata_keys:
             if getattr(self, key) is Ellipsis:
@@ -42,7 +35,7 @@ class LocalRepo:
             self.extras_require["full"] = list(set().union(*self.extras_require.values()))
             self.extras_require["full"].sort()
 
-    def metadata_setter(self, value, key):
+    def metadata_setter(self, key, value):
         """ Set a metadata's key both in instance and json file. """
         if value != getattr(self, f"_{key}"):
             metadata = self.get_metadata_path().read()
@@ -138,6 +131,11 @@ class LocalRepo:
         self.version = ".".join(parts)
 
 
+for key in LocalRepo.metadata_keys:
+    setattr(LocalRepo, key, property(
+        lambda self, key=key: getattr(self, f"_{key}", ...),
+        lambda self, value, key=key: LocalRepo.metadata_setter(self, key, value),
+    ))
 
 
 

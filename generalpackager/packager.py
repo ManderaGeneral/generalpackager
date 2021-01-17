@@ -49,6 +49,12 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
 
         assert self.localrepo.name == self.name
 
+    @staticmethod
+    def get_users_packages(pypi_user=None, github_user=None):
+        """ Return a set of user's packages with intersecting PyPI and GitHub. """
+
+        return PyPI.get_users_packages(user=pypi_user).intersection(GitHub.get_users_packages(user=github_user))
+
     def generate_localfiles(self):
         """ Generate all local files. """
         self.generate_git_exclude()
@@ -62,6 +68,9 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
         self.generate_localfiles()
         self.sync_github_metadata()
         self.localrepo.commit_and_push(message=message)
+
+    def __repr__(self):
+        return f"<Packager: {self.name}>"
 
 
 

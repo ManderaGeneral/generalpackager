@@ -1,6 +1,7 @@
 
 import requests
 import json
+import re
 from generalpackager import PACKAGER_GITHUB_API
 
 
@@ -16,7 +17,7 @@ class GitHub:
         """ Assert that url is working. """
         response = self._request(url=url)
         if response.status_code != 200:
-            raise AssertionError(f"Request for url '{url}' status code {response.status_code} != 200.")
+            raise AssertionError(f"Request for url '{response.url}' status code {response.status_code} != 200.")
 
     def url(self):
         """ Get static URL from owner and name. """
@@ -74,3 +75,25 @@ class GitHub:
         if url is None:
             url = self.api_url(endpoint=endpoint)
         return method(url=url, **kwargs)
+
+    @staticmethod
+    def get_users_packages(user=None):
+        """ Get a set of a user's packages' names on PyPI. """
+        if user is None:
+            user = "ManderaGeneral"
+        return set(re.findall(f'"/{user}/([a-z]*)"', requests.get(f"https://github.com/{user}?tab=repositories").text))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

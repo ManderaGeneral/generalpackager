@@ -50,9 +50,9 @@ jobs:
       - name: Install pip packages .[full]
         run: |
           pip install .[full]
-      - name: Install pip packages generalpackager, generallibrary, generalfile, generalvector, generalgui and generalprocess
+      - name: Install pip packages generalfile, generalgui, generallibrary, generalpackager and generalvector
         run: |
-          pip install generalpackager generallibrary generalfile generalvector generalgui generalprocess
+          pip install generalfile generalgui generallibrary generalpackager generalvector
       - name: Sync
         run: python -c "from generalpackager import Packager; Packager('generalpackager', commit_sha='${{ github.sha }}').sync_package('[CI SYNC]')"
         env:
