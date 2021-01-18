@@ -28,17 +28,11 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
     git_exclude_lines = ".idea", "build", "dist", "*.egg-info", "__pycache__", ".git"
 
     def __init__(self, name, repos_path=None, commit_sha="master"):
-        if repos_path is None:
-            repos_path = Path(repos_path).absolute()
-            while not LocalRepo.get_local_repos(repos_path):
-                repos_path = repos_path.get_parent()
-                if repos_path is None:
-                    raise AttributeError(f"Couldn't find repos path.")
-
-        # print(repos_path)
-        # print("Repo path view:")
-        # list(repos_path.get_paths_recursive(depth=4))
-        # repos_path.view()
+        repos_path = Path(repos_path).absolute()
+        while not LocalRepo.get_local_repos(repos_path):
+            repos_path = repos_path.get_parent()
+            if repos_path is None:
+                raise AttributeError(f"Couldn't find repos path.")
 
         self.name = name
         self.repos_path = repos_path
@@ -50,8 +44,6 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
         self._github = None
         self._localmodule = None
         self._pypi = None
-
-        # assert self.localrepo.name == self.name
 
     @property
     def localrepo(self):
@@ -89,9 +81,6 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
             self._pypi = PyPI(name=self.name)
 
         return self._pypi
-
-
-
 
     @staticmethod
     def get_users_packages(pypi_user=None, github_user=None):

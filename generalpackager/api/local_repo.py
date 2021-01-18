@@ -84,7 +84,10 @@ class LocalRepo:
     @classmethod
     def get_local_repos(cls, folder_path):
         """ Return a list of local repos in given folder. """
-        return [path for path in Path(folder_path).get_paths_in_folder() if cls.path_is_repo(path)]
+        folder_path = Path(folder_path)
+        if not folder_path.exists():
+            return []
+        return [path for path in folder_path.get_paths_in_folder() if cls.path_is_repo(path)]
 
     @classmethod
     def path_is_repo(cls, path):

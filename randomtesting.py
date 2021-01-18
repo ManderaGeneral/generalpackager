@@ -10,21 +10,6 @@ from generalfile import Path
 
 packager = Packager("generalpackager")
 
-print(GitHub.is_creatable("generalpackager", "ManderaGeneral"))
-print(LocalModule.is_creatable("generalpackager"))
-print(LocalRepo.is_creatable(packager.path))
-print(PyPI.is_creatable("generalpackager"))
-
-
-# HERE ** finish is_creatable, then we should really create generalcrawler (temporarily in generalpackager I guess)
-
-# path = Path().absolute().get_parent() / "clonetest"
-# packager.clone_repo(path=path)
-
-# path.open_folder()
-
-
-
 # packager.localmodule.get_dependants("generallibrary")
 # packager.upload()
 # packager.generate_readme()
@@ -38,20 +23,46 @@ print(PyPI.is_creatable("generalpackager"))
 
 # packager.localrepo.get_git_exclude_path().open_folder()
 
+# print(GitHub.is_creatable("generalpackager", "ManderaGeneral"))
+# print(LocalModule.is_creatable("generalpackager"))
+# print(LocalRepo.is_creatable(packager.path))
+# print(PyPI.is_creatable("generalpackager"))
 
 
 
-# class PackageGrp:
-#     """ Handles a collection of packages. """
-#     def __init__(self):
-#         self.packages = []
+class PackageGrp:
+    """ Handles a collection of packages. """
+    def __init__(self, repos_path):
+        self.repos_path = repos_path
+
+        self.packagers = []
+
+    def add_packages(self, *names):
+        """ Add a Package. """
+        self.packagers.extend([Packager(name=name, repos_path=self.repos_path) for name in names])
+
+    def load_general_packages(self):
+        """ Load my general packages. """
+        self.add_packages(*Packager.get_users_packages())
+
+    def clone(self):
+        for packager in self.packagers:
+            print(packager.path)
+            # packager.clone_repo()
+
+
+
+# path = Path().absolute().get_parent(1) / "testrepos"
 #
-#     def load_general_packages(self):
-#         """ Load my general packages. """
-#         self.packages.clear()
-#         self.packages.extend([Packager(name) for name in Packager.get_users_packages()])
+# packageGrp = PackageGrp(repos_path=path)
+# packageGrp.load_general_packages()
 #
-# print(PackageGrp().packages)
+# packageGrp.clone()
+
+from pathlib import Path
+
+print(list(Path("C:").iterdir()))  # HERE ** https://stackoverflow.com/questions/7258993/pythons-os-listdir-behaviour-on-windows
+# print(Path("C:build"))
 
 # print(PyPI.get_users_packages("Mandera").intersection(GitHub.get_users_packages("ManderaGeneral")))
 # print(PyPI.get_users_packages("Mandera"))
