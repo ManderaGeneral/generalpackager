@@ -35,6 +35,11 @@ class LocalRepo:
             self.extras_require["full"] = list(set().union(*self.extras_require.values()))
             self.extras_require["full"].sort()
 
+    @classmethod
+    def is_creatable(cls, path):
+        """ Return whether this API can be created. """
+        return cls.path_is_repo(path=path)
+
     def metadata_setter(self, key, value):
         """ Set a metadata's key both in instance and json file. """
         if value != getattr(self, f"_{key}"):

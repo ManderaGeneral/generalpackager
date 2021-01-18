@@ -29,7 +29,7 @@ class _PackagerFiles:
             "long_description": f"Path(r'{readme_path}').read_text(encoding='utf-8')",
             "long_description_content_type": '"text/markdown"',
             "install_requires": self.localrepo.install_requires,
-            "url": f'"{self.github.url()}"',
+            "url": f'"{self.github.url}"',
             "license": f'"{self.license}"',
             "python_requires": f'">={self.python[0]}, <{last_version_bumped_micro}"',
             "packages": 'find_namespace_packages(exclude=("build*", "dist*"))',

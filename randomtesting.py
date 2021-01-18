@@ -1,13 +1,29 @@
 
 from generallibrary import TreeDiagram, ObjInfo
-from generalpackager import Packager, LocalModule, PyPI, GitHub
+from generalpackager import Packager, LocalModule, PyPI, GitHub, LocalRepo
 
 import generallibrary
 import generalpackager
 from generalfile import Path
 
 
-# packager = Packager("generalpackager")
+
+packager = Packager("generalpackager")
+
+print(GitHub.is_creatable("generalpackager", "ManderaGeneral"))
+print(LocalModule.is_creatable("generalpackager"))
+print(LocalRepo.is_creatable(packager.path))
+print(PyPI.is_creatable("generalpackager"))
+
+
+# HERE ** finish is_creatable, then we should really create generalcrawler (temporarily in generalpackager I guess)
+
+# path = Path().absolute().get_parent() / "clonetest"
+# packager.clone_repo(path=path)
+
+# path.open_folder()
+
+
 
 # packager.localmodule.get_dependants("generallibrary")
 # packager.upload()
@@ -25,33 +41,17 @@ from generalfile import Path
 
 
 
-# def dynamic_property(cls, key, getter, setter):
-#     setattr(cls, key, property(getter, setter))
+# class PackageGrp:
+#     """ Handles a collection of packages. """
+#     def __init__(self):
+#         self.packages = []
 #
+#     def load_general_packages(self):
+#         """ Load my general packages. """
+#         self.packages.clear()
+#         self.packages.extend([Packager(name) for name in Packager.get_users_packages()])
 #
-# class A:
-#     pass
-#
-# key = "foo"
-# dynamic_property(A, key, lambda self, key=key: getattr(self, f"_{key}", ...), lambda self, value, key=key: setattr(self, f"_{key}", value))
-#
-# a = A()
-# a.foo = 2
-#
-# b = A()
-# b.foo = 3
-#
-# print(a.foo)
-# print(b.foo)
-
-
-class PackageGrp:
-    """ Handles a collection of packages. """
-    def __init__(self):
-        self.packages = [Packager(name) for name in Packager.get_users_packages()]
-
-
-print(PackageGrp().packages)
+# print(PackageGrp().packages)
 
 # print(PyPI.get_users_packages("Mandera").intersection(GitHub.get_users_packages("ManderaGeneral")))
 # print(PyPI.get_users_packages("Mandera"))

@@ -68,7 +68,7 @@ class _PackagerMarkdown:
         """ :param generalpackager.Packager self:
             :param text:
             :param suffix: """
-        url = f"{self.github.url()}/{suffix}"
+        url = f"{self.github.url}/{suffix}"
         # self.assert_url_up(url=url)  # Wont work for private repos or new files, would have to check after the fact.
         return Markdown.link(text=text, url=url, href=True)
 

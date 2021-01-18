@@ -11,17 +11,24 @@ class GitHub:
         self.name = name
         self.owner = owner
 
-        self.assert_url_up()  # Checks name, owner and token all in one
+        self.url = self.get_url(name=self.name, owner=self.owner)
 
-    def assert_url_up(self, url=None):
-        """ Assert that url is working. """
-        response = self._request(url=url)
-        if response.status_code != 200:
-            raise AssertionError(f"Request for url '{response.url}' status code {response.status_code} != 200.")
+        if not self.is_url_functioning():
+            raise AssertionError(f"Url for {self.name} is not functioning.")
 
-    def url(self):
+    @classmethod
+    def is_creatable(cls, name, owner):
+        """ Return whether this API can be created. """
+        return requests.get(url=cls.get_url(name=name, owner=owner)).status_code == 200
+
+    @staticmethod
+    def get_url(name, owner):
         """ Get static URL from owner and name. """
-        return f"https://github.com/{self.owner}/{self.name}"
+        return f"https://github.com/{owner}/{name}"
+
+    def is_url_functioning(self, url=None):
+        """ Checks name, owner and token all in one. """
+        return self._request(url=url).status_code == 200
 
     def api_url(self, endpoint=None):
         """ Get URL from owner, name and enpoint. """

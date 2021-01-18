@@ -1,18 +1,30 @@
 
 import pkg_resources
+from importlib import import_module
 
 from generallibrary import ObjInfo
 
 
 class LocalModule:
     """ Tools to interface a Local Python Module. """
-    def __init__(self, module):
-        self.module = module
+    def __init__(self, name):
+        self.name = name
+
+        self.module = import_module(name=self.name)
 
         self.objInfo = ObjInfo(self.module)
         assert self.objInfo.is_module()
         self.objInfo.filters = [self._filter]
         self.objInfo.get_attrs(depth=-1)
+
+    @classmethod
+    def is_creatable(cls, name):
+        """ Return whether this API can be created. """
+        try:
+            import_module(name=name)
+        except ModuleNotFoundError:
+            return False
+        return True
 
     def _filter(self, objInfo):
         """ :param ObjInfo objInfo: """
