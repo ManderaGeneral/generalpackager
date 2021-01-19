@@ -1,8 +1,9 @@
 
+from generalpackager import PACKAGER_GITHUB_API
+
 import requests
 import json
 import re
-from generalpackager import PACKAGER_GITHUB_API
 
 
 class GitHub:

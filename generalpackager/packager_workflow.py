@@ -93,7 +93,7 @@ class _PackagerWorkflow:
 
     def step_publish(self):
         """ :param generalpackager.Packager self: """
-        run = f'run: python -c "from generalpackager import Packager; Packager(\'{self.name}\').upload()"'
+        run = f'run: python -c "from generalpackager import Packager; Packager(\'{self.name}\').localrepo.upload()"'
         return self.get_step(f"Publish", run, self.get_env())
 
     def get_unittest_job(self):

@@ -5,6 +5,8 @@ from generalpackager import GIT_PASSWORD
 from setuptools import find_namespace_packages
 import re
 from git import Repo
+import subprocess
+import sys
 
 
 class LocalRepo:
@@ -73,9 +75,9 @@ class LocalRepo:
         """ Get a Path instance pointing to workflow.yml, regardless if it exists. """
         return self.path / ".github/workflows/workflow.yml"
 
-    def get_test_main_path(self):
+    def get_test_path(self):
         """ Get a Path instance pointing to workflow.yml, regardless if it exists. """
-        return self.path / f"{self.name}/test/main.py"
+        return self.path / f"{self.name}/test"
 
     def get_package_paths(self):
         """ Get a list of Paths pointing to each folder containing a Python file in this local repo, aka `namespace package`. """
@@ -138,6 +140,29 @@ class LocalRepo:
         parts[-1] = str(int(parts[-1]) + 1)
         self.version = ".".join(parts)
 
+    def pip_install(self):
+        """ Install this repository with pip, WITHOUT -e flag.
+            Subprocess messed up -e flag compared to doing it in terminal, so use the normal one."""
+        subprocess.call(f"{sys.executable} -m pip install {self.path}")
+
+    def unittest(self):
+        """ Run unittests for this repository. """
+        subprocess.call(f"{sys.executable} -m unittest discover {self.get_test_path()}")
+
+    def create_sdist(self):
+        """ Create source distribution.
+
+            :param generalpackager.Packager self: """
+        subprocess.call(f"{sys.executable} -m pip install --upgrade pip", shell=True)
+        subprocess.call(f"{sys.executable} -m pip install setuptools wheel", shell=True)
+        subprocess.call(f"{sys.executable} setup.py sdist bdist_wheel", shell=True)
+
+    def upload(self):
+        """ Upload local repo to PyPI.
+
+            :param generalpackager.Packager self: """
+        self.create_sdist()
+        subprocess.call(f"{sys.executable} -m twine upload dist/* --skip-existing", shell=True)
 
 for key in LocalRepo.metadata_keys:
     setattr(LocalRepo, key, property(

@@ -1,17 +1,18 @@
 
 from generallibrary import TreeDiagram, ObjInfo
 from generalpackager import Packager, LocalModule, PyPI, GitHub, LocalRepo
-
 import generallibrary
 import generalpackager
 from generalfile import Path
 
+import subprocess
+import sys
 
 
 packager = Packager("generalpackager")
+packager.localrepo.unittest()
 
 # packager.localmodule.get_dependants("generallibrary")
-# packager.upload()
 # packager.generate_readme()
 # packager.generate_workflow()
 # packager.generate_localfiles()
@@ -46,27 +47,25 @@ class PackageGrp:
         self.add_packages(*Packager.get_users_packages())
 
     def clone(self):
+        """ Clone all packages to repos_path. """
         for packager in self.packagers:
-            print(packager.path)
-            # packager.clone_repo()
+            packager.clone_repo()
+
+    def install(self):
+        """ Install all packages. """
+        for packager in self.packagers:
+            packager.localrepo.pip_install()
+
+    # def test(self):
 
 
 
 # path = Path().absolute().get_parent(1) / "testrepos"
-#
+# path.open_folder()
 # packageGrp = PackageGrp(repos_path=path)
 # packageGrp.load_general_packages()
-#
-# packageGrp.clone()
 
-from pathlib import Path
 
-print(list(Path("C:").iterdir()))  # HERE ** https://stackoverflow.com/questions/7258993/pythons-os-listdir-behaviour-on-windows
-# print(Path("C:build"))
-
-# print(PyPI.get_users_packages("Mandera").intersection(GitHub.get_users_packages("ManderaGeneral")))
-# print(PyPI.get_users_packages("Mandera"))
-# print(GitHub.get_users_packages("ManderaGeneral"))
 
 
 # Todo: Write [CI MAJOR] in commit message to bump major for example.

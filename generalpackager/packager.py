@@ -1,4 +1,5 @@
-""" Methods specific for my general packages. """
+""" Methods specific for my general packages.
+    Isolatable methods are put inside APIs. """
 
 from generallibrary import initBases
 from generalfile import Path
@@ -16,23 +17,26 @@ from generalpackager.packager_workflow import _PackagerWorkflow
 class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow):
     """ Uses APIs to manage 'general' package.
         Contains methods that require more than one API as well as methods specific for ManderaGeneral.
-        Todo: Allow github, pypi or local repo not to exist in any combination. """
+        Todo: Allow github, pypi or local repo not to exist in any combination.
+        Todo: Replace badges with generated hardcode. """
 
     author = 'Rickard "Mandera" Abraham'
     email = "rickard.abraham@gmail.com"
     license = "mit"
     python = "3.8", "3.9"  # Only supports basic definition with tuple of major.minor
-    os = "windows", "ubuntu"
-    # os = "windows", "macos", "ubuntu"
+    os = "windows", "ubuntu"  # , "macos"
 
     git_exclude_lines = ".idea", "build", "dist", "*.egg-info", "__pycache__", ".git"
 
     def __init__(self, name, repos_path=None, commit_sha="master"):
-        repos_path = Path(repos_path).absolute()
-        while not LocalRepo.get_local_repos(repos_path):
-            repos_path = repos_path.get_parent()
-            if repos_path is None:
-                raise AttributeError(f"Couldn't find repos path.")
+        if repos_path is None:
+            repos_path = Path(repos_path).absolute()
+            while not LocalRepo.get_local_repos(repos_path):
+                repos_path = repos_path.get_parent()
+                if repos_path is None:
+                    raise AttributeError(f"Couldn't find repos path.")
+        else:
+            repos_path = Path(repos_path).absolute()
 
         self.name = name
         self.repos_path = repos_path
