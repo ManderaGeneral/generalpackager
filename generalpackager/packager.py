@@ -91,13 +91,15 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
         """ Return a set of user's packages with intersecting PyPI and GitHub. """
         return PyPI.get_users_packages(user=pypi_user).intersection(GitHub.get_users_packages(user=github_user))
 
-    def generate_localfiles(self):
+    def generate_localfiles(self, generate_aesthetic=True):
         """ Generate all local files. """
-        self.generate_git_exclude()
-        self.generate_readme()
         self.generate_setup()
-        self.generate_license()
-        self.generate_workflow()
+
+        if generate_aesthetic:
+            self.generate_git_exclude()
+            self.generate_readme()
+            self.generate_license()
+            self.generate_workflow()
 
     def sync_package(self, message=None):
         """ Called by GitHub Actions when a commit is pushed. """

@@ -10,7 +10,9 @@ import sys
 
 
 packager = Packager("generalpackager")
-packager.localrepo.unittest()
+packager.localrepo.get_changed_files()
+
+# HERE ** Create a method in localrepo that checks what files have been commited changes, seperate aesthetic files
 
 # packager.localmodule.get_dependants("generallibrary")
 # packager.generate_readme()
