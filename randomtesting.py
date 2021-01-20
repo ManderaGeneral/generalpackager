@@ -13,8 +13,7 @@ packager = Packager("generalpackager")
 print(packager.get_changed_files(aesthetic=False))
 print(packager.get_changed_files(aesthetic=True))
 
-
-# HERE ** Create a method in localrepo that checks what files have been commited changes, seperate aesthetic files
+# HERE ** Create method to compare versions, use that with packager.get_changed_files to decide if to publish in PackageGrp
 
 # packager.localmodule.get_dependants("generallibrary")
 # packager.generate_readme()
