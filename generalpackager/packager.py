@@ -13,6 +13,21 @@ from generalpackager.packager_pypi import _PackagerPypi
 from generalpackager.packager_workflow import _PackagerWorkflow
 
 
+class GenerateFile:
+    """ Handle generation of files. """
+    def __init__(self, path, text_func, packager, aesthetic):
+        self.text_func = text_func
+        self.packager = packager
+        self.aesthetic = aesthetic
+
+        self.relative_path = path.relative(base=packager.path)
+        self.path = packager.path / self.relative_path
+
+    def overwrite(self):
+        """ Generate actual file. """
+        self.path.text.write(f"{self.text_func()}\n", overwrite=True)
+
+
 @initBases
 class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow):
     """ Uses APIs to manage 'general' package.
@@ -48,6 +63,14 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
         self._github = None
         self._localmodule = None
         self._pypi = None
+
+        self.files = [
+            GenerateFile(self.localrepo.get_setup_path(), self.generate_setup, self, aesthetic=False),
+            GenerateFile(self.localrepo.get_git_exclude_path(), self.generate_git_exclude, self, aesthetic=True),
+            GenerateFile(self.localrepo.get_license_path(), self.generate_license, self, aesthetic=True),
+            GenerateFile(self.localrepo.get_workflow_path(), self.generate_workflow, self, aesthetic=True),
+            GenerateFile(self.localrepo.get_readme_path(), self.generate_readme, self, aesthetic=True),
+        ]
 
     @property
     def localrepo(self):
@@ -93,13 +116,9 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
 
     def generate_localfiles(self, generate_aesthetic=True):
         """ Generate all local files. """
-        self.generate_setup()
-
-        if generate_aesthetic:
-            self.generate_git_exclude()
-            self.generate_readme()
-            self.generate_license()
-            self.generate_workflow()
+        for generate in self.files:
+            if generate_aesthetic or not generate.aesthetic:
+                generate.overwrite()
 
     def sync_package(self, message=None):
         """ Called by GitHub Actions when a commit is pushed. """
@@ -109,11 +128,6 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
 
     def __repr__(self):
         return f"<Packager: {self.name}>"
-
-
-
-
-
 
 
 

@@ -1,17 +1,21 @@
 
-from generallibrary import CodeLine, current_datetime
+from generallibrary import CodeLine, current_datetime, Markdown
 from generalfile import Path
 
 
 class _PackagerFiles:
     """ Generates setup, license and gitexclude. """
-    def generate_file(self, path, text):
-        """ Overwrite a file in local repo with generated text.
+    def get_changed_files(self, aesthetic=True):
+        """ Get a list of changed files compared to remote with optional aesthetic files.
 
             :param generalpackager.Packager self:
-            :param path:
-            :param text: """
-        path.text.write(f"{text}\n", overwrite=True)
+            :param aesthetic: """
+        changed_files = []
+        for relative_path in self.localrepo.get_changed_files():
+            if not aesthetic and getattr({file.relative_path: file for file in self.files}.get(relative_path, None), "aesthetic", False):
+                continue
+            changed_files.append(relative_path)
+        return changed_files
 
     def generate_setup(self):
         """ Generate setup.py.
@@ -58,13 +62,13 @@ class _PackagerFiles:
 
         top.add(CodeLine(")"))
 
-        self.generate_file(self.localrepo.get_setup_path(), top.text())
+        return top.text()
 
     def generate_git_exclude(self):
         """ Generate git exclude file.
 
             :param generalpackager.Packager self: """
-        self.generate_file(self.localrepo.get_git_exclude_path(), "\n".join(self.git_exclude_lines))
+        return "\n".join(self.git_exclude_lines)
 
     def generate_license(self):
         """ Generate LICENSE by using Packager.license.
@@ -76,7 +80,7 @@ class _PackagerFiles:
         text = text.replace("$author", self.author)
         assert "$" not in text
 
-        self.generate_file(self.localrepo.get_license_path(), text)
+        return text
 
     def generate_workflow(self):
         """ Generate workflow.yml.
@@ -92,5 +96,35 @@ class _PackagerFiles:
         jobs.add(self.get_unittest_job())
         jobs.add(self.get_sync_and_publish_job())
 
-        self.generate_file(self.localrepo.get_workflow_path(), workflow.text())
+        return workflow.text()
+
+    def generate_readme(self):
+        """ Generate readme markdown and overwrite README.md in local repo.
+
+            :param generalpackager.Packager self: """
+        # Description
+        markdown = Markdown(self.localrepo.description, header=self.name)
+
+        # Badges
+        markdown.add_lines(*self.get_badges_dict().values())
+
+        # Table of contents - Placeholder
+        contents = Markdown(header="Contents", parent=markdown)
+
+        # Installation
+        self.get_installation_markdown().set_parent(parent=markdown)
+
+        # Attributes
+        self.get_attributes_markdown().set_parent(parent=markdown)
+
+        # Todos
+        Markdown(header="Todos", parent=markdown).add_table_lines(*self.localrepo.get_todos())
+
+        # Table of contents - Configuration
+        self.configure_contents_markdown(markdown=contents)
+
+        # Footnote
+        self.get_footnote_markdown().set_parent(parent=markdown)
+
+        return markdown
 

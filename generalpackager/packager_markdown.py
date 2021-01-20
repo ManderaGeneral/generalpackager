@@ -1,5 +1,5 @@
 
-from generallibrary import Markdown, comma_and_and, current_datetime_formatted
+from generallibrary import Markdown, current_datetime_formatted
 
 
 class _PackagerMarkdown:
@@ -86,34 +86,3 @@ class _PackagerMarkdown:
         line = f"Generated {current_datetime_formatted()} for commit {self.github_link(text=self.commit_sha, suffix=f'commit/{self.commit_sha}')}."
         return Markdown(line).wrap_with_tags("sup")
 
-
-    def generate_readme(self):
-        """ Generate readme markdown and overwrite README.md in local repo.
-
-            :param generalpackager.Packager self: """
-        # Description
-        markdown = Markdown(self.localrepo.description, header=self.name)
-
-        # Badges
-        markdown.add_lines(*self.get_badges_dict().values())
-
-        # Table of contents - Placeholder
-        contents = Markdown(header="Contents", parent=markdown)
-
-        # Installation
-        self.get_installation_markdown().set_parent(parent=markdown)
-
-        # Attributes
-        self.get_attributes_markdown().set_parent(parent=markdown)
-
-        # Todos
-        Markdown(header="Todos", parent=markdown).add_table_lines(*self.localrepo.get_todos())
-
-        # Table of contents - Configuration
-        self.configure_contents_markdown(markdown=contents)
-
-        # Footnote
-        self.get_footnote_markdown().set_parent(parent=markdown)
-
-        # Create actual readme file
-        self.generate_file(self.localrepo.get_readme_path(), markdown)

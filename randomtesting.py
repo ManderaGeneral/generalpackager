@@ -10,7 +10,9 @@ import sys
 
 
 packager = Packager("generalpackager")
-packager.localrepo.get_changed_files()
+print(packager.get_changed_files(aesthetic=False))
+print(packager.get_changed_files(aesthetic=True))
+
 
 # HERE ** Create a method in localrepo that checks what files have been commited changes, seperate aesthetic files
 

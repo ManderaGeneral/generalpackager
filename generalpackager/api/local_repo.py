@@ -137,7 +137,7 @@ class LocalRepo:
     def get_changed_files(self):
         """ Get a list of changed files compared to remote. """
         repo = Repo(str(self.path))
-        print(repo.git.diff())
+        return re.findall("diff --git a/(.*) " + "b/", repo.git.diff())
 
     def bump_version(self):
         """ Bump micro version in metadata.json. """
