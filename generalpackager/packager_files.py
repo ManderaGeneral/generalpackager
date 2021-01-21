@@ -4,8 +4,34 @@ from generalfile import Path
 from generalpackager import LocalRepo
 
 
+class GenerateFile:
+    """ Handle generation of files. """
+    def __init__(self, path, text_func, packager, aesthetic):
+        self.text_func = text_func
+        self.packager = packager
+        self.aesthetic = aesthetic
+
+        self.relative_path = path.relative(base=packager.path)
+        self.path = packager.path / self.relative_path
+
+    def generate(self):
+        """ Generate actual file. """
+        self.path.text.write(f"{self.text_func()}\n", overwrite=True)
+
+
 class _PackagerFiles:
     """ Generates setup, license and gitexclude. """
+    def __init_post__(self):
+        """ :param generalpackager.Packager self: """
+        self.file_setup =           GenerateFile(self.localrepo.get_setup_path(), self.generate_setup, self, aesthetic=False)
+        self.file_git_exclude =     GenerateFile(self.localrepo.get_git_exclude_path(), self.generate_git_exclude, self, aesthetic=True)
+        self.file_license =         GenerateFile(self.localrepo.get_license_path(), self.generate_license, self, aesthetic=True)
+        self.file_workflow =        GenerateFile(self.localrepo.get_workflow_path(), self.generate_workflow, self, aesthetic=True)
+        self.file_readme =          GenerateFile(self.localrepo.get_readme_path(), self.generate_readme, self, aesthetic=True)
+
+        self.files = [getattr(self, key) for key in dir(self) if key.startswith("file_")]
+        self.files_by_relative_path = {file.relative_path: file for file in self.files}
+
     def get_changed_files(self, aesthetic=True):
         """ Get a list of changed files compared to remote with optional aesthetic files.
 
@@ -13,7 +39,7 @@ class _PackagerFiles:
             :param aesthetic: """
         changed_files = []
         for relative_path in self.localrepo.get_changed_files():
-            if not aesthetic and getattr({file.relative_path: file for file in self.files}.get(relative_path, None), "aesthetic", False):
+            if not aesthetic and getattr(self.files_by_relative_path.get(relative_path, None), "aesthetic", False):
                 continue
             changed_files.append(relative_path)
         return changed_files
@@ -95,7 +121,7 @@ class _PackagerFiles:
 
         jobs = workflow.add("jobs:")
         jobs.add(self.get_unittest_job())
-        jobs.add(self.get_sync_and_publish_job())
+        # jobs.add(self.get_sync_push_publish_job())
 
         return workflow.text()
 

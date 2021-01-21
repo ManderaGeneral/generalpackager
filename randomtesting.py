@@ -7,8 +7,6 @@ from generalfile import Path
 
 import subprocess
 import sys
-
-
 import re
 
 
@@ -17,7 +15,9 @@ import re
 
 
 
-# packager = Packager("generalpackager")
+packager = Packager("generalpackager")
+packager.file_workflow.generate()
+
 # print(packager.localrepo.version)
 # packager.localrepo.bump_version()
 # print(packager.localrepo.version)
@@ -29,7 +29,6 @@ import re
 
 # packager.localmodule.get_dependants("generallibrary")
 # packager.generate_readme()
-# packager.generate_workflow()
 # packager.generate_localfiles()
 # packager.sync_package("Cleaned up secrets, testing auto")
 # packager.localrepo.get_todos()
@@ -84,9 +83,9 @@ class PackageGrp:
 # path = Path().absolute().get_parent(1) / "testrepos"
 # path.open_folder()
 
-packageGrp = PackageGrp()
-print(packageGrp.packagers)
-print(packageGrp.get_bumped())
+# packageGrp = PackageGrp()
+# print(packageGrp.packagers)
+# print(packageGrp.get_bumped())
 
 
 

@@ -32,38 +32,3 @@ jobs:
           PACKAGER_GITHUB_API: ${{ secrets.PACKAGER_GITHUB_API }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
-  sync_and_publish:
-    needs: unittest
-    if: contains(github.event.head_commit.message, '[CI SKIP]') == false
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Set up python version 3.8
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-      - name: Install necessities pip, wheel, twine and generalpackager
-        run: |
-          python -m pip install --upgrade pip
-          pip install wheel twine generalpackager
-      - name: Install pip packages .[full]
-        run: |
-          pip install .[full]
-      - name: Install pip packages generalfile, generalgui, generallibrary, generalpackager and generalvector
-        run: |
-          pip install generalfile generalgui generallibrary generalpackager generalvector
-      - name: Sync
-        run: python -c "from generalpackager import Packager; Packager('generalpackager', commit_sha='${{ github.sha }}').sync_package('[CI SYNC]')"
-        env:
-          GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
-          PACKAGER_GITHUB_API: ${{ secrets.PACKAGER_GITHUB_API }}
-          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-          TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
-      - name: Publish
-        run: python -c "from generalpackager import Packager; Packager('generalpackager').upload()"
-        env:
-          GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
-          PACKAGER_GITHUB_API: ${{ secrets.PACKAGER_GITHUB_API }}
-          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-          TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}

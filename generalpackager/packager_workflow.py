@@ -116,7 +116,7 @@ class _PackagerWorkflow:
 
         return top
 
-    def get_sync_and_publish_job(self):
+    def get_sync_push_publish_job(self):
         """ :param generalpackager.Packager self: """
         top = CodeLine("sync_and_publish:")
         top.add("needs: unittest")
