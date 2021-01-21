@@ -2,8 +2,8 @@
 from generalpackager import Packager, PackagerGrp
 from generalfile import Path
 
-packager = Packager("generalpackager")
-packager.file_workflow.generate()
+# packager = Packager("generalpackager")
+# packager.file_workflow.generate()
 
 # print(packager.localrepo.version)
 # packager.localrepo.bump_version()
@@ -35,10 +35,12 @@ packager.file_workflow.generate()
 
 # path = Path.get_working_dir().get_parent(1) / "testrepos"
 # path.open_folder()
-#
-# PackagerGrp = PackagerGrp()
-# print(PackagerGrp.packagers)
-# print(PackagerGrp.get_bumped())
+
+packagerGrp = PackagerGrp()
+print(packagerGrp.get_dependency_order())  # 1 HERE ** Create Diagram from packagers' install_requires. Maybe ends up with removing PackagerGrp and making Packager inherit Diagram?
+
+# print(packagerGrp.packagers)
+# print(packagerGrp.get_bumped())
 
 
 # Todo: Install packages in correct order when using git to prevent it using pip.

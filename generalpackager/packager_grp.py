@@ -34,5 +34,8 @@ class PackagerGrp:
         # return [(packager.localrepo.version, packager.pypi.get_version()) for packager in self.packagers if packager.is_bumped()]
         return [packager for packager in self.packagers if packager.is_bumped()]
 
-    # def test(self):
+    def get_dependency_order(self):
+        """ Testing diagram. """
+
+
 
