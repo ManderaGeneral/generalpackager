@@ -52,8 +52,8 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self: """
         run = CodeLine("run: |")
         run.add("python -m pip install --upgrade pip")
-        run.add(f"pip install wheel twine generalpackager")
-        return self.get_step(f"Install necessities pip, wheel, twine and generalpackager", run)
+        run.add(f"pip install wheel twine")
+        return self.get_step(f"Install necessities pip, wheel and twine", run)
 
     def step_install_package_pip(self, *packages):
         """ Supply package name as it's stated on pypi.
@@ -96,6 +96,13 @@ class _PackagerWorkflow:
         run = f'run: python -c "from generalpackager import Packager; Packager(\'{self.name}\').localrepo.upload()"'
         return self.get_step(f"Publish", run, self.get_env())
 
+    def step_grp_clone(self):
+        """ :param generalpackager.Packager self: """
+        run = f'run: python -c "from generalpackager import PackagerGrp; grp = PackagerGrp(); print(grp.packagers)"'
+        # run = f'run: python -c "from generalpackager import PackagerGrp; Packager(\'{self.name}\').localrepo.upload()"'
+        return self.get_step(f"Clone all repos", run, self.get_env())
+
+
     def get_unittest_job(self):
         """ :param generalpackager.Packager self: """
         top = CodeLine("unittest:")
@@ -108,11 +115,15 @@ class _PackagerWorkflow:
         matrix.add(f"os: {[f'{os}-latest' for os in self.os]}".replace("'", ""))
 
         steps = top.add("steps:")
-        steps.add(self.step_checkout())
         steps.add(self.step_setup_python(version=self._var(self._matrix_python_version)))
         steps.add(self.step_install_necessities())
-        steps.add(self.step_install_package_pip(".[full]"))
-        steps.add(self.step_unittests())
+        steps.add(self.step_install_package_git("ManderaGeneral/generalpackager"))
+        steps.add(self.step_grp_clone())
+
+
+        # steps.add(self.step_install_necessities())
+        # steps.add(self.step_install_package_git(".[full]"))
+        # steps.add(self.step_unittests())
 
         return top
 
