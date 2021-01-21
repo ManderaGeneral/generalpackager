@@ -52,8 +52,8 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self: """
         run = CodeLine("run: |")
         run.add("python -m pip install --upgrade pip")
-        run.add(f"pip install wheel twine")
-        return self.get_step(f"Install necessities pip, wheel and twine", run)
+        run.add(f"pip install wheel twine generalpackager")
+        return self.get_step(f"Install necessities pip, wheel, twine and generalpackager", run)
 
     def step_install_package_pip(self, *packages):
         """ Supply package name as it's stated on pypi.
@@ -117,7 +117,7 @@ class _PackagerWorkflow:
         steps = top.add("steps:")
         steps.add(self.step_setup_python(version=self._var(self._matrix_python_version)))
         steps.add(self.step_install_necessities())
-        steps.add(self.step_install_package_git("ManderaGeneral/generalpackager"))
+        # steps.add(self.step_install_package_git("ManderaGeneral/generalpackager"))  #
         steps.add(self.step_grp_clone())
 
 

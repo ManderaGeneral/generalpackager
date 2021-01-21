@@ -41,7 +41,7 @@ packager.file_workflow.generate()
 # print(PackagerGrp.get_bumped())
 
 
-
+# Todo: Install packages in correct order when using git to prevent it using pip.
 
 # Todo: Write [CI MAJOR] in commit message to bump major for example.
 # Todo: Push empty commits to dependents after publish in workflow.

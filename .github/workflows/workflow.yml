@@ -16,13 +16,10 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install necessities pip, wheel and twine
+      - name: Install necessities pip, wheel, twine and generalpackager
         run: |
           python -m pip install --upgrade pip
-          pip install wheel twine
-      - name: Install git repos ManderaGeneral/generalpackager
-        run: |
-          pip install git+https://github.com/ManderaGeneral/generalpackager.git
+          pip install wheel twine generalpackager
       - name: Clone all repos
         run: python -c "from generalpackager import PackagerGrp; grp = PackagerGrp(); print(grp.packagers)"
         env:
