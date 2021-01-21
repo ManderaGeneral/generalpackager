@@ -1,6 +1,7 @@
 
 from generalfile import Path
 from generalpackager import GIT_PASSWORD
+from generallibrary import Ver
 
 from setuptools import find_namespace_packages
 import re
@@ -12,7 +13,7 @@ import sys
 class LocalRepo:
     """ Tools to help Path interface a Local Python Repository. """
     name = ...
-    version = ...
+    version = ...  # type: Ver
     description = ...
     install_requires = ...
     extras_require = ...
@@ -37,6 +38,21 @@ class LocalRepo:
             self.extras_require["full"] = list(set().union(*self.extras_require.values()))
             self.extras_require["full"].sort()
 
+        self.version = Ver(self.version)
+
+    @staticmethod
+    def get_repos_path(path):
+        """ Try to return repos path by iterating parents if None. """
+        if path is None:
+            repos_path = Path.get_working_dir()
+            while not LocalRepo.get_local_repos(repos_path):
+                repos_path = repos_path.get_parent()
+                if repos_path is None:
+                    raise AttributeError(f"Couldn't find repos path.")
+            return repos_path
+        else:
+            return Path(path).absolute()
+
     @classmethod
     def is_creatable(cls, path):
         """ Return whether this API can be created. """
@@ -46,7 +62,7 @@ class LocalRepo:
         """ Set a metadata's key both in instance and json file. """
         if value != getattr(self, f"_{key}"):
             metadata = self.get_metadata_path().read()
-            metadata[key] = value
+            metadata[key] = str(value)
             self.get_metadata_path().write(metadata, overwrite=True, indent=4)
 
         setattr(self, f"_{key}", value)
@@ -141,9 +157,7 @@ class LocalRepo:
 
     def bump_version(self):
         """ Bump micro version in metadata.json. """
-        parts = self.version.split(".")
-        parts[-1] = str(int(parts[-1]) + 1)
-        self.version = ".".join(parts)
+        self.version = self.version.bump()
 
     def pip_install(self):
         """ Install this repository with pip, WITHOUT -e flag.

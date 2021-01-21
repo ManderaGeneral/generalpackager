@@ -1,6 +1,7 @@
 
 from generallibrary import CodeLine, current_datetime, Markdown
 from generalfile import Path
+from generalpackager import LocalRepo
 
 
 class _PackagerFiles:

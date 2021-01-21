@@ -9,11 +9,23 @@ import subprocess
 import sys
 
 
-packager = Packager("generalpackager")
-print(packager.get_changed_files(aesthetic=False))
-print(packager.get_changed_files(aesthetic=True))
+import re
 
-# HERE ** Create method to compare versions, use that with packager.get_changed_files to decide if to publish in PackageGrp
+
+
+
+
+
+
+# packager = Packager("generalpackager")
+# print(packager.localrepo.version)
+# packager.localrepo.bump_version()
+# print(packager.localrepo.version)
+
+# print(packager.get_changed_files(aesthetic=False))
+# print(packager.get_changed_files(aesthetic=True))
+# print(packager.pypi.get_version())
+
 
 # packager.localmodule.get_dependants("generallibrary")
 # packager.generate_readme()
@@ -36,18 +48,19 @@ print(packager.get_changed_files(aesthetic=True))
 
 class PackageGrp:
     """ Handles a collection of packages. """
-    def __init__(self, repos_path):
-        self.repos_path = repos_path
+    def __init__(self, repos_path=None):
+        self.repos_path = LocalRepo.get_repos_path(path=repos_path)
 
         self.packagers = []
-
-    def add_packages(self, *names):
-        """ Add a Package. """
-        self.packagers.extend([Packager(name=name, repos_path=self.repos_path) for name in names])
+        self.load_general_packages()
 
     def load_general_packages(self):
         """ Load my general packages. """
         self.add_packages(*Packager.get_users_packages())
+
+    def add_packages(self, *names):
+        """ Add a Package. """
+        self.packagers.extend([Packager(name=name, repos_path=self.repos_path) for name in names])
 
     def clone(self):
         """ Clone all packages to repos_path. """
@@ -59,14 +72,21 @@ class PackageGrp:
         for packager in self.packagers:
             packager.localrepo.pip_install()
 
+    def get_bumped(self):
+        """ Get a list of bumped packagers, meaning PyPI version and LocalRepo version mismatch. """
+        # return [(packager.localrepo.version, packager.pypi.get_version()) for packager in self.packagers if packager.is_bumped()]
+        return [packager for packager in self.packagers if packager.is_bumped()]
+
     # def test(self):
 
 
 
 # path = Path().absolute().get_parent(1) / "testrepos"
 # path.open_folder()
-# packageGrp = PackageGrp(repos_path=path)
-# packageGrp.load_general_packages()
+
+packageGrp = PackageGrp()
+print(packageGrp.packagers)
+print(packageGrp.get_bumped())
 
 
 

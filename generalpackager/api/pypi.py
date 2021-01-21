@@ -1,4 +1,6 @@
 
+from generallibrary import Ver
+
 import requests
 import re
 
@@ -28,43 +30,6 @@ class PyPI:
             user = "Mandera"
         return set(re.findall("/project/(.*)/", requests.get(f"https://pypi.org/user/{user}/").text))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def get_version(self):
+        """ Get version of latest publish on PyPI. """
+        return Ver(re.findall(f"{self.name} ([.0-9]+)\n", requests.get(f"https://pypi.org/project/{self.name}/").text)[0])

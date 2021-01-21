@@ -44,17 +44,8 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
     git_exclude_lines = ".idea", "build", "dist", "*.egg-info", "__pycache__", ".git"
 
     def __init__(self, name, repos_path=None, commit_sha="master"):
-        if repos_path is None:
-            repos_path = Path(repos_path).absolute()
-            while not LocalRepo.get_local_repos(repos_path):
-                repos_path = repos_path.get_parent()
-                if repos_path is None:
-                    raise AttributeError(f"Couldn't find repos path.")
-        else:
-            repos_path = Path(repos_path).absolute()
-
         self.name = name
-        self.repos_path = repos_path
+        self.repos_path = LocalRepo.get_repos_path(path=repos_path)
         self.commit_sha = commit_sha
 
         self.path = self.repos_path / self.name

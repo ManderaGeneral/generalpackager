@@ -29,6 +29,16 @@ class _PackagerMetadata:
             :param generalpackager.Packager self: """
         return self._topics_to_classifiers(*self.get_topics())
 
+    def is_bumped(self):
+        """ Return whether this package has been bumped by comparing PyPI and LocalRepo's versions.
+
+            :param generalpackager.Packager self: """
+        return self.localrepo.version > self.pypi.get_version()
+
+
+
+
+
     _lib = {
         "planning": "Development Status :: 1 - Planning",
         "pre-alpha": "Development Status :: 2 - Pre-Alpha",
