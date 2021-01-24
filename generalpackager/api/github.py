@@ -14,8 +14,8 @@ class GitHub:
 
         self.url = self.get_url(name=self.name, owner=self.owner)
 
-        if not self.is_url_functioning():
-            raise AssertionError(f"Url for {self.name} is not functioning.")
+        # if not self.is_url_functioning():
+        #     raise AssertionError(f"Url for {self.name} is not functioning.")
 
     @classmethod
     def is_creatable(cls, name, owner):

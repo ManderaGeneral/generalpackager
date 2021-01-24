@@ -1,8 +1,20 @@
 
 from generalpackager import Packager, PackagerGrp
 from generalfile import Path
+from pprint import pprint
 
-# packager = Packager("generalpackager")
+
+packager = Packager("generalpackager")
+packager.load_general_packagers()
+
+
+print(packager.get_packager_with_name("generallibrary").get_routes(depth=1, outgoing=False))
+
+# routes = packager.get_routes()
+# pprint(routes.get_links())
+# pprint(routes.get_nodes())
+
+
 # packager.file_workflow.generate()
 
 # print(packager.localrepo.version)
@@ -36,8 +48,8 @@ from generalfile import Path
 # path = Path.get_working_dir().get_parent(1) / "testrepos"
 # path.open_folder()
 
-packagerGrp = PackagerGrp()
-print(packagerGrp.get_dependency_order())  # 1 HERE ** Create Diagram from packagers' install_requires. Maybe ends up with removing PackagerGrp and making Packager inherit Diagram?
+# packagerGrp = PackagerGrp()
+# print(packagerGrp.get_dependency_order())  # 1 HERE ** Create Diagram from packagers' install_requires. Maybe ends up with removing PackagerGrp and making Packager inherit Diagram?
 
 # print(packagerGrp.packagers)
 # print(packagerGrp.get_bumped())

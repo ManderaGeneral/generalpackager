@@ -1,8 +1,7 @@
 """ Methods specific for my general packages.
     Isolatable methods are put inside APIs. """
 
-from generallibrary import initBases
-from generalfile import Path
+from generallibrary import initBases, NetworkDiagram
 from generalpackager import LocalRepo, LocalModule, GitHub, PyPI
 
 from generalpackager.packager_files import _PackagerFiles
@@ -13,9 +12,8 @@ from generalpackager.packager_pypi import _PackagerPypi
 from generalpackager.packager_workflow import _PackagerWorkflow
 
 
-
 @initBases
-class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow):
+class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow):
     """ Uses APIs to manage 'general' package.
         Contains methods that require more than one API as well as methods specific for ManderaGeneral.
         Todo: Allow github, pypi or local repo not to exist in any combination.
@@ -40,6 +38,11 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
         self._github = None
         self._localmodule = None
         self._pypi = None
+
+    @staticmethod
+    def is_creatable(name):
+        """ Simple placeholder check. """
+        return GitHub.is_creatable(name=name, owner="ManderaGeneral")
 
     @property
     def localrepo(self):
@@ -75,11 +78,29 @@ class Packager(_PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMeta
         """ Generate, protect and cache. """
         if not self._pypi:
             self._pypi = PyPI(name=self.name)
-
         return self._pypi
 
+    def get_packagers_dict(self):
+        """ Get a dict of Packagers connected to this one using name as key. """
+        return {packager.name: packager for packager in self.get_routes().get_nodes()}
+
+    def get_packager_with_name(self, name):
+        """ Return Packager or None. """
+        packager = self.get_packagers_dict().get(name)
+        if packager is None and Packager.is_creatable(name=name):
+            packager = Packager(name=name, repos_path=self.repos_path)
+        return packager
+
+    def load_general_packagers(self):
+        for name in Packager.get_users_package_names():
+            packager = self.get_packager_with_name(name=name)
+            for dependency_name in packager.localrepo.install_requires:
+                dependency_packager = self.get_packager_with_name(name=dependency_name)
+                if dependency_packager is not None:
+                    dependency_packager.link(target=packager)
+
     @staticmethod
-    def get_users_packages(pypi_user=None, github_user=None):
+    def get_users_package_names(pypi_user=None, github_user=None):
         """ Return a set of user's packages with intersecting PyPI and GitHub. """
         return PyPI.get_users_packages(user=pypi_user).intersection(GitHub.get_users_packages(user=github_user))
 
