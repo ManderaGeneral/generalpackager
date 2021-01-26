@@ -11,7 +11,8 @@ from generalpackager.api.local_repo import LocalRepo
 
 
 class PackagerGrp(list):
-    """ Handles a collection of packages. """
+    """ Handles a collection of packages.
+        Todo: Maybe move PackagerGrp to Packager now that it inherits NetworkDiagram? """
     def __init__(self, *packagers, repos_path=None):
         super().__init__(packagers)
 

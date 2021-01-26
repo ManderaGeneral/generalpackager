@@ -117,7 +117,7 @@ class _PackagerWorkflow:
         steps = top.add("steps:")
         steps.add(self.step_setup_python(version=self._var(self._matrix_python_version)))
         steps.add(self.step_install_necessities())
-        # steps.add(self.step_install_package_git("ManderaGeneral/generalpackager"))  # HERE ** Install in hardcoded order
+        # steps.add(self.step_install_package_git("ManderaGeneral/generalpackager"))  # HERE ** Install in hardcoded order with get_ordered
         steps.add(self.step_grp_clone())
 
 

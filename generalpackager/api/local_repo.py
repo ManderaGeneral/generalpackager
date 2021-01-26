@@ -111,7 +111,7 @@ class LocalRepo:
     def path_is_repo(cls, path):
         """ Return whether this path is a local repo. """
         path = Path(path)
-        if path.is_file():
+        if path.is_file() or not path.exists(quick=True):
             return False
         for file in path.get_paths_in_folder():
             if file.name() in ("metadata.json", "setup.py"):

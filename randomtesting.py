@@ -4,18 +4,14 @@ from generalfile import Path
 from pprint import pprint
 
 
+
+
 packager = Packager("generalpackager")
 packager.load_general_packagers()
 
+print(packager.get_ordered())
 
-print(packager.get_packager_with_name("generallibrary").get_routes(depth=1, outgoing=False))
-
-# routes = packager.get_routes()
-# pprint(routes.get_links())
-# pprint(routes.get_nodes())
-
-
-# packager.file_workflow.generate()
+packager.file_workflow.generate()
 
 # print(packager.localrepo.version)
 # packager.localrepo.bump_version()
@@ -49,7 +45,7 @@ print(packager.get_packager_with_name("generallibrary").get_routes(depth=1, outg
 # path.open_folder()
 
 # packagerGrp = PackagerGrp()
-# print(packagerGrp.get_dependency_order())  # 1 HERE ** Create Diagram from packagers' install_requires. Maybe ends up with removing PackagerGrp and making Packager inherit Diagram?
+# print(packagerGrp.get_dependency_order())
 
 # print(packagerGrp.packagers)
 # print(packagerGrp.get_bumped())
