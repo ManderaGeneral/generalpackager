@@ -39,15 +39,15 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
       - name: Run unittests for generallibrary
-        run: python -m unittest discover generallibrary\generallibrary\test
+        run: python -m unittest discover generallibrary/generallibrary/test
       - name: Run unittests for generalfile
-        run: python -m unittest discover generalfile\generalfile\test
+        run: python -m unittest discover generalfile/generalfile/test
       - name: Run unittests for generalvector
-        run: python -m unittest discover generalvector\generalvector\test
+        run: python -m unittest discover generalvector/generalvector/test
       - name: Run unittests for generalgui
-        run: python -m unittest discover generalgui\generalgui\test
+        run: python -m unittest discover generalgui/generalgui/test
       - name: Run unittests for generalpackager
-        run: python -m unittest discover generalpackager\generalpackager\test
+        run: python -m unittest discover generalpackager/generalpackager/test
         env:
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
           PACKAGER_GITHUB_API: ${{ secrets.PACKAGER_GITHUB_API }}

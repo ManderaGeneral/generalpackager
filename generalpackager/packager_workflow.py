@@ -85,7 +85,7 @@ class _PackagerWorkflow:
 
     def step_unittests(self):
         """ :param generalpackager.Packager self: """
-        run = f"run: python -m unittest discover {Path(self.name) / self.name / 'test'}"
+        run = f"run: python -m unittest discover {self.name}/{self.name}/test"
         return self.get_step(f"Run unittests for {self.name}", run, self.get_env())
 
     def step_sync(self):
@@ -163,8 +163,10 @@ class _PackagerWorkflow:
             packager.generate_localfiles(aesthetic=False)
             print(packager.name, packager.get_changed_files())
 
-        from generalfile import Path
-        Path().view()
+        # from generalfile import Path
+        # Path().view()
+
+        # Install because of tests' dependencies using install not repo
 
         # for packager in order:
         #     print(packager.name, "install")
