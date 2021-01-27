@@ -31,7 +31,7 @@ jobs:
       - name: Install git repos ManderaGeneral/generalpackager
         run: pip install git+https://github.com/ManderaGeneral/generalpackager.git
       - name: Clone all repos
-        run: python -c "from generalpackager import Packager; Packager('generalpackager', '/repos').workflow_stuff()"
+        run: python -c "from generalpackager import Packager; Packager('generalpackager', '').workflow_stuff()"
         env:
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
           PACKAGER_GITHUB_API: ${{ secrets.PACKAGER_GITHUB_API }}

@@ -33,6 +33,7 @@ class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFile
     def __init__(self, name, repos_path=None, commit_sha="master"):
         self.name = name
         self.repos_path = LocalRepo.get_repos_path(path=repos_path)
+        print("given", name, self.repos_path)
         self.commit_sha = commit_sha
 
         self.path = self.repos_path / self.name
