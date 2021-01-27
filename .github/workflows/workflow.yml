@@ -34,7 +34,8 @@ jobs:
         run: |
           pwd
           ls
-          cd ...
+          cd ..
+          cd ..
           pwd
           ls
         env:
