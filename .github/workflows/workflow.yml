@@ -12,6 +12,10 @@ jobs:
         python-version: [3.8, 3.9]
         os: [windows-latest, ubuntu-latest]
     steps:
+      - name: Path first
+        run: |
+          pwd
+          ls
       - name: Set up python version ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
