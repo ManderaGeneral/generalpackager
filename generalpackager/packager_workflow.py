@@ -166,9 +166,9 @@ class _PackagerWorkflow:
         from generalfile import Path
         Path().view()
 
-        for packager in order:
-            print(packager.name, "install")
-            packager.localrepo.pip_install()
+        # for packager in order:
+        #     print(packager.name, "install")
+        #     packager.localrepo.pip_install()
 
 
 
