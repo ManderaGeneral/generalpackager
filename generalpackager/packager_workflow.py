@@ -1,5 +1,6 @@
 
 from generallibrary import CodeLine, comma_and_and
+from generalfile import Path
 
 
 class _PackagerWorkflow:
@@ -84,7 +85,7 @@ class _PackagerWorkflow:
 
     def step_unittests(self):
         """ :param generalpackager.Packager self: """
-        run = f"run: python -m unittest discover {self.path / 'test'}"
+        run = f"run: python -m unittest discover {Path(self.name) / self.name / 'test'}"
         return self.get_step(f"Run unittests for {self.name}", run, self.get_env())
 
     def step_sync(self):
@@ -118,8 +119,8 @@ class _PackagerWorkflow:
 
         steps.add(self.step_grp_clone())
 
-        # for packager in self.get_ordered_packagers():
-        #     steps.add(packager.step_unittests())
+        for packager in self.get_ordered_packagers():
+            steps.add(packager.step_unittests())
 
         # steps.add(self.step_install_necessities())
         # steps.add(self.step_install_package_git(".[full]"))
@@ -148,29 +149,22 @@ class _PackagerWorkflow:
     def step_grp_clone(self):
         """ :param generalpackager.Packager self: """
         run = CodeLine(f'run: |')
-        run.add("pwd")
-        run.add("ls")
-        run.add("cd ...")
-        run.add("pwd")
-        run.add("ls")
 
-        # run.add('python -c "from generalpackager import Packager; Packager(\'generalpackager\', \'\').workflow_stuff()"')
+        run.add('python -c "from generalpackager import Packager; Packager(\'generalpackager\', \'\').workflow_stuff()"')
 
         return self.get_step(f"Clone all repos", run, self.get_env())
 
     def workflow_stuff(self):
         """ :param generalpackager.Packager self: """
-        from generalfile import Path
-
         self.load_general_packagers()
         order = self.get_ordered_packagers()
 
         for packager in order:
-            print(packager.name, packager.repos_path, packager.path, Path.get_working_dir())
             packager.generate_localfiles(aesthetic=False)
+            print(packager.get_changed_files())
 
-        # for packager in order:
-        #     packager.localrepo.pip_install()
+        for packager in order:
+            packager.localrepo.pip_install()
 
 
 
