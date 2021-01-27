@@ -44,8 +44,8 @@ class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFile
 
     def is_creatable(self, name):
         """ Simple placeholder check. """
-        return LocalRepo.is_creatable(path=self.repos_path / name)
-        # return GitHub.is_creatable(name=name, owner="ManderaGeneral")
+        # return LocalRepo.is_creatable(path=self.repos_path / name)
+        return GitHub.is_creatable(name=name, owner="ManderaGeneral")
 
     @property
     def localrepo(self):
