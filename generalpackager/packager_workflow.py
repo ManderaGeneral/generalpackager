@@ -147,7 +147,7 @@ class _PackagerWorkflow:
 
     def step_grp_clone(self):
         """ :param generalpackager.Packager self: """
-        run = f'run: python -c "from generalpackager import Packager; Packager(\'generalpackager\').workflow_stuff()"'
+        run = f'run: python -c "from generalpackager import Packager; Packager(\'generalpackager\', \'\').workflow_stuff()"'
         return self.get_step(f"Clone all repos", run, self.get_env())
 
     def workflow_stuff(self):
