@@ -48,11 +48,11 @@ class _PackagerRelations:
             :param generalpackager.Packager self: """
         return self.get_nodes(incoming=False, outgoing=True)
 
-    def get_ordered_names(self):
+    def get_ordered_packagers(self):
         """ Get a list of ordered names from the dependency chain.
 
             :param generalpackager.Packager self: """
-        return [packager.name for packager_set in self.get_ordered() for packager in sorted(packager_set, key=lambda x: x.name)]
+        return [packager for packager_set in self.get_ordered() for packager in sorted(packager_set, key=lambda x: x.name)]
 
     @classmethod
     def get_users_package_names(cls, pypi_user=None, github_user=None):

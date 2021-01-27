@@ -6,12 +6,12 @@ from pprint import pprint
 
 
 packager = Packager("generalpackager")
-packager.generate_localfiles(aesthetic=False)
+packager.load_general_packagers()
+packager.file_workflow.generate()
 
-# packager.load_general_packagers()
+# packager.generate_localfiles(aesthetic=False)
 
-# print(packager.get_ordered_names())
-# packager.file_workflow.generate()
+# print(packager.get_ordered_packagers())
 
 # print(packager.localrepo.version)
 # packager.localrepo.bump_version()

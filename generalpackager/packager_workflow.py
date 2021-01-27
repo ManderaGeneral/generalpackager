@@ -31,7 +31,8 @@ class _PackagerWorkflow:
         """ . """
         step = CodeLine(f"- name: {name}")
         for codeline in codelines:
-            step.add(codeline)
+            if codeline:
+                step.add(codeline)
         return step
 
     def step_checkout(self):
@@ -77,16 +78,17 @@ class _PackagerWorkflow:
         for env_var in self.localmodule.get_env_vars():
             if env_var.actions_name:
                 env.add(f"{env_var.name}: {env_var.actions_name}")
+        if not env.get_children():
+            return None
         return env
 
     def step_unittests(self):
         """ :param generalpackager.Packager self: """
-        run = f"run: python -m unittest discover {self.name}/test"
-        return self.get_step(f"Run unittests", run, self.get_env())
+        run = f"run: python -m unittest discover {self.path / 'test'}"
+        return self.get_step(f"Run unittests for {self.name}", run, self.get_env())
 
     def step_sync(self):
         """ :param generalpackager.Packager self: """
-        # msg = f"[CI SYNC] {self._var(self._commit_msg)}"  # Don't know how to escape ' in ubuntu
         msg = f"[CI SYNC]"
         run = f'run: python -c "from generalpackager import Packager; Packager(\'{self.name}\', commit_sha=\'{self._var("github.sha")}\').sync_package(\'{msg}\')"'
         return self.get_step(f"Sync", run, self.get_env())
@@ -102,7 +104,9 @@ class _PackagerWorkflow:
             "from generalpackager import Packager",
             "packager = Packager('generalpackager', '')",
             "packager.load_general_packagers()",
-            "print(packager.get_ordered_names())",
+            "order = packager.get_ordered_packagers()",
+            "[packager.generate_localfiles(aesthetic=False) for packager in order]",
+            "[packager.localrepo.pip_install() for packager in order]",
         )
 
         run = f'run: python -c "{"; ".join(code)}"'
@@ -124,11 +128,13 @@ class _PackagerWorkflow:
         steps.add(self.step_setup_python(version=self._var(self._matrix_python_version)))
         steps.add(self.step_install_necessities())
 
-        for name in self.get_ordered_names():
-            steps.add(self.step_install_package_git(f"{self.github.owner}/{name}"))
+        for packager in self.get_ordered_packagers():
+            steps.add(self.step_install_package_git(f"{packager.github.owner}/{packager.name}"))
 
         steps.add(self.step_grp_clone())
 
+        for packager in self.get_ordered_packagers():
+            steps.add(packager.step_unittests())
 
         # steps.add(self.step_install_necessities())
         # steps.add(self.step_install_package_git(".[full]"))
