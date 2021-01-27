@@ -5,12 +5,10 @@ from pprint import pprint
 
 
 
-
 packager = Packager("generalpackager")
 packager.load_general_packagers()
 
-print(packager.get_ordered())
-
+# print(packager.get_ordered_names())
 packager.file_workflow.generate()
 
 # print(packager.localrepo.version)

@@ -30,13 +30,7 @@ class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFile
 
     git_exclude_lines = ".idea", "build", "dist", "*.egg-info", "__pycache__", ".git"
 
-    packagers_dict = {}
-
     def __init__(self, name, repos_path=None, commit_sha="master"):
-        if name in self.packagers_dict:
-            raise AttributeError(f"{name} packager already exists")
-        self.packagers_dict[name] = self
-
         self.name = name
         self.repos_path = LocalRepo.get_repos_path(path=repos_path)
         self.commit_sha = commit_sha

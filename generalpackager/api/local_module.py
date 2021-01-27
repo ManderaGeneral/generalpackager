@@ -46,13 +46,13 @@ class LocalModule:
         return [pkg.project_name for pkg in pkg_resources.working_set]
 
     def get_dependencies(self, name=None):
-        """ Get a list of dependencies this module has. """
+        """ Get a list of dependencies' names this module has. """
         if name is None:
             name = self.module.__name__
         return list(map(str, pkg_resources.working_set.by_key[name.lower()].requires()))
 
     def get_dependants(self, name=None):
-        """ Get a list of all available packages. """
+        """ Get a list of all available packages' names. """
         if name is None:
             name = self.module.__name__
         return [pkg for pkg in self.get_all_packages() if name.lower() in self.get_dependencies(name=pkg)]

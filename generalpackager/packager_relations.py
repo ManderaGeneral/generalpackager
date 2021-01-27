@@ -1,6 +1,13 @@
 
 
 class _PackagerRelations:
+    packagers_dict = {}
+
+    def __init__(self, name):
+        if name in self.packagers_dict:
+            raise AttributeError(f"{name} packager already exists")
+        self.packagers_dict[name] = self
+
     def update_links(self):
         """ Update links of all created Packagers.
 
@@ -19,9 +26,7 @@ class _PackagerRelations:
         packager = self.packagers_dict.get(name)
         if packager is None and self.is_creatable(name=name):
             packager = type(self)(name=name, repos_path=self.repos_path)
-
         self.update_links()
-
         return packager
 
     def load_general_packagers(self):
@@ -32,16 +37,22 @@ class _PackagerRelations:
             self.get_packager_with_name(name=name)
 
     def get_dependencies(self):
-        """ Get list of loaded Packagers that this Packager requires.
+        """ Get set of loaded Packagers that this Packager requires.
 
             :param generalpackager.Packager self: """
         return self.get_nodes(incoming=True, outgoing=False)
 
     def get_dependents(self):
-        """ Get list of loaded Packagers that requires this Packager.
+        """ Get set of loaded Packagers that requires this Packager.
 
             :param generalpackager.Packager self: """
         return self.get_nodes(incoming=False, outgoing=True)
+
+    def get_ordered_names(self):
+        """ Get a list of ordered names from the dependency chain.
+
+            :param generalpackager.Packager self: """
+        return [packager.name for packager_set in self.get_ordered() for packager in sorted(packager_set, key=lambda x: x.name)]
 
     @classmethod
     def get_users_package_names(cls, pypi_user=None, github_user=None):

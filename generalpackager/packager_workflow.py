@@ -59,16 +59,16 @@ class _PackagerWorkflow:
         """ Supply package name as it's stated on pypi.
 
             :param generalpackager.Packager self: """
-        run = CodeLine("run: |")
-        run.add(f"pip install {' '.join(packages)}")
+        run = CodeLine(f"run: pip install {' '.join(packages)}")
         return self.get_step(f"Install pip packages {comma_and_and(*packages, period=False)}", run)
 
     def step_install_package_git(self, *author_repo):
         """ Supply author/repo, e.g. ManderaGeneral/generalpackager
 
             :param generalpackager.Packager self: """
-        run = CodeLine("run: |")
-        run.add(f"pip install {' '.join([f'git+https://github.com/{pkg}.git' for pkg in author_repo])}")
+        assert all(map(lambda x: "/" in x, author_repo))
+
+        run = CodeLine(f"run: pip install {' '.join([f'git+https://github.com/{pkg}.git' for pkg in author_repo])}")
         return self.get_step(f"Install git repos {comma_and_and(*author_repo, period=False)}", run)
 
     def get_env(self):
@@ -98,8 +98,14 @@ class _PackagerWorkflow:
 
     def step_grp_clone(self):
         """ :param generalpackager.Packager self: """
-        run = f'run: python -c "from generalpackager import PackagerGrp; grp = PackagerGrp(); print(grp.packagers)"'
-        # run = f'run: python -c "from generalpackager import PackagerGrp; Packager(\'{self.name}\').localrepo.upload()"'
+        code = (
+            "from generalpackager import Packager",
+            "packager = Packager('generalpackager')",
+            "packager.load_general_packagers()",
+            "print(packager.get_ordered_names())",
+        )
+
+        run = f'run: python -c "{"; ".join(code)}"'
         return self.get_step(f"Clone all repos", run, self.get_env())
 
 
@@ -117,7 +123,10 @@ class _PackagerWorkflow:
         steps = top.add("steps:")
         steps.add(self.step_setup_python(version=self._var(self._matrix_python_version)))
         steps.add(self.step_install_necessities())
-        # steps.add(self.step_install_package_git("ManderaGeneral/generalpackager"))  # HERE ** Install in hardcoded order with get_ordered
+
+        for name in self.get_ordered_names():
+            steps.add(self.step_install_package_git(f"{self.github.owner}/{name}"))
+
         steps.add(self.step_grp_clone())
 
 
