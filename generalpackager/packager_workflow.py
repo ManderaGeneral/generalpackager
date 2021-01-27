@@ -100,7 +100,7 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self: """
         code = (
             "from generalpackager import Packager",
-            "packager = Packager('generalpackager')",
+            "packager = Packager('generalpackager', '')",
             "packager.load_general_packagers()",
             "print(packager.get_ordered_names())",
         )
