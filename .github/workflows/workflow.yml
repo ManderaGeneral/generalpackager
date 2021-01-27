@@ -31,21 +31,21 @@ jobs:
       - name: Install git repos ManderaGeneral/generalpackager
         run: pip install git+https://github.com/ManderaGeneral/generalpackager.git
       - name: Clone all repos
-        run: python -c "from generalpackager import Packager; packager = Packager('generalpackager', ''); packager.load_general_packagers(); order = packager.get_ordered_packagers(); [packager.generate_localfiles(aesthetic=False) for packager in order]; [packager.localrepo.pip_install() for packager in order]"
+        run: python -c "from generalpackager import Packager; Packager('generalpackager').workflow_stuff()"
         env:
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
           PACKAGER_GITHUB_API: ${{ secrets.PACKAGER_GITHUB_API }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
-      - name: Run unittests
+      - name: Run unittests for generallibrary
         run: python -m unittest discover C:\Python\Repos\generallibrary\test
-      - name: Run unittests
+      - name: Run unittests for generalfile
         run: python -m unittest discover C:\Python\Repos\generalfile\test
-      - name: Run unittests
+      - name: Run unittests for generalvector
         run: python -m unittest discover C:\Python\Repos\generalvector\test
-      - name: Run unittests
+      - name: Run unittests for generalgui
         run: python -m unittest discover C:\Python\Repos\generalgui\test
-      - name: Run unittests
+      - name: Run unittests for generalpackager
         run: python -m unittest discover C:\Python\Repos\generalpackager\test
         env:
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}

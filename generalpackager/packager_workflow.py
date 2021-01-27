@@ -98,21 +98,6 @@ class _PackagerWorkflow:
         run = f'run: python -c "from generalpackager import Packager; Packager(\'{self.name}\').localrepo.upload()"'
         return self.get_step(f"Publish", run, self.get_env())
 
-    def step_grp_clone(self):
-        """ :param generalpackager.Packager self: """
-        code = (
-            "from generalpackager import Packager",
-            "packager = Packager('generalpackager', '')",
-            "packager.load_general_packagers()",
-            "order = packager.get_ordered_packagers()",
-            "[packager.generate_localfiles(aesthetic=False) for packager in order]",
-            "[packager.localrepo.pip_install() for packager in order]",
-        )
-
-        run = f'run: python -c "{"; ".join(code)}"'
-        return self.get_step(f"Clone all repos", run, self.get_env())
-
-
     def get_unittest_job(self):
         """ :param generalpackager.Packager self: """
         top = CodeLine("unittest:")
@@ -160,7 +145,21 @@ class _PackagerWorkflow:
 
         return top
 
+    def step_grp_clone(self):
+        """ :param generalpackager.Packager self: """
+        run = f'run: python -c "from generalpackager import Packager; Packager(\'generalpackager\').workflow_stuff()"'
+        return self.get_step(f"Clone all repos", run, self.get_env())
 
+    def workflow_stuff(self):
+        """ :param generalpackager.Packager self: """
+        self.load_general_packagers()
+        order = self.get_ordered_packagers()
+
+        for packager in order:
+            packager.generate_localfiles(aesthetic=False)
+
+        for packager in order:
+            packager.localrepo.pip_install()
 
 
 
