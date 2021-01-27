@@ -83,10 +83,10 @@ class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFile
             self._pypi = PyPI(name=self.name)
         return self._pypi
 
-    def generate_localfiles(self, generate_aesthetic=True):
+    def generate_localfiles(self, aesthetic=True):
         """ Generate all local files. """
         for generate in self.files:
-            if generate_aesthetic or not generate.aesthetic:
+            if aesthetic or not generate.aesthetic:
                 generate.generate()
 
     def sync_package(self, message=None):

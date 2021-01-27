@@ -37,3 +37,8 @@ jobs:
           PACKAGER_GITHUB_API: ${{ secrets.PACKAGER_GITHUB_API }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
+      - name: Testing
+        run: |
+          ls
+          cd generalpackager
+          ls
