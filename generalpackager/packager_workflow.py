@@ -118,8 +118,8 @@ class _PackagerWorkflow:
 
         steps.add(self.step_grp_clone())
 
-        for packager in self.get_ordered_packagers():
-            steps.add(packager.step_unittests())
+        # for packager in self.get_ordered_packagers():
+        #     steps.add(packager.step_unittests())
 
         # steps.add(self.step_install_necessities())
         # steps.add(self.step_install_package_git(".[full]"))
@@ -147,7 +147,15 @@ class _PackagerWorkflow:
 
     def step_grp_clone(self):
         """ :param generalpackager.Packager self: """
-        run = f'run: python -c "from generalpackager import Packager; Packager(\'generalpackager\', \'\').workflow_stuff()"'
+        run = CodeLine(f'run: |')
+        run.add("pwd")
+        run.add("ls")
+        run.add("cd ...")
+        run.add("pwd")
+        run.add("ls")
+
+        # run.add('python -c "from generalpackager import Packager; Packager(\'generalpackager\', \'\').workflow_stuff()"')
+
         return self.get_step(f"Clone all repos", run, self.get_env())
 
     def workflow_stuff(self):
