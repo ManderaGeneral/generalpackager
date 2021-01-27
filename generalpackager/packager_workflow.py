@@ -152,14 +152,17 @@ class _PackagerWorkflow:
 
     def workflow_stuff(self):
         """ :param generalpackager.Packager self: """
+        from generalfile import Path
+
         self.load_general_packagers()
         order = self.get_ordered_packagers()
 
         for packager in order:
+            print(packager.name, packager.repos_path, packager.path, Path.get_working_dir())
             packager.generate_localfiles(aesthetic=False)
 
-        for packager in order:
-            packager.localrepo.pip_install()
+        # for packager in order:
+        #     packager.localrepo.pip_install()
 
 
 
