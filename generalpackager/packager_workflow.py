@@ -163,7 +163,11 @@ class _PackagerWorkflow:
             packager.generate_localfiles(aesthetic=False)
             print(packager.name, packager.get_changed_files())
 
+        from generalfile import Path
+        Path().get_paths_recursive().view()
+
         for packager in order:
+            print(packager.name, "install")
             packager.localrepo.pip_install()
 
 
