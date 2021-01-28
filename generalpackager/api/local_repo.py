@@ -168,7 +168,7 @@ class LocalRepo:
     def unittest(self):
         """ Run unittests for this repository. """
         # subprocess.call(f"python -m unittest discover {self.get_test_path()}")
-        subprocess.check_call([sys.executable, "-m", "unittest", "discover", str(self.get_test_path)])
+        subprocess.check_call([sys.executable, "-m", "unittest", "discover", str(self.get_test_path())])
 
     def create_sdist(self):
         """ Create source distribution.
