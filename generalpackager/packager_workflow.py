@@ -119,8 +119,8 @@ class _PackagerWorkflow:
 
         steps.add(self.step_grp_clone())
 
-        for packager in self.get_ordered_packagers():
-            steps.add(packager.step_unittests())
+        # for packager in self.get_ordered_packagers():
+        #     steps.add(packager.step_unittests())
 
         # steps.add(self.step_install_necessities())
         # steps.add(self.step_install_package_git(".[full]"))
@@ -163,10 +163,19 @@ class _PackagerWorkflow:
             packager.generate_localfiles(aesthetic=False)
             print(packager.name, packager.get_changed_files())
 
+        for packager in order:
+            packager.localrepo.pip_install()
+            print(packager.name, "install")
+
+        for packager in order:
+            packager.localrepo.unittest()
+            print(packager.name, "install")
+
+
         # from generalfile import Path
         # Path().view()
 
-        # Install because of tests' dependencies using install not repo
+        # HERE ** Install because of tests' dependencies using install not repo
 
         # for packager in order:
         #     print(packager.name, "install")
