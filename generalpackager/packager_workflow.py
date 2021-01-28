@@ -152,31 +152,24 @@ class _PackagerWorkflow:
 
         run.add('python -c "from generalpackager import Packager; Packager(\'generalpackager\', \'\').workflow_stuff()"')
 
-        return self.get_step(f"Clone all repos", run, self.get_env())
+        return self.get_step(f"Clone, sync, install, unittest", run, self.get_env())
 
     def workflow_stuff(self):
         """ :param generalpackager.Packager self: """
         self.load_general_packagers()
         order = self.get_ordered_packagers()
 
-        for packager in order:
-            packager.generate_localfiles(aesthetic=False)
+        methods = (
+            lambda packager: packager.generate_localfiles(aesthetic=False),
+            lambda packager: packager.localrepo.pip_install(),
+            lambda packager: packager.localrepo.unittest(),
+            lambda packager: packager.generate_localfiles(aesthetic=True),
+            lambda packager: print(packager.localrepo.get_changed_files()),
+        )
 
-        for packager in order:
-            packager.localrepo.pip_install()
-
-        for packager in order:
-            packager.localrepo.unittest()
-
-
-        # from generalfile import Path
-        # Path().view()
-
-        # HERE ** Install because of tests' dependencies using install not repo
-
-        # for packager in order:
-        #     print(packager.name, "install")
-        #     packager.localrepo.pip_install()
+        for method in methods:
+            for packager in order:
+                method(packager=packager)
 
 
 
