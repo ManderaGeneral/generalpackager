@@ -161,7 +161,8 @@ class _PackagerWorkflow:
 
         for packager in order:
             packager.generate_localfiles(aesthetic=False)
-            print(packager.name, packager.get_changed_files())
+            print(packager.name)
+            packager.path.view()
 
         for packager in order:
             packager.localrepo.pip_install()

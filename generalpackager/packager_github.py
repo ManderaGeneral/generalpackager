@@ -23,6 +23,8 @@ class _PackagerGitHub:
             url = self.github.url
         if path is None:
             path = self.path
+        print("cwd", path.get_working_dir())
+        print("clone", url, path)
         Repo.clone_from(url=url, to_path=path)
 
 
