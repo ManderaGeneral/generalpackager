@@ -162,11 +162,13 @@ class LocalRepo:
     def pip_install(self):
         """ Install this repository with pip, WITHOUT -e flag.
             Subprocess messed up -e flag compared to doing it in terminal, so use the normal one."""
-        subprocess.call(f"python -m pip install {self.path}")
+        # subprocess.call(f"python -m pip install {self.path}")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", str(self.path)])
 
     def unittest(self):
         """ Run unittests for this repository. """
-        subprocess.call(f"python -m unittest discover {self.get_test_path()}")
+        # subprocess.call(f"python -m unittest discover {self.get_test_path()}")
+        subprocess.check_call([sys.executable, "-m", "unittest", "discover", str(self.get_test_path)])
 
     def create_sdist(self):
         """ Create source distribution.

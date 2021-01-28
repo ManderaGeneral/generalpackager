@@ -162,7 +162,6 @@ class _PackagerWorkflow:
         for packager in order:
             packager.generate_localfiles(aesthetic=False)
             print(packager.name, "sync")
-            packager.path.view()
 
         for packager in order:
             packager.localrepo.pip_install()
