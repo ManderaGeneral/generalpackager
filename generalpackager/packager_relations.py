@@ -3,10 +3,20 @@
 class _PackagerRelations:
     packagers_dict = {}
 
-    def __init__(self, name):
-        if name in self.packagers_dict:
-            raise AttributeError(f"{name} packager already exists")
-        self.packagers_dict[name] = self
+    def add(self):
+        """ Add this packager to packagers dict.
+
+            :param generalpackager.Packager self: """
+        if self.name in self.packagers_dict:
+            raise AttributeError(f"{self.name} packager already exists")
+
+        self.packagers_dict[self.name] = self
+
+    def remove(self):
+        """ Remove this packager from packagers dict.
+
+            :param generalpackager.Packager self: """
+        self.packagers_dict.pop(self.name)
 
     def update_links(self):
         """ Update links of all created Packagers.
@@ -23,10 +33,13 @@ class _PackagerRelations:
 
             :param generalpackager.Packager self:
             :param name: """
+        if self.name == name:
+            return self
+
         packager = self.packagers_dict.get(name)
         if packager is None and self.is_creatable(name=name):
             packager = type(self)(name=name, repos_path=self.repos_path)
-        self.update_links()
+
         return packager
 
     def load_general_packagers(self):
@@ -34,7 +47,11 @@ class _PackagerRelations:
 
             :param generalpackager.Packager self: """
         for name in self.get_users_package_names():
-            self.get_packager_with_name(name=name)
+            packager = self.get_packager_with_name(name=name)
+
+            if packager and packager.localrepo.enabled:
+                packager.add()
+                self.update_links()
 
     def get_dependencies(self):
         """ Get set of loaded Packagers that this Packager requires.

@@ -12,6 +12,7 @@ import sys
 
 class LocalRepo:
     """ Tools to help Path interface a Local Python Repository. """
+    enabled = ...
     name = ...
     version = ...  # type: Ver
     description = ...
@@ -27,7 +28,9 @@ class LocalRepo:
         self.path = Path(path).absolute()
         self.git_exclude_lines = git_exclude_lines
 
-        for key, value in self.get_metadata_path().read().items():
+        metadata = {"enabled": True} | self.get_metadata_path().read()
+
+        for key, value in metadata.items():
             setattr(self, f"_{key}", value)
 
         for key in self.metadata_keys:

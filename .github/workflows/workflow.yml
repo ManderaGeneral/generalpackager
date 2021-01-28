@@ -26,8 +26,6 @@ jobs:
         run: pip install git+https://github.com/ManderaGeneral/generalfile.git
       - name: Install git repos ManderaGeneral/generalvector
         run: pip install git+https://github.com/ManderaGeneral/generalvector.git
-      - name: Install git repos ManderaGeneral/generalgui
-        run: pip install git+https://github.com/ManderaGeneral/generalgui.git
       - name: Install git repos ManderaGeneral/generalpackager
         run: pip install git+https://github.com/ManderaGeneral/generalpackager.git
       - name: Clone all repos
