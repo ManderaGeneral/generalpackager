@@ -28,7 +28,8 @@ class LocalRepo:
         self.path = Path(path).absolute()
         self.git_exclude_lines = git_exclude_lines
 
-        metadata = {"enabled": True} | self.get_metadata_path().read()
+        metadata = {"enabled": True}
+        metadata.update(self.get_metadata_path().read())
 
         for key, value in metadata.items():
             setattr(self, f"_{key}", value)
