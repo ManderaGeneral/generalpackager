@@ -161,7 +161,7 @@ class _PackagerWorkflow:
 
         for packager in order:
             packager.generate_localfiles(aesthetic=False)
-            print(packager.name)
+            print(packager.name, packager.path, packager.path.get_children())
             packager.path.view()
 
         for packager in order:
