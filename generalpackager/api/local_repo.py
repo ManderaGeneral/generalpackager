@@ -149,7 +149,7 @@ class LocalRepo:
 
         repo = Repo(str(self.path))
         repo.git.add(A=True)
-        repo.index.commit(message=message)
+        repo.index.commit(message=str(message))
         remote = repo.remote()
         remote.set_url(f"https://Mandera:{GIT_PASSWORD}@github.com/ManderaGeneral/{self.name}.git")
         remote.push()

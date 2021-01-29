@@ -1,6 +1,5 @@
 
-from generallibrary import CodeLine, comma_and_and
-from generalfile import Path
+from generallibrary import CodeLine, comma_and_and, EnvVar
 
 
 class _PackagerWorkflow:
@@ -102,7 +101,7 @@ class _PackagerWorkflow:
     def get_unittest_job(self):
         """ :param generalpackager.Packager self: """
         top = CodeLine("unittest:")
-        top.add(self._commit_msg_if(NOTEST=False))
+        top.add(self._commit_msg_if(SKIP=False))
         top.add(f"runs-on: {self._var(self._matrix_os)}")
 
         strategy = top.add("strategy:")
@@ -160,11 +159,11 @@ class _PackagerWorkflow:
         order = self.get_ordered_packagers()
 
         methods = (
-            lambda packager: packager.generate_localfiles(aesthetic=False),
+            lambda packager: packager.generate_localfiles(aesthetic=True),
             lambda packager: packager.localrepo.pip_install(),
             lambda packager: packager.localrepo.unittest(),
-            lambda packager: packager.generate_localfiles(aesthetic=True),
-            lambda packager: print(packager.localrepo.get_changed_files()),  # HERE ** Commit and possibly publish
+            lambda packager: packager.localrepo.commit_and_push(f"{EnvVar('github.repository')}: {EnvVar('github.event.head_commit.message')}"),
+            # lambda packager: packager.possibly_publish(packagers=order),
         )
 
         for method in methods:
