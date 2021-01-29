@@ -134,13 +134,13 @@ Tools to interface GitHub, PyPI and local modules / repos. Used for generating f
 | randomtesting.py     | Push empty commits to dependents after publish in workflow.                   |
 | randomtesting.py     | Generate GitHub profile readme.                                               |
 | randomtesting.py     | Compare local\_repo version with pypi version before publishing.               |
-| packager\_workflow.py | Add token here to see if we can trigger workflow for dependents auto testing. |
-| packager\_markdown.py | Inherit future crawler class for pypi and github.                             |
-| packager\_grp.py      | Maybe move PackagerGrp to Packager now that it inherits NetworkDiagram?       |
 | packager.py          | Allow github, pypi or local repo not to exist in any combination.             |
 | packager.py          | Replace badges with generated hardcode.                                       |
+| packager\_grp.py      | Maybe move PackagerGrp to Packager now that it inherits NetworkDiagram?       |
+| packager\_markdown.py | Inherit future crawler class for pypi and github.                             |
+| packager\_workflow.py | Add token here to see if we can trigger workflow for dependents auto testing. |
 | pypi.py              | get\_latest\_version()                                                          |
 
 <sup>
-Generated 2021-01-29 11:42 CET for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/6c7dd3ca1e5eb1e618167b802c89216d93798623'>6c7dd3ca1e5eb1e618167b802c89216d93798623</a>.
+Generated 2021-01-29 11:44 CET for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/6c7dd3ca1e5eb1e618167b802c89216d93798623'>6c7dd3ca1e5eb1e618167b802c89216d93798623</a>.
 </sup>
