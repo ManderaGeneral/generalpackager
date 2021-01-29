@@ -6,10 +6,11 @@ import sys
 
 
 packager = Packager("generalpackager")
+packager.localrepo.commit_and_push("[CI SKIP] Auto commit test")
 
-packager.load_general_packagers()
+# packager.load_general_packagers()
 
-packager.file_workflow.generate()
+# packager.file_workflow.generate()
 
 # packager.localrepo.pip_install()
 

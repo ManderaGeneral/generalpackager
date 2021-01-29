@@ -164,7 +164,7 @@ class _PackagerWorkflow:
             lambda packager: packager.localrepo.pip_install(),
             lambda packager: packager.localrepo.unittest(),
             lambda packager: packager.generate_localfiles(aesthetic=True),
-            lambda packager: print(packager.localrepo.get_changed_files()),
+            lambda packager: print(packager.localrepo.get_changed_files()),  # HERE ** Commit and possibly publish
         )
 
         for method in methods:
