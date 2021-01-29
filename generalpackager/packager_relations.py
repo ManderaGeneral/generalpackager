@@ -38,7 +38,7 @@ class _PackagerRelations:
 
         packager = self.packagers_dict.get(name)
         if packager is None and self.is_creatable(name=name):
-            packager = type(self)(name=name, repos_path=self.repos_path)
+            packager = type(self)(name=name, repos_path=self.repos_path, commit_sha=self.commit_sha)
 
         return packager
 

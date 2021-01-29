@@ -148,8 +148,7 @@ class _PackagerWorkflow:
     def step_grp_clone(self):
         """ :param generalpackager.Packager self: """
         run = CodeLine(f'run: |')
-
-        run.add('python -c "from generalpackager import Packager; Packager(\'generalpackager\', \'\').workflow_stuff()"')
+        run.add(f'python -c "from generalpackager import Packager; Packager(\'generalpackager\', \'\', \'{self._var("github.sha")}\').workflow_stuff()"')
 
         return self.get_step(f"Clone, sync, install, unittest", run, self.get_env())
 
@@ -162,7 +161,7 @@ class _PackagerWorkflow:
             lambda packager: packager.generate_localfiles(aesthetic=True),
             lambda packager: packager.localrepo.pip_install(),
             lambda packager: packager.localrepo.unittest(),
-            lambda packager: packager.localrepo.commit_and_push(f"{EnvVar('github.repository')}: {EnvVar('github.event.head_commit.message')}"),
+            lambda packager: packager.localrepo.commit_and_push(f"Auto test: {EnvVar('GITHUB_REPOSITORY')}"),
             # lambda packager: packager.possibly_publish(packagers=order),
         )
 

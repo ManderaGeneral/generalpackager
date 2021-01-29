@@ -5,7 +5,7 @@ on:
       - master
 jobs:
   unittest:
-    if: contains(github.event.head_commit.message, '[CI NOTEST]') == false
+    if: contains(github.event.head_commit.message, '[CI SKIP]') == false
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -28,9 +28,9 @@ jobs:
         run: pip install git+https://github.com/ManderaGeneral/generalvector.git
       - name: Install git repos ManderaGeneral/generalpackager
         run: pip install git+https://github.com/ManderaGeneral/generalpackager.git
-      - name: Clone all repos
+      - name: Clone, sync, install, unittest
         run: |
-          python -c "from generalpackager import Packager; Packager('generalpackager', '').workflow_stuff()"
+          python -c "from generalpackager import Packager; Packager('generalpackager', '', '${{ github.sha }}').workflow_stuff()"
         env:
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
           PACKAGER_GITHUB_API: ${{ secrets.PACKAGER_GITHUB_API }}
