@@ -79,19 +79,6 @@ class _PackagerMarkdown:
         view_str = self.localmodule.objInfo.view(custom_repr=self._attr_repr, print_out=False)
         return Markdown(header="Attributes").add_pre_lines(view_str)
 
-    def get_todos_markdown(self):
-        """ Get a table of all Todos in documentaion.
-
-            :param generalpackager.Packager self: """
-        todos = self.localrepo.get_todos()
-        markdown = Markdown(header="Todo")
-        if todos:
-            markdown.add_table_lines(*todos)
-        else:
-            markdown.add("Nothing to see here").wrap_with_tags("i")
-
-        return markdown
-
     def get_footnote_markdown(self):
         """ Get a markdown for footnote containing date, time and commit link.
 
