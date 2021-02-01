@@ -75,9 +75,10 @@ class _PackagerWorkflow:
     def get_env(self):
         """ :param generalpackager.Packager self: """
         env = CodeLine("env:")
-        for env_var in self.localmodule.get_env_vars():
-            if env_var.actions_name:
-                env.add(f"{env_var.name}: {env_var.actions_name}")
+        for packager in self.get_nodes_all():
+            for env_var in packager.localmodule.get_env_vars():
+                if env_var.actions_name and env_var.name not in str(env):
+                    env.add(f"{env_var.name}: {env_var.actions_name}")
         if not env.get_children():
             return None
         return env
@@ -116,7 +117,7 @@ class _PackagerWorkflow:
         for packager in self.get_ordered_packagers():
             steps.add(self.step_install_package_git(f"{packager.github.owner}/{packager.name}"))
 
-        steps.add(self.step_grp_clone())
+        steps.add(self.step_packagers_sync())
 
         # for packager in self.get_ordered_packagers():
         #     steps.add(packager.step_unittests())
@@ -145,7 +146,7 @@ class _PackagerWorkflow:
 
         return top
 
-    def step_grp_clone(self):
+    def step_packagers_sync(self):
         """ :param generalpackager.Packager self: """
         run = CodeLine(f'run: |')
         run.add(f'python -c "from generalpackager import Packager; Packager(\'generalpackager\', \'\', \'{self._var("github.sha")}\').workflow_stuff()"')
@@ -161,7 +162,8 @@ class _PackagerWorkflow:
             lambda packager: packager.generate_localfiles(aesthetic=True),
             lambda packager: packager.localrepo.pip_install(),
             lambda packager: packager.localrepo.unittest(),
-            lambda packager: packager.localrepo.commit_and_push(f"Auto test: {EnvVar('GITHUB_REPOSITORY')}"),
+            lambda packager: packager.localrepo.commit_and_push(f"[CI AUTO] {EnvVar('GITHUB_REPOSITORY')}"),
+            lambda packager: packager.sync_github_metadata(),
             # lambda packager: packager.possibly_publish(packagers=order),
         )
 
