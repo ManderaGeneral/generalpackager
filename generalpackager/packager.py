@@ -25,7 +25,7 @@ class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFile
     author = 'Rickard "Mandera" Abraham'
     email = "rickard.abraham@gmail.com"
     license = "mit"
-    python = "3.8", "3.9"  # Only supports basic definition with tuple of major.minor
+    python = "3.8", "3.9"  # Only supports basic definition with tuple of major.minor.
     os = "windows", "ubuntu"  # , "macos"
 
     git_exclude_lines = ".idea", "build", "dist", "*.egg-info", "__pycache__", ".git"
