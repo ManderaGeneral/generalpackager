@@ -140,8 +140,19 @@ class _PackagerWorkflow:
             lambda packager: packager.generate_localfiles(aesthetic=True),
             lambda packager: packager.localrepo.pip_install(),
             lambda packager: packager.localrepo.unittest(),  # For good measure
-            lambda packager: packager.localrepo.commit_and_push(f"[CI AUTO] {EnvVar('GITHUB_REPOSITORY')}"),
+
+            # See if any package has been bumped
+            # If publishing: Bump all repos that have had a non-aesthetic changed file
+
+            lambda packager: packager.commit_push_store_sha(f"[CI AUTO] {EnvVar('GITHUB_REPOSITORY')}"),
+
+            # Generate readme again, this time with defined sha
+            # Commit and push again
+
             lambda packager: packager.sync_github_metadata(),
+
+            # If publishing: Publish relevant repos
+
         )
 
 

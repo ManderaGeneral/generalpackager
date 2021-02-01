@@ -143,7 +143,8 @@ class LocalRepo:
         return todos
 
     def commit_and_push(self, message=None):
-        """ Commit and push this local repo to GitHub. """
+        """ Commit and push this local repo to GitHub.
+            Return short sha1 of pushed commit. """
         if message is None:
             message = "Automatic commit."
 
@@ -152,7 +153,6 @@ class LocalRepo:
         repo.index.commit(message=str(message))
         remote = repo.remote()
         remote.set_url(f"https://Mandera:{GIT_PASSWORD}@github.com/ManderaGeneral/{self.name}.git")
-
         return remote.push()[0].summary.split("..")[1]
 
     def get_changed_files(self):

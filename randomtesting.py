@@ -1,13 +1,11 @@
 
-from generalpackager import Packager, PackagerGrp
+from generalpackager import Packager
 from generalfile import Path
 from pprint import pprint
 import sys
 
 
 packager = Packager("generalpackager")
-print(packager.localrepo.commit_and_push("[CI SKIP] Testing"))
-
 
 
 # packager.load_general_packagers()

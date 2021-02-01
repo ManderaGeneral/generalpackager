@@ -130,7 +130,7 @@ class _PackagerFiles:
 
             :param generalpackager.Packager self: """
         # Description
-        markdown = Markdown(self.localrepo.description, header=self.name)
+        markdown = Markdown(self.localrepo.description, header=f"{self.name} {self.localrepo.version}")
 
         # Badges
         markdown.add_lines(*self.get_badges_dict().values())

@@ -4,6 +4,9 @@ from git import Repo
 
 
 class _PackagerGitHub:
+    def __init__(self):
+        self.commit_sha = "master"
+
     """ Sync metadata. """
     def sync_github_metadata(self):
         """ Sync GitHub with local metadata.
@@ -24,6 +27,14 @@ class _PackagerGitHub:
         if path is None:
             path = self.path
         Repo.clone_from(url=url, to_path=path)
+
+    def commit_push_store_sha(self, message):
+        """ Use LocalRepos method commit_and_push but also store short sha1.
+
+            :param generalpackager.Packager self:
+            :param message: """
+        self.commit_sha = self.localrepo.commit_and_push(message=message)
+
 
 
 

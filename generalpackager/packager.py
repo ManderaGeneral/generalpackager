@@ -30,13 +30,9 @@ class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFile
 
     git_exclude_lines = ".idea", "build", "dist", "*.egg-info", "__pycache__", ".git"
 
-    def __init__(self, name, repos_path=None, commit_sha=None):
-        if commit_sha is None:
-            commit_sha = "master"
-
+    def __init__(self, name, repos_path=None):
         self.name = name
         self.repos_path = LocalRepo.get_repos_path(path=repos_path)
-        self.commit_sha = commit_sha
 
         self.path = self.repos_path / self.name
 
@@ -91,12 +87,6 @@ class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFile
         for generate in self.files:
             if aesthetic or not generate.aesthetic:
                 generate.generate()
-
-    def sync_package(self, message=None):
-        """ Called by GitHub Actions when a commit is pushed. """
-        self.generate_localfiles()
-        self.sync_github_metadata()
-        self.localrepo.commit_and_push(message=message)
 
     def __repr__(self):
         return f"<Packager: {self.name}>"
