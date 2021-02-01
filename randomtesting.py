@@ -6,7 +6,7 @@ import sys
 
 
 packager = Packager("generalpackager")
-packager.localrepo.commit_and_push("[CI SKIP] Testing")
+print(packager.localrepo.commit_and_push("[CI SKIP] Testing"))
 
 
 
