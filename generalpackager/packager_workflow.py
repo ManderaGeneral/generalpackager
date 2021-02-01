@@ -3,7 +3,7 @@ from generallibrary import CodeLine, comma_and_and, EnvVar
 
 
 class _PackagerWorkflow:
-    """ Afraid to start handling all the logic, might not be worth the time. """
+    """ Light handling of workflow logic. """
     @staticmethod
     def _var(string):
         return f"${{{{ {string} }}}}"
@@ -35,13 +35,6 @@ class _PackagerWorkflow:
                 step.add(codeline)
         return step
 
-    def step_checkout(self):
-        """ Todo: Add token here to see if we can trigger workflow for dependents auto testing.
-            https://github.com/actions/checkout
-
-            :param generalpackager.Packager self: """
-        return self.get_step("Checkout repository", "uses: actions/checkout@v2")
-
     def step_setup_python(self, version):
         """ :param generalpackager.Packager self:
             :param version: """
@@ -63,14 +56,17 @@ class _PackagerWorkflow:
         run = CodeLine(f"run: pip install {' '.join(packages)}")
         return self.get_step(f"Install pip packages {comma_and_and(*packages, period=False)}", run)
 
-    def step_install_package_git(self, *author_repo):
+    def step_install_package_git(self, *author_repo_tuple):
         """ Supply author/repo, e.g. ManderaGeneral/generalpackager
 
             :param generalpackager.Packager self: """
-        assert all(map(lambda x: "/" in x, author_repo))
+        assert all(map(lambda x: "/" in x, author_repo_tuple))
 
-        run = CodeLine(f"run: pip install {' '.join([f'git+https://github.com/{pkg}.git' for pkg in author_repo])}")
-        return self.get_step(f"Install git repos {comma_and_and(*author_repo, period=False)}", run)
+        run = CodeLine(f"run: |")
+        for author_repo in author_repo_tuple:
+            run.add(f"pip install git+https://github.com/{author_repo}.git")
+
+        return self.get_step(f"Install {len(author_repo_tuple)} git repos", run)
 
     def get_env(self):
         """ :param generalpackager.Packager self: """
@@ -83,93 +79,70 @@ class _PackagerWorkflow:
             return None
         return env
 
-    def step_unittests(self):
+    def steps_setup(self):
         """ :param generalpackager.Packager self: """
-        run = f"run: python -m unittest discover {self.name}/{self.name}/test"
-        return self.get_step(f"Run unittests for {self.name}", run, self.get_env())
-
-    def step_sync(self):
-        """ :param generalpackager.Packager self: """
-        msg = f"[CI SYNC]"
-        run = f'run: python -c "from generalpackager import Packager; Packager(\'{self.name}\', commit_sha=\'{self._var("github.sha")}\').sync_package(\'{msg}\')"'
-        return self.get_step(f"Sync", run, self.get_env())
-
-    def step_publish(self):
-        """ :param generalpackager.Packager self: """
-        run = f'run: python -c "from generalpackager import Packager; Packager(\'{self.name}\').localrepo.upload()"'
-        return self.get_step(f"Publish", run, self.get_env())
+        steps = CodeLine("steps:")
+        steps.add(self.step_setup_python(version=self._var(self._matrix_python_version)))
+        steps.add(self.step_install_necessities())
+        steps.add(self.step_install_package_git(
+            *[f"{packager.github.owner}/{packager.name}" for packager in self.get_ordered_packagers()]))
+        return steps
 
     def get_unittest_job(self):
         """ :param generalpackager.Packager self: """
-        top = CodeLine("unittest:")
-        top.add(self._commit_msg_if(SKIP=False, AUTO=False))
-        top.add(f"runs-on: {self._var(self._matrix_os)}")
-
-        strategy = top.add("strategy:")
+        job = CodeLine("unittest:")
+        job.add(self._commit_msg_if(SKIP=False, AUTO=False))
+        job.add(f"runs-on: {self._var(self._matrix_os)}")
+        strategy = job.add("strategy:")
         matrix = strategy.add("matrix:")
         matrix.add(f"python-version: {list(self.python)}".replace("'", ""))
         matrix.add(f"os: {[f'{os}-latest' for os in self.os]}".replace("'", ""))
 
-        steps = top.add("steps:")
-        steps.add(self.step_setup_python(version=self._var(self._matrix_python_version)))
-        steps.add(self.step_install_necessities())
+        steps = job.add(self.steps_setup())
+        steps.add(self.step_run_packager_method("workflow_unittest"))
+        return job
 
-        for packager in self.get_ordered_packagers():
-            steps.add(self.step_install_package_git(f"{packager.github.owner}/{packager.name}"))
-
-        steps.add(self.step_packagers_sync())
-
-        # for packager in self.get_ordered_packagers():
-        #     steps.add(packager.step_unittests())
-
-        # steps.add(self.step_install_necessities())
-        # steps.add(self.step_install_package_git(".[full]"))
-        # steps.add(self.step_unittests())
-
-        return top
-
-    def get_sync_push_publish_job(self):
+    def get_sync_job(self):
         """ :param generalpackager.Packager self: """
-        top = CodeLine("sync_and_publish:")
-        top.add("needs: unittest")
-        top.add(self._commit_msg_if(SKIP=False))
-        top.add(f"runs-on: ubuntu-latest")
+        job = CodeLine("sync:")
+        job.add("needs: unittest")
+        job.add(f"runs-on: ubuntu-latest")
+        steps = job.add(self.steps_setup())
+        steps.add(self.step_run_packager_method("workflow_sync"))
+        return job
 
-        steps = top.add("steps:")
-        steps.add(self.step_checkout())
-        steps.add(self.step_setup_python(version=self.python[0]))
-        steps.add(self.step_install_necessities())
-        steps.add(self.step_install_package_pip(".[full]"))
-        steps.add(self.step_install_package_pip(*sorted(self.get_users_package_names())))
-        steps.add(self.step_sync())
-        steps.add(self.step_publish())
-
-        return top
-
-    def step_packagers_sync(self):
-        """ :param generalpackager.Packager self: """
+    def step_run_packager_method(self, method):
+        """ :param generalpackager.Packager self:
+            :param method: """
         run = CodeLine(f'run: |')
-        run.add(f'python -c "from generalpackager import Packager; Packager(\'generalpackager\', \'\', \'{self._var("github.sha")}\').workflow_stuff()"')
+        run.add(f'python -c "from generalpackager import Packager; Packager(\'generalpackager\', \'\', \'{self._var("github.sha")}\').{method}()"')
+        return self.get_step(f"Run Packager method '{method}'", run, self.get_env())
 
-        return self.get_step(f"Clone, sync, install, unittest", run, self.get_env())
-
-    def workflow_stuff(self):
+    def run_ordered_methods(self, *funcs):
         """ :param generalpackager.Packager self: """
         self.load_general_packagers()
         order = self.get_ordered_packagers()
+        for func in funcs:
+            for packager in order:
+                func(packager=packager)
 
-        methods = (
-            lambda packager: packager.generate_localfiles(aesthetic=True),
+    def workflow_unittest(self):
+        """ :param generalpackager.Packager self: """
+        self.run_ordered_methods(
+            lambda packager: packager.generate_localfiles(aesthetic=False),
             lambda packager: packager.localrepo.pip_install(),
             lambda packager: packager.localrepo.unittest(),
-            lambda packager: packager.localrepo.commit_and_push(f"[CI AUTO] {EnvVar('GITHUB_REPOSITORY')}"),
-            lambda packager: packager.sync_github_metadata(),
-            # lambda packager: packager.possibly_publish(packagers=order),
         )
 
-        for method in methods:
-            for packager in order:
-                method(packager=packager)
+    def workflow_sync(self):
+        """ :param generalpackager.Packager self: """
+        self.run_ordered_methods(
+            lambda packager: packager.generate_localfiles(aesthetic=True),
+            lambda packager: packager.localrepo.pip_install(),
+            lambda packager: packager.localrepo.unittest(),  # For good measure
+            lambda packager: packager.localrepo.commit_and_push(f"[CI AUTO] {EnvVar('GITHUB_REPOSITORY')}"),
+            lambda packager: packager.sync_github_metadata(),
+        )
 
 
 

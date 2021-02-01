@@ -121,7 +121,7 @@ class _PackagerFiles:
 
         jobs = workflow.add("jobs:")
         jobs.add(self.get_unittest_job())
-        # jobs.add(self.get_sync_push_publish_job())
+        jobs.add(self.get_sync_job())
 
         return workflow.text()
 

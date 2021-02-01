@@ -86,7 +86,7 @@ class GitHub:
 
     @staticmethod
     def get_users_packages(user=None):
-        """ Get a set of a user's packages' names on PyPI. """
+        """ Get a set of a user's packages' names on GitHub. """
         if user is None:
             user = "ManderaGeneral"
         return set(re.findall(f'"/{user}/([a-z]*)"', requests.get(f"https://github.com/{user}?tab=repositories").text))
