@@ -155,7 +155,7 @@ class LocalRepo:
 
         push = remote.push()
         pushInfo = push[0]
-        print(push, dir(pushInfo), pushInfo.local_ref, pushInfo.remote_ref)
+        print(push, dir(pushInfo), pushInfo.local_ref, pushInfo.remote_ref, pushInfo.summary)
 
     def get_changed_files(self):
         """ Get a list of changed files compared to remote. """
