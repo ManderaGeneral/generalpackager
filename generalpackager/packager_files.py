@@ -145,7 +145,7 @@ class _PackagerFiles:
         self.get_attributes_markdown().set_parent(parent=markdown)
 
         # Todos
-        Markdown(header="Todos", parent=markdown).add_table_lines(*self.localrepo.get_todos())
+        self.get_todos_markdown().set_parent(parent=markdown)
 
         # Table of contents - Configuration
         self.configure_contents_markdown(markdown=contents)

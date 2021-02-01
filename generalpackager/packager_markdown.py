@@ -1,5 +1,5 @@
 
-from generallibrary import Markdown, current_datetime_formatted
+from generallibrary import Markdown, current_datetime_formatted, plur_sing
 
 
 class _PackagerMarkdown:
@@ -36,7 +36,7 @@ class _PackagerMarkdown:
         for command, packages in options.items():
             row = {"Command": f"`pip install {command}`"}
             for dependency in dependencies_required + dependencies_optional:
-                row[Markdown.link(dependency, url=f"https://pypi.org/project/{dependency}", href=True)] = "Yes" if dependency in packages else "-"
+                row[Markdown.link(dependency, url=f"https://pypi.org/project/{dependency}", href=True)] = "Yes" if dependency in packages else "No"
             list_of_dicts.append(row)
 
         markdown.add_table_lines(*list_of_dicts)
@@ -78,6 +78,19 @@ class _PackagerMarkdown:
             :param generalpackager.Packager self: """
         view_str = self.localmodule.objInfo.view(custom_repr=self._attr_repr, print_out=False)
         return Markdown(header="Attributes").add_pre_lines(view_str)
+
+    def get_todos_markdown(self):
+        """ Get a table of all Todos in documentaion.
+
+            :param generalpackager.Packager self: """
+        todos = self.localrepo.get_todos()
+        markdown = Markdown(header="Todo")
+        if todos:
+            markdown.add_table_lines(*todos)
+        else:
+            markdown.add("Nothing to see here").wrap_with_tags("i")
+
+        return markdown
 
     def get_footnote_markdown(self):
         """ Get a markdown for footnote containing date, time and commit link.
