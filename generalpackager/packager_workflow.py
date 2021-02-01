@@ -101,7 +101,7 @@ class _PackagerWorkflow:
     def get_unittest_job(self):
         """ :param generalpackager.Packager self: """
         top = CodeLine("unittest:")
-        top.add(self._commit_msg_if(SKIP=False))
+        top.add(self._commit_msg_if(SKIP=False, AUTO=False))
         top.add(f"runs-on: {self._var(self._matrix_os)}")
 
         strategy = top.add("strategy:")
