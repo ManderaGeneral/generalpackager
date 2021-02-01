@@ -79,10 +79,10 @@ class _PackagerWorkflow:
             return None
         return env
 
-    def steps_setup(self):
+    def steps_setup(self, python_version):
         """ :param generalpackager.Packager self: """
         steps = CodeLine("steps:")
-        steps.add(self.step_setup_python(version=self._var(self._matrix_python_version)))
+        steps.add(self.step_setup_python(version=python_version))
         steps.add(self.step_install_necessities())
         steps.add(self.step_install_package_git(
             *[f"{packager.github.owner}/{packager.name}" for packager in self.get_ordered_packagers()]))
@@ -98,7 +98,7 @@ class _PackagerWorkflow:
         matrix.add(f"python-version: {list(self.python)}".replace("'", ""))
         matrix.add(f"os: {[f'{os}-latest' for os in self.os]}".replace("'", ""))
 
-        steps = job.add(self.steps_setup())
+        steps = job.add(self.steps_setup(python_version=self._var(self._matrix_python_version)))
         steps.add(self.step_run_packager_method("workflow_unittest"))
         return job
 
@@ -107,7 +107,7 @@ class _PackagerWorkflow:
         job = CodeLine("sync:")
         job.add("needs: unittest")
         job.add(f"runs-on: ubuntu-latest")
-        steps = job.add(self.steps_setup())
+        steps = job.add(self.steps_setup(python_version=self.python[0]))
         steps.add(self.step_run_packager_method("workflow_sync"))
         return job
 

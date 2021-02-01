@@ -26,7 +26,7 @@ jobs:
           pip install git+https://github.com/ManderaGeneral/generalfile.git
           pip install git+https://github.com/ManderaGeneral/generalvector.git
           pip install git+https://github.com/ManderaGeneral/generalpackager.git
-      - name: Clone, sync, install, unittest
+      - name: Run Packager method 'workflow_unittest'
         run: |
           python -c "from generalpackager import Packager; Packager('generalpackager', '', '${{ github.sha }}').workflow_unittest()"
         env:
@@ -38,10 +38,10 @@ jobs:
     needs: unittest
     runs-on: ubuntu-latest
     steps:
-      - name: Set up python version ${{ matrix.python-version }}
+      - name: Set up python version 3.8
         uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: 3.8
       - name: Install necessities pip, setuptools, wheel, twine
         run: |
           python -m pip install --upgrade pip
@@ -52,7 +52,7 @@ jobs:
           pip install git+https://github.com/ManderaGeneral/generalfile.git
           pip install git+https://github.com/ManderaGeneral/generalvector.git
           pip install git+https://github.com/ManderaGeneral/generalpackager.git
-      - name: Clone, sync, install, unittest
+      - name: Run Packager method 'workflow_sync'
         run: |
           python -c "from generalpackager import Packager; Packager('generalpackager', '', '${{ github.sha }}').workflow_sync()"
         env:
