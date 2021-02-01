@@ -1,5 +1,5 @@
 
-from generallibrary import Markdown, current_datetime_formatted, plur_sing
+from generallibrary import Markdown, current_datetime_formatted
 
 
 class _PackagerMarkdown:
