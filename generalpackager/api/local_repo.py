@@ -154,7 +154,7 @@ class LocalRepo:
         commit = repo.index.commit(message=str(message))
 
         if tag:
-            print(repo.create_tag(f"v{self.version}", ref=commit.tree))
+            print(repo.create_tag(f"v{self.version}", ref=commit.tree, froce=True))
             # print(repo.create_tag(f"v{self.version}", ref=repo.index, force=True))
 
         remote = repo.remote()
