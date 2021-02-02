@@ -32,7 +32,8 @@ class _PackagerGitHub:
         """ Use LocalRepos method commit_and_push but also store short sha1.
 
             :param generalpackager.Packager self:
-            :param message: """
+            :param message:
+            :param tag: """
         self.commit_sha = self.localrepo.commit_and_push(message=message, tag=tag)
 
 

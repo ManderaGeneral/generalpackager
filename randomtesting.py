@@ -7,7 +7,7 @@ import sys
 
 packager = Packager("generalpackager")
 
-# print(packager.general_changed_dict(aesthetic=False))
+packager.localrepo.commit_and_push("[CI SKIP] Getting tags to work", tag=True)
 
 
 

@@ -142,11 +142,6 @@ class LocalRepo:
                 })
         return todos
 
-    def tag(self):
-        Git
-        sha = repo.get_commits()[0].sha
-        repo.create_git_ref('refs/tags/{}'.format("4.0.0"), sha)
-
     def commit_and_push(self, message=None, tag=False):
         """ Commit and push this local repo to GitHub.
             Return short sha1 of pushed commit. """
@@ -156,14 +151,14 @@ class LocalRepo:
         repo = Repo(str(self.path))
 
         repo.git.add(A=True)
-        repo.index.commit(message=str(message))
+        commit = repo.index.commit(message=str(message))
 
         if tag:
-            repo.create_tag(f"v{self.version}")
+            repo.create_tag(f"v{self.version}", ref=commit)
 
         remote = repo.remote()
         remote.set_url(f"https://Mandera:{GIT_PASSWORD}@github.com/ManderaGeneral/{self.name}.git")
-        return remote.push()[0].summary.split("..")[1]
+        return remote.push()[0].summary.split("..")[1].rstrip()
 
     def get_changed_files(self):
         """ Get a list of changed files compared to remote. """
@@ -186,19 +181,13 @@ class LocalRepo:
         subprocess.check_call([sys.executable, "-m", "unittest", "discover", str(self.get_test_path())])
 
     def create_sdist(self):
-        """ Create source distribution.
-
-            :param generalpackager.Packager self: """
-        subprocess.call(f"{sys.executable} -m pip install --upgrade pip", shell=True)
-        subprocess.call(f"{sys.executable} -m pip install setuptools wheel", shell=True)
-        subprocess.call(f"{sys.executable} setup.py sdist bdist_wheel", shell=True)
+        """ Create source distribution. """
+        subprocess.check_call([sys.executable, str(self.get_setup_path()), "sdist", "bdist_wheel"])
 
     def upload(self):
-        """ Upload local repo to PyPI.
-
-            :param generalpackager.Packager self: """
+        """ Upload local repo to PyPI. """
         self.create_sdist()
-        subprocess.call(f"{sys.executable} -m twine upload dist/* --skip-existing", shell=True)
+        subprocess.check_call([sys.executable, "-m", "twine", "upload", f"{self.path}/dist/*", "--skip-existing"])
 
 for key in LocalRepo.metadata_keys:
     setattr(LocalRepo, key, property(

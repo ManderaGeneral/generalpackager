@@ -18,7 +18,6 @@ class _PackagerWorkflow:
     _action_setup_python = "actions/setup-python@v2"
     _matrix_os = "matrix.os"
     _matrix_python_version = "matrix.python-version"
-    _trigger_repo = str(EnvVar('GITHUB_REPOSITORY')).split('/')[1]
 
     def get_triggers(self):
         """ :param generalpackager.Packager self: """
@@ -137,14 +136,15 @@ class _PackagerWorkflow:
 
     def workflow_sync(self):
         """ :param generalpackager.Packager self: """
-        msg1 = f"[CI AUTO] {'Pre-publish' if self.general_bumped_set() else 'Sync'} triggered by {self._trigger_repo}"
-        msg2 = f"[CI AUTO] Publish triggered by {self._trigger_repo}"
+        trigger_repo = str(EnvVar('GITHUB_REPOSITORY')).split('/')[1]
+        msg1 = f"[CI AUTO] Sync triggered by {trigger_repo}"
+        msg2 = f"[CI AUTO] Publish triggered by {trigger_repo}"
 
         self.run_ordered_methods(
+            lambda packager: packager.if_publish_bump(),
             lambda packager: packager.generate_localfiles(aesthetic=True),
             lambda packager: packager.localrepo.pip_install(),
             lambda packager: packager.localrepo.unittest(),  # For good measure
-            lambda packager: packager.if_publish_bump(),
             lambda packager, msg=msg1: packager.commit_push_store_sha(message=msg, tag=False),
             lambda packager, msg=msg2: packager.if_publish_publish(message=msg),
             lambda packager: packager.sync_github_metadata(),
@@ -156,7 +156,8 @@ class _PackagerWorkflow:
             self.localrepo.bump_version()
 
     def if_publish_publish(self, message):
-        """ :param generalpackager.Packager self: """
+        """ :param generalpackager.Packager self:
+            :param message: """
         if self.is_bumped():
             self.file_readme.generate()
             self.commit_push_store_sha(message=message, tag=True)
