@@ -6,7 +6,7 @@ setup(
     name="generalpackager",
     author='Rickard "Mandera" Abraham',
     author_email="rickard.abraham@gmail.com",
-    version="0.0.6",
+    version="0.0.7",
     description="Tools to interface GitHub, PyPI and local modules / repos. Used for generating files to keep projects dry and synced. Tailored for my general packages.",
     long_description=Path(r'README.md').read_text(encoding='utf-8'),
     long_description_content_type="text/markdown",
