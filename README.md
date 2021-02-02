@@ -79,15 +79,15 @@ Tools to interface GitHub, PyPI and local modules / repos. Used for generating f
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_markdown.py#L46'>Method: configure_contents_markdown</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_relations.py#L84'>Method: general_bumped_set</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_relations.py#L91'>Method: general_changed_dict</a>
-│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L94'>Method: generate_git_exclude</a>
-│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L100'>Method: generate_license</a>
+│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L96'>Method: generate_git_exclude</a>
+│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L102'>Method: generate_license</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager.py#L87'>Method: generate_localfiles</a>
-│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L128'>Method: generate_readme</a>
-│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L47'>Method: generate_setup</a>
-│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L112'>Method: generate_workflow</a>
+│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L130'>Method: generate_readme</a>
+│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L49'>Method: generate_setup</a>
+│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L114'>Method: generate_workflow</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_markdown.py#L75'>Method: get_attributes_markdown</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_markdown.py#L8'>Method: get_badges_dict</a>
-│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L35'>Method: get_changed_files</a>
+│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L37'>Method: get_changed_files</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_metadata.py#L26'>Method: get_classifiers</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_relations.py#L57'>Method: get_dependencies</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_relations.py#L63'>Method: get_dependents</a>
@@ -124,20 +124,21 @@ Tools to interface GitHub, PyPI and local modules / repos. Used for generating f
 </pre>
 
 ## Todo
-| Module               | Message                                                                   |
-|:---------------------|:--------------------------------------------------------------------------|
-| randomtesting.py     | Install packages in correct order when using git to prevent it using pip. |
-| randomtesting.py     | Write [CI MAJOR] in commit message to bump major for example.             |
-| randomtesting.py     | Push empty commits to dependents after publish in workflow.               |
-| randomtesting.py     | Generate GitHub profile readme.                                           |
-| randomtesting.py     | Compare local\_repo version with pypi version before publishing.           |
-| packager\_markdown.py | Inherit future crawler class for pypi and github.                         |
-| packager\_grp.py      | Maybe move PackagerGrp to Packager now that it inherits NetworkDiagram?   |
-| packager.py          | Allow github, pypi or local repo not to exist in any combination.         |
-| packager.py          | Replace badges with generated hardcode.                                   |
-| packager.py          | Find all imports to generate install\_requires.                            |
-| packager.py          | Create links for Todos.                                                   |
+| Module               | Message                                                                                |
+|:---------------------|:---------------------------------------------------------------------------------------|
+| randomtesting.py     | Install packages in correct order when using git to prevent it using pip.              |
+| randomtesting.py     | Write [CI MAJOR] in commit message to bump major for example.                          |
+| randomtesting.py     | Push empty commits to dependents after publish in workflow.                            |
+| randomtesting.py     | Generate GitHub profile readme.                                                        |
+| randomtesting.py     | Compare local\_repo version with pypi version before publishing.                        |
+| packager\_markdown.py | Inherit future crawler class for pypi and github.                                      |
+| packager\_grp.py      | Maybe move PackagerGrp to Packager now that it inherits NetworkDiagram?                |
+| packager.py          | Allow github, pypi or local repo not to exist in any combination.                      |
+| packager.py          | Replace badges with generated hardcode.                                                |
+| packager.py          | Find all imports to generate install\_requires.                                         |
+| packager.py          | Create links for Todos.                                                                |
+| packager\_files.py    | Watermark generated files to prevent mistake of thinking you can modify them directly. |
 
 <sup>
-Generated 2021-02-02 12:52 CET for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
+Generated 2021-02-02 13:07 CET for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
 </sup>
