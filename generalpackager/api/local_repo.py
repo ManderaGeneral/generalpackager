@@ -5,7 +5,7 @@ from generallibrary import Ver
 
 from setuptools import find_namespace_packages
 import re
-from git import Repo, GitHub
+from git import Repo
 import subprocess
 import sys
 
