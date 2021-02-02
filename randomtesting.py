@@ -4,7 +4,6 @@ from generalfile import Path
 from pprint import pprint
 import sys
 
-
 # packager = Packager("generalpackager")
 # packager.file_setup.generate()
 

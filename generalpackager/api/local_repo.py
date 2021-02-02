@@ -183,12 +183,12 @@ class LocalRepo:
 
     def create_sdist(self):
         """ Create source distribution. """
-        subprocess.check_call([sys.executable, str(self.get_setup_path()), "sdist", "bdist_wheel"])
+        subprocess.check_call([sys.executable, str(self.get_setup_path()), "sdist", "bdist_wheel", f"--dist-dir={self.name}/dist"])
 
     def upload(self):
         """ Upload local repo to PyPI. """
         self.create_sdist()
-        subprocess.check_call([sys.executable, "-m", "twine", "upload", f"dist/{self.name}*", "--skip-existing"])
+        subprocess.check_call([sys.executable, "-m", "twine", "upload", f"{self.name}/dist/*"])
 
 for key in LocalRepo.metadata_keys:
     setattr(LocalRepo, key, property(
