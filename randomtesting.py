@@ -6,6 +6,8 @@ import sys
 
 
 # packager = Packager("generalpackager")
+# packager.file_setup.generate()
+
 # packager.localrepo.commit_and_push("[CI SKIP] Getting tags to work", tag=True)
 
 

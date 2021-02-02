@@ -22,7 +22,9 @@ class GenerateFile:
 class _PackagerFiles:
     """ Generates setup, license and gitexclude. """
     def __init_post__(self):
-        """ :param generalpackager.Packager self: """
+        """ Todo: Watermark generated files to prevent mistake of thinking you can modify them directly.
+
+            :param generalpackager.Packager self: """
         self.file_setup =           GenerateFile(self.localrepo.get_setup_path(), self.generate_setup, self, aesthetic=False)
         self.file_git_exclude =     GenerateFile(self.localrepo.get_git_exclude_path(), self.generate_git_exclude, self, aesthetic=True)
         self.file_license =         GenerateFile(self.localrepo.get_license_path(), self.generate_license, self, aesthetic=True)
@@ -48,7 +50,7 @@ class _PackagerFiles:
         """ Generate setup.py.
 
             :param generalpackager.Packager self: """
-        readme_path = self.localrepo.get_readme_path().relative(self.localrepo.path)
+        readme_path = self.localrepo.get_readme_path().relative(self.localrepo.get_setup_path().get_parent())
         last_version_split = self.python[-1].split(".")
         last_version_bumped_micro = f"{last_version_split[0]}.{int(last_version_split[1]) + 1}"
         setup_kwargs = {
@@ -57,7 +59,7 @@ class _PackagerFiles:
             "author_email": f'"{self.email}"',
             "version": f'"{self.localrepo.version}"',
             "description": f'"{self.localrepo.description}"',
-            "long_description": f"Path(r'{readme_path}').read_text(encoding='utf-8')",
+            "long_description": f"(Path(__file__).parent / '{readme_path}').read_text(encoding='utf-8')",
             "long_description_content_type": '"text/markdown"',
             "install_requires": self.localrepo.install_requires,
             "url": f'"{self.github.url}"',
