@@ -188,7 +188,7 @@ class LocalRepo:
     def upload(self):
         """ Upload local repo to PyPI. """
         self.create_sdist()
-        subprocess.check_call([sys.executable, "-m", "twine", "upload", f"{self.path}/dist/*", "--skip-existing"])
+        subprocess.check_call([sys.executable, "-m", "twine", "upload", f"dist/{self.name}*", "--skip-existing"])
 
 for key in LocalRepo.metadata_keys:
     setattr(LocalRepo, key, property(
