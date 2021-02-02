@@ -154,7 +154,7 @@ class LocalRepo:
         commit = repo.index.commit(message=str(message))
 
         if tag:
-            repo.create_tag(f"v{self.version}", ref=commit)
+            print(repo.create_tag(f"v{self.version}", ref=commit))
 
         remote = repo.remote()
         remote.set_url(f"https://Mandera:{GIT_PASSWORD}@github.com/ManderaGeneral/{self.name}.git")
