@@ -5,10 +5,8 @@ from pprint import pprint
 import sys
 
 
-packager = Packager("generalpackager")
-
-packager.localrepo.commit_and_push("[CI SKIP] Getting tags to work", tag=True)
-
+# packager = Packager("generalpackager")
+# packager.localrepo.commit_and_push("[CI SKIP] Getting tags to work", tag=True)
 
 
 # packager.load_general_packagers()
