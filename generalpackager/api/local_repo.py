@@ -154,7 +154,7 @@ class LocalRepo:
         repo.index.commit(message=str(message))
 
         if tag:
-            tag_ref = repo.create_tag(f"v{self.version}")
+            tag_ref = repo.create_tag(f"v{self.version}", force=True)
             # tag_ref = repo.create_tag(f"v{self.version}", ref=repo)
         else:
             tag_ref = None
