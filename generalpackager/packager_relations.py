@@ -1,5 +1,14 @@
 
 
+def deco_load_general(func):
+    def _wrapper(self, *args, **kwargs):
+        """ :param generalpackager.Packager self: """
+        if not self.packagers_dict:
+            self.load_general_packagers()
+        return func(self, *args, **kwargs)
+    return _wrapper
+
+
 class _PackagerRelations:
     packagers_dict = {}
 
@@ -80,5 +89,17 @@ class _PackagerRelations:
             :param github_user: """
         return cls.PyPI.get_users_packages(user=pypi_user).intersection(cls.GitHub.get_users_packages(user=github_user))
 
+    @deco_load_general
+    def general_bumped_set(self):
+        """ Return a set of general packagers that have been bumped.
 
+            :param generalpackager.Packager self: """
+        return {packager for packager in self.packagers_dict.values() if packager.is_bumped()}
+
+    @deco_load_general
+    def general_changed_dict(self, aesthetic=False):
+        """ Return a dict of general packagers with changed files.
+
+            :param generalpackager.Packager self: """
+        return {packager: files for packager in self.packagers_dict.values() if (files := packager.get_changed_files(aesthetic=aesthetic))}
 

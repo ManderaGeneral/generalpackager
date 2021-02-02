@@ -5,7 +5,7 @@ from generallibrary import Ver
 
 from setuptools import find_namespace_packages
 import re
-from git import Repo
+from git import Repo, GitHub
 import subprocess
 import sys
 
@@ -142,15 +142,25 @@ class LocalRepo:
                 })
         return todos
 
-    def commit_and_push(self, message=None):
+    def tag(self):
+        Git
+        sha = repo.get_commits()[0].sha
+        repo.create_git_ref('refs/tags/{}'.format("4.0.0"), sha)
+
+    def commit_and_push(self, message=None, tag=False):
         """ Commit and push this local repo to GitHub.
             Return short sha1 of pushed commit. """
         if message is None:
             message = "Automatic commit."
 
         repo = Repo(str(self.path))
+
         repo.git.add(A=True)
         repo.index.commit(message=str(message))
+
+        if tag:
+            repo.create_tag(f"v{self.version}")
+
         remote = repo.remote()
         remote.set_url(f"https://Mandera:{GIT_PASSWORD}@github.com/ManderaGeneral/{self.name}.git")
         return remote.push()[0].summary.split("..")[1]

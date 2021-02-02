@@ -18,6 +18,7 @@ class _PackagerWorkflow:
     _action_setup_python = "actions/setup-python@v2"
     _matrix_os = "matrix.os"
     _matrix_python_version = "matrix.python-version"
+    _trigger_repo = str(EnvVar('GITHUB_REPOSITORY')).split('/')[1]
 
     def get_triggers(self):
         """ :param generalpackager.Packager self: """
@@ -115,7 +116,7 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self:
             :param method: """
         run = CodeLine(f'run: |')
-        run.add(f'python -c "from generalpackager import Packager; Packager(\'generalpackager\', \'\', \'{self._var("github.sha")}\').{method}()"')
+        run.add(f'python -c "from generalpackager import Packager; Packager(\'generalpackager\', \'\').{method}()"')
         return self.get_step(f"Run Packager method '{method}'", run, self.get_env())
 
     def run_ordered_methods(self, *funcs):
@@ -136,24 +137,32 @@ class _PackagerWorkflow:
 
     def workflow_sync(self):
         """ :param generalpackager.Packager self: """
+        msg1 = f"[CI AUTO] {'Pre-publish' if self.general_bumped_set() else 'Sync'} triggered by {self._trigger_repo}"
+        msg2 = f"[CI AUTO] Publish triggered by {self._trigger_repo}"
+
         self.run_ordered_methods(
             lambda packager: packager.generate_localfiles(aesthetic=True),
             lambda packager: packager.localrepo.pip_install(),
             lambda packager: packager.localrepo.unittest(),  # For good measure
-
-            # See if any package has been bumped
-            # If publishing: Bump all repos that have had a non-aesthetic changed file
-
-            lambda packager: packager.commit_push_store_sha(f"[CI AUTO] {EnvVar('GITHUB_REPOSITORY')}"),
-
-            # Generate readme again, this time with defined sha
-            # Commit and push again
-
+            lambda packager: packager.if_publish_bump(),
+            lambda packager, msg=msg1: packager.commit_push_store_sha(message=msg, tag=False),
+            lambda packager, msg=msg2: packager.if_publish_publish(message=msg),
             lambda packager: packager.sync_github_metadata(),
-
-            # If publishing: Publish relevant repos
-
         )
+
+    def if_publish_bump(self):
+        """ :param generalpackager.Packager self: """
+        if self.general_bumped_set() and not self.is_bumped() and self.get_changed_files(aesthetic=False):
+            self.localrepo.bump_version()
+
+    def if_publish_publish(self, message):
+        """ :param generalpackager.Packager self: """
+        if self.is_bumped():
+            self.file_readme.generate()
+            self.commit_push_store_sha(message=message, tag=True)
+            self.localrepo.upload()
+
+
 
 
 

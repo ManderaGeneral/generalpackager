@@ -7,6 +7,9 @@ import sys
 
 packager = Packager("generalpackager")
 
+# print(packager.general_changed_dict(aesthetic=False))
+
+
 
 # packager.load_general_packagers()
 # packager.file_workflow.generate()
