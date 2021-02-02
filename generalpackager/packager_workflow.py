@@ -80,7 +80,8 @@ class _PackagerWorkflow:
         return env
 
     def steps_setup(self, python_version):
-        """ :param generalpackager.Packager self: """
+        """ :param generalpackager.Packager self:
+            :param python_version: """
         steps = CodeLine("steps:")
         steps.add(self.step_setup_python(version=python_version))
         steps.add(self.step_install_necessities())
