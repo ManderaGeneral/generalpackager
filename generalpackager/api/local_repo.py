@@ -161,7 +161,10 @@ class LocalRepo:
 
         remote = repo.remote()
         remote.set_url(f"https://Mandera:{GIT_PASSWORD}@github.com/ManderaGeneral/{self.name}.git")
-        return remote.push(refspec=tag_ref)[0].summary.split("..")[1].rstrip()
+
+        print(remote.push(refspec=tag_ref))
+        
+        # return remote.push(refspec=tag_ref)[0].summary.split("..")[1].rstrip()
 
     def get_changed_files(self):
         """ Get a list of changed files compared to remote. """
