@@ -140,5 +140,5 @@ Tools to interface GitHub, PyPI and local modules / repos. Used for generating f
 | packager\_files.py    | Watermark generated files to prevent mistake of thinking you can modify them directly. |
 
 <sup>
-Generated 2021-02-02 13:07 CET for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
+Generated 2021-02-02 13:24 CET for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
 </sup>
