@@ -151,15 +151,17 @@ class LocalRepo:
         repo = Repo(str(self.path))
 
         repo.git.add(A=True)
-        commit = repo.index.commit(message=str(message))
+        repo.index.commit(message=str(message))
 
         if tag:
-            print(repo.create_tag(f"v{self.version}", ref=commit.tree, force=True))
-            # print(repo.create_tag(f"v{self.version}", ref=repo.index, force=True))
+            tag_ref = repo.create_tag(f"v{self.version}")
+            # tag_ref = repo.create_tag(f"v{self.version}", ref=repo)
+        else:
+            tag_ref = None
 
         remote = repo.remote()
         remote.set_url(f"https://Mandera:{GIT_PASSWORD}@github.com/ManderaGeneral/{self.name}.git")
-        return remote.push()[0].summary.split("..")[1].rstrip()
+        return remote.push(refspec=tag_ref)[0].summary.split("..")[1].rstrip()
 
     def get_changed_files(self):
         """ Get a list of changed files compared to remote. """
