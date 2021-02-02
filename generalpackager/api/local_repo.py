@@ -155,7 +155,7 @@ class LocalRepo:
 
         if tag:
             print(repo.create_tag(f"v{self.version}", ref=commit))
-
+        exit()
         remote = repo.remote()
         remote.set_url(f"https://Mandera:{GIT_PASSWORD}@github.com/ManderaGeneral/{self.name}.git")
         return remote.push()[0].summary.split("..")[1].rstrip()
