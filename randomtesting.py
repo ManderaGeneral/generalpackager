@@ -3,8 +3,21 @@ from generalpackager import Packager
 from generalfile import Path
 from pprint import pprint
 import sys
+from generallibrary import Timer
 
-# packager = Packager("generalpackager")
+import shutil
+import requests
+import hashlib
+
+
+
+
+
+
+# 1 HERE ** Create a method to get changed files between pypi and github, use that instead to see whether to bump
+packager = Packager("generalpackager")
+packager.compare_local_to_pypi()
+
 # packager.file_setup.generate()
 
 # packager.localrepo.commit_and_push("[CI SKIP] Getting tags to work", tag=True)

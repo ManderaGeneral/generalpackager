@@ -89,9 +89,10 @@ class _PackagerRelations:
         return {packager for packager in self.packagers_dict.values() if packager.is_bumped()}
 
     def general_changed_dict(self, aesthetic=False):
-        """ Return a dict of general packagers with changed files.
+        """ Return a dict of general packagers with changed files comparing to remote.
 
-            :param generalpackager.Packager self: """
+            :param generalpackager.Packager self:
+            :param aesthetic: """
         self.load_general_packagers()
         return {packager: files for packager in self.packagers_dict.values() if (files := packager.get_changed_files(aesthetic=aesthetic))}
 

@@ -1,7 +1,6 @@
 
 from generallibrary import CodeLine, current_datetime, Markdown
 from generalfile import Path
-from generalpackager import LocalRepo
 
 
 class GenerateFile:
@@ -42,7 +41,7 @@ class _PackagerFiles:
         changed_files = []
         for relative_path in self.localrepo.get_changed_files():
             if not aesthetic and getattr(self.files_by_relative_path.get(relative_path, None), "aesthetic", False):
-                continue
+                continue  # Todo: Extract aesthetic filter to it's own method so that pypi can use it too
             changed_files.append(relative_path)
         return changed_files
 
