@@ -19,7 +19,11 @@ class GenerateFile:
 
 
 class _PackagerFiles:
-    """ Generates setup, license and gitexclude. """
+    """ Generates setup, license and gitexclude.
+        Only changed non-aesthetic files can trigger a version bump and publish. """
+    extra_aesthetic = "randomtesting.py",
+    extra_non_aesthetic = tuple()
+
     def __init_post__(self):
         """ Todo: Watermark generated files to prevent mistake of thinking you can modify them directly.
 
@@ -33,17 +37,45 @@ class _PackagerFiles:
         self.files = [getattr(self, key) for key in dir(self) if key.startswith("file_")]
         self.files_by_relative_path = {file.relative_path: file for file in self.files}
 
-    def get_changed_files(self, aesthetic=True):
+    def relative_path_is_aesthetic(self, relative_path):
+        """ Relative to package path. None if not defined as a GenerateFile instance.
+
+            :param generalpackager.Packager self:
+            :param Path relative_path: """
+        aesthetic_attr = getattr(self.files_by_relative_path.get(relative_path, None), "aesthetic", None)
+        if aesthetic_attr is None:
+            if relative_path.match(*self.extra_aesthetic):
+                return True
+            elif relative_path.match(*self.extra_non_aesthetic):
+                return False
+        return aesthetic_attr
+
+    def filter_relative_filenames(self, *filenames, aesthetic, non_defined=True):
+        """ If aesthetic is None then it doesn't filter any.
+            True will return only aesthetic.
+            False will return only non-aesthetic.
+
+            :param generalpackager.Packager self:
+            :param bool or None aesthetic:
+            :param bool non_defined: """
+        result = []
+        for filename in filenames:
+            is_aesthetic = self.relative_path_is_aesthetic(filename)
+            if non_defined is False and is_aesthetic is None:
+                continue
+            if aesthetic is True and is_aesthetic is False:
+                continue
+            if aesthetic is False and is_aesthetic is True:
+                continue
+            result.append(filename)
+        return result
+
+    def compare_local_to_remote(self, aesthetic=None):
         """ Get a list of changed files compared to remote with optional aesthetic files.
 
             :param generalpackager.Packager self:
             :param aesthetic: """
-        changed_files = []
-        for relative_path in self.localrepo.get_changed_files():
-            if not aesthetic and getattr(self.files_by_relative_path.get(relative_path, None), "aesthetic", False):
-                continue  # Todo: Extract aesthetic filter to it's own method so that pypi can use it too
-            changed_files.append(relative_path)
-        return changed_files
+        return self.filter_relative_filenames(*self.localrepo.get_changed_files(), aesthetic=aesthetic)
 
     def generate_setup(self):
         """ Generate setup.py.

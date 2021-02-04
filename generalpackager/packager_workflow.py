@@ -136,7 +136,9 @@ class _PackagerWorkflow:
         )
 
     def workflow_sync(self):
-        """ :param generalpackager.Packager self: """
+        """ Runs in workflow once Packagers have created each LocalRepo from latest master commit.
+
+            :param generalpackager.Packager self: """
         trigger_repo = str(EnvVar('GITHUB_REPOSITORY')).split('/')[1]
         msg1 = f"[CI AUTO] Sync triggered by {trigger_repo}"
         msg2 = f"[CI AUTO] Publish triggered by {trigger_repo}"
@@ -153,7 +155,7 @@ class _PackagerWorkflow:
 
     def if_publish_bump(self):
         """ :param generalpackager.Packager self: """
-        if self.general_bumped_set() and not self.is_bumped() and self.get_changed_files(aesthetic=False):
+        if self.general_bumped_set() and not self.is_bumped() and self.compare_local_to_pypi(aesthetic=False):
             self.localrepo.bump_version()
 
     def if_publish_publish(self, message):

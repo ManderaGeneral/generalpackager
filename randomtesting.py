@@ -16,7 +16,7 @@ import hashlib
 
 # 1 HERE ** Create a method to get changed files between pypi and github, use that instead to see whether to bump
 packager = Packager("generalpackager")
-packager.compare_local_to_pypi()
+pprint(packager.compare_local_to_pypi(aesthetic=False))
 
 
 # packager.file_setup.generate()

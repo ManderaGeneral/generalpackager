@@ -94,5 +94,5 @@ class _PackagerRelations:
             :param generalpackager.Packager self:
             :param aesthetic: """
         self.load_general_packagers()
-        return {packager: files for packager in self.packagers_dict.values() if (files := packager.get_changed_files(aesthetic=aesthetic))}
+        return {packager: files for packager in self.packagers_dict.values() if (files := packager.compare_local_to_remote(aesthetic=aesthetic))}
 
