@@ -1,4 +1,4 @@
-# generalpackager 0.0.9
+# generalpackager 0.0.10
 Tools to interface GitHub, PyPI and local modules / repos. Used for generating files to keep projects dry and synced. Tailored for my general packages.
 
 [![workflow Actions Status](https://github.com/ManderaGeneral/generalpackager/workflows/workflow/badge.svg)](https://github.com/ManderaGeneral/generalpackager/actions)
@@ -9,7 +9,7 @@ Tools to interface GitHub, PyPI and local modules / repos. Used for generating f
 
 ## Contents
 <pre>
-<a href='#generalpackager-0.0.9'>generalpackager 0.0.9</a>
+<a href='#generalpackager-0.0.10'>generalpackager 0.0.10</a>
 ├─ <a href='#Contents'>Contents</a>
 ├─ <a href='#Installation'>Installation</a>
 ├─ <a href='#Attributes'>Attributes</a>
@@ -149,5 +149,5 @@ Tools to interface GitHub, PyPI and local modules / repos. Used for generating f
 | pypi.py              | Add pack and unpack to generalfile.                                                    |
 
 <sup>
-Generated 2021-02-04 11:14 CET for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
+Generated 2021-02-04 11:28 CET for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
 </sup>
