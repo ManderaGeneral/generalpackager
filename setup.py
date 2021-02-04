@@ -30,4 +30,5 @@ setup(
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX :: Linux',
     ],
+    include_package_data=True,
 )

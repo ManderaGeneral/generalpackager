@@ -21,7 +21,7 @@ class GenerateFile:
 class _PackagerFiles:
     """ Generates setup, license and gitexclude.
         Only changed non-aesthetic files can trigger a version bump and publish. """
-    extra_aesthetic = "randomtesting.py",
+    extra_aesthetic = "randomtesting.py",  # "licenses"
     extra_non_aesthetic = tuple()
 
     def __init_post__(self):
@@ -101,6 +101,7 @@ class _PackagerFiles:
             "packages": 'find_namespace_packages(exclude=("build*", "dist*"))',
             "extras_require": self.localrepo.extras_require,
             "classifiers": self.get_classifiers(),
+            "include_package_data": True,
         }
 
         top = CodeLine()
