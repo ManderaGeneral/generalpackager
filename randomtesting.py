@@ -9,6 +9,7 @@ import shutil
 import requests
 import hashlib
 
+# HERE ** Missed writing include in manifest
 
 packager = Packager("generalpackager")
 

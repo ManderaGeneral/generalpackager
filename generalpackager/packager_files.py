@@ -101,7 +101,7 @@ class _PackagerFiles:
             "packages": 'find_namespace_packages(exclude=("build*", "dist*"))',
             "extras_require": self.localrepo.extras_require,
             "classifiers": self.get_classifiers(),
-            "include_package_data": True,
+            # "include_package_data": True,
         }
 
         top = CodeLine()
@@ -132,7 +132,7 @@ class _PackagerFiles:
 
             :param generalpackager.Packager self: """
         return "\n".join(self.localrepo.manifest + [
-            str(self.localrepo.get_metadata_path().relative(self.path)),
+            f"include {self.localrepo.get_metadata_path().relative(self.path)}",
         ])
 
     def generate_git_exclude(self):
