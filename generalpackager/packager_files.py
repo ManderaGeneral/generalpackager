@@ -131,9 +131,10 @@ class _PackagerFiles:
         """ Generate manifest file.
 
             :param generalpackager.Packager self: """
-        return "\n".join(self.localrepo.manifest + [
-            f"include {self.localrepo.get_metadata_path().relative(self.path)}",
-        ])
+        default_manifest = [
+            self.localrepo.get_metadata_path().relative(self.path),
+        ]
+        return "\n".join([f"include {path}" for path in self.localrepo.manifest + default_manifest])
 
     def generate_git_exclude(self):
         """ Generate git exclude file.
