@@ -1,20 +1,19 @@
 
-from generalpackager import Packager
+from generalpackager import Packager, GitHub
 from generalfile import Path
 from pprint import pprint
 import sys
 from generallibrary import Timer
 
-import shutil
-import requests
-import hashlib
 
-# HERE ** Missed writing include in manifest
+packager = Packager(name="Mandera", owner="Mandera")  # HERE ** Make this work, first goal is to clone it
 
-packager = Packager("generalpackager")
+
+
+# packager = Packager("generalpackager")
 
 # pprint(packager.compare_local_to_pypi(aesthetic=False))
-packager.file_manifest.generate()
+# packager.file_manifest.generate()
 # packager.file_setup.generate()
 # packager.localrepo.commit_and_push("[CI SKIP] Getting tags to work", tag=True)
 

@@ -9,7 +9,6 @@ class _PackagerMarkdown:
         """ Get badges as a dict.
 
             :param generalpackager.Packager self: """
-
         return {
             "UnitTests": f"[![workflow Actions Status](https://github.com/ManderaGeneral/{self.name}/workflows/workflow/badge.svg)](https://github.com/ManderaGeneral/{self.name}/actions)",
             "Commit": f"![GitHub last commit](https://img.shields.io/github/last-commit/ManderaGeneral/{self.name})",
@@ -17,6 +16,24 @@ class _PackagerMarkdown:
             "Python": f"[![PyPI pyversions](https://img.shields.io/pypi/pyversions/{self.name}.svg)](https://pypi.python.org/pypi/{self.name}/)",
             "Operating System": f"[![Generic badge](https://img.shields.io/badge/platforms-{'%20%7C%20'.join(self.os)}-blue.svg)](https://shields.io/)",
         }
+
+    def get_information_markdown(self, *packagers):
+        """ Get information table.
+
+            :param generalpackager.Packager self: """
+        markdown = Markdown(header="Information")
+
+        list_of_dicts = []
+
+        for packager in (self, *packagers):
+            list_of_dicts.append({
+                "Package": Markdown.link(text=packager.name, url=packager.github.url),
+                "Version": packager.localrepo.version,
+                "Python": packager.python,
+                "Platform": packager.os,
+            })
+        markdown.add_table_lines(*list_of_dicts)
+        return markdown
 
     def get_installation_markdown(self):
         """ Get install markdown.

@@ -177,10 +177,10 @@ class _PackagerFiles:
         # Description
         markdown = Markdown(self.localrepo.description, header=f"{self.name} {self.localrepo.version}")
 
-        # Badges
-        markdown.add_lines(*self.get_badges_dict().values())
+        # Information
+        self.get_information_markdown().set_parent(parent=markdown)
 
-        # Table of contents - Placeholder
+        # Table of contents
         contents = Markdown(header="Contents", parent=markdown)
 
         # Installation
@@ -202,3 +202,5 @@ class _PackagerFiles:
 
         return markdown
 
+    def generate_personal_readme(self):
+        pass
