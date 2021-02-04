@@ -1,1 +1,2 @@
-include generalpackager/licenses/*
+generalpackager/licenses/*
+metadata.json

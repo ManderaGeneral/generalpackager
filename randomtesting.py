@@ -10,17 +10,10 @@ import requests
 import hashlib
 
 
-
-
-
-
-# 1 HERE ** Create a method to get changed files between pypi and github, use that instead to see whether to bump
 packager = Packager("generalpackager")
-pprint(packager.compare_local_to_pypi(aesthetic=False))
 
-
-# packager.file_setup.generate()
-
+# pprint(packager.compare_local_to_pypi(aesthetic=False))
+packager.file_manifest.generate()
 # packager.localrepo.commit_and_push("[CI SKIP] Getting tags to work", tag=True)
 
 

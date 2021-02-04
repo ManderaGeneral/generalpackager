@@ -29,6 +29,8 @@ class _PackagerFiles:
 
             :param generalpackager.Packager self: """
         self.file_setup =           GenerateFile(self.localrepo.get_setup_path(), self.generate_setup, self, aesthetic=False)
+        self.file_manifest =        GenerateFile(self.localrepo.get_manifest_path(), self.generate_manifest, self, aesthetic=False)
+
         self.file_git_exclude =     GenerateFile(self.localrepo.get_git_exclude_path(), self.generate_git_exclude, self, aesthetic=True)
         self.file_license =         GenerateFile(self.localrepo.get_license_path(), self.generate_license, self, aesthetic=True)
         self.file_workflow =        GenerateFile(self.localrepo.get_workflow_path(), self.generate_workflow, self, aesthetic=True)
@@ -123,6 +125,14 @@ class _PackagerFiles:
         top.add(CodeLine(")"))
 
         return top.text()
+
+    def generate_manifest(self):
+        """ Generate manifest file.
+
+            :param generalpackager.Packager self: """
+        return "\n".join(self.localrepo.manifest + [
+            str(self.localrepo.get_metadata_path().relative(self.path)),
+        ])
 
     def generate_git_exclude(self):
         """ Generate git exclude file.

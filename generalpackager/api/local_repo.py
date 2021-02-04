@@ -19,6 +19,7 @@ class LocalRepo:
     install_requires = ...
     extras_require = ...
     topics = ...
+    manifest = ...
 
     metadata_keys = [key for key, value in locals().items() if value is Ellipsis]
 
@@ -28,7 +29,12 @@ class LocalRepo:
         self.path = Path(path).absolute()
         self.git_exclude_lines = git_exclude_lines
 
-        metadata = {"enabled": True}
+        metadata = {
+            "enabled": True,
+            "extras_require": {},
+            "topics": [],
+            "manifest": [],
+        }
         metadata.update(self.get_metadata_path().read())
 
         for key, value in metadata.items():
@@ -86,6 +92,10 @@ class LocalRepo:
     def get_setup_path(self):
         """ Get a Path instance pointing to setup.py, regardless if it exists. """
         return self.path / "setup.py"
+
+    def get_manifest_path(self):
+        """ Get a Path instance pointing to MANIFEST.in, regardless if it exists. """
+        return self.path / "MANIFEST.in"
 
     def get_license_path(self):
         """ Get a Path instance pointing to LICENSE, regardless if it exists. """
