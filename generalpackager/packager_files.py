@@ -24,6 +24,8 @@ class _PackagerFiles:
     extra_aesthetic = "randomtesting.py",  # "licenses"
     extra_non_aesthetic = tuple()
 
+    _todo_header = "Todo"
+
     def __init_post__(self):
         """ Todo: Watermark generated files to prevent mistake of thinking you can modify them directly.
 
@@ -194,7 +196,7 @@ class _PackagerFiles:
         # Todos
         todos = self.localrepo.get_todos()
         if todos:
-            Markdown(header=f"Todo ({len(todos)}x)", parent=markdown).add_table_lines(*todos)
+            Markdown(header=self._todo_header, parent=markdown).add_table_lines(*todos)
 
         # Table of contents - Configuration
         self.configure_contents_markdown(markdown=contents)

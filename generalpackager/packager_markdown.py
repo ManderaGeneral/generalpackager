@@ -22,8 +22,8 @@ class _PackagerMarkdown:
 
             :param generalpackager.Packager self: """
         part_of = f"This package and {len(self.packagers_dict) - 1} other make up {Markdown.link(text='ManderaGeneral', url='https://github.com/Mandera')}."
-        header = f"{self.name} {self.localrepo.version}"
-        return Markdown(self.localrepo.description, "\n", part_of, header=header)
+
+        return Markdown(self.localrepo.description, "\n", part_of, header=self.name)
 
     def get_information_markdown(self, *packagers):
         """ Get information table.
@@ -44,6 +44,7 @@ class _PackagerMarkdown:
                 "Latest Release": packager.pypi.get_datetime(),
                 "Python": ", ".join([Markdown.link(text=ver, url=f"{python_url}{str(ver).replace('.', '')}0/") for ver in packager.python]),
                 "Platform": ", ".join(map(str.capitalize, packager.os)),
+                "Todos": Markdown.link(text=len(packager.localrepo.get_todos()), url=f"{packager.github.url}#{self._todo_header}"),
             })
         markdown.add_table_lines(*list_of_dicts, sort_by="Package")
         return markdown

@@ -1,7 +1,7 @@
 
 from generalfile import Path
 from generalpackager import GIT_PASSWORD
-from generallibrary import Ver
+from generallibrary import Ver, deco_cache
 
 from setuptools import find_namespace_packages
 import re
@@ -122,6 +122,7 @@ class LocalRepo:
             return False
         return ".git" in map(Path.name, path.get_paths_in_folder())
 
+    @deco_cache()
     def get_todos(self):
         """ Get a list of dicts containing cleaned up todos.
 
