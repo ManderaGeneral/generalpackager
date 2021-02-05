@@ -73,7 +73,7 @@ class PyPI:
             name = self.name
         return Ver(re.findall(f"{name} ([.0-9]+)\n", requests.get(f"https://pypi.org/project/{name}/").text)[0])
 
-    @deco_cache()
+    # @deco_cache()
     def get_datetime(self, name=None):
         """ Get datetime of latest release.
             Todo: Proper date fetch. """
