@@ -17,6 +17,14 @@ class _PackagerMarkdown:
             "Operating System": f"[![Generic badge](https://img.shields.io/badge/platforms-{'%20%7C%20'.join(self.os)}-blue.svg)](https://shields.io/)",
         }
 
+    def get_description_markdown(self):
+        """ Get information table.
+
+            :param generalpackager.Packager self: """
+        part_of = f"This package and {len(self.packagers_dict) - 1} other make up {Markdown.link(text='ManderaGeneral', url='https://github.com/Mandera')}."
+        header = f"{self.name} {self.localrepo.version}"
+        return Markdown(self.localrepo.description, "\n", part_of, header=header)
+
     def get_information_markdown(self, *packagers):
         """ Get information table.
 
@@ -104,7 +112,8 @@ class _PackagerMarkdown:
     def get_footnote_markdown(self, commit=True):
         """ Get a markdown for footnote containing date, time and commit link.
 
-            :param generalpackager.Packager self: """
+            :param generalpackager.Packager self:
+            :param commit: """
         line = f"Generated {current_datetime_formatted()}"
         if commit:
             line += f" for commit {self.github_link(text=self.commit_sha, suffix=f'commit/{self.commit_sha}')}."

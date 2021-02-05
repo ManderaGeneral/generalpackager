@@ -7,13 +7,14 @@ from generallibrary import Timer
 
 
 
-packager = Packager(name="Mandera", owner="Mandera")
-# packager = Packager("generalpackager")
 
 
-packager.file_personal_readme.generate()
+# packager = Packager(name="Mandera", owner="Mandera")
+# packager.file_personal_readme.generate()
 # packager.commit_push_store_sha("Testing new personal readme generation.")
 
+packager = Packager("generalpackager")
+packager.load_general_packagers()
 
 # pprint(packager.compare_local_to_pypi(aesthetic=False))
 # packager.file_manifest.generate()
@@ -21,9 +22,8 @@ packager.file_personal_readme.generate()
 # packager.localrepo.commit_and_push("[CI SKIP] Getting tags to work", tag=True)
 
 
-# packager.load_general_packagers()
 # packager.file_workflow.generate()
-# packager.file_readme.generate()
+packager.file_readme.generate()
 
 # packager.localrepo.pip_install()
 

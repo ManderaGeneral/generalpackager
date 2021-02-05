@@ -177,7 +177,7 @@ class _PackagerFiles:
 
             :param generalpackager.Packager self: """
         # Description
-        markdown = Markdown(self.localrepo.description, header=f"{self.name} {self.localrepo.version}")
+        markdown = self.get_description_markdown()
 
         # Information
         self.get_information_markdown().set_parent(parent=markdown)
@@ -194,7 +194,7 @@ class _PackagerFiles:
         # Todos
         todos = self.localrepo.get_todos()
         if todos:
-            Markdown(header="Todo", parent=markdown).add_table_lines(*todos)
+            Markdown(header=f"Todo ({len(todos)}x)", parent=markdown).add_table_lines(*todos)
 
         # Table of contents - Configuration
         self.configure_contents_markdown(markdown=contents)
@@ -210,9 +210,9 @@ class _PackagerFiles:
             :param generalpackager.Packager self: """
         # Description
         markdown = Markdown(header="General").add_list_lines(
-            "A collection of connected packages with shared metadata.",
-            "Violently updated with little regard for backwards compatability as they're all in Alpha.",
-            "Automatic workflows to unittest, publish, release and trigger dependents' workflows.",
+            "A collection of connected packages.",
+            "Violently updated with little regard for backwards compatability.",
+            "Automatic workflows to unittest, sync and publish.",
         )
 
         # Package information
