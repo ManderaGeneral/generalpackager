@@ -34,7 +34,7 @@ class _PackagerGitHub:
             :param generalpackager.Packager self:
             :param message:
             :param tag: """
-        self.commit_sha = self.localrepo.commit_and_push(message=message, tag=tag)
+        self.commit_sha = self.localrepo.commit_and_push(message=message, tag=tag, owner=self.owner)
 
 
 

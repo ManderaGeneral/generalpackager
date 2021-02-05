@@ -39,6 +39,8 @@ class _PackagerFiles:
         self.files = [getattr(self, key) for key in dir(self) if key.startswith("file_")]
         self.files_by_relative_path = {file.relative_path: file for file in self.files}
 
+        self.file_personal_readme = GenerateFile(self.localrepo.get_readme_path(), self.generate_personal_readme, self, aesthetic=True)
+
     def relative_path_is_aesthetic(self, relative_path):
         """ Relative to package path. None if not defined as a GenerateFile instance.
 
@@ -203,4 +205,48 @@ class _PackagerFiles:
         return markdown
 
     def generate_personal_readme(self):
-        pass
+        """ Generate personal readme markdown and overwrite README.md in local repo.
+
+            :param generalpackager.Packager self: """
+        # Description
+        markdown = Markdown(header="General").add_list_lines(
+            "A collection of connected packages with shared metadata.",
+            "Violently updated with little regard for backwards compatability as they're all in Alpha.",
+            "Automatic workflows to unittest, publish, release and trigger dependents' workflows.",
+        )
+
+        # Package information
+        self.get_information_markdown(*self.load_general_packagers().values()).set_parent(parent=markdown)
+
+        # Footnote
+        self.get_footnote_markdown(commit=False).set_parent(parent=markdown)
+
+        return markdown
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

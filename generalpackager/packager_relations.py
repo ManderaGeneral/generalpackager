@@ -53,6 +53,7 @@ class _PackagerRelations:
                 if packager and packager.localrepo.enabled:
                     packager.add()
                     self.update_links()
+        return self.packagers_dict
 
     def get_dependencies(self):
         """ Get set of loaded Packagers that this Packager requires.

@@ -21,18 +21,23 @@ class _PackagerMarkdown:
         """ Get information table.
 
             :param generalpackager.Packager self: """
+        if not packagers:
+            packagers = (self, )
+
         markdown = Markdown(header="Information")
 
-        list_of_dicts = []
+        python_url = "https://www.python.org/downloads/release/python-"
 
-        for packager in (self, *packagers):
+        list_of_dicts = []
+        for packager in packagers:
             list_of_dicts.append({
                 "Package": Markdown.link(text=packager.name, url=packager.github.url),
-                "Version": packager.localrepo.version,
-                "Python": packager.python,
-                "Platform": packager.os,
+                "Version": Markdown.link(text=packager.localrepo.version, url=packager.pypi.url),
+                "Latest Release": packager.pypi.get_datetime(),
+                "Python": ", ".join([Markdown.link(text=ver, url=f"{python_url}{str(ver).replace('.', '')}0/") for ver in packager.python]),
+                "Platform": ", ".join(map(str.capitalize, packager.os)),
             })
-        markdown.add_table_lines(*list_of_dicts)
+        markdown.add_table_lines(*list_of_dicts, sort_by="Package")
         return markdown
 
     def get_installation_markdown(self):
@@ -96,10 +101,13 @@ class _PackagerMarkdown:
         view_str = self.localmodule.objInfo.view(custom_repr=self._attr_repr, print_out=False)
         return Markdown(header="Attributes").add_pre_lines(view_str)
 
-    def get_footnote_markdown(self):
+    def get_footnote_markdown(self, commit=True):
         """ Get a markdown for footnote containing date, time and commit link.
 
             :param generalpackager.Packager self: """
-        line = f"Generated {current_datetime_formatted()} for commit {self.github_link(text=self.commit_sha, suffix=f'commit/{self.commit_sha}')}."
+        line = f"Generated {current_datetime_formatted()}"
+        if commit:
+            line += f" for commit {self.github_link(text=self.commit_sha, suffix=f'commit/{self.commit_sha}')}."
+
         return Markdown(line).wrap_with_tags("sup")
 

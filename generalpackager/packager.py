@@ -32,9 +32,13 @@ class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFile
 
     git_exclude_lines = ".idea", "build", "dist", "*.egg-info", "__pycache__", ".git"
 
-    def __init__(self, name, repos_path=None):
+    def __init__(self, name, repos_path=None, owner=None):
+        if owner is None:
+            owner = "ManderaGeneral"
+
         self.name = name
         self.repos_path = LocalRepo.get_repos_path(path=repos_path)
+        self.owner = owner
 
         self.path = self.repos_path / self.name
 
@@ -65,7 +69,7 @@ class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFile
     def github(self):
         """ Generate, protect and cache. """
         if not self._github:
-            self._github = GitHub(name=self.name)
+            self._github = GitHub(name=self.name, owner=self.owner)
 
         return self._github
 

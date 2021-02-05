@@ -6,11 +6,14 @@ import sys
 from generallibrary import Timer
 
 
-packager = Packager(name="Mandera", owner="Mandera")  # HERE ** Make this work, first goal is to clone it
 
-
-
+packager = Packager(name="Mandera", owner="Mandera")
 # packager = Packager("generalpackager")
+
+
+packager.file_personal_readme.generate()
+# packager.commit_push_store_sha("Testing new personal readme generation.")
+
 
 # pprint(packager.compare_local_to_pypi(aesthetic=False))
 # packager.file_manifest.generate()

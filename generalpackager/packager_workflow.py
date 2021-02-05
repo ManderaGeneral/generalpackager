@@ -153,6 +153,10 @@ class _PackagerWorkflow:
             lambda packager: packager.sync_github_metadata(),
         )
 
+        mandera = Packager(name="Mandera", owner="Mandera")
+        mandera.file_personal_readme.generate()
+        mandera.commit_push_store_sha(message=msg1)
+
     def if_publish_bump(self):
         """ :param generalpackager.Packager self: """
         if self.general_bumped_set() and not self.is_bumped() and self.compare_local_to_pypi(aesthetic=False):

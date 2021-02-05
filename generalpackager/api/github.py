@@ -8,7 +8,10 @@ import re
 
 class GitHub:
     """ Tools to interface a GitHub Repository. """
-    def __init__(self, name, owner="ManderaGeneral"):
+    def __init__(self, name, owner=None):
+        if owner is None:
+            owner = "ManderaGeneral"
+
         self.name = name
         self.owner = owner
 

@@ -12,16 +12,16 @@ import sys
 
 class LocalRepo:
     """ Tools to help Path interface a Local Python Repository. """
-    enabled = ...
+    enabled = True
     name = ...
-    version = ...  # type: Ver
-    description = ...
-    install_requires = ...
-    extras_require = ...
-    topics = ...
-    manifest = ...
+    version = "0.0.1"  # type: Ver
+    description = "Missing description."
+    install_requires = []
+    extras_require = {}
+    topics = []
+    manifest = []
 
-    metadata_keys = [key for key, value in locals().items() if value is Ellipsis]
+    metadata_keys = [key for key, value in locals().items() if not key.startswith("_")]
 
     def __init__(self, path, git_exclude_lines):
         assert self.path_is_repo(path=path)
@@ -29,26 +29,19 @@ class LocalRepo:
         self.path = Path(path).absolute()
         self.git_exclude_lines = git_exclude_lines
 
-        metadata = {
-            "enabled": True,
-            "extras_require": {},
-            "topics": [],
-            "manifest": [],
-        }
-        metadata.update(self.get_metadata_path().read())
-
-        for key, value in metadata.items():
-            setattr(self, f"_{key}", value)
-
-        for key in self.metadata_keys:
-            if getattr(self, key) is Ellipsis:
-                raise AssertionError(f"Key '{key}' for {self}'s metadata is still {Ellipsis}")
+        self.has_metadata = self.get_metadata_path().exists(quick=True)
+        if self.has_metadata:
+            for key, value in self.get_metadata_path().read().items():
+                setattr(self, f"_{key}", value)
 
         if self.extras_require:
             self.extras_require["full"] = list(set().union(*self.extras_require.values()))
             self.extras_require["full"].sort()
 
         self.version = Ver(self.version)
+
+        if self.name is Ellipsis:
+            self.name = self.path.name()
 
     @staticmethod
     def get_repos_path(path):
@@ -70,7 +63,7 @@ class LocalRepo:
 
     def metadata_setter(self, key, value):
         """ Set a metadata's key both in instance and json file. """
-        if value != getattr(self, f"_{key}"):
+        if self.has_metadata and value != getattr(self, f"_{key}", ...):
             metadata = self.get_metadata_path().read()
             metadata[key] = str(value)
             self.get_metadata_path().write(metadata, overwrite=True, indent=4)
@@ -127,10 +120,7 @@ class LocalRepo:
         path = Path(path)
         if path.is_file() or not path.exists(quick=True):
             return False
-        for file in path.get_paths_in_folder():
-            if file.name() in ("metadata.json", "setup.py"):
-                return True
-        return False
+        return ".git" in map(Path.name, path.get_paths_in_folder())
 
     def get_todos(self):
         """ Get a list of dicts containing cleaned up todos.
@@ -152,18 +142,20 @@ class LocalRepo:
                 })
         return todos
 
-    def commit_and_push(self, message=None, tag=False):
+    def commit_and_push(self, message=None, tag=False, owner=None):
         """ Commit and push this local repo to GitHub.
             Return short sha1 of pushed commit. """
         if message is None:
             message = "Automatic commit."
+        if owner is None:
+            owner = "ManderaGeneral"
 
         repo = Repo(str(self.path))
 
         repo.git.add(A=True)
         repo.index.commit(message=str(message))
         remote = repo.remote()
-        remote.set_url(f"https://Mandera:{GIT_PASSWORD}@github.com/ManderaGeneral/{self.name}.git")
+        remote.set_url(f"https://Mandera:{GIT_PASSWORD}@github.com/{owner}/{self.name}.git")
 
         if tag:
             tag_ref = repo.create_tag(f"v{self.version}", force=True)
@@ -201,9 +193,10 @@ class LocalRepo:
             subprocess.check_call([sys.executable, "-m", "twine", "upload", "dist/*"])
 
 for key in LocalRepo.metadata_keys:
+    value = getattr(LocalRepo, key)
     setattr(LocalRepo, key, property(
-        lambda self, key=key: getattr(self, f"_{key}", ...),
-        lambda self, value, key=key: LocalRepo.metadata_setter(self, key, value),
+        fget=lambda self, key=key, value=value: getattr(self, f"_{key}", value),
+        fset=lambda self, value, key=key: LocalRepo.metadata_setter(self, key, value),
     ))
 
 

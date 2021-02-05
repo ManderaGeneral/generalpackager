@@ -73,6 +73,16 @@ class PyPI:
             name = self.name
         return Ver(re.findall(f"{name} ([.0-9]+)\n", requests.get(f"https://pypi.org/project/{name}/").text)[0])
 
+    @deco_cache()
+    def get_datetime(self, name=None):
+        """ Get datetime of latest release.
+            Todo: Proper date fetch. """
+        if name is None:
+            name = self.name
+        requests.get(f"https://pypi.org/project/{name}/")
+        result = re.findall('Generated (.+) for commit', requests.get(f"https://pypi.org/project/{name}/").text)
+        return result[0] if result else "-"
+
     def reserve_name(self):
         pass
 
