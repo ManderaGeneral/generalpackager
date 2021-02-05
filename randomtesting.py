@@ -3,18 +3,20 @@ from generalpackager import Packager, GitHub
 from generalfile import Path
 from pprint import pprint
 import sys
-from generallibrary import Timer
-
-
-
+from generallibrary import Timer, Ver
 
 
 # packager = Packager(name="Mandera", owner="Mandera")
 # packager.file_personal_readme.generate()
+
 # packager.commit_push_store_sha("Testing new personal readme generation.")
 
 packager = Packager("generalpackager")
 packager.load_general_packagers()
+packager.file_readme.generate()
+
+# pprint(packager.get_todos())
+
 
 # pprint(packager.compare_local_to_pypi(aesthetic=False))
 # packager.file_manifest.generate()
@@ -23,7 +25,6 @@ packager.load_general_packagers()
 
 
 # packager.file_workflow.generate()
-packager.file_readme.generate()
 
 # packager.localrepo.pip_install()
 
@@ -44,7 +45,6 @@ packager.file_readme.generate()
 # packager.generate_readme()
 # packager.generate_localfiles()
 # packager.sync_package("Cleaned up secrets, testing auto")
-# packager.localrepo.get_todos()
 # packager.sync_github_metadata()
 # packager.generate_git_exclude()
 # packager.generate_setup()

@@ -61,7 +61,7 @@ class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFile
                     self.clone_repo(url=self.github.url, path=self.path)
                 else:
                     return None
-            self._localrepo = LocalRepo(path=self.path, git_exclude_lines=self.git_exclude_lines)
+            self._localrepo = LocalRepo(path=self.path)
 
         return self._localrepo
 

@@ -1,5 +1,8 @@
 
-from generallibrary import Markdown, current_datetime_formatted
+from generallibrary import Markdown, current_datetime_formatted, deco_cache
+from generalfile import Path
+
+import re
 
 
 class _PackagerMarkdown:
@@ -16,6 +19,33 @@ class _PackagerMarkdown:
             "Python": f"[![PyPI pyversions](https://img.shields.io/pypi/pyversions/{self.name}.svg)](https://pypi.python.org/pypi/{self.name}/)",
             "Operating System": f"[![Generic badge](https://img.shields.io/badge/platforms-{'%20%7C%20'.join(self.os)}-blue.svg)](https://shields.io/)",
         }
+
+    @deco_cache()
+    def get_todos(self):
+        """ Get a list of dicts containing cleaned up todos.
+
+            :param generalpackager.Packager self:
+            :rtype: dict[list[str]] """
+        todos = []
+        for path in self.path.get_paths_recursive():
+            if path.match(*self.git_exclude_lines, "shelved.patch", "readme.md"):
+                continue
+            try:
+                text = path.text.read()
+            except:
+                continue
+
+            relative_path = path.relative(self.path)
+
+            for i, line in enumerate(text.splitlines()):
+                result = re.findall("todo+: (.+)", line, re.I)
+                if result:
+                    todo = re.sub('[" ]*$', "", result[0])
+                    todos.append({
+                        "Module": self.github_link_path_line(text=path.name(), path=relative_path, line=1),
+                        "Message": self.github_link_path_line(text=todo, path=relative_path, line=i + 1),
+                    })
+        return todos
 
     def get_description_markdown(self):
         """ Get information table.
@@ -44,9 +74,10 @@ class _PackagerMarkdown:
                 "Latest Release": packager.pypi.get_datetime(),
                 "Python": ", ".join([Markdown.link(text=ver, url=f"{python_url}{str(ver).replace('.', '')}0/") for ver in packager.python]),
                 "Platform": ", ".join(map(str.capitalize, packager.os)),
-                "Todos": Markdown.link(text=len(packager.localrepo.get_todos()), url=f"{packager.github.url}#{self._todo_header}"),
+                "Todos": Markdown.link(text=len(packager.get_todos()), url=f"{packager.github.url}#{self._todo_header}"),
+                "Hierarchy": packager.get_ordered_index(),
             })
-        markdown.add_table_lines(*list_of_dicts, sort_by="Package")
+        markdown.add_table_lines(*list_of_dicts, sort_by=["Hierarchy", "Package"])
         return markdown
 
     def get_installation_markdown(self):
@@ -83,25 +114,33 @@ class _PackagerMarkdown:
         markdown.add_pre_lines(parent_markdown.view(custom_repr=lambda md: md.link(md.header, href=True), print_out=False))
         return markdown
 
+    def github_link(self, text, suffix):
+        """ :param generalpackager.Packager self:
+            :param text:
+            :param suffix: """
+        url = f"{self.github.url}/{suffix}"
+        return Markdown.link(text=text, url=url, href=True)
+
+    def github_link_path_line(self, text, path, line=None):
+        """ :param generalpackager.Packager self:
+            :param text:
+            :param path:
+            :param line: """
+        if line is None:
+            line = 1
+        path = Path(path)
+        return self.github_link(text=text, suffix=f"blob/{self.commit_sha}/{path.encode()}#L{line}")
+
     def _attr_repr(self, objInfo):
         """ Return a nice representation of each attribute made by this module, in this case a link to code definition.
 
             :param generalpackager.Packager self:
             :param generallibrary.ObjInfo objInfo: """
         text = objInfo.nice_repr()
-        commit_sha = self.commit_sha
-        file_path = f'{objInfo.module().__name__.replace(".", "/")}{"/__init__" if objInfo.is_module() else ""}.py'
+        path = f'{objInfo.module().__name__.replace(".", "/")}{"/__init__" if objInfo.is_module() else ""}.py'
         line = objInfo.get_definition_line()
 
-        return self.github_link(text=text, suffix=f"blob/{commit_sha}/{file_path}#L{line}")
-
-    def github_link(self, text, suffix):
-        """ :param generalpackager.Packager self:
-            :param text:
-            :param suffix: """
-        url = f"{self.github.url}/{suffix}"
-        # self.assert_url_up(url=url)  # Wont work for private repos or new files, would have to check after the fact.
-        return Markdown.link(text=text, url=url, href=True)
+        return self.github_link_path_line(text=text, path=path, line=line)
 
     def get_attributes_markdown(self):
         """ Get a recursive view of attributes markdown.

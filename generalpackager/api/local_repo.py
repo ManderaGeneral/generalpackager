@@ -1,7 +1,7 @@
 
 from generalfile import Path
 from generalpackager import GIT_PASSWORD
-from generallibrary import Ver, deco_cache
+from generallibrary import Ver
 
 from setuptools import find_namespace_packages
 import re
@@ -23,11 +23,10 @@ class LocalRepo:
 
     metadata_keys = [key for key, value in locals().items() if not key.startswith("_")]
 
-    def __init__(self, path, git_exclude_lines):
+    def __init__(self, path):
         assert self.path_is_repo(path=path)
 
         self.path = Path(path).absolute()
-        self.git_exclude_lines = git_exclude_lines
 
         self.has_metadata = self.get_metadata_path().exists(quick=True)
         if self.has_metadata:
@@ -121,27 +120,6 @@ class LocalRepo:
         if path.is_file() or not path.exists(quick=True):
             return False
         return ".git" in map(Path.name, path.get_paths_in_folder())
-
-    @deco_cache()
-    def get_todos(self):
-        """ Get a list of dicts containing cleaned up todos.
-
-            :rtype: dict[list[str]] """
-        todos = []
-        for path in self.path.get_paths_recursive():
-            if path.match(*self.git_exclude_lines, "shelved.patch", "readme.md"):
-                continue
-            try:
-                text = path.text.read()
-            except:
-                continue
-
-            for todo in re.findall("todo+: (.+)", text, re.I):
-                todos.append({
-                    "Module": path.name(),
-                    "Message": re.sub('[" ]*$', "", todo),
-                })
-        return todos
 
     def commit_and_push(self, message=None, tag=False, owner=None):
         """ Commit and push this local repo to GitHub.

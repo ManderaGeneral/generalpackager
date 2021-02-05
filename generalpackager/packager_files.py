@@ -194,7 +194,7 @@ class _PackagerFiles:
         self.get_attributes_markdown().set_parent(parent=markdown)
 
         # Todos
-        todos = self.localrepo.get_todos()
+        todos = self.get_todos()
         if todos:
             Markdown(header=self._todo_header, parent=markdown).add_table_lines(*todos)
 
