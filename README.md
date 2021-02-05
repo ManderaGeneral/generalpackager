@@ -155,5 +155,5 @@ Tools to interface GitHub, PyPI and local modules / repos. Used for generating f
 | pypi.py              | Proper date fetch.                                                                     |
 
 <sup>
-Generated 2021-02-05 11:05 CET for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
+Generated 2021-02-05 11:17 CET for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
 </sup>
