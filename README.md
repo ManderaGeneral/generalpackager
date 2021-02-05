@@ -1,4 +1,4 @@
-# generalpackager 0.0.13
+# generalpackager 0.0.14
 Tools to interface GitHub, PyPI and local modules / repos. Used for generating files to keep projects dry and synced. Tailored for my general packages.
 
 This package and 3 other make up [ManderaGeneral](https://github.com/Mandera).
@@ -6,16 +6,16 @@ This package and 3 other make up [ManderaGeneral](https://github.com/Mandera).
 ## Information
 | Package                                                              | Version                                             | Latest Release       | Python                                                                                                                   | Platform        |
 |:---------------------------------------------------------------------|:----------------------------------------------------|:---------------------|:-------------------------------------------------------------------------------------------------------------------------|:----------------|
-| [generalpackager](https://github.com/ManderaGeneral/generalpackager) | [0.0.13](https://pypi.org/project/generalpackager/) | 2021-02-04 17:13 CET | [3.8](https://www.python.org/downloads/release/python-380/), [3.9](https://www.python.org/downloads/release/python-390/) | Windows, Ubuntu |
+| [generalpackager](https://github.com/ManderaGeneral/generalpackager) | [0.0.14](https://pypi.org/project/generalpackager/) | 2021-02-04 17:13 CET | [3.8](https://www.python.org/downloads/release/python-380/), [3.9](https://www.python.org/downloads/release/python-390/) | Windows, Ubuntu |
 
 ## Contents
 <pre>
-<a href='#generalpackager-0.0.13'>generalpackager 0.0.13</a>
+<a href='#generalpackager-0.0.14'>generalpackager 0.0.14</a>
 ├─ <a href='#Information'>Information</a>
 ├─ <a href='#Contents'>Contents</a>
 ├─ <a href='#Installation'>Installation</a>
 ├─ <a href='#Attributes'>Attributes</a>
-└─ <a href='#Todo'>Todo</a>
+└─ <a href='#Todo-(16x)'>Todo (16x)</a>
 </pre>
 
 ## Installation
@@ -67,7 +67,7 @@ This package and 3 other make up [ManderaGeneral](https://github.com/Mandera).
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_repo.py#L175'>Method: pip_install</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_repo.py#L180'>Method: unittest</a>
 │  └─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_repo.py#L189'>Method: upload</a>
-├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager.py#L16'>Class: Packager</a>
+├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager.py#L17'>Class: Packager</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/github.py#L9'>Class: GitHub</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_module.py#L8'>Class: LocalModule</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_repo.py#L13'>Class: LocalRepo</a>
@@ -137,7 +137,7 @@ This package and 3 other make up [ManderaGeneral](https://github.com/Mandera).
 └─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/pypi.py#L27'>Class: PyPI</a>
 </pre>
 
-## Todo
+## Todo (16x)
 | Module               | Message                                                                                |
 |:---------------------|:---------------------------------------------------------------------------------------|
 | randomtesting.py     | Install packages in correct order when using git to prevent it using pip.              |
@@ -145,18 +145,18 @@ This package and 3 other make up [ManderaGeneral](https://github.com/Mandera).
 | randomtesting.py     | Push empty commits to dependents after publish in workflow.                            |
 | randomtesting.py     | Generate GitHub profile readme.                                                        |
 | randomtesting.py     | Compare local\_repo version with pypi version before publishing.                        |
+| packager\_markdown.py | Inherit future crawler class for pypi and github.                                      |
+| packager\_grp.py      | Maybe move PackagerGrp to Packager now that it inherits NetworkDiagram?                |
 | packager.py          | Allow github, pypi or local repo not to exist in any combination.                      |
 | packager.py          | Replace badges with generated hardcode.                                                |
 | packager.py          | Find all imports to generate install\_requires.                                         |
 | packager.py          | Create links for Todos.                                                                |
 | packager\_files.py    | Watermark generated files to prevent mistake of thinking you can modify them directly. |
-| packager\_grp.py      | Maybe move PackagerGrp to Packager now that it inherits NetworkDiagram?                |
-| packager\_markdown.py | Inherit future crawler class for pypi and github.                                      |
 | pypi.py              | Move download to it's own package.                                                     |
 | pypi.py              | Binary extension for generalfile.                                                      |
 | pypi.py              | Add pack and unpack to generalfile.                                                    |
 | pypi.py              | Proper date fetch.                                                                     |
 
 <sup>
-Generated 2021-02-05 11:58 CET for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
+Generated 2021-02-05 12:08 CET for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
 </sup>
