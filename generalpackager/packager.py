@@ -2,7 +2,10 @@
     Isolatable methods are put inside APIs. """
 
 from generallibrary import initBases, NetworkDiagram
-from generalpackager import LocalRepo, LocalModule, GitHub, PyPI
+from generalpackager.api.local_repo import LocalRepo
+from generalpackager.api.local_module import LocalModule
+from generalpackager.api.github import GitHub
+from generalpackager.api.pypi import PyPI
 
 from generalpackager.packager_files import _PackagerFiles
 from generalpackager.packager_github import _PackagerGitHub

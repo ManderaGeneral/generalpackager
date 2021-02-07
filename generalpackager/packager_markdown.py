@@ -140,7 +140,11 @@ class _PackagerMarkdown:
         path = f'{objInfo.module().__name__.replace(".", "/")}{"/__init__" if objInfo.is_module() else ""}.py'
         line = objInfo.get_definition_line()
 
-        return self.github_link_path_line(text=text, path=path, line=line)
+        string = self.github_link_path_line(text=text, path=path, line=line)
+        if not self.localrepo.text_in_tests(text=objInfo.name):
+            string = f"{string} <b>(Untested)</b>"
+
+        return string
 
     def get_attributes_markdown(self):
         """ Get a recursive view of attributes markdown.

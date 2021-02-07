@@ -1,9 +1,10 @@
 
-from generalpackager import Packager, GitHub
+from generalpackager import Packager
 from generalfile import Path
 from pprint import pprint
 import sys
 from generallibrary import Timer, Ver
+
 
 
 # packager = Packager(name="Mandera", owner="Mandera")
@@ -12,8 +13,20 @@ from generallibrary import Timer, Ver
 # packager.commit_push_store_sha("Testing new personal readme generation.")
 
 packager = Packager("generalpackager")
+
+# print(packager.localrepo.text_in_tests("get_topics"))
+
+# print(Path.contains_text(*packager.localrepo.get_test_paths(), text="hello"))
+
+
+
 packager.load_general_packagers()
 packager.file_readme.generate()
+
+
+
+
+
 
 # pprint(packager.get_todos())
 

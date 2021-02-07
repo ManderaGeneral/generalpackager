@@ -211,7 +211,7 @@ class _PackagerFiles:
 
             :param generalpackager.Packager self: """
         # Description
-        markdown = Markdown(header="General").add_list_lines(
+        markdown = Markdown(header="ManderaGeneral").add_list_lines(
             "A collection of connected packages.",
             "Violently updated with little regard for backwards compatability.",
             "Automatic workflows to unittest, sync and publish.",

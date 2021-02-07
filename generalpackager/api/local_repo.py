@@ -1,7 +1,7 @@
 
 from generalfile import Path
 from generalpackager import GIT_PASSWORD
-from generallibrary import Ver
+from generallibrary import Ver, deco_cache
 
 from setuptools import find_namespace_packages
 import re
@@ -100,6 +100,18 @@ class LocalRepo:
     def get_test_path(self):
         """ Get a Path instance pointing to workflow.yml, regardless if it exists. """
         return self.path / f"{self.name}/test"
+
+    @deco_cache()
+    def get_test_paths(self):
+        """ Get a list of paths to each test python file. """
+        return [path for path in self.get_test_path().get_paths_recursive() if path.match("test_*.py")]
+    
+    def text_in_tests(self, text):
+        """ Return whether text exists in one of the test files. """
+        for path in self.get_test_paths():
+            if path.contains(text=text):
+                return True
+        return False
 
     def get_package_paths(self):
         """ Get a list of Paths pointing to each folder containing a Python file in this local repo, aka `namespace package`. """
