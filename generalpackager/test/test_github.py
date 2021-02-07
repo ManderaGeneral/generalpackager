@@ -2,7 +2,7 @@
 import unittest
 import random
 
-from generalpackager import GitHub
+from generalpackager import Packager
 
 
 # Running tests locally:            Set env var 'packager_github_api' to GitHub token, run unittests with PyCharm as usual
@@ -10,5 +10,5 @@ from generalpackager import GitHub
 
 class TestGitHub(unittest.TestCase):
     def test_topics(self):
-        github = GitHub("generalpackager")
+        github = Packager.GitHub("generalpackager")
         self.assertTrue(github.get_topics())

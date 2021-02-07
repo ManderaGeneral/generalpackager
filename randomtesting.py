@@ -6,6 +6,7 @@ import sys
 from generallibrary import Timer, Ver
 
 
+# HERE ** Fix latest release being wrong, caching issue?
 
 # packager = Packager(name="Mandera", owner="Mandera")
 # packager.file_personal_readme.generate()
