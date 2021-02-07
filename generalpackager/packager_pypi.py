@@ -1,5 +1,6 @@
 
 from generalfile import Path
+from generallibrary import current_datetime_formatted
 
 
 class _PackagerPypi:
@@ -14,5 +15,13 @@ class _PackagerPypi:
         differing_files = self.path.get_differing_files(target=package_target, filt=filt)
         return self.filter_relative_filenames(*differing_files, aesthetic=aesthetic)
 
+    def get_latest_release(self):
+        """ Use current datetime if bumped, otherwise fetch.
+
+            :param generalpackager.Packager self: """
+        if self.is_bumped():
+            return current_datetime_formatted()
+        else:
+            return self.pypi.get_datetime()
 
 

@@ -71,7 +71,7 @@ class _PackagerMarkdown:
             list_of_dicts.append({
                 "Package": Markdown.link(text=packager.name, url=packager.github.url),
                 "Version": Markdown.link(text=packager.localrepo.version, url=packager.pypi.url),
-                "Latest Release": packager.pypi.get_datetime(),
+                "Latest Release": packager.get_latest_release(),
                 "Python": ", ".join([Markdown.link(text=ver, url=f"{python_url}{str(ver).replace('.', '')}0/") for ver in packager.python]),
                 "Platform": ", ".join(map(str.capitalize, packager.os)),
                 "Todos": Markdown.link(text=len(packager.get_todos()), url=f"{packager.github.url}#{self._todo_header}"),

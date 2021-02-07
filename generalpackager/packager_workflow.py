@@ -158,7 +158,9 @@ class _PackagerWorkflow:
         mandera.commit_push_store_sha(message=msg1)
 
     def if_publish_bump(self):
-        """ :param generalpackager.Packager self: """
+        """ Bump if updated and any other Packager is bumped.
+
+            :param generalpackager.Packager self: """
         if self.general_bumped_set() and not self.is_bumped() and self.compare_local_to_pypi(aesthetic=False):
             self.localrepo.bump_version()
 

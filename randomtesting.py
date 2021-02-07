@@ -3,26 +3,22 @@ from generalpackager import Packager
 from generalfile import Path
 from pprint import pprint
 import sys
-from generallibrary import Timer, Ver
+from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line
 
-
-# HERE ** Fix latest release being wrong, caching issue?
 
 # packager = Packager(name="Mandera", owner="Mandera")
 # packager.file_personal_readme.generate()
 
 # packager.commit_push_store_sha("Testing new personal readme generation.")
 
-packager = Packager("generalpackager")
 
-# print(packager.localrepo.text_in_tests("get_topics"))
+# packager = Packager("generalfile")
+# print(packager.localmodule.objInfo.get_child_by_key_values(name="Path").get_child_by_key_values(name="size").get_definition_line())
+print(print_link_to_obj(Path.size))
 
-# print(Path.contains_text(*packager.localrepo.get_test_paths(), text="hello"))
-
-
-
-packager.load_general_packagers()
-packager.file_readme.generate()
+# packager = Packager("generalpackager")
+# packager.load_general_packagers()
+# packager.file_readme.generate()
 
 
 
