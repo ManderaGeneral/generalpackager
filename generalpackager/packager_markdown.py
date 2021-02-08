@@ -20,7 +20,6 @@ class _PackagerMarkdown:
             "Operating System": f"[![Generic badge](https://img.shields.io/badge/platforms-{'%20%7C%20'.join(self.os)}-blue.svg)](https://shields.io/)",
         }
 
-    @deco_cache()
     def get_todos(self):
         """ Get a list of dicts containing cleaned up todos.
 

@@ -5,6 +5,8 @@ from pprint import pprint
 import sys
 from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line
 
+# HERE ** Fix todo urls, issues with both blob and random slash
+
 
 # packager = Packager(name="Mandera", owner="Mandera")
 # packager.file_personal_readme.generate()
@@ -13,18 +15,18 @@ from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line
 
 
 # packager = Packager("generalfile")
+# print(packager.github_link_path_line("test", "generalpackager/packager_files.py"))
+
+
 # print(packager.localmodule.objInfo.get_child_by_key_values(name="Path").get_child_by_key_values(name="size").get_definition_line())
-print(print_link_to_obj(Path.size))
 
-# packager = Packager("generalpackager")
-# packager.load_general_packagers()
-# packager.file_readme.generate()
-
+packager = Packager("generalpackager")
+packager.load_general_packagers()
+packager.file_readme.generate()
 
 
 
-
-
+# pprint(packager.get_todos())
 # pprint(packager.get_todos())
 
 
