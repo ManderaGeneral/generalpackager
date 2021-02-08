@@ -11,7 +11,8 @@ import sys
 
 
 class LocalRepo:
-    """ Tools to help Path interface a Local Python Repository. """
+    """ Tools to help Path interface a Local Python Repository.
+        Todo: Search for imports to list dependencies. """
     enabled = True
     name = ...
     version = "0.0.1"  # type: Ver

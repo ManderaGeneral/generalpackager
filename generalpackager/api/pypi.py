@@ -8,8 +8,7 @@ import shutil
 
 
 def download(url, path):
-    """ Todo: Move download to it's own package.
-        Todo: Binary extension for generalfile. """
+    """ Todo: Move download to it's own package. """
     data = requests.get(url)
     path = Path(path)
 
@@ -20,7 +19,7 @@ def download(url, path):
 
 
 def unpack(path, target):
-    """ Todo: Add pack and unpack to generalfile. """
+    """ Unpack file to target. """
     shutil.unpack_archive(str(path), str(target))
 
 

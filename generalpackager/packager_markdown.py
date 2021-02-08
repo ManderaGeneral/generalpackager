@@ -6,8 +6,7 @@ import re
 
 
 class _PackagerMarkdown:
-    """ Contains methods to generate readme sections from arguments.
-        Todo: Inherit future crawler class for pypi and github. """
+    """ Contains methods to generate readme sections from arguments. """
     def get_badges_dict(self):
         """ Get badges as a dict.
 

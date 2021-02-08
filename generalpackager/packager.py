@@ -21,9 +21,7 @@ class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFile
     """ Uses APIs to manage 'general' package.
         Contains methods that require more than one API as well as methods specific for ManderaGeneral.
         Todo: Allow github, pypi or local repo not to exist in any combination.
-        Todo: Replace badges with generated hardcode.
-        Todo: Find all imports to generate install_requires.
-        Todo: Create links for Todos. """
+        Todo: Support writing [CI MAJOR] in msg to bump major for example. """
 
     LocalRepo, LocalModule, GitHub, PyPI = LocalRepo, LocalModule, GitHub, PyPI
 
