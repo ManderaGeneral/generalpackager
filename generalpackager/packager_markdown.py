@@ -63,11 +63,12 @@ class _PackagerMarkdown:
         markdown = Markdown(header="Information")
         python_url = "https://www.python.org/downloads/release/python-"
 
-        attrs = self.localmodule.objInfo.get_all()
-        test_percentage = floor(len([objInfo for objInfo in attrs if self.localrepo.text_in_tests(text=objInfo.name)]) / len(attrs) * 100, 1)
-
         list_of_dicts = []
         for packager in packagers:
+            attrs = packager.localmodule.objInfo.get_all()
+            tested_attrs = [objInfo for objInfo in attrs if packager.localrepo.text_in_tests(text=objInfo.name)]
+            test_percentage = floor(len(tested_attrs) / len(attrs) * 100, 1)
+
             list_of_dicts.append({
                 "Package": Markdown.link(text=packager.name, url=packager.github.url),
                 "Ver": Markdown.link(text=packager.localrepo.version, url=packager.pypi.url),
