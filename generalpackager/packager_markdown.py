@@ -135,7 +135,7 @@ class _PackagerMarkdown:
             :param generalpackager.Packager self:
             :param generallibrary.ObjInfo objInfo: """
         text = objInfo.nice_repr()
-        path = f'{objInfo.module().__name__.replace(".", "/")}{"/__init__" if objInfo.is_module() else ""}.py'
+        path = Path(objInfo.file()).relative(self.path)
         line = objInfo.get_definition_line()
 
         string = self.github_link_path_line(text=text, path=path, line=line)
