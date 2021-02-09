@@ -19,10 +19,10 @@ from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line
 # print(packager.localmodule.objInfo.get_child_by_key_values(name="Path").get_child_by_key_values(name="size").get_definition_line())
 
 packager = Packager("generalpackager")
-# packager.load_general_packagers()
+packager.load_general_packagers()
 # print(packager.generate_personal_readme())
-# packager.file_readme.generate()
-print(packager.generate_manifest())
+packager.file_readme.generate()
+# print(packager.generate_manifest())
 
 
 # pprint(packager.get_todos())
