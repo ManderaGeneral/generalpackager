@@ -106,7 +106,8 @@ class LocalRepo:
     def get_test_paths(self):
         """ Get a list of paths to each test python file. """
         return [path for path in self.get_test_path().get_paths_recursive() if path.match("test_*.py")]
-    
+
+    @deco_cache()
     def text_in_tests(self, text):
         """ Return whether text exists in one of the test files. """
         for path in self.get_test_paths():

@@ -1,5 +1,5 @@
 
-from generallibrary import Markdown, current_datetime_formatted, deco_cache
+from generallibrary import Markdown, current_datetime_formatted, floor
 from generalfile import Path
 
 import re
@@ -61,21 +61,24 @@ class _PackagerMarkdown:
             packagers = (self, )
 
         markdown = Markdown(header="Information")
-
         python_url = "https://www.python.org/downloads/release/python-"
+
+        attrs = self.localmodule.objInfo.get_all()
+        test_percentage = floor(len([objInfo for objInfo in attrs if self.localrepo.text_in_tests(text=objInfo.name)]) / len(attrs) * 100, 1)
 
         list_of_dicts = []
         for packager in packagers:
             list_of_dicts.append({
                 "Package": Markdown.link(text=packager.name, url=packager.github.url),
-                "Version": Markdown.link(text=packager.localrepo.version, url=packager.pypi.url),
+                "Ver": Markdown.link(text=packager.localrepo.version, url=packager.pypi.url),
                 "Latest Release": packager.get_latest_release(),
                 "Python": ", ".join([Markdown.link(text=ver, url=f"{python_url}{str(ver).replace('.', '')}0/") for ver in packager.python]),
                 "Platform": ", ".join(map(str.capitalize, packager.os)),
-                "Todos": Markdown.link(text=len(packager.get_todos()), url=f"{packager.github.url}#{self._todo_header}"),
-                "Hierarchy": packager.get_ordered_index(),
+                "Todo": Markdown.link(text=len(packager.get_todos()), url=f"{packager.github.url}#{self._todo_header}"),
+                "Lvl": packager.get_ordered_index(),
+                "Tests": f"{test_percentage} %",
             })
-        markdown.add_table_lines(*list_of_dicts, sort_by=["Hierarchy", "Package"])
+        markdown.add_table_lines(*list_of_dicts, sort_by=["Lvl", "Package"])
         return markdown
 
     def get_installation_markdown(self):
