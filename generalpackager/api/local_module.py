@@ -28,8 +28,8 @@ class LocalModule:
 
     def _filter(self, objInfo):
         """ :param ObjInfo objInfo: """
-        is_part_of_module = getattr(objInfo.module(), "__name__", "").startswith(self.module.__name__)
-        return objInfo.public() and not (objInfo.is_instance() or objInfo.is_module()) and is_part_of_module
+        is_part_of_module = objInfo.module().__name__.startswith(self.module.__name__)
+        return objInfo.public() and not (objInfo.is_instance() or objInfo.is_module()) and is_part_of_module and objInfo.name not in ("fget", "fset")
 
     def get_env_vars(self):
         """ Get a list of EnvVar instances avialable directly in module.
