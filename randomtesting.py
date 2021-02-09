@@ -3,7 +3,7 @@ from generalpackager import Packager
 from generalfile import Path
 from pprint import pprint
 import sys
-from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line
+from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line, ObjInfo
 
 
 # packager = Packager(name="Mandera", owner="Mandera")
@@ -20,7 +20,7 @@ from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line
 
 # packager = Packager("generalfile")
 packager = Packager("generalpackager")
-packager.load_general_packagers()
+# packager.load_general_packagers()
 # print(packager.generate_personal_readme())
 packager.file_readme.generate()
 # print(packager.generate_manifest())
