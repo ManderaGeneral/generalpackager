@@ -6,8 +6,8 @@ import sys
 from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line, ObjInfo
 
 
-packager = Packager(name="Mandera", owner="Mandera")
-packager.file_personal_readme.generate()
+# packager = Packager(name="Mandera", owner="Mandera")
+# packager.file_personal_readme.generate()
 
 # packager.commit_push_store_sha("Testing new personal readme generation.")
 
@@ -19,10 +19,10 @@ packager.file_personal_readme.generate()
 # print(packager.localmodule.objInfo.get_child_by_key_values(name="Path").get_child_by_key_values(name="size").get_definition_line())
 
 # packager = Packager("generalfile")
-# packager = Packager("generalpackager")
+packager = Packager("generalpackager")
 # packager.load_general_packagers()
 # print(packager.generate_personal_readme())
-# packager.file_readme.generate()
+packager.file_readme.generate()
 # print(packager.generate_manifest())
 
 

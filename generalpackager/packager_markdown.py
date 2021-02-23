@@ -65,7 +65,7 @@ class _PackagerMarkdown:
 
         list_of_dicts = []
         for packager in packagers:
-            attrs = packager.localmodule.objInfo.get_all()
+            attrs = packager.localmodule.objInfo.get_nodes(depth=-1)
             tested_attrs = [objInfo for objInfo in attrs if packager.localrepo.text_in_tests(text=objInfo.name)]
             test_percentage = floor(len(tested_attrs) / len(attrs) * 100, 1)
 
@@ -75,8 +75,8 @@ class _PackagerMarkdown:
                 "Latest Release": packager.get_latest_release(),
                 "Python": ", ".join([Markdown.link(text=ver, url=f"{python_url}{str(ver).replace('.', '')}0/") for ver in packager.python]),
                 "Platform": ", ".join(map(str.capitalize, packager.os)),
-                "Todo": Markdown.link(text=len(packager.get_todos()), url=f"{packager.github.url}#{self._todo_header}"),
                 "Lvl": packager.get_ordered_index(),
+                "Todo": Markdown.link(text=len(packager.get_todos()), url=f"{packager.github.url}#{self._todo_header}"),
                 "Tests": f"{test_percentage} %",
             })
         markdown.add_table_lines(*list_of_dicts, sort_by=["Lvl", "Package"])
