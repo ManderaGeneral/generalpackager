@@ -20,9 +20,15 @@ from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line, O
 
 # packager = Packager("generalfile")
 packager = Packager("generalpackager")
+
+# packager.clone_repo(path=packager.repos_path / "clone")
+# print(packager.get_ordered(flat=False))
+# print(packager.get_ordered_packagers())
+
+
 # packager.load_general_packagers()
 # print(packager.generate_personal_readme())
-packager.file_readme.generate()
+# packager.file_readme.generate()
 # print(packager.generate_manifest())
 
 

@@ -71,7 +71,7 @@ class _PackagerRelations:
         """ Get a list of ordered packagers from the dependency chain.
 
             :param generalpackager.Packager self: """
-        return [packager for packager_set in self.get_ordered() for packager in sorted(packager_set, key=lambda x: x.name)]
+        return [packager for packager_set in self.get_ordered(flat=False) for packager in sorted(packager_set, key=lambda x: x.name)]
 
     @classmethod
     def get_users_package_names(cls, pypi_user=None, github_user=None):
