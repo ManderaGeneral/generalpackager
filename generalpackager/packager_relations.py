@@ -59,13 +59,13 @@ class _PackagerRelations:
         """ Get set of loaded Packagers that this Packager requires.
 
             :param generalpackager.Packager self: """
-        return self.get_nodes(incoming=True, outgoing=False)
+        return self.get_parents()
 
     def get_dependents(self):
         """ Get set of loaded Packagers that requires this Packager.
 
             :param generalpackager.Packager self: """
-        return self.get_nodes(incoming=False, outgoing=True)
+        return self.get_children()
 
     def get_ordered_packagers(self):
         """ Get a list of ordered packagers from the dependency chain.

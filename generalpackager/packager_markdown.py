@@ -65,7 +65,7 @@ class _PackagerMarkdown:
 
         list_of_dicts = []
         for packager in packagers:
-            attrs = packager.localmodule.objInfo.get_nodes(depth=-1)
+            attrs = packager.localmodule.objInfo.get_children(depth=-1)
             tested_attrs = [objInfo for objInfo in attrs if packager.localrepo.text_in_tests(text=objInfo.name)]
             test_percentage = floor(len(tested_attrs) / len(attrs) * 100, 1)
 
