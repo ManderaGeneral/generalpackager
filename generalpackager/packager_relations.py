@@ -3,7 +3,7 @@
 class _PackagerRelations:
     packagers_dict = {}
 
-    def add(self):
+    def add_packager(self):
         """ Add this packager to packagers dict.
 
             :param generalpackager.Packager self: """
@@ -51,7 +51,7 @@ class _PackagerRelations:
                 packager = self.get_packager_with_name(name=name)
 
                 if packager and packager.localrepo.enabled:
-                    packager.add()
+                    packager.add_packager()
                     self.update_links()
         return self.packagers_dict
 

@@ -4,10 +4,10 @@ from git import Repo
 
 
 class _PackagerGitHub:
+    """ Sync metadata. """
     def __init__(self):
         self.commit_sha = "master"
 
-    """ Sync metadata. """
     def sync_github_metadata(self):
         """ Sync GitHub with local metadata.
 
