@@ -26,7 +26,7 @@ class _PackagerRelations:
             for dependency_name in packager.localrepo.install_requires:
                 dependency_packager = self.packagers_dict.get(dependency_name)
                 if dependency_packager is not None:
-                    dependency_packager.link(target=packager)
+                    dependency_packager.set_parent(parent=packager)
 
     def get_packager_with_name(self, name):
         """ Return connected Packager or None.
