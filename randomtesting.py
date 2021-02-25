@@ -29,7 +29,8 @@ packager.load_general_packagers()
 
 # print(packager.get_parents())
 
-print(packager.get_ordered(flat=False))
+for pack in packager.get_ordered(flat=True):
+    print(pack.get_parent, pack.packagers_dict)
 
 # print(packager.generate_personal_readme())
 # packager.file_readme.generate()

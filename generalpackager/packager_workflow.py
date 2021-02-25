@@ -125,7 +125,7 @@ class _PackagerWorkflow:
         order = self.get_ordered_packagers()
         for func in funcs:
             for packager in order:
-                func(packager=packager)
+                func(packager)
 
     def workflow_unittest(self):
         """ :param generalpackager.Packager self: """
