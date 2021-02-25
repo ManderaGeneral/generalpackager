@@ -29,8 +29,8 @@ packager.load_general_packagers()
 
 # print(packager.get_parents())
 
-for pack in packager.get_ordered(flat=True):
-    print(pack.get_parent, pack.packagers_dict)
+# for pack in packager.get_ordered(flat=True):
+#     print(pack.get_parent, pack.packagers_dict)
 
 # print(packager.generate_personal_readme())
 # packager.file_readme.generate()
@@ -47,7 +47,7 @@ for pack in packager.get_ordered(flat=True):
 # packager.localrepo.commit_and_push("[CI SKIP] Getting tags to work", tag=True)
 
 
-# packager.file_workflow.generate()
+packager.file_workflow.generate()
 
 # packager.localrepo.pip_install()
 

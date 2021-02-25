@@ -1,5 +1,7 @@
 """ Methods specific for my general packages.
-    Isolatable methods are put inside APIs. """
+    Isolatable methods are put inside APIs.
+
+    Todo: Add a check in workflow to make sure it doesn't use a pypi version in case of wrong order. """
 
 from generallibrary import initBases, NetworkDiagram
 from generalpackager.api.local_repo import LocalRepo
