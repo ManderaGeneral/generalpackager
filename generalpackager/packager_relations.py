@@ -12,7 +12,7 @@ class _PackagerRelations:
 
         self.packagers_dict[self.name] = self
 
-    def remove(self):
+    def remove_packager(self):
         """ Remove this packager from packagers dict.
 
             :param generalpackager.Packager self: """
@@ -26,7 +26,7 @@ class _PackagerRelations:
             for dependency_name in packager.localrepo.install_requires:
                 dependency_packager = self.packagers_dict.get(dependency_name)
                 if dependency_packager is not None:
-                    dependency_packager.set_parent(parent=packager)
+                    packager.set_parent(parent=dependency_packager)
 
     def get_packager_with_name(self, name):
         """ Return connected Packager or None.
@@ -49,7 +49,6 @@ class _PackagerRelations:
         if not self.packagers_dict:
             for name in self.get_users_package_names():
                 packager = self.get_packager_with_name(name=name)
-
                 if packager and packager.localrepo.enabled:
                     packager.add_packager()
                     self.update_links()
@@ -68,7 +67,7 @@ class _PackagerRelations:
         return self.get_children()
 
     def get_ordered_packagers(self):
-        """ Get a list of ordered packagers from the dependency chain.
+        """ Get a list of ordered packagers from the dependency chain, sorted by name in each lvl.
 
             :param generalpackager.Packager self: """
         return [packager for packager_set in self.get_ordered(flat=False) for packager in sorted(packager_set, key=lambda x: x.name)]

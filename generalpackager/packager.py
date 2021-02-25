@@ -36,7 +36,6 @@ class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFile
     def __init__(self, name, repos_path=None, owner=None):
         if owner is None:
             owner = "ManderaGeneral"
-
         self.name = name
         self.repos_path = LocalRepo.get_repos_path(path=repos_path)
         self.owner = owner

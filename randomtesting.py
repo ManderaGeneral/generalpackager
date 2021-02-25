@@ -25,8 +25,12 @@ packager = Packager("generalpackager")
 # print(packager.get_ordered(flat=False))
 # print(packager.get_ordered_packagers())
 
+packager.load_general_packagers()
 
-# packager.load_general_packagers()
+# print(packager.get_parents())
+
+print(packager.get_ordered(flat=False))
+
 # print(packager.generate_personal_readme())
 # packager.file_readme.generate()
 # print(packager.generate_manifest())
@@ -38,7 +42,7 @@ packager = Packager("generalpackager")
 
 # pprint(packager.compare_local_to_pypi(aesthetic=False))
 # packager.file_manifest.generate()
-packager.file_setup.generate()
+# packager.file_setup.generate()
 # packager.localrepo.commit_and_push("[CI SKIP] Getting tags to work", tag=True)
 
 
