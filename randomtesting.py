@@ -21,11 +21,13 @@ from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line, O
 # packager = Packager("generalfile")
 packager = Packager("generalpackager")
 
+print(packager.localrepo.get_test_paths())
+
 # packager.clone_repo(path=packager.repos_path / "clone")
 # print(packager.get_ordered(flat=False))
 # print(packager.get_ordered_packagers())
 
-packager.load_general_packagers()
+# packager.load_general_packagers()
 
 # print(packager.get_parents())
 
@@ -47,7 +49,7 @@ packager.load_general_packagers()
 # packager.localrepo.commit_and_push("[CI SKIP] Getting tags to work", tag=True)
 
 
-packager.file_workflow.generate()
+# packager.file_workflow.generate()
 
 # packager.localrepo.pip_install()
 
