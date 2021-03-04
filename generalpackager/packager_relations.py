@@ -37,7 +37,7 @@ class _PackagerRelations:
             return self
 
         packager = self.packagers_dict.get(name)
-        if packager is None and self.is_creatable(name=name):
+        if packager is None and self.exists(name=name):
             packager = type(self)(name=name, repos_path=self.repos_path)
 
         return packager
@@ -47,7 +47,7 @@ class _PackagerRelations:
 
             :param generalpackager.Packager self: """
         if not self.packagers_dict:
-            for name in self.get_users_package_names():
+            for name in self.get_owners_package_names():
                 packager = self.get_packager_with_name(name=name)
                 if packager and packager.localrepo.enabled:
                     packager.add_packager()
@@ -73,13 +73,13 @@ class _PackagerRelations:
         return [packager for packager_set in self.get_ordered(flat=False) for packager in sorted(packager_set, key=lambda x: x.name)]
 
     @classmethod
-    def get_users_package_names(cls, pypi_user=None, github_user=None):
-        """ Return a set of user's packages with intersecting PyPI and GitHub.
+    def get_owners_package_names(cls, pypi_owner=None, github_owner=None):
+        """ Return a set of owner's packages with intersecting PyPI and GitHub.
 
             :param generalpackager.Packager cls:
-            :param pypi_user:
-            :param github_user: """
-        return cls.PyPI.get_users_packages(user=pypi_user).intersection(cls.GitHub.get_users_packages(user=github_user))
+            :param pypi_owner:
+            :param github_owner: """
+        return cls.PyPI.get_owners_packages(owner=pypi_owner).intersection(cls.GitHub.get_owners_packages(owner=github_owner))
 
     def general_bumped_set(self):
         """ Return a set of general packagers that have been bumped.

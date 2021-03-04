@@ -5,6 +5,10 @@ from pprint import pprint
 import sys
 from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line, ObjInfo
 
+from generalpackager.api.github import GitHub
+
+github = GitHub("generalpackager")
+
 
 # packager = Packager(name="Mandera", owner="Mandera")
 # packager.file_personal_readme.generate()
@@ -19,9 +23,8 @@ from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line, O
 # print(packager.localmodule.objInfo.get_child_by_key_values(name="Path").get_child_by_key_values(name="size").get_definition_line())
 
 # packager = Packager("generalfile")
-packager = Packager("generalpackager")
-
-print(packager.localrepo.get_test_paths())
+# packager = Packager("generalpackager")
+# print(packager.localrepo.get_test_paths())
 
 # packager.clone_repo(path=packager.repos_path / "clone")
 # print(packager.get_ordered(flat=False))

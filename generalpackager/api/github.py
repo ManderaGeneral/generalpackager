@@ -1,5 +1,6 @@
 
 from generalpackager import PACKAGER_GITHUB_API
+from generallibrary import deco_bound_defaults
 
 import requests
 import json
@@ -8,31 +9,23 @@ import re
 
 class GitHub:
     """ Tools to interface a GitHub Repository. """
-    def __init__(self, name, owner=None):
-        if owner is None:
-            owner = "ManderaGeneral"
+    name = None
+    owner = "ManderaGeneral"
 
+    @deco_bound_defaults
+    def __init__(self, name, owner):
         self.name = name
         self.owner = owner
 
-        self.url = self.get_url(name=self.name, owner=self.owner)
+        self.url = f"https://github.com/{owner}/{name}"
 
-        # if not self.is_url_functioning():
-        #     raise AssertionError(f"Url for {self.name} is not functioning.")
-
-    @classmethod
-    def is_creatable(cls, name, owner):
+    def exists(self):
         """ Return whether this API can be created. """
-        return requests.get(url=cls.get_url(name=name, owner=owner)).status_code == 200
+        return requests.get(url=self.url).status_code == 200
 
-    @staticmethod
-    def get_url(name, owner):
-        """ Get static URL from owner and name. """
-        return f"https://github.com/{owner}/{name}"
-
-    def is_url_functioning(self, url=None):
-        """ Checks name, owner and token all in one. """
-        return self._request(url=url).status_code == 200
+    def get_owners_packages(self, owner):
+        """ Get a set of a owner's packages' names on GitHub. """
+        return set(re.findall(f'"/{owner}/([a-z]*)"', requests.get(f"https://github.com/{owner}?tab=repositories").text))
 
     def api_url(self, endpoint=None):
         """ Get URL from owner, name and enpoint. """
@@ -48,7 +41,6 @@ class GitHub:
         """ Set a website for the GitHub repository. """
         return self._request(method="patch", name=self.name, homepage=website)
 
-
     def get_topics(self):
         """ Get a list of topics in the GitHub repository.
 
@@ -60,7 +52,6 @@ class GitHub:
 
             :param str topics: """
         return self._request(method="put", endpoint="topics", names=topics)
-
 
     def get_description(self):
         """ Get a string of description in the GitHub repository.
@@ -86,13 +77,6 @@ class GitHub:
         if url is None:
             url = self.api_url(endpoint=endpoint)
         return method(url=url, **kwargs)
-
-    @staticmethod
-    def get_users_packages(user=None):
-        """ Get a set of a user's packages' names on GitHub. """
-        if user is None:
-            user = "ManderaGeneral"
-        return set(re.findall(f'"/{user}/([a-z]*)"', requests.get(f"https://github.com/{user}?tab=repositories").text))
 
 
 

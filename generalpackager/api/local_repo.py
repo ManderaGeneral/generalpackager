@@ -25,6 +25,7 @@ class LocalRepo:
     metadata_keys = [key for key, value in locals().items() if not key.startswith("_")]
 
     def __init__(self, path):
+        # HERE ** Make LocalRepo creatable without all overhead, it should only store path, like the other APIs
         assert self.path_is_repo(path=path)
 
         self.path = Path(path).absolute()
@@ -57,7 +58,7 @@ class LocalRepo:
             return Path(path).absolute()
 
     @classmethod
-    def is_creatable(cls, path):
+    def exists(cls, path):
         """ Return whether this API can be created. """
         return cls.path_is_repo(path=path)
 

@@ -3,7 +3,7 @@
 
     Todo: Add a check in workflow to make sure it doesn't use a pypi version in case of wrong order. """
 
-from generallibrary import initBases, NetworkDiagram
+from generallibrary import initBases, NetworkDiagram, deco_bound_defaults, deco_cache
 from generalpackager.api.local_repo import LocalRepo
 from generalpackager.api.local_module import LocalModule
 from generalpackager.api.github import GitHub
@@ -33,32 +33,36 @@ class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFile
     python = "3.8", "3.9"  # Only supports basic definition with tuple of major.minor.
     os = "windows", "ubuntu"  # , "macos"
 
+    repos_path = ""
+    github_owner = GitHub.owner
+    pypi_owner = PyPI.owner
+
     git_exclude_lines = ".idea", "build", "dist", "*.egg-info", "__pycache__", ".git"
 
-    def __init__(self, name, repos_path=None, owner=None):
-        if owner is None:
-            owner = "ManderaGeneral"
+    @deco_bound_defaults
+    def __init__(self, name, repos_path, github_owner, pypi_owner):
         self.name = name
         self.repos_path = LocalRepo.get_repos_path(path=repos_path)
-        self.owner = owner
+        self.github_owner = github_owner
+        self.pypi_owner = pypi_owner
 
         self.path = self.repos_path / self.name
 
         self._localrepo = None
-        self._github = None
-        self._localmodule = None
-        self._pypi = None
+        self.github = GitHub(name=self.name, owner=self.github_owner)
+        self.localmodule = LocalModule(name=self.name)
+        self.pypi = PyPI(name=self.name)
 
-    def is_creatable(self, name):
-        """ Simple placeholder check. """
-        # return LocalRepo.is_creatable(path=self.repos_path / name)
-        return GitHub.is_creatable(name=name, owner="ManderaGeneral")
+    def exists(self):
+        """ Just check GitHub for now. """
+        return GitHub(name=self.name, owner=self.owner).exists()
 
+    @deco_cache()
     @property
     def localrepo(self):
         """ Generate, protect and cache. """
         if not self._localrepo:
-            if not LocalRepo.is_creatable(path=self.path):
+            if not LocalRepo.exists(path=self.path):
                 if self.github:
                     self.clone_repo(url=self.github.url, path=self.path)
                 else:
@@ -66,29 +70,6 @@ class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFile
             self._localrepo = LocalRepo(path=self.path)
 
         return self._localrepo
-
-    @property
-    def github(self):
-        """ Generate, protect and cache. """
-        if not self._github:
-            self._github = GitHub(name=self.name, owner=self.owner)
-
-        return self._github
-
-    @property
-    def localmodule(self):
-        """ Generate, protect and cache. """
-        if not self._localmodule:
-            self._localmodule = LocalModule(name=self.name)
-
-        return self._localmodule
-
-    @property
-    def pypi(self):
-        """ Generate, protect and cache. """
-        if not self._pypi:
-            self._pypi = PyPI(name=self.name)
-        return self._pypi
 
     def generate_localfiles(self, aesthetic=True):
         """ Generate all local files. """

@@ -1,8 +1,8 @@
 
+from generallibrary import ObjInfo, deco_cache
+
 import pkg_resources
 from importlib import import_module
-
-from generallibrary import ObjInfo
 
 
 class LocalModule:
@@ -10,15 +10,8 @@ class LocalModule:
     def __init__(self, name):
         self.name = name
 
-        self.module = import_module(name=self.name)
-
-        self.objInfo = ObjInfo(self.module)
-        assert self.objInfo.is_module()
-        self.objInfo.filters = [self._filter]
-        self.objInfo.get_attrs(depth=-1)
-
     @classmethod
-    def is_creatable(cls, name):
+    def exists(cls, name):
         """ Return whether this API can be created. """
         try:
             import_module(name=name)
@@ -26,9 +19,23 @@ class LocalModule:
             return False
         return True
 
+    @deco_cache()
+    @property
+    def module(self):
+        return import_module(self.name)
+
+    @deco_cache()
+    @property
+    def objInfo(self):
+        objInfo = ObjInfo(self.module)
+        assert objInfo.is_module()
+        objInfo.filters = [self._filter]
+        objInfo.get_attrs(depth=-1)
+        return objInfo
+
     def _filter(self, objInfo):
         """ :param ObjInfo objInfo: """
-        is_part_of_module = objInfo.module().__name__.startswith(self.module.__name__)
+        is_part_of_module = objInfo.module().__name__.startswith(self.name)
         parent = objInfo.get_parent()
         return objInfo.public() and not (objInfo.is_instance() or objInfo.is_module()) and is_part_of_module and objInfo.name not in ("fget", "fset") and not objInfo.from_builtin() and (parent is None or parent.is_module() or parent.is_class())
 
@@ -36,27 +43,21 @@ class LocalModule:
         """ Get a list of EnvVar instances avialable directly in module.
 
             :rtype: list[generallibrary.EnvVar] """
-        objInfo = ObjInfo(self.module)
-        objInfo.filters = [lambda objInfo: type(objInfo.obj).__name__ == "EnvVar"]
-        objInfo.get_attrs()
-        return [objInfo.obj for objInfo in objInfo.get_children()]
+        filt = lambda objInfo: type(objInfo.obj).__name__ == "EnvVar"
+        return [objInfo.obj for objInfo in self.objInfo.get_children(filt=filt)]
 
     @staticmethod
-    def get_all_packages():
-        """ Get a list of all available packages. """
-        return [pkg.project_name for pkg in pkg_resources.working_set]
+    def get_all_local_modules():
+        """ Get a list of all available LocalModules. """
+        return [LocalModule(name=pkg.project_name) for pkg in pkg_resources.working_set]
 
-    def get_dependencies(self, name=None):
-        """ Get a list of dependencies' names this module has. """
-        if name is None:
-            name = self.module.__name__
-        return list(map(str, pkg_resources.working_set.by_key[name.lower()].requires()))
+    def get_dependencies(self):
+        """ Get a list of LocalModules that this module depends on. """
+        return [LocalModule(name=str(name)) for name in pkg_resources.working_set.by_key[self.name.lower()].requires()]
 
-    def get_dependants(self, name=None):
-        """ Get a list of all available packages' names. """
-        if name is None:
-            name = self.module.__name__
-        return [pkg for pkg in self.get_all_packages() if name.lower() in self.get_dependencies(name=pkg)]
+    def get_dependants(self):
+        """ Get a list of LocalModules that depend on this module. """
+        return [local_module for local_module in self.get_all_local_modules() if self in local_module.get_dependencies()]
 
 
 

@@ -1,5 +1,5 @@
 
-from generallibrary import Ver, deco_cache
+from generallibrary import Ver, get, deco_bound_defaults
 from generalfile import Path
 
 import requests
@@ -25,62 +25,47 @@ def unpack(path, target):
 
 class PyPI:
     """ Tools to interface pypi.org """
-    def __init__(self, name):
+    name = None
+    owner = "Mandera"
+
+    @deco_bound_defaults
+    def __init__(self, name, owner):
         self.name = name
+        self.owner = owner
 
-        self.url = self.get_url(name=self.name)
+        self.url = f"https://pypi.org/project/{self.name}/"
 
-    @classmethod
-    def is_creatable(cls, name):
+    def exists(self):
         """ Return whether this API can be created. """
-        return requests.get(url=cls.get_url(name=name)).status_code == 200
+        return requests.get(url=self.url).status_code == 200
 
-    @staticmethod
-    def get_url(name):
-        """ Get static URL from owner and name. """
-        return f"https://pypi.org/project/{name}/"
-
-    @deco_cache()
-    def get_tarball_url(self, name=None, version=None):
+    def get_tarball_url(self, version=None):
         """ Get URL to download tarball. """
-        if name is None:
-            name = self.name
         if version is None:
-            version = self.get_version(name=name)
-        return f"https://pypi.io/packages/source/{name[0]}/{name}/{name}-{version}.tar.gz"
+            version = self.get_version()
+        return f"https://pypi.io/packages/source/{self.name[0]}/{self.name}/{self.name}-{version}.tar.gz"
 
-    def download_and_unpack_tarball(self, target_folder, name=None, version=None):
+    def download_and_unpack_tarball(self, target_folder, version=None):
         """ Download tar ball, extract it, remove tar ball. """
         temp = Path.get_cache_dir() / "Python/temp.tar.gz"
-        download(self.get_tarball_url(name=name, version=version), path=temp)
+        download(self.get_tarball_url(version=version), path=temp)
         unpack(path=temp, target=target_folder)
         temp.delete(error=False)
         return target_folder
 
-    @staticmethod
-    @deco_cache()
-    def get_users_packages(user=None):
-        """ Get a set of a user's packages' names on PyPI. """
-        if user is None:
-            user = "Mandera"
-        return set(re.findall("/project/(.*)/", requests.get(f"https://pypi.org/user/{user}/").text))
+    def get_owners_packages(self):
+        """ Get a set of a owner's packages' names on PyPI. """
+        return set(re.findall("/project/(.*)/", requests.get(f"https://pypi.org/user/{self.owner}/").text))
 
-    @deco_cache()
-    def get_version(self, name=None):
-        """ Get version of latest publish on PyPI. """
-        if name is None:
-            name = self.name
-        return Ver(re.findall(f"{name} ([.0-9]+)\n", requests.get(f"https://pypi.org/project/{name}/").text)[0])
+    def get_version(self):
+        """ Get version of latest publish on PyPI.
+            Todo: Find a faster fetch for latest PyPI version. """
+        return Ver(re.findall(f"{self.name} ([.0-9]+)\n", requests.get(self.url).text)[0])
 
-    # @deco_cache()
-    def get_datetime(self, name=None):
+    def get_datetime(self):
         """ Get datetime of latest release.
             Todo: Proper date fetch. """
-        if name is None:
-            name = self.name
-        requests.get(f"https://pypi.org/project/{name}/")
-        result = re.findall('Generated (.+) for commit', requests.get(f"https://pypi.org/project/{name}/").text)
-        return result[0] if result else "-"
+        return get(re.findall('Generated (.+) for commit', requests.get(self.url).text), 0, "-")
 
     def reserve_name(self):
         pass
