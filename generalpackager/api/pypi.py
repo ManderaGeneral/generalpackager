@@ -1,5 +1,5 @@
 
-from generallibrary import Ver, get, deco_bound_defaults
+from generallibrary import Ver, get
 from generalfile import Path
 
 import requests

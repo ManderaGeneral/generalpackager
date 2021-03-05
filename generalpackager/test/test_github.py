@@ -1,17 +1,14 @@
 
-import unittest
-import random
-
 from generalpackager.api.github import GitHub
 
+import unittest
 
-# Running tests locally:            Set env var 'packager_github_api' to GitHub token, run unittests with PyCharm as usual
-# Running tests in GitHub Actions:  Run test.main and supply env vars as launch options.
 
 class TestGitHub(unittest.TestCase):
     """ Skipped tests:
         set_website()
-        set_topcis()
+        set_topics()
+        set_description()
     """
     def test_exists(self):
         self.assertEqual(True, GitHub("generalpackager").exists())
@@ -33,6 +30,7 @@ class TestGitHub(unittest.TestCase):
 
     def test_get_description(self):
         github = GitHub("generalpackager")
-        self.assertEqual(True, "pypi" in github.get_website())
+        self.assertEqual(True, len(github.get_description()) > 5)
+        # self.assertEqual(True, "pypi" in github.get_website())
 
 

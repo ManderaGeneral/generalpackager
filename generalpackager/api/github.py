@@ -1,6 +1,6 @@
 
 from generalpackager import PACKAGER_GITHUB_API
-from generallibrary import Recycle
+from generallibrary import Recycle, deco_cache
 
 import requests
 import json
@@ -62,6 +62,7 @@ class GitHub(Recycle):
         """ Set a description for the GitHub repository. """
         return self._request(method="patch", name=self.name, description=description)
 
+    @deco_cache()
     def _request(self, method="get", url=None, endpoint=None, **data):
         """ :rtype: requests.Response """
         method = getattr(requests, method.lower())
