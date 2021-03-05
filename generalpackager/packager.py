@@ -48,7 +48,7 @@ class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFile
 
         self.path = self.repos_path / self.name
 
-        self._localrepo = None
+        self.localrepo = LocalRepo(path=self.path)
         self.github = GitHub(name=self.name, owner=self.github_owner)
         self.localmodule = LocalModule(name=self.name)
         self.pypi = PyPI(name=self.name)
@@ -56,20 +56,6 @@ class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFile
     def exists(self):
         """ Just check GitHub for now. """
         return GitHub(name=self.name, owner=self.owner).exists()
-
-    @deco_cache()
-    @property
-    def localrepo(self):
-        """ Generate, protect and cache. """
-        if not self._localrepo:
-            if not LocalRepo.exists(path=self.path):
-                if self.github:
-                    self.clone_repo(url=self.github.url, path=self.path)
-                else:
-                    return None
-            self._localrepo = LocalRepo(path=self.path)
-
-        return self._localrepo
 
     def generate_localfiles(self, aesthetic=True):
         """ Generate all local files. """

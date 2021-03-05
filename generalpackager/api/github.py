@@ -20,12 +20,12 @@ class GitHub:
         self.url = f"https://github.com/{owner}/{name}"
 
     def exists(self):
-        """ Return whether this API can be created. """
+        """ Return whether this API's target exists. """
         return requests.get(url=self.url).status_code == 200
 
-    def get_owners_packages(self, owner):
+    def get_owners_packages(self):
         """ Get a set of a owner's packages' names on GitHub. """
-        return set(re.findall(f'"/{owner}/([a-z]*)"', requests.get(f"https://github.com/{owner}?tab=repositories").text))
+        return set(re.findall(f'"/{self.owner}/([a-z]*)"', requests.get(f"https://github.com/{self.owner}?tab=repositories").text))
 
     def api_url(self, endpoint=None):
         """ Get URL from owner, name and enpoint. """

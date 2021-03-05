@@ -36,7 +36,7 @@ class PyPI:
         self.url = f"https://pypi.org/project/{self.name}/"
 
     def exists(self):
-        """ Return whether this API can be created. """
+        """ Return whether this API's target exists. """
         return requests.get(url=self.url).status_code == 200
 
     def get_tarball_url(self, version=None):

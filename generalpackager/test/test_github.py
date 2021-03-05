@@ -10,7 +10,7 @@ from generalpackager.api.github import GitHub
 
 class TestGitHub(unittest.TestCase):
     def test_exists(self):
-        self.assertEqual(True, GitHub.exists("generalpackager"))
+        self.assertEqual(True, GitHub("generalpackager").exists())
 
     def test_topics(self):
         github = GitHub("generalpackager")

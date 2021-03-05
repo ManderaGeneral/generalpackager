@@ -10,22 +10,21 @@ class LocalModule:
     def __init__(self, name):
         self.name = name
 
-    @classmethod
-    def exists(cls, name):
-        """ Return whether this API can be created. """
+    def exists(self):
+        """ Return whether this API's target exists. """
         try:
-            import_module(name=name)
+            import_module(name=self.name)
         except ModuleNotFoundError:
             return False
         return True
 
-    @deco_cache()
     @property
+    @deco_cache()
     def module(self):
         return import_module(self.name)
 
-    @deco_cache()
     @property
+    @deco_cache()
     def objInfo(self):
         objInfo = ObjInfo(self.module)
         assert objInfo.is_module()

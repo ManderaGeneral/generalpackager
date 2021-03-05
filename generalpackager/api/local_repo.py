@@ -10,6 +10,15 @@ import subprocess
 import sys
 
 
+def load_metadata_before(func):
+    def _wrapper(self, *args, **kwargs):
+        """ :param LocalRepo self: """
+        if not self.has_loaded_metadata:
+            self.load_metadata()
+        return func(self, *args, **kwargs)
+    return _wrapper
+
+
 class LocalRepo:
     """ Tools to help Path interface a Local Python Repository.
         Todo: Search for imports to list dependencies. """
@@ -25,15 +34,15 @@ class LocalRepo:
     metadata_keys = [key for key, value in locals().items() if not key.startswith("_")]
 
     def __init__(self, path):
-        # HERE ** Make LocalRepo creatable without all overhead, it should only store path, like the other APIs
-        assert self.path_is_repo(path=path)
-
         self.path = Path(path).absolute()
+        self.has_loaded_metadata = False
 
-        self.has_metadata = self.get_metadata_path().exists(quick=True)
-        if self.has_metadata:
-            for key, value in self.get_metadata_path().read().items():
-                setattr(self, f"_{key}", value)
+    def has_metadata(self):
+        return self.get_metadata_path().exists(quick=True)
+
+    def load_metadata(self):
+        for key, value in self.get_metadata_path().read().items():
+            setattr(self, f"_{key}", value)
 
         if self.extras_require:
             self.extras_require["full"] = list(set().union(*self.extras_require.values()))
@@ -43,6 +52,12 @@ class LocalRepo:
 
         if self.name is Ellipsis:
             self.name = self.path.name()
+
+        self.has_loaded_metadata = True
+
+    def exists(self):
+        """ Return whether this API's target exists. """
+        return self.path_is_repo()
 
     @staticmethod
     def get_repos_path(path):
@@ -57,18 +72,17 @@ class LocalRepo:
         else:
             return Path(path).absolute()
 
-    @classmethod
-    def exists(cls, path):
-        """ Return whether this API can be created. """
-        return cls.path_is_repo(path=path)
+    @load_metadata_before
+    def metadata_getter(self, key):
+        return getattr(self, f"_{key}")
 
+    @load_metadata_before
     def metadata_setter(self, key, value):
         """ Set a metadata's key both in instance and json file. """
-        if self.has_metadata and value != getattr(self, f"_{key}", ...):
+        if self.has_metadata() and value != getattr(self, f"_{key}", ...):
             metadata = self.get_metadata_path().read()
             metadata[key] = str(value)
             self.get_metadata_path().write(metadata, overwrite=True, indent=4)
-
         setattr(self, f"_{key}", value)
 
     def get_readme_path(self):
@@ -126,15 +140,13 @@ class LocalRepo:
         folder_path = Path(folder_path)
         if not folder_path.exists():
             return []
-        return [path for path in folder_path.get_paths_in_folder() if cls.path_is_repo(path)]
+        return [path for path in folder_path.get_paths_in_folder() if LocalRepo(path=path).path_is_repo()]
 
-    @classmethod
-    def path_is_repo(cls, path):
+    def path_is_repo(self):
         """ Return whether this path is a local repo. """
-        path = Path(path)
-        if path.is_file() or not path.exists(quick=True):
+        if self.path.is_file() or not self.path.exists(quick=True):
             return False
-        return ".git" in map(Path.name, path.get_paths_in_folder())
+        return ".git" in map(Path.name, self.path.get_paths_in_folder())
 
     def commit_and_push(self, message=None, tag=False, owner=None):
         """ Commit and push this local repo to GitHub.
@@ -188,8 +200,9 @@ class LocalRepo:
 
 for key in LocalRepo.metadata_keys:
     value = getattr(LocalRepo, key)
+    setattr(LocalRepo, f"_{key}", value)
     setattr(LocalRepo, key, property(
-        fget=lambda self, key=key, value=value: getattr(self, f"_{key}", value),
+        fget=lambda self, key=key: LocalRepo.metadata_getter(self, key),
         fset=lambda self, value, key=key: LocalRepo.metadata_setter(self, key, value),
     ))
 
