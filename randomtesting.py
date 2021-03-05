@@ -3,11 +3,20 @@ from generalpackager import Packager
 from generalfile import Path
 from pprint import pprint
 import sys
-from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line, ObjInfo
+from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line, ObjInfo, SigInfo
 
 from generalpackager.api.github import GitHub
 
-github = GitHub("generalpackager")
+generalpackager = GitHub("generalpackager")
+generalpackager2 = GitHub(name="generalpackager")
+generalfile = GitHub("generalfile")
+
+print(generalpackager is generalpackager2)
+print(generalpackager is generalfile)
+
+
+
+
 
 
 # packager = Packager(name="Mandera", owner="Mandera")

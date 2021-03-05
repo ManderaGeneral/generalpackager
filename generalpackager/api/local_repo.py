@@ -61,7 +61,7 @@ class LocalRepo:
 
     @staticmethod
     def get_repos_path(path):
-        """ Try to return repos path by iterating parents if None. """
+        """ Try to return absolute repos path by iterating parents if None. """
         if path is None:
             repos_path = Path.get_working_dir()
             while not LocalRepo.get_local_repos(repos_path):

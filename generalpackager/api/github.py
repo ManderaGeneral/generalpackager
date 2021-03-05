@@ -1,23 +1,22 @@
 
 from generalpackager import PACKAGER_GITHUB_API
-from generallibrary import deco_bound_defaults
+from generallibrary import Recycle
 
 import requests
 import json
 import re
 
 
-class GitHub:
-    """ Tools to interface a GitHub Repository. """
-    name = None
-    owner = "ManderaGeneral"
 
-    @deco_bound_defaults
-    def __init__(self, name, owner):
+class GitHub(Recycle):
+    """ Tools to interface a GitHub Repository. """
+    def __init__(self, name=None, owner=None):
+        if owner is None:
+            owner = "ManderaGeneral"
         self.name = name
         self.owner = owner
 
-        self.url = f"https://github.com/{owner}/{name}"
+        self.url = f"https://github.com/{self.owner}/{self.name}"
 
     def exists(self):
         """ Return whether this API's target exists. """
@@ -25,9 +24,9 @@ class GitHub:
 
     def get_owners_packages(self):
         """ Get a set of a owner's packages' names on GitHub. """
-        return set(re.findall(f'"/{self.owner}/([a-z]*)"', requests.get(f"https://github.com/{self.owner}?tab=repositories").text))
+        return set(re.findall(f'"/{self.owner}/(.+)/hovercard"', requests.get(f"https://github.com/{self.owner}?tab=repositories").text))
 
-    def api_url(self, endpoint=None):
+    def _api_url(self, endpoint=None):
         """ Get URL from owner, name and enpoint. """
         return "/".join(("https://api.github.com", "repos", self.owner, self.name) + ((endpoint, ) if endpoint else ()))
 
@@ -73,9 +72,8 @@ class GitHub:
         }
         if data:
             kwargs["data"] = json.dumps(data)
-
         if url is None:
-            url = self.api_url(endpoint=endpoint)
+            url = self._api_url(endpoint=endpoint)
         return method(url=url, **kwargs)
 
 

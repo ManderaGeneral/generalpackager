@@ -25,11 +25,9 @@ def unpack(path, target):
 
 class PyPI:
     """ Tools to interface pypi.org """
-    name = None
-    owner = "Mandera"
-
-    @deco_bound_defaults
-    def __init__(self, name, owner):
+    def __init__(self, name=None, owner=None):
+        if owner is None:
+            owner = "Mandera"
         self.name = name
         self.owner = owner
 
