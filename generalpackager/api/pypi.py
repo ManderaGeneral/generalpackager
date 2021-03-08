@@ -4,23 +4,21 @@ from generalfile import Path
 
 import requests
 import re
-import shutil
 
 
 def download(url, path):
     """ Todo: Move download to it's own package. """
     data = requests.get(url)
+    if data.status_code != 200:
+        raise AttributeError(f"Request for url {url} did not yield a status code of 200.'")
+
     path = Path(path)
 
     with path.lock():
         path.get_parent().create_folder()
         with open(str(path), "wb") as file:
             file.write(data.content)
-
-
-def unpack(path, target):
-    """ Unpack file to target. """
-    shutil.unpack_archive(str(path), str(target))
+    return path
 
 
 class PyPI:
@@ -43,11 +41,12 @@ class PyPI:
             version = self.get_version()
         return f"https://pypi.io/packages/source/{self.name[0]}/{self.name}/{self.name}-{version}.tar.gz"
 
-    def download_and_unpack_tarball(self, target_folder, version=None):
+    def download_and_unpack_tarball(self, target_folder, version=None, overwrite=False):
         """ Download tar ball, extract it, remove tar ball. """
+        target_folder = Path(target_folder)
         temp = Path.get_cache_dir() / "Python/temp.tar.gz"
         download(self.get_tarball_url(version=version), path=temp)
-        unpack(path=temp, target=target_folder)
+        temp.unpack(base=target_folder, overwrite=overwrite)
         temp.delete(error=False)
         return target_folder
 

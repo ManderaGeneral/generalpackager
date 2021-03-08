@@ -16,6 +16,11 @@ print(generalpackager is generalfile)
 
 
 
+# Plan
+# Finish tests for packager
+# Push without skip
+# Create package for Url
+
 
 
 
