@@ -4,6 +4,7 @@ from generalfile.test.setup_workdir import setup_workdir
 from generalfile import Path
 
 import unittest
+import datetime
 
 
 class TestPyPI(unittest.TestCase):
@@ -30,4 +31,14 @@ class TestPyPI(unittest.TestCase):
         path = PyPI("generalpackager").download_and_unpack_tarball(target_folder="repo", version="0.0.11", overwrite=True)
         self.assertEqual(2, len(list(path.get_paths_in_folder())))
 
+    def test_get_owners_packages(self):
+        github = PyPI()
+        self.assertEqual(set(), {"generallibrary", "generalfile", "generalvector", "generalpackager"}.difference(github.get_owners_packages()))
+
+    def test_get_version(self):
+        self.assertEqual(True, PyPI("generalpackager").get_version() > "0.2.0")
+
+    def test_get_datetime(self):
+        print(PyPI("generalpackager").get_datetime())
+        # self.assertEqual(True, PyPI("generalpackager").get_datetime() > datetime.datetime.now())
 

@@ -31,6 +31,5 @@ class TestGitHub(unittest.TestCase):
     def test_get_description(self):
         github = GitHub("generalpackager")
         self.assertEqual(True, len(github.get_description()) > 5)
-        # self.assertEqual(True, "pypi" in github.get_website())
 
 

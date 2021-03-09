@@ -1,9 +1,11 @@
 
-from generallibrary import Ver, get
+from generallibrary import Ver, get, get_datetime_format
 from generalfile import Path
 
 import requests
 import re
+import datetime
+from dateutil import parser
 
 
 def download(url, path):
@@ -61,8 +63,9 @@ class PyPI:
 
     def get_datetime(self):
         """ Get datetime of latest release.
-            Todo: Proper date fetch. """
-        return get(re.findall('Generated (.+) for commit', requests.get(self.url).text), 0, "-")
+            Todo: Find a faster fetch for latest PyPI datetime. """
+        datetime_str = get(re.findall('Generated (.+) for commit', requests.get(self.url).text), 0, "-")
+        return datetime.datetime.strptime(datetime_str, get_datetime_format())
 
     def reserve_name(self):
         pass

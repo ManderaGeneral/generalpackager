@@ -5,14 +5,14 @@ from pprint import pprint
 import sys
 from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line, ObjInfo, SigInfo
 
-from generalpackager.api.github import GitHub
-
-generalpackager = GitHub("generalpackager")
-generalpackager2 = GitHub(name="generalpackager")
-generalfile = GitHub("generalfile")
-
-print(generalpackager is generalpackager2)
-print(generalpackager is generalfile)
+# from generalpackager.api.github import GitHub
+#
+# generalpackager = GitHub("generalpackager")
+# generalpackager2 = GitHub(name="generalpackager")
+# generalfile = GitHub("generalfile")
+#
+# print(generalpackager is generalpackager2)
+# print(generalpackager is generalfile)
 
 
 
@@ -21,6 +21,16 @@ print(generalpackager is generalfile)
 # Push without skip
 # Create package for Url
 
+from datetime import datetime
+import pytz
+
+from dateutil import parser
+from dateutil.tz import gettz
+
+# print(pytz.timezone("Europe/Paris").)
+
+print(parser.parse("2021-02-26 15:48 CET", tzinfos={"CET": gettz("Europe/Paris")}))
+# print(datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(pytz.timezone("Europe/Paris")).strftime("%Y-%m-%d %H:%M %Z"))
 
 
 
