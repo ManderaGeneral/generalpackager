@@ -1,5 +1,5 @@
 
-from generallibrary import CodeLine, current_datetime, Markdown
+from generallibrary import CodeLine, Markdown, Date
 from generalfile import Path
 
 
@@ -152,7 +152,7 @@ class _PackagerFiles:
             :param generalpackager.Packager self: """
         text = Path(self.repos_path / f"generalpackager/generalpackager/licenses/{self.license}").text.read()
         assert "$" in text
-        text = text.replace("$year", str(current_datetime().year))
+        text = text.replace("$year", str(Date.now().datetime.year))
         text = text.replace("$author", self.author)
         assert "$" not in text
 

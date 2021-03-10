@@ -1,15 +1,12 @@
 
 from generalpackager.api.pypi import PyPI
 from generalfile.test.setup_workdir import setup_workdir
-from generalfile import Path
+from generallibrary import Date
 
 import unittest
-import datetime
 
 
 class TestPyPI(unittest.TestCase):
-    """ Skipped tests:
-    """
     def test_exists(self):
         self.assertEqual(True, PyPI("generalpackager").exists())
         self.assertEqual(False, PyPI("random-package_that,cant.exist").exists())
@@ -38,7 +35,5 @@ class TestPyPI(unittest.TestCase):
     def test_get_version(self):
         self.assertEqual(True, PyPI("generalpackager").get_version() > "0.2.0")
 
-    def test_get_datetime(self):
-        print(PyPI("generalpackager").get_datetime())
-        # self.assertEqual(True, PyPI("generalpackager").get_datetime() > datetime.datetime.now())
-
+    def test_get_date(self):
+        self.assertLess(PyPI("generalpackager").get_date(), Date.now())

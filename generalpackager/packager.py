@@ -3,7 +3,7 @@
 
     Todo: Add a check in workflow to make sure it doesn't use a pypi version in case of wrong order. """
 
-from generallibrary import initBases, NetworkDiagram, deco_bound_defaults
+from generallibrary import initBases, NetworkDiagram
 from generalpackager.api.local_repo import LocalRepo
 from generalpackager.api.local_module import LocalModule
 from generalpackager.api.github import GitHub

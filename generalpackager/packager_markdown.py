@@ -1,5 +1,5 @@
 
-from generallibrary import Markdown, current_datetime_formatted, floor
+from generallibrary import Markdown, floor, Date
 from generalfile import Path
 
 import re
@@ -160,7 +160,7 @@ class _PackagerMarkdown:
 
             :param generalpackager.Packager self:
             :param commit: """
-        line = f"Generated {current_datetime_formatted()}"
+        line = f"Generated {Date.now()}"
         if commit:
             line += f" for commit {self.github_link(text=self.commit_sha, suffix=f'commit/{self.commit_sha}')}."
 

@@ -1,6 +1,6 @@
 
 from generalfile import Path
-from generallibrary import current_datetime_formatted
+from generallibrary import Date
 
 
 class _PackagerPypi:
@@ -20,9 +20,9 @@ class _PackagerPypi:
 
             :param generalpackager.Packager self: """
         if self.is_bumped():
-            return current_datetime_formatted()
+            return Date.now()
         else:
-            return self.pypi.get_datetime()
+            return self.pypi.get_date()
 
 
 

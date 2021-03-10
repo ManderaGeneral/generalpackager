@@ -15,23 +15,7 @@ from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line, O
 # print(generalpackager is generalfile)
 
 
-
-# Plan
-# Finish tests for packager
-# Push without skip
-# Create package for Url
-
-from datetime import datetime
-import pytz
-
-from dateutil import parser
-from dateutil.tz import gettz
-
-# print(pytz.timezone("Europe/Paris").)
-
-print(parser.parse("2021-02-26 15:48 CET", tzinfos={"CET": gettz("Europe/Paris")}))
-# print(datetime.utcnow().replace(tzinfo=pytz.utc).astimezone(pytz.timezone("Europe/Paris")).strftime("%Y-%m-%d %H:%M %Z"))
-
+print(Path.get_working_dir().get_parents())
 
 
 # packager = Packager(name="Mandera", owner="Mandera")

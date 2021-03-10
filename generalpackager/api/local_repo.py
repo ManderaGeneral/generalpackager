@@ -57,10 +57,35 @@ class LocalRepo:
 
     def exists(self):
         """ Return whether this API's target exists. """
-        return self.path_is_repo()
+        if self.path.is_file() or not self.path.exists(quick=True):
+            return False
+        return ".git" in map(Path.name, self.path.get_paths_in_folder())
+
+    @classmethod
+    def get_first_repo(cls, folder_path=None):
+        """ Return first found LocalRepo or None.
+
+            :param generalfile.Path folder_path: """
+        if folder_path is None:
+            folder_path = Path.get_working_dir()
+
+        for path in folder_path.get_parents(depth=-1, gen=True, include_self=True):  # 1 HERE ** get_parents() isn't generating, only get_parent()
+            print(1, path)
+            repo = LocalRepo(path=path)
+            if repo.exists():
+                return repo
+
+    @classmethod
+    def get_local_repos(cls, folder_path):
+        """ Return a list of local repo paths in given folder.
+            Todo: Return LocalRepo instead of Path for these methods. """
+        folder_path = Path(folder_path)
+        if not folder_path.exists():
+            return []
+        return [path for path in folder_path.get_paths_in_folder() if LocalRepo(path=path).exists()]
 
     @staticmethod
-    def get_repos_path(path):
+    def get_repos_path(path=None):
         """ Try to return absolute repos path by iterating parents if None. """
         if path is None:
             repos_path = Path.get_working_dir()
@@ -133,20 +158,6 @@ class LocalRepo:
     def get_package_paths(self):
         """ Get a list of Paths pointing to each folder containing a Python file in this local repo, aka `namespace package`. """
         return [self.path / pkg.replace(".", "/") for pkg in find_namespace_packages(where=str(self.path))]
-
-    @classmethod
-    def get_local_repos(cls, folder_path):
-        """ Return a list of local repos in given folder. """
-        folder_path = Path(folder_path)
-        if not folder_path.exists():
-            return []
-        return [path for path in folder_path.get_paths_in_folder() if LocalRepo(path=path).path_is_repo()]
-
-    def path_is_repo(self):
-        """ Return whether this path is a local repo. """
-        if self.path.is_file() or not self.path.exists(quick=True):
-            return False
-        return ".git" in map(Path.name, self.path.get_paths_in_folder())
 
     def commit_and_push(self, message=None, tag=False, owner=None):
         """ Commit and push this local repo to GitHub.

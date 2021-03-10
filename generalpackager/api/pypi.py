@@ -1,11 +1,9 @@
 
-from generallibrary import Ver, get, get_datetime_format
+from generallibrary import Ver, Date
 from generalfile import Path
 
 import requests
 import re
-import datetime
-from dateutil import parser
 
 
 def download(url, path):
@@ -44,7 +42,8 @@ class PyPI:
         return f"https://pypi.io/packages/source/{self.name[0]}/{self.name}/{self.name}-{version}.tar.gz"
 
     def download_and_unpack_tarball(self, target_folder, version=None, overwrite=False):
-        """ Download tar ball, extract it, remove tar ball. """
+        """ Download tar ball to cache, extract it, remove tar ball.
+            Returns target folder tarball is extracted in. """
         target_folder = Path(target_folder)
         temp = Path.get_cache_dir() / "Python/temp.tar.gz"
         download(self.get_tarball_url(version=version), path=temp)
@@ -61,11 +60,10 @@ class PyPI:
             Todo: Find a faster fetch for latest PyPI version. """
         return Ver(re.findall(f"{self.name} ([.0-9]+)\n", requests.get(self.url).text)[0])
 
-    def get_datetime(self):
+    def get_date(self):
         """ Get datetime of latest release.
             Todo: Find a faster fetch for latest PyPI datetime. """
-        datetime_str = get(re.findall('Generated (.+) for commit', requests.get(self.url).text), 0, "-")
-        return datetime.datetime.strptime(datetime_str, get_datetime_format())
+        return Date(re.findall('Generated (.+) for commit', requests.get(self.url).text)[0])
 
     def reserve_name(self):
         pass
