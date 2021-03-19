@@ -15,6 +15,10 @@ from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line, O
 # print(generalpackager is generalfile)
 
 
+from generalpackager.api.local_repo import LocalRepo
+
+LocalRepo.get_first_repo()  # HERE ** Dunno why it doesnt search all parents
+print(Path().absolute().get_parents(-1))
 
 # print(Path.get_working_dir().get_parents())
 

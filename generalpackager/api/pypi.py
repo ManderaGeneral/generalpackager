@@ -1,5 +1,5 @@
 
-from generallibrary import Ver, Date
+from generallibrary import Ver, Date, Recycle
 from generalfile import Path
 
 import requests
@@ -21,8 +21,10 @@ def download(url, path):
     return path
 
 
-class PyPI:
+class PyPI(Recycle):
     """ Tools to interface pypi.org """
+    _recycle_keys = {"name": str, "owner": str}
+
     def __init__(self, name=None, owner=None):
         if owner is None:
             owner = "Mandera"

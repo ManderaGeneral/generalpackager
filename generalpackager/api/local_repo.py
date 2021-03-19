@@ -1,7 +1,7 @@
 
 from generalfile import Path
 from generalpackager import GIT_PASSWORD
-from generallibrary import Ver, deco_cache
+from generallibrary import Ver, deco_cache, Recycle
 
 from setuptools import find_namespace_packages
 import re
@@ -19,7 +19,7 @@ def load_metadata_before(func):
     return _wrapper
 
 
-class LocalRepo:
+class LocalRepo(Recycle):
     """ Tools to help Path interface a Local Python Repository.
         Todo: Search for imports to list dependencies. """
     enabled = True
@@ -32,6 +32,7 @@ class LocalRepo:
     manifest = []
 
     metadata_keys = [key for key, value in locals().items() if not key.startswith("_")]
+    _recycle_keys = {"path": lambda path: Path(path=path).path}
 
     def __init__(self, path):
         self.path = Path(path).absolute()
@@ -57,6 +58,7 @@ class LocalRepo:
 
     def exists(self):
         """ Return whether this API's target exists. """
+        print(self.path.get_children())
         if self.path.is_file() or not self.path.exists():
             return False
         return bool(self.path.get_child(filt=lambda path: path.name() == ".git"))
@@ -66,13 +68,12 @@ class LocalRepo:
         """ Return first found LocalRepo or None.
 
             :param generalfile.Path folder_path: """
-        folder_path = Path(folder_path)
-        # path = folder_path.get_parent(depth=-1, include_self=True, filt=lambda path: LocalRepo(path=path).exists())  # HERE ** Add include_self for singular alternative
+        return Path(path=folder_path).absolute().get_parents(depth=-1, include_self=True, filt=lambda path: LocalRepo(path=path).exists())
 
-        for path in folder_path.get_parents(depth=-1, gen=True, include_self=True):
-            repo = LocalRepo(path=path)
-            if repo.exists():
-                return repo
+        # for path in folder_path.get_parents(depth=-1, gen=True, include_self=True):
+        #     repo = LocalRepo(path=path)
+        #     if repo.exists():
+        #         return repo
 
     @classmethod
     def get_local_repos(cls, folder_path):

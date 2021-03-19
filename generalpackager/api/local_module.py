@@ -1,12 +1,14 @@
 
-from generallibrary import ObjInfo, deco_cache
+from generallibrary import ObjInfo, deco_cache, Recycle
 
 import pkg_resources
 from importlib import import_module
 
 
-class LocalModule:
+class LocalModule(Recycle):
     """ Tools to interface a Local Python Module. """
+    _recycle_keys = {"name": str}
+
     def __init__(self, name):
         self.name = name
 
