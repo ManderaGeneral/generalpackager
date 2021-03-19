@@ -20,13 +20,13 @@ class TestPyPI(unittest.TestCase):
         setup_workdir(use_working_dir=True)
 
         path = PyPI("generalpackager").download_and_unpack_tarball(target_folder="repo")
-        self.assertEqual(True, "generalpackager" in next(path.get_paths_in_folder()))
+        self.assertEqual(True, "generalpackager" in path.get_child())
 
         with self.assertRaises(AttributeError):
             PyPI("generalpackager").download_and_unpack_tarball(target_folder="repo", version="0.0.111")
 
         path = PyPI("generalpackager").download_and_unpack_tarball(target_folder="repo", version="0.0.11", overwrite=True)
-        self.assertEqual(2, len(list(path.get_paths_in_folder())))
+        self.assertEqual(2, len(path.get_children()))
 
     def test_get_owners_packages(self):
         github = PyPI()

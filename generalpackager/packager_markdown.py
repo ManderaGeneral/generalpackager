@@ -25,7 +25,7 @@ class _PackagerMarkdown:
             :param generalpackager.Packager self:
             :rtype: dict[list[str]] """
         todos = []
-        for path in self.path.get_paths_recursive():
+        for path in self.path.get_children(depth=-1, gen=True):
             if path.match(*self.git_exclude_lines, "shelved.patch", "readme.md"):
                 continue
             try:

@@ -10,6 +10,8 @@ import re
 
 class GitHub(Recycle):
     """ Tools to interface a GitHub Repository. """
+    _recycle_keys = {"name": str, "owner": str}
+
     def __init__(self, name=None, owner=None):
         if owner is None:
             owner = "ManderaGeneral"

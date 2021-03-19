@@ -15,7 +15,8 @@ from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line, O
 # print(generalpackager is generalfile)
 
 
-print(Path.get_working_dir().get_parents())
+
+# print(Path.get_working_dir().get_parents())
 
 
 # packager = Packager(name="Mandera", owner="Mandera")

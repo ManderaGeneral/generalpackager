@@ -38,7 +38,7 @@ class LocalRepo:
         self.has_loaded_metadata = False
 
     def has_metadata(self):
-        return self.get_metadata_path().exists(quick=True)
+        return self.get_metadata_path().exists()
 
     def load_metadata(self):
         for key, value in self.get_metadata_path().read().items():
@@ -57,20 +57,19 @@ class LocalRepo:
 
     def exists(self):
         """ Return whether this API's target exists. """
-        if self.path.is_file() or not self.path.exists(quick=True):
+        if self.path.is_file() or not self.path.exists():
             return False
-        return ".git" in map(Path.name, self.path.get_paths_in_folder())
+        return bool(self.path.get_child(filt=lambda path: path.name() == ".git"))
 
     @classmethod
     def get_first_repo(cls, folder_path=None):
         """ Return first found LocalRepo or None.
 
             :param generalfile.Path folder_path: """
-        if folder_path is None:
-            folder_path = Path.get_working_dir()
+        folder_path = Path(folder_path)
+        # path = folder_path.get_parent(depth=-1, include_self=True, filt=lambda path: LocalRepo(path=path).exists())  # HERE ** Add include_self for singular alternative
 
-        for path in folder_path.get_parents(depth=-1, gen=True, include_self=True):  # 1 HERE ** get_parents() isn't generating, only get_parent()
-            print(1, path)
+        for path in folder_path.get_parents(depth=-1, gen=True, include_self=True):
             repo = LocalRepo(path=path)
             if repo.exists():
                 return repo
@@ -79,10 +78,7 @@ class LocalRepo:
     def get_local_repos(cls, folder_path):
         """ Return a list of local repo paths in given folder.
             Todo: Return LocalRepo instead of Path for these methods. """
-        folder_path = Path(folder_path)
-        if not folder_path.exists():
-            return []
-        return [path for path in folder_path.get_paths_in_folder() if LocalRepo(path=path).exists()]
+        return Path(folder_path).get_children(filt=lambda path: LocalRepo(path=path).exists())
 
     @staticmethod
     def get_repos_path(path=None):
@@ -145,7 +141,7 @@ class LocalRepo:
     @deco_cache()
     def get_test_paths(self):
         """ Get a list of paths to each test python file. """
-        return [path for path in self.get_test_path().get_paths_recursive() if path.match("*.py")]
+        return self.get_test_path().get_children(depth=-1, filt=lambda path: path.match("*.py"))
 
     @deco_cache()
     def text_in_tests(self, text):
