@@ -58,7 +58,6 @@ class LocalRepo(Recycle):
 
     def exists(self):
         """ Return whether this API's target exists. """
-        print(self.path.get_children())
         if self.path.is_file() or not self.path.exists():
             return False
         return bool(self.path.get_child(filt=lambda path: path.name() == ".git"))
@@ -68,31 +67,20 @@ class LocalRepo(Recycle):
         """ Return first found LocalRepo or None.
 
             :param generalfile.Path folder_path: """
-        return Path(path=folder_path).absolute().get_parents(depth=-1, include_self=True, filt=lambda path: LocalRepo(path=path).exists())
-
-        # for path in folder_path.get_parents(depth=-1, gen=True, include_self=True):
-        #     repo = LocalRepo(path=path)
-        #     if repo.exists():
-        #         return repo
+        for path in Path(path=folder_path).absolute().get_parents(depth=-1, gen=True, include_self=True):
+            local_repo = LocalRepo(path=path)
+            if local_repo.exists():
+                return local_repo
 
     @classmethod
     def get_local_repos(cls, folder_path):
-        """ Return a list of local repo paths in given folder.
-            Todo: Return LocalRepo instead of Path for these methods. """
-        return Path(folder_path).get_children(filt=lambda path: LocalRepo(path=path).exists())
+        """ Return a list of local repo paths in given folder. """
+        return [local_repo for path in Path(folder_path).get_children() if (local_repo := LocalRepo(path)).exists()]
 
     @staticmethod
     def get_repos_path(path=None):
-        """ Try to return absolute repos path by iterating parents if None. """
-        if path is None:
-            repos_path = Path.get_working_dir()
-            while not LocalRepo.get_local_repos(repos_path):
-                repos_path = repos_path.get_parent()
-                if repos_path is None:
-                    raise AttributeError(f"Couldn't find repos path.")
-            return repos_path
-        else:
-            return Path(path).absolute()
+        """ Try to return absolute path pointing to folder containing repos by searching parents. """
+        return Path(path).absolute().get_parent(depth=-1, include_self=True, filt=lambda path: LocalRepo.get_local_repos(path))
 
     @load_metadata_before
     def metadata_getter(self, key):

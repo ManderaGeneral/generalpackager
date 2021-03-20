@@ -112,7 +112,7 @@ class _PackagerMarkdown:
 
             :param generalpackager.Packager self:
             :param markdown: """
-        parent_markdown = markdown.get_parent(-1)
+        parent_markdown = markdown.get_parent(-1, -1)
         markdown.add_pre_lines(parent_markdown.view(custom_repr=lambda md: md.link(md.header, href=True), print_out=False))
         return markdown
 

@@ -9,7 +9,7 @@ class TestLocalRepo(unittest.TestCase):
     """
     def test_has_metadata(self):
         local_repo = LocalRepo.get_first_repo()
-        print(local_repo)
+        # self.assertEqual(True, )
 
 
 

@@ -36,8 +36,6 @@ class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFile
     git_exclude_lines = ".idea", "build", "dist", "*.egg-info", "__pycache__", ".git"
 
     def __init__(self, name, repos_path=None, github_owner=None, pypi_owner=None):
-        if repos_path is None:
-            repos_path = ""
         self.name = name
         self.repos_path = LocalRepo.get_repos_path(path=repos_path)
 
