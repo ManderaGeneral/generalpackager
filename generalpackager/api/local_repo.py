@@ -32,10 +32,10 @@ class LocalRepo(Recycle):
     manifest = []
 
     metadata_keys = [key for key, value in locals().items() if not key.startswith("_")]
-    _recycle_keys = {"path": lambda path: str(LocalRepo.get_first_repo_path(path=path))}
+    _recycle_keys = {"path": lambda path: str(LocalRepo.scrub_path(path=path))}
 
-    def __init__(self, path):
-        self.path = self.get_first_repo_path(path=path)
+    def __init__(self, path=None):
+        self.path = self.scrub_path(path=path)
         self.has_loaded_metadata = False
 
     def __repr__(self):
@@ -85,6 +85,14 @@ class LocalRepo(Recycle):
             :param generalfile.Path or any path:
             :rtype: generalfile.Path """
         return Path(path=path).absolute().get_parent(depth=-1, include_self=True, filt=lambda path: LocalRepo.path_exists(path=path))
+
+    @classmethod
+    def scrub_path(cls, path=None):
+        """ Scrub path.
+
+            :param generalfile.Path or any path:
+            :rtype: generalfile.Path """
+        return cls.get_first_repo_path(path=path) or Path(path).absolute()
 
     @classmethod
     def get_local_repos(cls, folder_path):

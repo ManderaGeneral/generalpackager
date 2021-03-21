@@ -13,5 +13,5 @@ from generalpackager.api.pypi import PyPI
 
 # print(LocalRepo("generalpackager/test"))
 
-print(LocalRepo.get_first_repo_path("generalpackager/test"))  # Not working because it doesnt traverse nodes that didn't pass filter
+print(LocalRepo.scrub_path("generalpackager/test"))
 
