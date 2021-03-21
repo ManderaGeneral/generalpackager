@@ -7,9 +7,13 @@ import unittest
 class TestLocalRepo(unittest.TestCase):
     """ Skipped tests:
     """
-    def test_has_metadata(self):
-        local_repo = LocalRepo.get_first_repo()
-        # self.assertEqual(True, )
+    def test_get_first_repo(self):
+        print(LocalRepo("generalpackager"))
+
+        # local_repo = LocalRepo.get_first_repo()
+        # self.assertEqual(LocalRepo("generalpackager"), local_repo)
+
+
 
 
 

@@ -5,90 +5,13 @@ from pprint import pprint
 import sys
 from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line, ObjInfo, SigInfo
 
-# from generalpackager.api.github import GitHub
-#
-# generalpackager = GitHub("generalpackager")
-# generalpackager2 = GitHub(name="generalpackager")
-# generalfile = GitHub("generalfile")
-#
-# print(generalpackager is generalpackager2)
-# print(generalpackager is generalfile)
+from generalpackager.api.github import GitHub
+from generalpackager.api.local_repo import LocalRepo
+from generalpackager.api.local_module import LocalModule
+from generalpackager.api.pypi import PyPI
 
 
-print(Packager("generalpackager").localrepo.get_repos_path("C:/test"))
+# print(LocalRepo("generalpackager/test"))
 
-# from generalpackager.api.local_repo import LocalRepo
-# print(LocalRepo.get_first_repo())
-
-# print(Path.get_working_dir().get_parents())
-
-
-# packager = Packager(name="Mandera", owner="Mandera")
-# packager.file_personal_readme.generate()
-
-# packager.commit_push_store_sha("Testing new personal readme generation.")
-
-
-# packager = Packager("generalfile")
-# print(packager.github_link_path_line("test", "generalpackager/packager_files.py"))
-
-
-# print(packager.localmodule.objInfo.get_child_by_key_values(name="Path").get_child_by_key_values(name="size").get_definition_line())
-
-# packager = Packager("generalfile")
-# packager = Packager("generalpackager")
-# print(packager.localrepo.get_test_paths())
-
-# packager.clone_repo(path=packager.repos_path / "clone")
-# print(packager.get_ordered(flat=False))
-# print(packager.get_ordered_packagers())
-
-# packager.load_general_packagers()
-
-# print(packager.get_parents())
-
-# for pack in packager.get_ordered(flat=True):
-#     print(pack.get_parent, pack.packagers_dict)
-
-# print(packager.generate_personal_readme())
-# packager.file_readme.generate()
-# print(packager.generate_manifest())
-
-
-# pprint(packager.get_todos())
-# pprint(packager.get_todos())
-
-
-# pprint(packager.compare_local_to_pypi(aesthetic=False))
-# packager.file_manifest.generate()
-# packager.file_setup.generate()
-# packager.localrepo.commit_and_push("[CI SKIP] Getting tags to work", tag=True)
-
-
-# packager.file_workflow.generate()
-
-# packager.localrepo.pip_install()
-
-# packager.generate_localfiles(aesthetic=False)
-
-# print(packager.get_ordered_packagers())
-
-# print(packager.localrepo.version)
-# packager.localrepo.bump_version()
-# print(packager.localrepo.version)
-
-# print(packager.get_changed_files(aesthetic=False))
-# print(packager.get_changed_files(aesthetic=True))
-# print(packager.pypi.get_version())
-
-
-# packager.localmodule.get_dependants("generallibrary")
-# packager.generate_readme()
-# packager.generate_localfiles()
-# packager.sync_package("Cleaned up secrets, testing auto")
-# packager.sync_github_metadata()
-# packager.generate_git_exclude()
-# packager.generate_setup()
-
-
+print(LocalRepo.get_first_repo_path("generalpackager/test"))  # Not working because it doesnt traverse nodes that didn't pass filter
 
