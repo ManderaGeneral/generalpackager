@@ -11,7 +11,6 @@ from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
 
-# print(LocalRepo("generalpackager/test"))
+print(LocalRepo().get_repos_path())
 
-print(LocalRepo.scrub_path("generalpackager/test"))
 

@@ -10,18 +10,39 @@ class TestLocalRepo(unittest.TestCase):
     """
     def test_get_first_repo(self):
         self.assertEqual(LocalRepo("generalpackager"), LocalRepo.get_first_repo())
+        self.assertEqual(LocalRepo.get_first_repo_path(), LocalRepo.get_first_repo_path("foo/bar"))
+        path = Path().absolute().get_parent(2, 2)
+        self.assertEqual(None, LocalRepo.get_first_repo_path(path))
+        self.assertEqual(path, LocalRepo.scrub_path(path))
 
     def test_has_metadata(self):
         self.assertEqual(True, LocalRepo().has_metadata())
         self.assertEqual(False, LocalRepo(Path().absolute().get_parent(2, 2)).has_metadata())
 
+    def test_load_metadata(self):
+        self.assertEqual("generalpackager", LocalRepo().name)
 
+    def test_exists(self):
+        self.assertEqual(True, LocalRepo().exists())
+        self.assertEqual(True, LocalRepo.path_exists(LocalRepo().path))
 
+    def test_get_local_repos(self):
+        self.assertEqual(LocalRepo().path.get_parent(), LocalRepo.get_repos_path())
 
-
-
-
-
+    def test_paths(self):
+        method_names = (
+            "get_readme_path",
+            "get_metadata_path",
+            "get_git_exclude_path",
+            "get_setup_path",
+            "get_manifest_path",
+            "get_license_path",
+            "get_workflow_path",
+            "get_test_path"
+        )
+        local_repo = LocalRepo()
+        for name in method_names:
+            self.assertEqual(True, getattr(local_repo, name)().exists())
 
 
 

@@ -45,6 +45,8 @@ class LocalRepo(Recycle):
         return self.get_metadata_path().exists()
 
     def load_metadata(self):
+        self.has_loaded_metadata = True
+
         for key, value in self.get_metadata_path().read().items():
             setattr(self, f"_{key}", value)
 
@@ -57,11 +59,9 @@ class LocalRepo(Recycle):
         if self.name is Ellipsis:
             self.name = self.path.name()
 
-        self.has_loaded_metadata = True
-
     def exists(self):
         """ Return whether this API's target exists. """
-        self.path_exists(path=self.path)
+        return self.path_exists(path=self.path)
 
     @classmethod
     def path_exists(self, path):
@@ -97,7 +97,7 @@ class LocalRepo(Recycle):
     @classmethod
     def get_local_repos(cls, folder_path):
         """ Return a list of local repo paths in given folder. """
-        return [local_repo for path in Path(folder_path).get_children() if (local_repo := LocalRepo(path=path)).exists()]
+        return [LocalRepo(path) for path in Path(folder_path).get_children() if LocalRepo.path_exists(path=path)]
 
     @staticmethod
     def get_repos_path(path=None):
@@ -105,11 +105,11 @@ class LocalRepo(Recycle):
         return Path(path).absolute().get_parent(depth=-1, include_self=True, filt=lambda path: LocalRepo.get_local_repos(path))
 
     @load_metadata_before
-    def metadata_getter(self, key):
+    def _metadata_getter(self, key):
         return getattr(self, f"_{key}")
 
     @load_metadata_before
-    def metadata_setter(self, key, value):
+    def _metadata_setter(self, key, value):
         """ Set a metadata's key both in instance and json file. """
         if self.has_metadata() and value != getattr(self, f"_{key}", ...):
             metadata = self.get_metadata_path().read()
@@ -117,37 +117,15 @@ class LocalRepo(Recycle):
             self.get_metadata_path().write(metadata, overwrite=True, indent=4)
         setattr(self, f"_{key}", value)
 
-    def get_readme_path(self):
-        """ Get a Path instance pointing to README.md, regardless if it exists. """
-        return self.path / "README.md"
+    def get_readme_path(self):      return self.path / "README.md"
+    def get_metadata_path(self):    return self.path / "metadata.json"
+    def get_git_exclude_path(self): return self.path / ".git/info/exclude"
+    def get_setup_path(self):       return self.path / "setup.py"
+    def get_manifest_path(self):    return self.path / "MANIFEST.in"
+    def get_license_path(self):     return self.path / "LICENSE"
+    def get_workflow_path(self):    return self.path / ".github/workflows/workflow.yml"
+    def get_test_path(self):        return self.path / f"{self.name}/test"
 
-    def get_metadata_path(self):
-        """ Get a Path instance pointing to metadata.json, regardless if it exists. """
-        return self.path / "metadata.json"
-
-    def get_git_exclude_path(self):
-        """ Get a Path instance pointing to .git/info/exclude, regardless if it exists. """
-        return self.path / ".git/info/exclude"
-
-    def get_setup_path(self):
-        """ Get a Path instance pointing to setup.py, regardless if it exists. """
-        return self.path / "setup.py"
-
-    def get_manifest_path(self):
-        """ Get a Path instance pointing to MANIFEST.in, regardless if it exists. """
-        return self.path / "MANIFEST.in"
-
-    def get_license_path(self):
-        """ Get a Path instance pointing to LICENSE, regardless if it exists. """
-        return self.path / "LICENSE"
-
-    def get_workflow_path(self):
-        """ Get a Path instance pointing to workflow.yml, regardless if it exists. """
-        return self.path / ".github/workflows/workflow.yml"
-
-    def get_test_path(self):
-        """ Get a Path instance pointing to workflow.yml, regardless if it exists. """
-        return self.path / f"{self.name}/test"
 
     @deco_cache()
     def get_test_paths(self):
@@ -220,8 +198,8 @@ for key in LocalRepo.metadata_keys:
     value = getattr(LocalRepo, key)
     setattr(LocalRepo, f"_{key}", value)
     setattr(LocalRepo, key, property(
-        fget=lambda self, key=key: LocalRepo.metadata_getter(self, key),
-        fset=lambda self, value, key=key: LocalRepo.metadata_setter(self, key, value),
+        fget=lambda self, key=key: LocalRepo._metadata_getter(self, key),
+        fset=lambda self, value, key=key: LocalRepo._metadata_setter(self, key, value),
     ))
 
 
