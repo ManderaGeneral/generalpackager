@@ -128,21 +128,25 @@ class LocalRepo(Recycle):
 
 
     @deco_cache()
-    def get_test_paths(self):
-        """ Get a list of paths to each test python file. """
-        return self.get_test_path().get_children(depth=-1, filt=lambda path: path.match("*.py"))
+    def get_test_paths_gen(self):
+        """ Yield paths to each test python file. """
+        yield from self.get_test_path().get_children(depth=-1, gen=True, filt=lambda path: path.match("*.py"))
 
     @deco_cache()
     def text_in_tests(self, text):
         """ Return whether text exists in one of the test files. """
-        for path in self.get_test_paths():
+        for path in self.get_test_paths_gen():
             if path.contains(text=text):
                 return True
         return False
 
-    def get_package_paths(self):
-        """ Get a list of Paths pointing to each folder containing a Python file in this local repo, aka `namespace package`. """
-        return [self.path / pkg.replace(".", "/") for pkg in find_namespace_packages(where=str(self.path))]
+    def get_package_paths_gen(self):
+        """ Yield Paths pointing to each folder containing a Python file in this local repo, aka `namespace package`.
+            Doesn't include self.path """
+        for package in find_namespace_packages(where=str(self.path)):
+            path = self.path / package.replace(".", "/")
+            if not path.match("/dist", "/build"):
+                yield path
 
     def commit_and_push(self, message=None, tag=False, owner=None):
         """ Commit and push this local repo to GitHub.

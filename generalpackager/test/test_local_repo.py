@@ -44,9 +44,18 @@ class TestLocalRepo(unittest.TestCase):
         for name in method_names:
             self.assertEqual(True, getattr(local_repo, name)().exists())
 
+    def test_get_test_paths(self):
+        self.assertGreater(2, len(list(LocalRepo().get_test_paths_gen())))
 
+    def test_text_in_tests(self):
+        self.assertEqual(True, LocalRepo().text_in_tests("stringthatexists"))
+        self.assertEqual(False, LocalRepo().text_in_tests("stringthat" + "doesntexist"))
 
-
+    def test_get_package_paths(self):
+        package_paths = list(LocalRepo().get_package_paths_gen())
+        self.assertIn(LocalRepo().get_test_path(), package_paths)
+        self.assertIn(LocalRepo().path / LocalRepo().name, package_paths)
+        self.assertNotIn(LocalRepo().path, package_paths)
 
 
 
