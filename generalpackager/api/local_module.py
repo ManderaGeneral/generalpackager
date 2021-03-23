@@ -9,7 +9,9 @@ class LocalModule(Recycle):
     """ Tools to interface a Local Python Module. """
     _recycle_keys = {"name": str}
 
-    def __init__(self, name):
+    def __init__(self, name=None):
+        if name is None:
+            name = "generalpackager"
         self.name = name
 
     def exists(self):
@@ -30,8 +32,7 @@ class LocalModule(Recycle):
     def objInfo(self):
         objInfo = ObjInfo(self.module)
         assert objInfo.is_module()
-        objInfo.filters = [self._filter]
-        objInfo.get_attrs(depth=-1)
+        objInfo.get_children(depth=-1, filt=self._filter)
         return objInfo
 
     def _filter(self, objInfo):

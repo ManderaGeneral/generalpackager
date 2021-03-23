@@ -7,6 +7,11 @@ import unittest
 
 class TestLocalRepo(unittest.TestCase):
     """ Skipped tests:
+        commit_and_push
+        pip_install
+        unittest
+        create_sdist
+        upload
     """
     def test_get_first_repo(self):
         self.assertEqual(LocalRepo("generalpackager"), LocalRepo.get_first_repo())
@@ -56,6 +61,15 @@ class TestLocalRepo(unittest.TestCase):
         self.assertIn(LocalRepo().get_test_path(), package_paths)
         self.assertIn(LocalRepo().path / LocalRepo().name, package_paths)
         self.assertNotIn(LocalRepo().path, package_paths)
+
+    def test_get_changed_files(self):
+        local_repo = LocalRepo()
+        version = local_repo.version
+        local_repo.bump_version()
+        self.assertNotEqual(local_repo.version, version)
+        self.assertIn("metadata.json", local_repo.get_changed_files())
+        local_repo.version = version
+        self.assertEqual(local_repo.version, version)
 
 
 

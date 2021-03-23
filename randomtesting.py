@@ -11,6 +11,7 @@ from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
 
-print(LocalRepo().get_repos_path())
+
+LocalModule().objInfo.view()  # HERE ** Use token instead of pw
 
 
