@@ -155,7 +155,6 @@ class LocalRepo(Recycle):
             message = "Automatic commit."
         if owner is None:
             owner = "ManderaGeneral"
-
         repo = Repo(str(self.path))
 
         repo.git.add(A=True)
