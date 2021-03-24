@@ -10,10 +10,13 @@ from generalpackager.api.local_repo import LocalRepo
 from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
+import generalpackager
+
+# objInfo = ObjInfo(generalpackager)
+# objInfo.view(spawn=True)
 
 
-print(LocalRepo().commit_and_push(message="[CI SKIP] Testing token"))
-
-# LocalModule().objInfo.view()  # HERE ** Use token instead of pw
+localModule = LocalModule()
+localModule.objInfo.view()
 
 

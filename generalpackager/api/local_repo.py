@@ -1,6 +1,6 @@
 
 from generalfile import Path
-from generalpackager import GIT_PASSWORD, PACKAGER_GITHUB_API
+from generalpackager import PACKAGER_GITHUB_API
 from generallibrary import Ver, deco_cache, Recycle
 
 from setuptools import find_namespace_packages
