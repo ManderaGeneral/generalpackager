@@ -12,6 +12,8 @@ from generalpackager.api.pypi import PyPI
 
 
 
-LocalModule().objInfo.view()  # HERE ** Use token instead of pw
+print(LocalRepo().commit_and_push(message="[CI SKIP] Testing token"))
+
+# LocalModule().objInfo.view()  # HERE ** Use token instead of pw
 
 

@@ -1,6 +1,6 @@
 
 from generalfile import Path
-from generalpackager import GIT_PASSWORD
+from generalpackager import GIT_PASSWORD, PACKAGER_GITHUB_API
 from generallibrary import Ver, deco_cache, Recycle
 
 from setuptools import find_namespace_packages
@@ -161,7 +161,7 @@ class LocalRepo(Recycle):
         repo.git.add(A=True)
         repo.index.commit(message=str(message))
         remote = repo.remote()
-        remote.set_url(f"https://Mandera:{GIT_PASSWORD}@github.com/{owner}/{self.name}.git")
+        remote.set_url(f"https://Mandera:{PACKAGER_GITHUB_API}@github.com/{owner}/{self.name}.git")
 
         if tag:
             tag_ref = repo.create_tag(f"v{self.version}", force=True)
