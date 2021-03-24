@@ -1,5 +1,5 @@
 
-from generallibrary import ObjInfo, deco_cache, Recycle
+from generallibrary import ObjInfo, deco_cache, Recycle, EnvVar
 
 import pkg_resources
 from importlib import import_module
@@ -13,6 +13,9 @@ class LocalModule(Recycle):
         if name is None:
             name = "generalpackager"
         self.name = name
+
+    def __repr__(self):
+        return self.name
 
     def exists(self):
         """ Return whether this API's target exists. """
@@ -38,25 +41,29 @@ class LocalModule(Recycle):
 
     def _filter(self, objInfo):
         """ :param ObjInfo objInfo: """
-        # print(objInfo.name, objInfo.module().__name__.startswith(self.name))
         return objInfo.module().__name__.startswith(self.name)
 
+    @deco_cache()
     def get_env_vars(self):
-        """ Get a list of EnvVar instances avialable directly in module.
+        """ Get a list of EnvVar instances available directly in module.
 
             :rtype: list[generallibrary.EnvVar] """
-        filt = lambda objInfo: type(objInfo.obj).__name__ == "EnvVar"
-        return [objInfo.obj for objInfo in self.objInfo.get_children(filt=filt, traverse_excluded=True)]
+        new_objInfo = ObjInfo(self.module)
+        new_objInfo.all_identifiers = []  # Bad fix for bad circularity prevention
+        return [objInfo.obj for objInfo in new_objInfo.get_children() if isinstance(objInfo.obj, EnvVar)]
 
     @staticmethod
+    @deco_cache()
     def get_all_local_modules():
         """ Get a list of all available LocalModules. """
         return [LocalModule(name=pkg.project_name) for pkg in pkg_resources.working_set]
 
+    @deco_cache()
     def get_dependencies(self):
         """ Get a list of LocalModules that this module depends on. """
         return [LocalModule(name=str(name)) for name in pkg_resources.working_set.by_key[self.name.lower()].requires()]
 
+    @deco_cache()
     def get_dependants(self):
         """ Get a list of LocalModules that depend on this module. """
         return [local_module for local_module in self.get_all_local_modules() if self in local_module.get_dependencies()]

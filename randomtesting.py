@@ -12,12 +12,13 @@ from generalpackager.api.pypi import PyPI
 
 import generalpackager
 
-# objInfo = ObjInfo(generalpackager)
-# objInfo.view(spawn=True)
+
+print(ObjInfo(generalpackager).get_children())
+
+print(ObjInfo(generalpackager).get_children(1))
 
 
-# localModule = LocalModule()
-# localModule.objInfo.view()
 
 
+# LocalModule().objInfo.view()
 

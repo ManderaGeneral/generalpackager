@@ -50,7 +50,7 @@ class TestLocalRepo(unittest.TestCase):
             self.assertEqual(True, getattr(local_repo, name)().exists())
 
     def test_get_test_paths(self):
-        self.assertLess(2, len(list(LocalRepo().get_test_paths_gen())))
+        self.assertLess(2, len(list(LocalRepo().get_test_paths())))
 
     def test_text_in_tests(self):
         self.assertEqual(True, LocalRepo().text_in_tests("stringthatexists"))

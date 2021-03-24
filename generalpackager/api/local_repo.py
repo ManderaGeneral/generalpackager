@@ -128,14 +128,14 @@ class LocalRepo(Recycle):
 
 
     @deco_cache()
-    def get_test_paths_gen(self):
+    def get_test_paths(self):
         """ Yield paths to each test python file. """
         return self.get_test_path().get_children(depth=-1, filt=lambda path: path.endswith(".py") and not path.match("/tests/"), traverse_excluded=True)
 
     @deco_cache()
     def text_in_tests(self, text):
         """ Return whether text exists in one of the test files. """
-        for path in self.get_test_paths_gen():
+        for path in self.get_test_paths():
             if path.contains(text=text):
                 return True
         return False
