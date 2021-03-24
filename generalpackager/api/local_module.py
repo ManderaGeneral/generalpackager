@@ -46,7 +46,7 @@ class LocalModule(Recycle):
 
             :rtype: list[generallibrary.EnvVar] """
         filt = lambda objInfo: type(objInfo.obj).__name__ == "EnvVar"
-        return [objInfo.obj for objInfo in self.objInfo.get_children(filt=filt)]
+        return [objInfo.obj for objInfo in self.objInfo.get_children(filt=filt, traverse_excluded=True)]
 
     @staticmethod
     def get_all_local_modules():

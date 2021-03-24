@@ -16,7 +16,8 @@ import generalpackager
 # objInfo.view(spawn=True)
 
 
-localModule = LocalModule()
-localModule.objInfo.view()
+# localModule = LocalModule()
+# localModule.objInfo.view()
+
 
 

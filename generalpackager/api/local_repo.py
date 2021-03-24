@@ -67,7 +67,7 @@ class LocalRepo(Recycle):
     def path_exists(self, path):
         if path.is_file() or not path.exists():
             return False
-        return bool(path.get_child(filt=lambda x: x.name() == ".git"))
+        return bool(path.get_child(filt=lambda x: x.name() == ".git", traverse_excluded=True))
 
     @classmethod
     def get_first_repo(cls, path=None):
@@ -84,7 +84,7 @@ class LocalRepo(Recycle):
 
             :param generalfile.Path or any path:
             :rtype: generalfile.Path """
-        return Path(path=path).absolute().get_parent(depth=-1, include_self=True, filt=lambda path: LocalRepo.path_exists(path=path))
+        return Path(path=path).absolute().get_parent(depth=-1, include_self=True, filt=lambda path: LocalRepo.path_exists(path=path), traverse_excluded=True)
 
     @classmethod
     def scrub_path(cls, path=None):
@@ -102,7 +102,7 @@ class LocalRepo(Recycle):
     @staticmethod
     def get_repos_path(path=None):
         """ Try to return absolute path pointing to folder containing repos by searching parents. """
-        return Path(path).absolute().get_parent(depth=-1, include_self=True, filt=lambda path: LocalRepo.get_local_repos(path))
+        return Path(path).absolute().get_parent(depth=-1, include_self=True, filt=lambda path: LocalRepo.get_local_repos(path), traverse_excluded=True)
 
     @load_metadata_before
     def _metadata_getter(self, key):
@@ -130,7 +130,7 @@ class LocalRepo(Recycle):
     @deco_cache()
     def get_test_paths_gen(self):
         """ Yield paths to each test python file. """
-        yield from self.get_test_path().get_children(depth=-1, gen=True, filt=lambda path: path.match("*.py"))
+        return self.get_test_path().get_children(depth=-1, filt=lambda path: path.endswith(".py") and not path.match("/tests/"), traverse_excluded=True)
 
     @deco_cache()
     def text_in_tests(self, text):

@@ -12,7 +12,7 @@ class _PackagerPypi:
         filt = lambda path: not path.match(*self.git_exclude_lines)
 
         self.pypi.download_and_unpack_tarball(target_folder=unpack_target)
-        differing_files = self.path.get_differing_files(target=package_target, filt=filt)
+        differing_files = self.path.get_differing_files(target=package_target, filt=filt, traverse_excluded=True)
         return self.filter_relative_filenames(*differing_files, aesthetic=aesthetic)
 
     def get_latest_release(self):
