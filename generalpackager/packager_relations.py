@@ -38,7 +38,7 @@ class _PackagerRelations:
 
         packager = self.packagers_dict.get(name)
         if packager is None and self.exists():
-            packager = type(self)(name=name, repos_path=self.repos_path)
+            packager = type(self)(name=name, repos_path=self.localrepo.get_repos_path())
 
         return packager
 

@@ -9,10 +9,12 @@ class _PackagerPypi:
             :param aesthetic: """
         unpack_target = Path.get_cache_dir() / "Python"
         package_target = unpack_target / f"{self.name}-{self.pypi.get_version()}"
-        filt = lambda path: not path.match(*self.git_exclude_lines)
 
-        self.pypi.download_and_unpack_tarball(target_folder=unpack_target)
-        differing_files = self.path.get_differing_files(target=package_target, filt=filt, traverse_excluded=True)
+        self.pypi.download_and_unpack_tarball(target_folder=unpack_target, overwrite=True)
+
+        filt = lambda path: not path.match(*self.git_exclude_lines)
+        differing_files = self.path.get_differing_files(target=package_target, filt=filt)
+
         return self.filter_relative_filenames(*differing_files, aesthetic=aesthetic)
 
     def get_latest_release(self):

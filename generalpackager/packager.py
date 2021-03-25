@@ -35,15 +35,17 @@ class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFile
 
     git_exclude_lines = ".idea", "build", "dist", "*.egg-info", "__pycache__", ".git"
 
-    def __init__(self, name, repos_path=None, github_owner=None, pypi_owner=None):
-        self.name = name
-        self.repos_path = LocalRepo.get_repos_path(path=repos_path)
+    def __init__(self, name=None, path=None, github_owner=None, pypi_owner=None):
+        self.localmodule = LocalModule(name=name)
+        self.name = self.localmodule.name
 
-        self.path = self.repos_path / self.name
+        if path is None:
+            path = self.name
 
-        self.localrepo = LocalRepo(path=self.path)
+        self.localrepo = LocalRepo(path=path)
+        self.path = self.localrepo.path
+
         self.github = GitHub(name=self.name, owner=github_owner)
-        self.localmodule = LocalModule(name=self.name)
         self.pypi = PyPI(name=self.name, owner=pypi_owner)
 
     def exists(self):

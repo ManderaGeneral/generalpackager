@@ -13,6 +13,8 @@ class GitHub(Recycle):
     _recycle_keys = {"name": str, "owner": str}
 
     def __init__(self, name=None, owner=None):
+        if name is None:
+            name = "generalpackager"
         if owner is None:
             owner = "ManderaGeneral"
         self.name = name

@@ -22,9 +22,9 @@ class _PackagerWorkflow:
     def get_triggers(self):
         """ :param generalpackager.Packager self: """
         on = CodeLine("on:")
-        push = on.add("push:")
-        branches = push.add("branches:")
-        branches.add("- master")
+        push = on.add_node("push:")
+        branches = push.add_node("branches:")
+        branches.add_node("- master")
         return on
 
     def get_step(self, name, *codelines):
@@ -32,21 +32,21 @@ class _PackagerWorkflow:
         step = CodeLine(f"- name: {name}")
         for codeline in codelines:
             if codeline:
-                step.add(codeline)
+                step.add_node(codeline)
         return step
 
     def step_setup_python(self, version):
         """ :param generalpackager.Packager self:
             :param version: """
         with_ = CodeLine("with:")
-        with_.add(f"python-version: {version}")
+        with_.add_node(f"python-version: {version}")
         return self.get_step(f"Set up python version {version}", f"uses: {self._action_setup_python}", with_)
 
     def step_install_necessities(self):
         """ :param generalpackager.Packager self: """
         run = CodeLine("run: |")
-        run.add("python -m pip install --upgrade pip")
-        run.add(f"pip install setuptools wheel twine")
+        run.add_node("python -m pip install --upgrade pip")
+        run.add_node(f"pip install setuptools wheel twine")
         return self.get_step(f"Install necessities pip, setuptools, wheel, twine", run)
 
     def step_install_package_pip(self, *packages):
@@ -64,7 +64,7 @@ class _PackagerWorkflow:
 
         run = CodeLine(f"run: |")
         for author_repo in author_repo_tuple:
-            run.add(f"pip install git+https://github.com/{author_repo}.git")
+            run.add_node(f"pip install git+https://github.com/{author_repo}.git")
 
         return self.get_step(f"Install {len(author_repo_tuple)} git repos", run)
 
@@ -74,7 +74,7 @@ class _PackagerWorkflow:
         for packager in self.get_all():
             for env_var in packager.localmodule.get_env_vars():
                 if env_var.actions_name and env_var.name not in str(env):
-                    env.add(f"{env_var.name}: {env_var.actions_name}")
+                    env.add_node(f"{env_var.name}: {env_var.actions_name}")
         if not env.get_children():
             return None
         return env
@@ -83,40 +83,40 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self:
             :param python_version: """
         steps = CodeLine("steps:")
-        steps.add(self.step_setup_python(version=python_version))
-        steps.add(self.step_install_necessities())
-        steps.add(self.step_install_package_git(
+        steps.add_node(self.step_setup_python(version=python_version))
+        steps.add_node(self.step_install_necessities())
+        steps.add_node(self.step_install_package_git(
             *[f"{packager.github.owner}/{packager.name}" for packager in self.get_ordered_packagers()]))
         return steps
 
     def get_unittest_job(self):
         """ :param generalpackager.Packager self: """
         job = CodeLine("unittest:")
-        job.add(self._commit_msg_if(SKIP=False, AUTO=False))
-        job.add(f"runs-on: {self._var(self._matrix_os)}")
-        strategy = job.add("strategy:")
-        matrix = strategy.add("matrix:")
-        matrix.add(f"python-version: {list(self.python)}".replace("'", ""))
-        matrix.add(f"os: {[f'{os}-latest' for os in self.os]}".replace("'", ""))
+        job.add_node(self._commit_msg_if(SKIP=False, AUTO=False))
+        job.add_node(f"runs-on: {self._var(self._matrix_os)}")
+        strategy = job.add_node("strategy:")
+        matrix = strategy.add_node("matrix:")
+        matrix.add_node(f"python-version: {list(self.python)}".replace("'", ""))
+        matrix.add_node(f"os: {[f'{os}-latest' for os in self.os]}".replace("'", ""))
 
-        steps = job.add(self.steps_setup(python_version=self._var(self._matrix_python_version)))
-        steps.add(self.step_run_packager_method("workflow_unittest"))
+        steps = job.add_node(self.steps_setup(python_version=self._var(self._matrix_python_version)))
+        steps.add_node(self.step_run_packager_method("workflow_unittest"))
         return job
 
     def get_sync_job(self):
         """ :param generalpackager.Packager self: """
         job = CodeLine("sync:")
-        job.add("needs: unittest")
-        job.add(f"runs-on: ubuntu-latest")
-        steps = job.add(self.steps_setup(python_version=self.python[0]))
-        steps.add(self.step_run_packager_method("workflow_sync"))
+        job.add_node("needs: unittest")
+        job.add_node(f"runs-on: ubuntu-latest")
+        steps = job.add_node(self.steps_setup(python_version=self.python[0]))
+        steps.add_node(self.step_run_packager_method("workflow_sync"))
         return job
 
     def step_run_packager_method(self, method):
         """ :param generalpackager.Packager self:
             :param method: """
         run = CodeLine(f'run: |')
-        run.add(f'python -c "from generalpackager import Packager; Packager(\'generalpackager\', \'\').{method}()"')
+        run.add_node(f'python -c "from generalpackager import Packager; Packager(\'generalpackager\', \'\').{method}()"')
         return self.get_step(f"Run Packager method '{method}'", run, self.get_env())
 
     def run_ordered_methods(self, *funcs):

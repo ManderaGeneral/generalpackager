@@ -157,7 +157,7 @@ class LocalRepo(Recycle):
             owner = "ManderaGeneral"
         repo = Repo(str(self.path))
 
-        repo.git.add(A=True)
+        repo.git.add_node(A=True)
         repo.index.commit(message=str(message))
         remote = repo.remote()
         remote.set_url(f"https://Mandera:{PACKAGER_GITHUB_API}@github.com/{owner}/{self.name}.git")

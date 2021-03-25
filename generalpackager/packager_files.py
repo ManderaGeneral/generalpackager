@@ -47,7 +47,8 @@ class _PackagerFiles:
         """ Relative to package path. None if not defined as a GenerateFile instance.
 
             :param generalpackager.Packager self:
-            :param Path relative_path: """
+            :param Path or str relative_path: """
+        relative_path = Path(relative_path).relative(self.path)
         aesthetic_attr = getattr(self.files_by_relative_path.get(relative_path, None), "aesthetic", None)
         if aesthetic_attr is None:
             if relative_path.match(*self.extra_aesthetic):
@@ -56,25 +57,14 @@ class _PackagerFiles:
                 return False
         return aesthetic_attr
 
-    def filter_relative_filenames(self, *filenames, aesthetic, non_defined=True):
+    def filter_relative_filenames(self, *filenames, aesthetic):
         """ If aesthetic is None then it doesn't filter any.
             True will return only aesthetic.
             False will return only non-aesthetic.
 
             :param generalpackager.Packager self:
-            :param bool or None aesthetic:
-            :param bool non_defined: """
-        result = []
-        for filename in filenames:
-            is_aesthetic = self.relative_path_is_aesthetic(filename)
-            if non_defined is False and is_aesthetic is None:
-                continue
-            if aesthetic is True and is_aesthetic is False:
-                continue
-            if aesthetic is False and is_aesthetic is True:
-                continue
-            result.append(filename)
-        return result
+            :param bool or None aesthetic: """
+        return [path for path in filenames if aesthetic is None or aesthetic is self.relative_path_is_aesthetic(path)]
 
     def compare_local_to_remote(self, aesthetic=None):
         """ Get a list of changed files compared to remote with optional aesthetic files.
@@ -109,25 +99,25 @@ class _PackagerFiles:
         }
 
         top = CodeLine()
-        top.add(CodeLine("from setuptools import setup, find_namespace_packages", space_before=1))
-        top.add(CodeLine("from pathlib import Path", space_after=1))
+        top.add_node(CodeLine("from setuptools import setup, find_namespace_packages", space_before=1))
+        top.add_node(CodeLine("from pathlib import Path", space_after=1))
 
-        setup = top.add(CodeLine("setup("))
+        setup = top.add_node(CodeLine("setup("))
         for key, value in setup_kwargs.items():
             if isinstance(value, list) and value:
-                list_ = setup.add(CodeLine(f"{key}=["))
+                list_ = setup.add_node(CodeLine(f"{key}=["))
                 for item in value:
-                    list_.add(CodeLine(f"'{item}',"))
-                setup.add(CodeLine("],"))
+                    list_.add_node(CodeLine(f"'{item}',"))
+                setup.add_node(CodeLine("],"))
             elif isinstance(value, dict) and value:
-                dict_ = setup.add(CodeLine(f"{key}={{"))
+                dict_ = setup.add_node(CodeLine(f"{key}={{"))
                 for k, v in value.items():
-                    dict_.add(CodeLine(f"'{k}': {v},"))
-                setup.add(CodeLine("},"))
+                    dict_.add_node(CodeLine(f"'{k}': {v},"))
+                setup.add_node(CodeLine("},"))
             else:
-                setup.add(CodeLine(f"{key}={value},"))
+                setup.add_node(CodeLine(f"{key}={value},"))
 
-        top.add(CodeLine(")"))
+        top.add_node(CodeLine(")"))
 
         return top.text()
 
@@ -150,7 +140,7 @@ class _PackagerFiles:
         """ Generate LICENSE by using Packager.license.
 
             :param generalpackager.Packager self: """
-        text = Path(self.repos_path / f"generalpackager/generalpackager/licenses/{self.license}").text.read()
+        text = Path(self.localrepo.get_repos_path() / f"generalpackager/generalpackager/licenses/{self.license}").text.read()
         assert "$" in text
         text = text.replace("$year", str(Date.now().datetime.year))
         text = text.replace("$author", self.author)
@@ -165,12 +155,12 @@ class _PackagerFiles:
         workflow = CodeLine()
         workflow.indent_str = " " * 2
 
-        workflow.add("name: workflow")
-        workflow.add(self.get_triggers())
+        workflow.add_node("name: workflow")
+        workflow.add_node(self.get_triggers())
 
-        jobs = workflow.add("jobs:")
-        jobs.add(self.get_unittest_job())
-        jobs.add(self.get_sync_job())
+        jobs = workflow.add_node("jobs:")
+        jobs.add_node(self.get_unittest_job())
+        jobs.add_node(self.get_sync_job())
 
         return workflow.text()
 
