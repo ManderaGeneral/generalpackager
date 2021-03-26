@@ -7,12 +7,14 @@ from importlib import import_module
 
 class LocalModule(Recycle):
     """ Tools to interface a Local Python Module. """
-    _recycle_keys = {"name": str}
+    _recycle_keys = {"name": lambda name: LocalModule._scrub_name(name=name)}
 
     def __init__(self, name=None):
-        if name is None:
-            name = "generalpackager"
-        self.name = name
+        self.name = self._scrub_name(name=name)
+
+    @classmethod
+    def _scrub_name(cls, name):
+        return name or "generalpackager"
 
     def __repr__(self):
         return self.name

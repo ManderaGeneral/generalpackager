@@ -32,7 +32,7 @@ class LocalRepo(Recycle):
     manifest = []
 
     metadata_keys = [key for key, value in locals().items() if not key.startswith("_")]
-    _recycle_keys = {"name": lambda name: str(LocalRepo.get_path_from_name(name=name))}
+    _recycle_keys = {"path": lambda name: str(LocalRepo.get_path_from_name(name=name))}
 
     def __init__(self, name=None):
         self.path = self.get_path_from_name(name=name)

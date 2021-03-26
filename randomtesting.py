@@ -14,4 +14,6 @@ from generalpackager.api.pypi import PyPI
 
 print(Packager().load_general_packagers())
 
+print(Packager() is Packager())
+
 

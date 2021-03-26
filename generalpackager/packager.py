@@ -3,7 +3,7 @@
 
     Todo: Add a check in workflow to make sure it doesn't use a pypi version in case of wrong order. """
 
-from generallibrary import initBases, NetworkDiagram
+from generallibrary import initBases, NetworkDiagram, Recycle
 from generalpackager.api.local_repo import LocalRepo
 from generalpackager.api.local_module import LocalModule
 from generalpackager.api.github import GitHub
@@ -19,7 +19,7 @@ from generalpackager.packager_relations import _PackagerRelations
 
 
 @initBases
-class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations):
+class Packager(Recycle, NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations):
     """ Uses APIs to manage 'general' package.
         Contains methods that require more than one API as well as methods specific for ManderaGeneral.
         Todo: Allow github, pypi or local repo not to exist in any combination.
@@ -34,6 +34,7 @@ class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFile
     os = "windows", "ubuntu"  # , "macos"
 
     git_exclude_lines = ".idea", "build", "dist", "*.egg-info", "__pycache__", ".git"
+    _recycle_keys = LocalModule._recycle_keys
 
     def __init__(self, name=None, github_owner=None, pypi_owner=None):
         self.localmodule = LocalModule(name=name)
