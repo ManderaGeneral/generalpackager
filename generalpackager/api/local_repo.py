@@ -32,10 +32,10 @@ class LocalRepo(Recycle):
     manifest = []
 
     metadata_keys = [key for key, value in locals().items() if not key.startswith("_")]
-    _recycle_keys = {"path": lambda path: str(LocalRepo.scrub_path(path=path))}
+    _recycle_keys = {"name": lambda name: str(LocalRepo.get_path_from_name(name=name))}
 
-    def __init__(self, path=None):
-        self.path = self.scrub_path(path=path)
+    def __init__(self, name=None):
+        self.path = self.get_path_from_name(name=name)
         self.has_loaded_metadata = False
 
     def __repr__(self):
@@ -70,39 +70,43 @@ class LocalRepo(Recycle):
         return bool(path.get_child(filt=lambda x: x.name() == ".git", traverse_excluded=True))
 
     @classmethod
-    def get_first_repo(cls, path=None):
-        """ Return first found LocalRepo that can be created or None.
-
-            :param generalfile.Path or any path:
-            :rtype: generalfile.Path """
-        path = cls.get_first_repo_path(path=path)
-        return None if path is None else LocalRepo(path=path)
-
-    @classmethod
-    def get_first_repo_path(cls, path=None):
+    def get_repo_path_parent(cls, path=None):
         """ Return first found Path where LocalRepo can be created or None.
 
-            :param generalfile.Path or any path:
-            :rtype: generalfile.Path """
-        return Path(path=path).absolute().get_parent(depth=-1, include_self=True, filt=lambda path: LocalRepo.path_exists(path=path), traverse_excluded=True)
+            :param Path or any path:
+            :rtype: Path """
+        return Path(path=path).absolute().get_parent(depth=-1, include_self=True, filt=LocalRepo.path_exists, traverse_excluded=True)
 
     @classmethod
-    def scrub_path(cls, path=None):
-        """ Scrub path.
-
-            :param generalfile.Path or any path:
-            :rtype: generalfile.Path """
-        return cls.get_first_repo_path(path=path) or Path(path).absolute()
+    def get_repo_path_child(cls, folder_path):
+        """ Return whether there's atleast one repo in folder. """
+        return Path(folder_path).get_child(filt=LocalRepo.path_exists, traverse_excluded=True)
 
     @classmethod
-    def get_local_repos(cls, folder_path):
-        """ Return a list of local repo paths in given folder. """
-        return [LocalRepo(path) for path in Path(folder_path).get_children() if LocalRepo.path_exists(path=path)]
+    def get_repos_path(cls, path=None):
+        """ Try to return absolute path pointing to folder containing repos or None.
 
-    @staticmethod
-    def get_repos_path(path=None):
-        """ Try to return absolute path pointing to folder containing repos by searching parents. """
-        return Path(path).absolute().get_parent(depth=-1, include_self=True, filt=lambda path: LocalRepo.get_local_repos(path), traverse_excluded=True)
+            :rtype: Path """
+        return Path(path).absolute().get_parent(depth=-1, include_self=True, filt=lambda path: LocalRepo.get_repo_path_child(path), traverse_excluded=True)
+
+    @classmethod
+    def get_path_from_name(cls, name=None):
+        """ Get path from name.
+
+            :param Path or any name:
+            :rtype: Path """
+        path = cls.get_repo_path_parent()
+        if path and (name is None or name == path.name()):
+            return path
+
+        if name is None:
+            name = "generalpackager"
+
+        repos_path = cls.get_repos_path()
+        if repos_path:
+            return repos_path / name
+
+        return Path(name).absolute()
 
     @load_metadata_before
     def _metadata_getter(self, key):

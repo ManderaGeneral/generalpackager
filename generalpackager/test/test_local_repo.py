@@ -13,12 +13,6 @@ class TestLocalRepo(unittest.TestCase):
         create_sdist
         upload
     """
-    def test_get_first_repo(self):
-        self.assertEqual(LocalRepo("generalpackager"), LocalRepo.get_first_repo())
-        self.assertEqual(LocalRepo.get_first_repo_path(), LocalRepo.get_first_repo_path("foo/bar"))
-        path = Path().absolute().get_parent(2, 2)
-        self.assertEqual(None, LocalRepo.get_first_repo_path(path))
-        self.assertEqual(path, LocalRepo.scrub_path(path))
 
     def test_has_metadata(self):
         self.assertEqual(True, LocalRepo().has_metadata())

@@ -12,23 +12,6 @@ from generalpackager.api.pypi import PyPI
 
 
 
-# print(Path().absolute().get_parent().set_working_dir())
+print(Packager().load_general_packagers())
 
-
-
-# print(Packager())
-
-
-for path in Path("generalpackager").get_children(filt=lambda x: x.match("packager_"), traverse_excluded=True):
-    Path(f"generalpackager/test/test_{path.name()}").text.write("""
-
-from generalpackager import Packager
-from generalfile.test.setup_workdir import setup_workdir
-
-import unittest
-
-
-class TestPackager(unittest.TestCase):
-    pass
-""", overwrite=True)
 

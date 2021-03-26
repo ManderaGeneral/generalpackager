@@ -35,14 +35,11 @@ class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFile
 
     git_exclude_lines = ".idea", "build", "dist", "*.egg-info", "__pycache__", ".git"
 
-    def __init__(self, name=None, path=None, github_owner=None, pypi_owner=None):
+    def __init__(self, name=None, github_owner=None, pypi_owner=None):
         self.localmodule = LocalModule(name=name)
         self.name = self.localmodule.name
 
-        if path is None:
-            path = self.name
-
-        self.localrepo = LocalRepo(path=path)
+        self.localrepo = LocalRepo(name=self.name)
         self.path = self.localrepo.path
 
         self.github = GitHub(name=self.name, owner=github_owner)
@@ -50,7 +47,7 @@ class Packager(NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFile
 
     def exists(self):
         """ Just check GitHub for now. """
-        return GitHub(name=self.name, owner=self.owner).exists()
+        return self.github.exists()
 
     def generate_localfiles(self, aesthetic=True):
         """ Generate all local files. """

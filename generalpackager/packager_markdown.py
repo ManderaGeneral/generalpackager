@@ -138,7 +138,7 @@ class _PackagerMarkdown:
 
             :param generalpackager.Packager self:
             :param generallibrary.ObjInfo objInfo: """
-        text = objInfo.nice_repr()
+        text = repr(objInfo)
         path = objInfo.file(relative=True)
         line = objInfo.get_definition_line()
 

@@ -35,6 +35,7 @@ class LocalModule(Recycle):
     def objInfo(self):
         objInfo = ObjInfo(self.module)
         assert objInfo.is_module()
+        objInfo.children_states[ObjInfo.is_instance] = False
         objInfo.get_children(depth=-1, filt=self._filter, traverse_excluded=False)
         objInfo.disconnect(lambda node: not self._filter(node))
         return objInfo
