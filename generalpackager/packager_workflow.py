@@ -121,7 +121,6 @@ class _PackagerWorkflow:
 
     def run_ordered_methods(self, *funcs):
         """ :param generalpackager.Packager self: """
-        self.load_general_packagers()
         order = self.get_ordered_packagers()
         for func in funcs:
             for packager in order:

@@ -49,7 +49,7 @@ class _PackagerMarkdown:
         """ Get information table.
 
             :param generalpackager.Packager self: """
-        part_of = f"This package and {len(self.packagers_dict) - 1} other make up {Markdown.link(text='ManderaGeneral', url='https://github.com/Mandera')}."
+        part_of = f"This package and {len(self.get_all()) - 1} other make up {Markdown.link(text='ManderaGeneral', url='https://github.com/Mandera')}."
 
         return Markdown(self.localrepo.description, "\n", part_of, header=self.name)
 
