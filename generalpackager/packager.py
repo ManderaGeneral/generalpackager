@@ -4,6 +4,7 @@
     Todo: Add a check in workflow to make sure it doesn't use a pypi version in case of wrong order. """
 
 from generallibrary import initBases, NetworkDiagram, Recycle
+from generalpackager.api.shared import _SharedAPI
 from generalpackager.api.local_repo import LocalRepo
 from generalpackager.api.local_module import LocalModule
 from generalpackager.api.github import GitHub
@@ -19,7 +20,7 @@ from generalpackager.packager_relations import _PackagerRelations
 
 
 @initBases
-class Packager(Recycle, NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations):
+class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations):
     """ Uses APIs to manage 'general' package.
         Contains methods that require more than one API as well as methods specific for ManderaGeneral.
         Todo: Allow github, pypi or local repo not to exist in any combination.
@@ -49,6 +50,20 @@ class Packager(Recycle, NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _Pac
     def exists(self):
         """ Just check GitHub for now. """
         return self.github.exists()
+
+    def spawn_children(self):
+        for local_module in self.localmodule.get_dependants():
+            if local_module.is_general():
+                packager = Packager(local_module.name)
+                if packager.localrepo.enabled:
+                    packager.set_parent(parent=self)
+
+    def spawn_parents(self):
+        for local_module in self.localmodule.get_dependencies():
+            if local_module.is_general():
+                packager = Packager(local_module.name)
+                if packager.localrepo.enabled:
+                    self.set_parent(parent=packager)
 
     def generate_localfiles(self, aesthetic=True):
         """ Generate all local files. """

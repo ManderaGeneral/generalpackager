@@ -1,4 +1,5 @@
 
+from generalpackager.api.shared import _SharedAPI
 from generallibrary import Ver, Date, Recycle
 from generalfile import Path
 
@@ -21,7 +22,7 @@ def download(url, path):
     return path
 
 
-class PyPI(Recycle):
+class PyPI(Recycle, _SharedAPI):
     """ Tools to interface pypi.org """
     _recycle_keys = {"name": str, "owner": str}
 

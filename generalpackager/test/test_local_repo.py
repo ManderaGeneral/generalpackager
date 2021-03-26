@@ -16,7 +16,7 @@ class TestLocalRepo(unittest.TestCase):
 
     def test_has_metadata(self):
         self.assertEqual(True, LocalRepo().has_metadata())
-        self.assertEqual(False, LocalRepo(Path().absolute().get_parent(2, 2)).has_metadata())
+        self.assertEqual(False, LocalRepo("doesntexist").has_metadata())
 
     def test_load_metadata(self):
         self.assertEqual("generalpackager", LocalRepo().name)

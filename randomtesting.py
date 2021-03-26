@@ -11,9 +11,8 @@ from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
 
-
-print(Packager().load_general_packagers())
-
-print(Packager() is Packager())
+# packager = Packager("generalfile")
+# print(packager.get_children())
+# print(packager.get_parents())
 
 

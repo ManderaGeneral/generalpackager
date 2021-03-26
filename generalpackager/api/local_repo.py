@@ -1,4 +1,5 @@
 
+from generalpackager.api.shared import _SharedAPI
 from generalfile import Path
 from generalpackager import PACKAGER_GITHUB_API
 from generallibrary import Ver, deco_cache, Recycle
@@ -19,7 +20,7 @@ def load_metadata_before(func):
     return _wrapper
 
 
-class LocalRepo(Recycle):
+class LocalRepo(Recycle, _SharedAPI):
     """ Tools to help Path interface a Local Python Repository.
         Todo: Search for imports to list dependencies. """
     enabled = True
@@ -32,7 +33,7 @@ class LocalRepo(Recycle):
     manifest = []
 
     metadata_keys = [key for key, value in locals().items() if not key.startswith("_")]
-    _recycle_keys = {"path": lambda name: str(LocalRepo.get_path_from_name(name=name))}
+    _recycle_keys = {"name": lambda name: str(LocalRepo.get_path_from_name(name=name))}
 
     def __init__(self, name=None):
         self.path = self.get_path_from_name(name=name)

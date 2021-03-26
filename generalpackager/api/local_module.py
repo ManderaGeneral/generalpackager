@@ -1,11 +1,12 @@
 
+from generalpackager.api.shared import _SharedAPI
 from generallibrary import ObjInfo, deco_cache, Recycle, EnvVar
 
 import pkg_resources
 from importlib import import_module
 
 
-class LocalModule(Recycle):
+class LocalModule(Recycle, _SharedAPI):
     """ Tools to interface a Local Python Module. """
     _recycle_keys = {"name": lambda name: LocalModule._scrub_name(name=name)}
 

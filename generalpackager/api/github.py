@@ -1,4 +1,5 @@
 
+from generalpackager.api.shared import _SharedAPI
 from generalpackager import PACKAGER_GITHUB_API
 from generallibrary import Recycle, deco_cache
 
@@ -8,7 +9,7 @@ import re
 
 
 
-class GitHub(Recycle):
+class GitHub(Recycle, _SharedAPI):
     """ Tools to interface a GitHub Repository. """
     _recycle_keys = {"name": str, "owner": str}
 
