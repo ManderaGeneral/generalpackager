@@ -27,8 +27,7 @@ class _PackagerWorkflow:
         branches.add_node("- master")
         return on
 
-    def get_step(self, name, *codelines):
-        """ . """
+    def _get_step(self, name, *codelines):
         step = CodeLine(f"- name: {name}")
         for codeline in codelines:
             if codeline:
@@ -40,33 +39,32 @@ class _PackagerWorkflow:
             :param version: """
         with_ = CodeLine("with:")
         with_.add_node(f"python-version: {version}")
-        return self.get_step(f"Set up python version {version}", f"uses: {self._action_setup_python}", with_)
+        return self._get_step(f"Set up python version {version}", f"uses: {self._action_setup_python}", with_)
 
     def step_install_necessities(self):
         """ :param generalpackager.Packager self: """
         run = CodeLine("run: |")
         run.add_node("python -m pip install --upgrade pip")
         run.add_node(f"pip install setuptools wheel twine")
-        return self.get_step(f"Install necessities pip, setuptools, wheel, twine", run)
+        return self._get_step(f"Install necessities pip, setuptools, wheel, twine", run)
 
-    def step_install_package_pip(self, *packages):
-        """ Supply package name as it's stated on pypi.
-
-            :param generalpackager.Packager self: """
-        run = CodeLine(f"run: pip install {' '.join(packages)}")
-        return self.get_step(f"Install pip packages {comma_and_and(*packages, period=False)}", run)
-
-    def step_install_package_git(self, *author_repo_tuple):
-        """ Supply author/repo, e.g. ManderaGeneral/generalpackager
+    def step_install_package_pip(self, *packagers):
+        """ Supply Packagers to create pip install steps for.
 
             :param generalpackager.Packager self: """
-        assert all(map(lambda x: "/" in x, author_repo_tuple))
+        names = [p.name for p in packagers]
+        run = CodeLine(f"run: pip install {' '.join(names)}")
+        return self._get_step(f"Install pip packages {comma_and_and(*names, period=False)}", run)
 
+    def step_install_package_git(self, *packagers):
+        """ Supply Packagers to create git install steps for.
+
+            :param generalpackager.Packager self: """
         run = CodeLine(f"run: |")
-        for author_repo in author_repo_tuple:
-            run.add_node(f"pip install git+https://github.com/{author_repo}.git")
+        for packager in packagers:
+            run.add_node(f"pip install git+https://github.com/{packager.github.owner}/{packager.name}.git")
 
-        return self.get_step(f"Install {len(author_repo_tuple)} git repos", run)
+        return self._get_step(f"Install {len(packagers)} git repos", run)
 
     def get_env(self):
         """ :param generalpackager.Packager self: """
@@ -85,8 +83,7 @@ class _PackagerWorkflow:
         steps = CodeLine("steps:")
         steps.add_node(self.step_setup_python(version=python_version))
         steps.add_node(self.step_install_necessities())
-        steps.add_node(self.step_install_package_git(
-            *[f"{packager.github.owner}/{packager.name}" for packager in self.get_ordered_packagers()]))
+        steps.add_node(self.step_install_package_git(*self.get_ordered_packagers()))
         return steps
 
     def get_unittest_job(self):
@@ -117,7 +114,7 @@ class _PackagerWorkflow:
             :param method: """
         run = CodeLine(f'run: |')
         run.add_node(f'python -c "from generalpackager import Packager; Packager(\'generalpackager\', \'\').{method}()"')
-        return self.get_step(f"Run Packager method '{method}'", run, self.get_env())
+        return self._get_step(f"Run Packager method '{method}'", run, self.get_env())
 
     def run_ordered_methods(self, *funcs):
         """ :param generalpackager.Packager self: """

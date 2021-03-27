@@ -107,7 +107,7 @@ class _PackagerMarkdown:
 
         return markdown
 
-    def configure_contents_markdown(self, markdown):
+    def _configure_contents_markdown(self, markdown):
         """ Configure table of contents lines from markdown.
 
             :param generalpackager.Packager self:
@@ -117,9 +117,11 @@ class _PackagerMarkdown:
         return markdown
 
     def github_link(self, text, suffix):
-        """ :param generalpackager.Packager self:
-            :param text:
-            :param suffix: """
+        """ Get an HREF link to this repo's github.
+
+            :param generalpackager.Packager self:
+            :param text: Text to be clickable.
+            :param suffix: URL suffix. """
         url = f"{self.github.url}/{suffix}"
         return Markdown.link(text=text, url=url, href=True)
 

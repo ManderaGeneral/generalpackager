@@ -189,7 +189,7 @@ class _PackagerFiles:
             Markdown(header=self._todo_header, parent=markdown).add_table_lines(*todos)
 
         # Table of contents - Configuration
-        self.configure_contents_markdown(markdown=contents)
+        self._configure_contents_markdown(markdown=contents)
 
         # Footnote
         self.get_footnote_markdown().set_parent(parent=markdown)

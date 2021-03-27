@@ -31,7 +31,6 @@ jobs:
         run: |
           python -c "from generalpackager import Packager; Packager('generalpackager', '').workflow_unittest()"
         env:
-          GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
           PACKAGER_GITHUB_API: ${{ secrets.PACKAGER_GITHUB_API }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
