@@ -7,4 +7,9 @@ import unittest
 
 
 class TestPackager(unittest.TestCase):
-    pass
+    """ Skipped:
+        sync_github_metadata"""
+    def test_sync_github_metadata(self):
+        setup_workdir(use_working_dir=True)
+        print(Packager().clone_repo(path="x"))
+

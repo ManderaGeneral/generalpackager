@@ -11,7 +11,11 @@ from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
 
-packager = Packager("generalfile")
+# packager = Packager("generalfile")
 
+import pathlib
+
+for path in Path("generalpackager/test/tests/x").get_children(-1, filt=Path.is_file, traverse_excluded=True):
+    path.delete()
 
 

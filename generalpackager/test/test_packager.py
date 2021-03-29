@@ -7,7 +7,8 @@ import unittest
 
 
 class TestPackager(unittest.TestCase):
-    pass
+    def test_exists(self):
+        self.assertEqual(True, Packager().exists())
 
 
 

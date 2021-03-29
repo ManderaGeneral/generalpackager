@@ -7,6 +7,12 @@ import unittest
 
 
 class TestPackager(unittest.TestCase):
+    """ Skipped:
+        workflow_unittest
+        workflow_sync
+        if_publish_bump
+        if_publish_publish
+        """
     def test_get_triggers(self):
         self.assertIn("branches", Packager().get_triggers())
 
@@ -26,22 +32,24 @@ class TestPackager(unittest.TestCase):
         self.assertIn("TWINE", Packager().get_env())
 
     def test_steps_setup(self):
-        print(Packager().steps_setup())
+        self.assertIn("pip install", Packager().steps_setup("3.8"))
 
     def test_get_unittest_job(self):
-        print(Packager().get_unittest_job())
+        self.assertIn("pip install", Packager().get_unittest_job())
 
     def test_get_sync_job(self):
-        print(Packager().get_sync_job())
+        self.assertIn("pip install", Packager().get_sync_job())
 
     def test_step_run_packager_method(self):
-        print(Packager().step_run_packager_method())
+        self.assertIn("Packager(", Packager().step_run_packager_method("foo"))
 
     def test_run_ordered_methods(self):
-        print(Packager().run_ordered_methods())
-
-    def test_workflow_unittest(self):
-        print(Packager().workflow_unittest())
+        x = []
+        def a(_): x.append(1)
+        def b(_): x.append(2)
+        Packager().run_ordered_methods(a, b)
+        length = len(Packager().get_all())
+        self.assertEqual([1] * length + [2] * length, x)
 
     def test_workflow_sync(self):
         print(Packager().workflow_sync())

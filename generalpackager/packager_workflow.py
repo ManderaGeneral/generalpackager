@@ -113,7 +113,7 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self:
             :param method: """
         run = CodeLine(f'run: |')
-        run.add_node(f'python -c "from generalpackager import Packager; Packager(\'generalpackager\', \'\').{method}()"')
+        run.add_node(f'python -c "from generalpackager import Packager; Packager(\'generalpackager\').{method}()"')
         return self._get_step(f"Run Packager method '{method}'", run, self.get_env())
 
     def run_ordered_methods(self, *funcs):

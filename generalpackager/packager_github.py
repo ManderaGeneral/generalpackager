@@ -1,4 +1,5 @@
 
+from generalpackager.api.local_repo import LocalRepo
 
 from git import Repo
 
@@ -16,17 +17,15 @@ class _PackagerGitHub:
         self.github.set_description(self.localrepo.description)
         self.github.set_topics(*self.get_topics())
 
-    def clone_repo(self, url=None, path=None):
+    def clone_repo(self, path=None):
         """ Clone a GitHub repo into a path to produce a LocalRepo.
 
             :param generalpackager.Packager self:
-            :param url:
             :param path: """
-        if url is None:
-            url = self.github.url
         if path is None:
             path = self.path
-        Repo.clone_from(url=url, to_path=path)
+        Repo.clone_from(url=self.github.url, to_path=path)
+        return LocalRepo(self.name)
 
     def commit_push_store_sha(self, message, tag=False):
         """ Use LocalRepos method commit_and_push but also store short sha1.
