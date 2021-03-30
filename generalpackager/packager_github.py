@@ -40,7 +40,7 @@ class _PackagerGitHub:
             :param message:
             :param tag: """
         repo = Repo(str(self.path))
-        repo.git.add_node(A=True)
+        repo.git.add(A=True)
         repo.index.commit(message=str(message) or "Automatic commit.")
         remote = repo.remote()
         remote.set_url(f"https://Mandera:{PACKAGER_GITHUB_API}@github.com/{self.github.owner}/{self.name}.git")
