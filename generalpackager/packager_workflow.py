@@ -125,6 +125,9 @@ class _PackagerWorkflow:
 
     def workflow_unittest(self):
         """ :param generalpackager.Packager self: """
+        from generalfile import Path
+        Path().view(spawn=True, filt=lambda path: not path.name().startswith("."))
+
         self.run_ordered_methods(
             lambda packager: packager.generate_localfiles(aesthetic=False),
             lambda packager: packager.localrepo.pip_install(),

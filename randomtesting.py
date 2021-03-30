@@ -19,4 +19,10 @@ from generalpackager.api.pypi import PyPI
 
 
 # Packager().commit_and_push("[CI SKIP] Auto tests.")
-Packager().file_workflow.generate()
+# Packager().file_workflow.generate()
+
+# print(Packager().localrepo.get_metadata_path())
+
+
+Path().view(spawn=True, filt=lambda path: not path.name().startswith("."))
+
