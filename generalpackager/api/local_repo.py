@@ -153,26 +153,6 @@ class LocalRepo(Recycle, _SharedAPI):
             if not path.match("/dist", "/build"):
                 yield path
 
-    def commit_and_push(self, message=None, tag=False, owner=None):
-        """ Commit and push this local repo to GitHub.
-            Return short sha1 of pushed commit. """
-        if message is None:
-            message = "Automatic commit."
-        if owner is None:
-            owner = "ManderaGeneral"
-        repo = Repo(str(self.path))
-
-        repo.git.add_node(A=True)
-        repo.index.commit(message=str(message))
-        remote = repo.remote()
-        remote.set_url(f"https://Mandera:{PACKAGER_GITHUB_API}@github.com/{owner}/{self.name}.git")
-
-        if tag:
-            tag_ref = repo.create_tag(f"v{self.version}", force=True)
-            remote.push(refspec=tag_ref)
-
-        return remote.push()[0].summary.split("..")[1].rstrip()
-
     def get_changed_files(self):
         """ Get a list of changed files compared to remote. """
         repo = Repo(str(self.path))
