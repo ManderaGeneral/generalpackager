@@ -18,5 +18,5 @@ from generalpackager.api.pypi import PyPI
 #     path.delete()
 
 
-Packager().commit_and_push("[CI SKIP] Auto tests.")
-
+# Packager().commit_and_push("[CI SKIP] Auto tests.")
+Packager().file_workflow.generate()

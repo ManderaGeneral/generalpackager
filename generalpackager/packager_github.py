@@ -50,7 +50,7 @@ class _PackagerGitHub:
             remote.push(refspec=tag_ref)
         try:
             self.commit_sha = remote.push()[0].summary.split("..")[1].rstrip()
-        except OSError:
+        except OSError:  # Just suppressing weird invalid handle error
             pass
         return self.commit_sha
 
