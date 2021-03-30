@@ -126,13 +126,14 @@ class _PackagerWorkflow:
     def workflow_unittest(self):
         """ :param generalpackager.Packager self: """
         from generalfile import Path
-        Path().view(spawn=True, filt=lambda path: not path.name().startswith("."))
+        print(Path().view(spawn=True, filt=lambda path: not path.name().startswith(".")))
+        exit()
 
-        self.run_ordered_methods(
-            lambda packager: packager.generate_localfiles(aesthetic=False),
-            lambda packager: packager.localrepo.pip_install(),
-            lambda packager: packager.localrepo.unittest(),
-        )
+        # self.run_ordered_methods(
+        #     lambda packager: packager.generate_localfiles(aesthetic=False),
+        #     lambda packager: packager.localrepo.pip_install(),
+        #     lambda packager: packager.localrepo.unittest(),
+        # )
 
     def workflow_sync(self):
         """ Runs in workflow once Packagers have created each LocalRepo from latest master commit.
