@@ -48,8 +48,10 @@ class _PackagerGitHub:
         if tag:
             tag_ref = repo.create_tag(f"v{self.version}", force=True)
             remote.push(refspec=tag_ref)
-
-        self.commit_sha = remote.push()[0].summary.split("..")[1].rstrip()
+        try:
+            self.commit_sha = remote.push()[0].summary.split("..")[1].rstrip()
+        except OSError:
+            pass
         return self.commit_sha
 
 
