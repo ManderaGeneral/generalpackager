@@ -51,12 +51,3 @@ class TestPackager(unittest.TestCase):
         length = len(Packager().get_all())
         self.assertEqual([1] * length + [2] * length, x)
 
-    def test_workflow_sync(self):
-        print(Packager().workflow_sync())
-
-    def test_if_publish_bump(self):
-        print(Packager().if_publish_bump())
-
-    def test_if_publish_publish(self):
-        print(Packager().if_publish_publish())
-

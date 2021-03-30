@@ -144,14 +144,14 @@ class _PackagerWorkflow:
             lambda packager: packager.generate_localfiles(aesthetic=True),
             lambda packager: packager.localrepo.pip_install(),
             lambda packager: packager.localrepo.unittest(),  # For good measure
-            lambda packager, msg=msg1: packager.commit_push_store_sha(message=msg, tag=False),
+            lambda packager, msg=msg1: packager.commit_and_push(message=msg, tag=False),
             lambda packager, msg=msg2: packager.if_publish_publish(message=msg),
             lambda packager: packager.sync_github_metadata(),
         )
 
         mandera = type(self)(name="Mandera", github_owner="Mandera")
         mandera.file_personal_readme.generate()
-        mandera.commit_push_store_sha(message=msg1)
+        mandera.commit_and_push(message=msg1)
 
     def if_publish_bump(self):
         """ Bump if updated and any other Packager is bumped.
@@ -165,7 +165,7 @@ class _PackagerWorkflow:
             :param message: """
         if self.is_bumped():
             self.file_readme.generate()
-            self.commit_push_store_sha(message=message, tag=True)
+            self.commit_and_push(message=message, tag=True)
             self.localrepo.upload()
 
 

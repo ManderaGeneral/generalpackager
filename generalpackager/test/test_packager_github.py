@@ -9,7 +9,7 @@ import unittest
 class TestPackager(unittest.TestCase):
     """ Skipped:
         sync_github_metadata"""
-    def test_sync_github_metadata(self):
+    def test_clone_repo(self):
         setup_workdir(use_working_dir=True)
-        print(Packager().clone_repo(path="x"))
+        self.assertEqual(True, Packager().clone_repo().exists())
 

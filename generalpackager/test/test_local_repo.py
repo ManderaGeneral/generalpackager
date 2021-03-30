@@ -7,7 +7,6 @@ import unittest
 
 class TestLocalRepo(unittest.TestCase):
     """ Skipped tests:
-        commit_and_push
         pip_install
         unittest
         create_sdist

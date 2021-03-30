@@ -13,9 +13,10 @@ from generalpackager.api.pypi import PyPI
 
 # packager = Packager("generalfile")
 
-import pathlib
 
-for path in Path("generalpackager/test/tests/x").get_children(-1, filt=Path.is_file, traverse_excluded=True):
-    path.delete()
+# for path in Path("generalpackager/test/tests/x").get_children(-1, filt=Path.is_file, traverse_excluded=True):
+#     path.delete()
 
+
+# Packager().commit_and_push("[CI SKIP] Auto tests.")
 
