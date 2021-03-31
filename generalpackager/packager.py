@@ -44,6 +44,9 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
         self.localrepo = LocalRepo(name=self.name)
         self.path = self.localrepo.path
 
+        if self.localmodule.is_general() and not self.localrepo.exists():
+            self.clone_repo()
+
         self.github = GitHub(name=self.name, owner=github_owner)
         self.pypi = PyPI(name=self.name, owner=pypi_owner)
 
@@ -51,17 +54,18 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
         """ Just check GitHub for now. """
         return self.github.exists()
 
-    def spawn_children(self):
-        for local_module in self.localmodule.get_dependants():
+    def _spawn(self, modules, child=None, parent=None):
+        for local_module in modules:
             if local_module.is_general():
                 packager = Packager(local_module.name)
-                packager.set_parent(parent=self)
+                if packager.localrepo.enabled:
+                    (child or packager).set_parent(parent=parent or packager)
+
+    def spawn_children(self):
+        self._spawn(self.localmodule.get_dependants(), parent=self)
 
     def spawn_parents(self):
-        for local_module in self.localmodule.get_dependencies():
-            if local_module.is_general():
-                packager = Packager(local_module.name)
-                self.set_parent(parent=packager)
+        self._spawn(self.localmodule.get_dependencies(), child=self)
 
     def generate_localfiles(self, aesthetic=True):
         """ Generate all local files. """

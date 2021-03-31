@@ -21,5 +21,10 @@ from generalpackager.api.pypi import PyPI
 # Packager().commit_and_push("[CI SKIP] Auto tests.")
 # Packager().file_workflow.generate()
 
-print(Packager("generalfile").localrepo.unittest())
+# print(Packager("generalfile").localrepo.unittest())
 
+
+
+for packager in Packager().get_all():
+    # print(packager)
+    packager.file_workflow.generate()

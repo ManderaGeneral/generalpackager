@@ -119,15 +119,9 @@ class _PackagerWorkflow:
     def run_ordered_methods(self, *funcs):
         """ :param generalpackager.Packager self: """
         order = self.get_ordered_packagers()
-
-        for packager in order:
-            if not packager.localrepo.exists():
-                packager.clone_repo()
-
         for func in funcs:
             for packager in order:
-                if packager.localrepo.enabled:
-                    func(packager)
+                func(packager)
 
     def workflow_unittest(self):
         """ :param generalpackager.Packager self: """

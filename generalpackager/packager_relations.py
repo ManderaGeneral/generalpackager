@@ -1,11 +1,14 @@
 
+from generallibrary import remove_duplicates
+
 
 class _PackagerRelations:
     def get_ordered_packagers(self):
         """ Get a list of enabled ordered packagers from the dependency chain, sorted by name in each lvl.
 
-            :param generalpackager.Packager self: """
-        return [packager for packager_set in self.get_ordered(flat=False) for packager in sorted(packager_set, key=lambda x: x.name)]
+            :param generalpackager.Packager self:
+            :rtype: list[generalpackager.Packager] """
+        return remove_duplicates([packager for packager_set in self.get_ordered(flat=False) for packager in sorted(packager_set, key=lambda x: x.name)])
 
     def get_owners_package_names(self):
         """ Return a set of owner's packages with intersecting PyPI and GitHub, ignores enabled flag.
