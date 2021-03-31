@@ -55,15 +55,13 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
         for local_module in self.localmodule.get_dependants():
             if local_module.is_general():
                 packager = Packager(local_module.name)
-                if packager.localrepo.enabled:
-                    packager.set_parent(parent=self)
+                packager.set_parent(parent=self)
 
     def spawn_parents(self):
         for local_module in self.localmodule.get_dependencies():
             if local_module.is_general():
                 packager = Packager(local_module.name)
-                if packager.localrepo.enabled:
-                    self.set_parent(parent=packager)
+                self.set_parent(parent=packager)
 
     def generate_localfiles(self, aesthetic=True):
         """ Generate all local files. """

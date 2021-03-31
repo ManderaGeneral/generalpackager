@@ -119,14 +119,19 @@ class _PackagerWorkflow:
     def run_ordered_methods(self, *funcs):
         """ :param generalpackager.Packager self: """
         order = self.get_ordered_packagers()
+
+        for packager in order:
+            if not packager.localrepo.exists():
+                packager.clone_repo()
+
         for func in funcs:
             for packager in order:
-                func(packager)
+                if packager.localrepo.enabled:
+                    func(packager)
 
     def workflow_unittest(self):
         """ :param generalpackager.Packager self: """
         self.run_ordered_methods(
-            lambda packager: packager.clone_repo(),
             lambda packager: packager.generate_localfiles(aesthetic=False),
             lambda packager: packager.localrepo.pip_install(),
             lambda packager: packager.localrepo.unittest(),
@@ -141,7 +146,6 @@ class _PackagerWorkflow:
         msg2 = f"[CI AUTO] Publish triggered by {trigger_repo}"
 
         self.run_ordered_methods(
-            lambda packager: packager.clone_repo(),
             lambda packager: packager.if_publish_bump(),
             lambda packager: packager.generate_localfiles(aesthetic=True),
             lambda packager: packager.localrepo.pip_install(),
