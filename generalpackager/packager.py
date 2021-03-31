@@ -44,11 +44,11 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
         self.localrepo = LocalRepo(name=self.name)
         self.path = self.localrepo.path
 
-        if self.localmodule.is_general() and not self.localrepo.exists():
-            self.clone_repo()
-
         self.github = GitHub(name=self.name, owner=github_owner)
         self.pypi = PyPI(name=self.name, owner=pypi_owner)
+
+        if self.localmodule.is_general() and not self.localrepo.exists():
+            self.clone_repo()
 
     def exists(self):
         """ Just check GitHub for now. """
