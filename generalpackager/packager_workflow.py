@@ -125,15 +125,12 @@ class _PackagerWorkflow:
 
     def workflow_unittest(self):
         """ :param generalpackager.Packager self: """
-        from generalfile import Path
-        print(Path().view(spawn=True, filt=lambda path: not path.name().startswith(".")))
-        exit()
-
-        # self.run_ordered_methods(
-        #     lambda packager: packager.generate_localfiles(aesthetic=False),
-        #     lambda packager: packager.localrepo.pip_install(),
-        #     lambda packager: packager.localrepo.unittest(),
-        # )
+        self.run_ordered_methods(
+            lambda packager: packager.clone_repo(),
+            lambda packager: packager.generate_localfiles(aesthetic=False),
+            lambda packager: packager.localrepo.pip_install(),
+            lambda packager: packager.localrepo.unittest(),
+        )
 
     def workflow_sync(self):
         """ Runs in workflow once Packagers have created each LocalRepo from latest master commit.
@@ -144,6 +141,7 @@ class _PackagerWorkflow:
         msg2 = f"[CI AUTO] Publish triggered by {trigger_repo}"
 
         self.run_ordered_methods(
+            lambda packager: packager.clone_repo(),
             lambda packager: packager.if_publish_bump(),
             lambda packager: packager.generate_localfiles(aesthetic=True),
             lambda packager: packager.localrepo.pip_install(),

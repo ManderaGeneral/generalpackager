@@ -26,7 +26,11 @@ class _PackagerGitHub:
 
             :param generalpackager.Packager self:
             :param path: """
-        path = Path(path) / self.name
+        if path is None:
+            path = self.path
+            assert not self.localrepo.exists()
+        else:
+            path = Path(path) / self.name
 
         Repo.clone_from(url=self.github.url, to_path=path)
         with path.as_working_dir():

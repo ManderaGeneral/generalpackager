@@ -12,5 +12,5 @@ class TestPackager(unittest.TestCase):
         commit_and_push """
     def test_clone_repo(self):
         setup_workdir(use_working_dir=True)
-        self.assertEqual(True, Packager().clone_repo().exists())
+        self.assertEqual(True, Packager().clone_repo("").exists())
 
