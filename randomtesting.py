@@ -28,3 +28,4 @@ from generalpackager.api.pypi import PyPI
 for packager in Packager().get_all():
     # print(packager)
     packager.file_workflow.generate()
+
