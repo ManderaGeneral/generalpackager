@@ -11,7 +11,16 @@ from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
 
-# packager = Packager("generalfile")
+# packager = Packager()
+
+
+
+print(Path.get_working_dir())
+localrepo = LocalRepo("generalpackager")
+print(localrepo)
+
+
+print(localrepo.get_changed_files())  # HERE ** Fix compare_local_to_pypi, compare_local_to_remote and get_changed_files
 
 
 # for path in Path("generalpackager/test/tests/x").get_children(-1, filt=Path.is_file, traverse_excluded=True):
@@ -25,7 +34,9 @@ from generalpackager.api.pypi import PyPI
 
 
 
-for packager in Packager().get_all():
+
+# for packager in Packager().get_all():
     # print(packager)
-    packager.file_workflow.generate()
+    # packager.file_workflow.generate()
+
 

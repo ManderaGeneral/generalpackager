@@ -65,14 +65,14 @@ class LocalRepo(Recycle, _SharedAPI):
         return self.path_exists(path=self.path)
 
     @classmethod
-    def path_exists(self, path):
+    def path_exists(cls, path):
         if path.is_file() or not path.exists():
             return False
-        return bool(path.get_child(filt=lambda x: x.name() == ".git", traverse_excluded=True))
+        return bool(path.get_child(filt=lambda x: x.name() in ("setup.py", ), traverse_excluded=True))
 
     @classmethod
     def get_repo_path_parent(cls, path=None):
-        """ Return first found Path where LocalRepo can be created or None.
+        """ Iterate self and parents to return first path where LocalRepo can be created or None.
 
             :param Path or any path:
             :rtype: Path """

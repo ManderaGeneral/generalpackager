@@ -23,8 +23,9 @@ class TestPackager(unittest.TestCase):
         self.assertEqual([], packager.filter_relative_filenames("setup.py", aesthetic=True))
 
     def test_compare_local_to_remote(self):
-        setup_workdir(use_working_dir=True)
+        setup_workdir(use_working_dir=True)  # HERE ** Not right in github actions
         packager = Packager()
+        print(packager.compare_local_to_remote())
         self.assertGreater(len(packager.compare_local_to_remote()), 0)
 
     def test_generate_setup(self):
