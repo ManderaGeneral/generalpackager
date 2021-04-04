@@ -49,12 +49,14 @@ class PyPI(Recycle, _SharedAPI):
     def download(self, path, version=None, overwrite=False):
         """ Download tar ball to cache, extract it, remove tar ball.
             Returns target folder tarball is extracted in. """
+        if version is None:
+            version = self.get_version()
         path = Path(path)
         temp = Path.get_cache_dir() / "Python/temp.tar.gz"
         download(self.get_tarball_url(version=version), path=temp)
         temp.unpack(base=path, overwrite=overwrite)
         temp.delete(error=False)
-        return path.get_child()
+        return path / f"{self.name}-{version}"
 
     def get_owners_packages(self):
         """ Get a set of a owner's packages' names on PyPI. """

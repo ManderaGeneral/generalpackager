@@ -44,7 +44,7 @@ class _PackagerFiles:
         self.file_personal_readme = GenerateFile(self.localrepo.get_readme_path(), self.generate_personal_readme, self, aesthetic=True)
 
     def relative_path_is_aesthetic(self, relative_path):
-        """ Relative to package path. None if not defined as a GenerateFile instance.
+        """ Relative to package path. False if not defined as a GenerateFile instance.
 
             :param generalpackager.Packager self:
             :param Path or str relative_path: """
@@ -53,7 +53,9 @@ class _PackagerFiles:
         if aesthetic_attr is None:
             if relative_path.match(*self.extra_aesthetic):
                 return True
-            elif relative_path.match(*self.extra_non_aesthetic):
+            # elif relative_path.match(*self.extra_non_aesthetic):
+            #     return False
+            else:
                 return False
         return aesthetic_attr
 
@@ -72,6 +74,7 @@ class _PackagerFiles:
         package_path = platform.download(path=unpack_target, overwrite=True)
 
         filt = lambda path: not path.match(*self.git_exclude_lines)
+
         differing_files = self.path.get_differing_files(target=package_path, filt=filt)
 
         return self.filter_relative_filenames(*differing_files, aesthetic=aesthetic)

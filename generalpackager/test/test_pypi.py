@@ -26,7 +26,7 @@ class TestPyPI(unittest.TestCase):
             PyPI("generalpackager").download(path="repo", version="0.0.111")
 
         path = PyPI("generalpackager").download(path="repo", version="0.0.11", overwrite=True)
-        self.assertEqual(2, len(path.get_children()))
+        self.assertEqual(2, len(path.get_parent().get_children()))
 
     def test_get_owners_packages(self):
         github = PyPI()

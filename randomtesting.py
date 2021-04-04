@@ -15,12 +15,9 @@ packager = Packager()
 
 print(packager)
 
-# print(packager.compare_local_to_pypi())
-print(packager.compare_local_to_github())
+print(packager.compare_local_to_pypi(aesthetic=True))
+# print(packager.compare_local_to_github(aesthetic=False))
 
-
-# print(localrepo.get_changed_files())  # HERE ** Fix compare_local_to_pypi, compare_local_to_remote and get_changed_files
-# Move to GitHub and change names to download
 
 # for path in Path("generalpackager/test/tests/x").get_children(-1, filt=Path.is_file, traverse_excluded=True):
 #     path.delete()
