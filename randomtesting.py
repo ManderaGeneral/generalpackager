@@ -11,28 +11,4 @@ from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
 
-packager = Packager()
-
-print(packager)
-
-print(packager.compare_local_to_pypi(aesthetic=True))
-# print(packager.compare_local_to_github(aesthetic=False))
-
-
-# for path in Path("generalpackager/test/tests/x").get_children(-1, filt=Path.is_file, traverse_excluded=True):
-#     path.delete()
-
-
-# Packager().commit_and_push("[CI SKIP] Auto tests.")
-# Packager().file_workflow.generate()
-
-# print(Packager("generalfile").localrepo.unittest())
-
-
-
-
-# for packager in Packager().get_all():
-    # print(packager)
-    # packager.file_workflow.generate()
-
-
+# HERE ** Tests working locally, make them work on remote

@@ -5,8 +5,6 @@ from generalfile.test.setup_workdir import setup_workdir
 
 import unittest
 
-from pprint import pprint
-
 
 class TestPackager(unittest.TestCase):
     def test_badges_dict(self):

@@ -23,9 +23,9 @@ class _PackagerRelations:
         return {packager for packager in self.get_all() if packager.is_bumped()}
 
     def general_changed_dict(self, aesthetic=None):
-        """ Return a dict of general packagers with changed files comparing to remote.
+        """ Return a dict of general packagers with changed files comparing to github.
 
             :param generalpackager.Packager self:
             :param aesthetic: """
-        return {packager: files for packager in self.get_all() if (files := packager.compare_local_to_remote(aesthetic=aesthetic))}
+        return {packager: files for packager in self.get_all() if (files := packager.compare_local_to_github(aesthetic=aesthetic))}
 
