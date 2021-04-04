@@ -154,7 +154,7 @@ class LocalRepo(Recycle, _SharedAPI):
                 yield path
 
     def get_changed_files(self):
-        """ Get a list of changed files compared to remote. """
+        """ Get a list of changed files compared to remote using local .git folder. """
         repo = Repo(str(self.path))
         return [Path(file) for file in re.findall("diff --git a/(.*) " + "b/", repo.git.diff())]
 

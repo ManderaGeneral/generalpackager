@@ -66,12 +66,29 @@ class _PackagerFiles:
             :param bool or None aesthetic: """
         return [path for path in filenames if aesthetic is None or aesthetic is self.relative_path_is_aesthetic(path)]
 
-    def compare_local_to_remote(self, aesthetic=None):
+    def _compare_local(self, platform, aesthetic):
+        """ :param generalpackager.Packager self: """
+        unpack_target = Path.get_cache_dir() / "Python"
+        package_path = platform.download(path=unpack_target, overwrite=True)
+
+        filt = lambda path: not path.match(*self.git_exclude_lines)
+        differing_files = self.path.get_differing_files(target=package_path, filt=filt)
+
+        return self.filter_relative_filenames(*differing_files, aesthetic=aesthetic)
+
+    def compare_local_to_github(self, aesthetic=None):
         """ Get a list of changed files compared to remote with optional aesthetic files.
 
             :param generalpackager.Packager self:
             :param aesthetic: """
-        return self.filter_relative_filenames(*self.localrepo.get_changed_files(), aesthetic=aesthetic)
+        return self._compare_local(platform=self.github, aesthetic=aesthetic)
+
+    def compare_local_to_pypi(self, aesthetic=None):
+        """ Get a list of changed files compared to pypi with optional aesthetic files.
+
+            :param generalpackager.Packager self:
+            :param aesthetic: """
+        return self._compare_local(platform=self.pypi, aesthetic=aesthetic)
 
     def generate_setup(self):
         """ Generate setup.py.

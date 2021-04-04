@@ -46,15 +46,15 @@ class PyPI(Recycle, _SharedAPI):
             version = self.get_version()
         return f"https://pypi.io/packages/source/{self.name[0]}/{self.name}/{self.name}-{version}.tar.gz"
 
-    def download_and_unpack_tarball(self, target_folder, version=None, overwrite=False):
+    def download(self, path, version=None, overwrite=False):
         """ Download tar ball to cache, extract it, remove tar ball.
             Returns target folder tarball is extracted in. """
-        target_folder = Path(target_folder)
+        path = Path(path)
         temp = Path.get_cache_dir() / "Python/temp.tar.gz"
         download(self.get_tarball_url(version=version), path=temp)
-        temp.unpack(base=target_folder, overwrite=overwrite)
+        temp.unpack(base=path, overwrite=overwrite)
         temp.delete(error=False)
-        return target_folder
+        return path.get_child()
 
     def get_owners_packages(self):
         """ Get a set of a owner's packages' names on PyPI. """

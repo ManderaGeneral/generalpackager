@@ -78,7 +78,7 @@ This package and 3 other make up [ManderaGeneral](https://github.com/Mandera).
    │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_repo.py#L182'>Method: upload</a> <b>(Untested)</b>
    │  └─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_repo.py#L192'>Property: version</a> <b>(Untested)</b>
    ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/pypi.py#L26'>Class: PyPI</a> <b>(Untested)</b>
-   │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/pypi.py#L52'>Method: download_and_unpack_tarball</a> <b>(Untested)</b>
+   │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/pypi.py#L52'>Method: download</a> <b>(Untested)</b>
    │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/pypi.py#L76'>Method: get_datetime</a> <b>(Untested)</b>
    │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/pypi.py#L44'>Method: get_tarball_url</a> <b>(Untested)</b>
    │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/pypi.py#L38'>Method: get_url</a> <b>(Untested)</b>

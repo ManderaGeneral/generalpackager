@@ -25,8 +25,8 @@ class TestPackager(unittest.TestCase):
     def test_compare_local_to_remote(self):
         setup_workdir(use_working_dir=True)  # HERE ** Not right in github actions
         packager = Packager()
-        print(packager.compare_local_to_remote())
-        self.assertGreater(len(packager.compare_local_to_remote()), 0)
+        print(packager.compare_local_to_github())
+        self.assertGreater(len(packager.compare_local_to_github()), 0)
 
     def test_generate_setup(self):
         packager = Packager()

@@ -19,23 +19,6 @@ class _PackagerGitHub:
         self.github.set_description(self.localrepo.description)
         self.github.set_topics(*self.get_topics())
 
-    def clone_repo(self, path=None):
-        """ Clone a GitHub repo into a path to produce a LocalRepo.
-            Creates a folder with Packager's name first.
-            Target must be empty.
-
-            :param generalpackager.Packager self:
-            :param path: """
-        if path is None:
-            path = self.path
-            assert not self.localrepo.exists()
-        else:
-            path = Path(path) / self.name
-
-        Repo.clone_from(url=self.github.url, to_path=path)
-        with path.as_working_dir():
-            return LocalRepo(self.name)
-
     def commit_and_push(self, message=None, tag=False):
         """ Commit and push this local repo to GitHub.
             Return short sha1 of pushed commit.

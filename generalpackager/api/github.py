@@ -2,11 +2,12 @@
 from generalpackager.api.shared import _SharedAPI
 from generalpackager import PACKAGER_GITHUB_API
 from generallibrary import Recycle, deco_cache
+from generalfile import Path
 
 import requests
 import json
 import re
-
+from git import Repo
 
 
 class GitHub(Recycle, _SharedAPI):
@@ -26,6 +27,25 @@ class GitHub(Recycle, _SharedAPI):
     def exists(self):
         """ Return whether this API's target exists. """
         return requests.get(url=self.url).status_code == 200
+
+    def download(self, path, overwrite=False):
+        """ Clone a GitHub repo into a path.
+            Creates a folder with Package's name first.
+            Target must be empty.
+
+            :param generalpackager.Packager self:
+            :param path:
+            :param overwrite: """
+        path = Path(path) / self.name
+
+        if path.exists():
+            if overwrite:
+                path.delete()
+            else:
+                raise AttributeError(f"Clone target exists and overwrite is False.")
+
+        Repo.clone_from(url=self.url, to_path=path)
+        return path
 
     def get_owners_packages(self):
         """ Get a set of a owner's packages' names on GitHub. """

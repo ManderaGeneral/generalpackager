@@ -34,7 +34,7 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
     python = "3.8", "3.9"  # Only supports basic definition with tuple of major.minor
     os = "windows", "ubuntu"  # , "macos"
 
-    git_exclude_lines = ".idea", "build", "dist", "*.egg-info", "__pycache__", ".git"
+    git_exclude_lines = ".idea", "build", "dist", "*.egg-info", "__pycache__", ".git", "test/tests"
     _recycle_keys = LocalModule._recycle_keys
 
     def __init__(self, name=None, github_owner=None, pypi_owner=None):
@@ -48,7 +48,7 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
         self.pypi = PyPI(name=self.name, owner=pypi_owner)
 
         if self.localmodule.is_general() and not self.localrepo.exists():
-            self.clone_repo()
+            self.github.download(path=self.path)
 
     def exists(self):
         """ Just check GitHub for now. """
