@@ -60,7 +60,7 @@ class TestLocalRepo(unittest.TestCase):
         version = local_repo.version
         local_repo.bump_version()
         self.assertNotEqual(local_repo.version, version)
-        self.assertIn("metadata.json", local_repo.get_changed_files())
+        self.assertIn("metadata.json", local_repo.git_changed_files())
         local_repo.version = version
         self.assertEqual(local_repo.version, version)
 

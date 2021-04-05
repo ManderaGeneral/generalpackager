@@ -1,7 +1,6 @@
 
 from generalpackager.api.shared import _SharedAPI
 from generalfile import Path
-from generalpackager import PACKAGER_GITHUB_API
 from generallibrary import Ver, deco_cache, Recycle
 
 from setuptools import find_namespace_packages
@@ -88,7 +87,8 @@ class LocalRepo(Recycle, _SharedAPI):
         """ Try to return absolute path pointing to folder containing repos or None.
 
             :rtype: Path """
-        return Path(path).absolute().get_parent(depth=-1, include_self=True, filt=lambda path: LocalRepo.get_repo_path_child(path), traverse_excluded=True)
+        filt = lambda path: LocalRepo.get_repo_path_child(path) and not path.match("/test")
+        return Path(path).absolute().get_parent(depth=-1, include_self=True, filt=filt, traverse_excluded=True)
 
     @classmethod
     def get_path_from_name(cls, name=None):
@@ -153,8 +153,8 @@ class LocalRepo(Recycle, _SharedAPI):
             if not path.match("/dist", "/build"):
                 yield path
 
-    def get_changed_files(self):
-        """ Get a list of changed files compared to remote using local .git folder. """
+    def git_changed_files(self):
+        """ Get a list of changed files using local .git folder. """
         repo = Repo(str(self.path))
         return [Path(file) for file in re.findall("diff --git a/(.*) " + "b/", repo.git.diff())]
 

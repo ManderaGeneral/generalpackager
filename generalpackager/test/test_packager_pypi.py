@@ -13,6 +13,6 @@ class TestPackager(unittest.TestCase):
         self.assertGreater(len(packager.compare_local_to_pypi()), 0)
 
     def test_get_latest_release(self):
-        self.assertIn("CET", str(Packager().get_latest_release()))
+        self.assertIn("CE", str(Packager().get_latest_release()))
 
 
