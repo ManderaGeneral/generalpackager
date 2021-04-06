@@ -11,4 +11,16 @@ from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
 
-# HERE ** Tests working locally, make them work on remote
+# HERE ** LocalRepo is getting wrong path
+
+# print(Path.get_working_dir())
+
+# packager = Packager()
+
+with Path("generalpackager").as_working_dir():
+    print(LocalRepo("generalfile"))
+    # print(Path.get_working_dir().open_folder())
+
+# packager.github.download(path=Path().absolute().get_parent() / "foo")
+
+
