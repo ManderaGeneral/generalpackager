@@ -96,6 +96,7 @@ class LocalRepo(Recycle, _SharedAPI):
 
             :param Path or any name:
             :rtype: Path """
+        # Check if inside correct repo already
         path = cls.get_repo_path_parent()
         if path and (name is None or name == path.name()):
             return path
@@ -103,6 +104,7 @@ class LocalRepo(Recycle, _SharedAPI):
         if name is None:
             name = "generalpackager"
 
+        # Check if there's a parent that has a repo child that exists
         repos_path = cls.get_repos_path()
         if repos_path:
             return repos_path / name

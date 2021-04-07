@@ -58,7 +58,10 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
         for local_module in modules:
             if local_module.is_general():
                 packager = Packager(name=local_module.name)
-                print("here", packager, packager.path.get_working_dir())
+
+                from generalfile import Path
+                Path().absolute().get_parent(1, 1).view(spawn=True)
+
                 if packager.localrepo.enabled:
                     (child or packager).set_parent(parent=parent or packager)
 
