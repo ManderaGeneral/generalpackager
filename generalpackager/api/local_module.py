@@ -35,10 +35,7 @@ class LocalModule(Recycle, _SharedAPI):
 
     def _filter(self, objInfo):
         """ :param ObjInfo objInfo: """
-        module = objInfo._module()
-        # return module and module.__name__.startswith(self.name)
         return objInfo.module().__name__.startswith(self.name) and (objInfo.from_class() or objInfo.from_module())
-        # return objInfo.module().__name__.startswith(self.name) and objInfo.type() is not None
 
     @property
     @deco_cache()
