@@ -25,12 +25,12 @@ class TestPackager(unittest.TestCase):
     def test_compare_local_to_github(self):
         setup_workdir(use_working_dir=True)
         packager = Packager()
-        self.assertGreater(len(packager.compare_local_to_github()), 0)
+        packager.compare_local_to_github()
 
     def test_compare_local_to_pypi(self):
         setup_workdir(use_working_dir=True)
         packager = Packager()
-        self.assertGreater(len(packager.compare_local_to_github()), 0)
+        packager.compare_local_to_pypi()
 
     def test_generate_setup(self):
         packager = Packager()
