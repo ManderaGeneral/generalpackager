@@ -33,6 +33,13 @@ class LocalModule(Recycle, _SharedAPI):
     def module(self):
         return import_module(self.name)
 
+    def _filter(self, objInfo):
+        """ :param ObjInfo objInfo: """
+        module = objInfo._module()
+        # return module and module.__name__.startswith(self.name)
+        return objInfo.module().__name__.startswith(self.name) and (objInfo.from_class() or objInfo.from_module())
+        # return objInfo.module().__name__.startswith(self.name) and objInfo.type() is not None
+
     @property
     @deco_cache()
     def objInfo(self):
@@ -42,10 +49,6 @@ class LocalModule(Recycle, _SharedAPI):
         objInfo.get_children(depth=-1, filt=self._filter, traverse_excluded=False)
         objInfo.disconnect(lambda node: not self._filter(node))
         return objInfo
-
-    def _filter(self, objInfo):
-        """ :param ObjInfo objInfo: """
-        return objInfo.module().__name__.startswith(self.name)
 
     @deco_cache()
     def get_env_vars(self):

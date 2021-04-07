@@ -149,6 +149,7 @@ class _PackagerMarkdown:
             string = f"{string} <b>(Untested)</b>"
 
         return string
+        # return f"{string} {objInfo.from_class()} {objInfo.from_module()}"
 
     def get_attributes_markdown(self):
         """ Get a recursive view of attributes markdown.
