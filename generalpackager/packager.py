@@ -48,7 +48,7 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
         self.pypi = PyPI(name=self.name, owner=pypi_owner)
 
         if self.localmodule.is_general() and not self.localrepo.exists():
-            self.github.download(path=self.path)
+            self.github.download(path=self.path.get_parent())
 
     def exists(self):
         """ Just check GitHub for now. """
@@ -59,8 +59,8 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
             if local_module.is_general():
                 packager = Packager(name=local_module.name)
 
-                from generalfile import Path
-                Path().absolute().get_parent(1, 1).view(spawn=True)
+                # from generalfile import Path
+                # Path().absolute().get_parent(1, 1).view(spawn=True)
 
                 if packager.localrepo.enabled:
                     (child or packager).set_parent(parent=parent or packager)
