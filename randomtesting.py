@@ -11,4 +11,4 @@ from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
 
-print(Packager("generalfile").get_attributes_markdown())
+print(Packager(name="Mandera", github_owner="Mandera").generate_personal_readme())

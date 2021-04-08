@@ -228,7 +228,7 @@ class _PackagerFiles:
         )
 
         # Package information
-        self.get_information_markdown(*self.get_ordered()).set_parent(parent=markdown)
+        self.get_information_markdown(*type(self)().get_ordered_packagers()).set_parent(parent=markdown)
 
         # Footnote
         self.get_footnote_markdown(commit=False).set_parent(parent=markdown)
