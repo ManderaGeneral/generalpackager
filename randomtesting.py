@@ -11,4 +11,6 @@ from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
 
-print(Packager(name="Mandera", github_owner="Mandera").generate_personal_readme())
+# print(Packager(name="Mandera", github_owner="Mandera").generate_personal_readme())
+
+Packager().file_workflow.generate()
