@@ -47,7 +47,9 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
         self.github = GitHub(name=self.name, owner=github_owner)
         self.pypi = PyPI(name=self.name, owner=pypi_owner)
 
-        if self.localmodule.is_general() and not self.localrepo.exists():
+        # Quick fix, should probably put download in a workflow step instead
+        if (self.localmodule.is_general() or self.name == "Mandera") and not self.localrepo.exists():
+            self.path.get_parent().open_folder()
             self.github.download(path=self.path.get_parent())
 
     def exists(self):
