@@ -13,6 +13,6 @@ from generalpackager.api.pypi import PyPI
 
 # print(Packager(name="Mandera", github_owner="Mandera").generate_personal_readme())
 
-# Packager().file_workflow.generate()
+Packager().file_workflow.generate()
 
 # print(Packager(name="Mandera", github_owner="Mandera"))
