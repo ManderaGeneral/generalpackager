@@ -6,7 +6,7 @@ This package and 3 other make up [ManderaGeneral](https://github.com/Mandera).
 ## Information
 | Package                                                              | Ver                                                | Latest Release       | Python                                                                                                                   | Platform        |   Lvl | Todo                                                        | Tests   |
 |:---------------------------------------------------------------------|:---------------------------------------------------|:---------------------|:-------------------------------------------------------------------------------------------------------------------------|:----------------|------:|:------------------------------------------------------------|:--------|
-| [generalpackager](https://github.com/ManderaGeneral/generalpackager) | [0.2.1](https://pypi.org/project/generalpackager/) | 2021-02-26 15:48 CET | [3.8](https://www.python.org/downloads/release/python-380/), [3.9](https://www.python.org/downloads/release/python-390/) | Windows, Ubuntu |     2 | [8](https://github.com/ManderaGeneral/generalpackager#Todo) | 86.9 %  |
+| [generalpackager](https://github.com/ManderaGeneral/generalpackager) | [0.2.1](https://pypi.org/project/generalpackager/) | 2021-02-26 15:48 CET | [3.8](https://www.python.org/downloads/release/python-380/), [3.9](https://www.python.org/downloads/release/python-390/) | Windows, Ubuntu |     2 | [8](https://github.com/ManderaGeneral/generalpackager#Todo) | 83.0 %  |
 
 ## Contents
 <pre>
@@ -40,10 +40,10 @@ This package and 3 other make up [ManderaGeneral](https://github.com/Mandera).
    │  └─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/github.py#L64'>Method: set_website</a>
    ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_module.py#L9'>Class: LocalModule</a>
    │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_module.py#L23'>Method: exists</a>
-   │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_module.py#L60'>Method: get_all_local_modules</a>
-   │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_module.py#L71'>Method: get_dependants</a>
-   │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_module.py#L66'>Method: get_dependencies</a>
-   │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_module.py#L51'>Method: get_env_vars</a>
+   │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_module.py#L63'>Method: get_all_local_modules</a>
+   │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_module.py#L74'>Method: get_dependants</a>
+   │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_module.py#L69'>Method: get_dependencies</a>
+   │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_module.py#L54'>Method: get_env_vars</a>
    │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared.py#L4'>Method: is_general</a> <b>(Untested)</b>
    │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_module.py#L33'>Property: module</a>
    │  └─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_module.py#L42'>Property: objInfo</a>
@@ -74,6 +74,7 @@ This package and 3 other make up [ManderaGeneral](https://github.com/Mandera).
    │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared.py#L4'>Method: is_general</a> <b>(Untested)</b>
    │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_repo.py#L47'>Method: load_metadata</a>
    │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_repo.py#L192'>Property: manifest</a>
+   │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/#L1'>Instance: metadata_keys</a> <b>(Untested)</b>
    │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_repo.py#L192'>Property: name</a>
    │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_repo.py#L67'>Method: path_exists</a>
    │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/local_repo.py#L167'>Method: pip_install</a>
@@ -91,10 +92,14 @@ This package and 3 other make up [ManderaGeneral](https://github.com/Mandera).
    │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/pypi.py#L65'>Method: get_version</a>
    │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared.py#L4'>Method: is_general</a> <b>(Untested)</b>
    │  └─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/pypi.py#L75'>Method: reserve_name</a> <b>(Untested)</b>
+   ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/#L1'>Instance: author</a> <b>(Untested)</b>
    ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_github.py#L22'>Method: commit_and_push</a>
    ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L82'>Method: compare_local_to_github</a>
    ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L89'>Method: compare_local_to_pypi</a>
+   ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/#L1'>Instance: email</a> <b>(Untested)</b>
    ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager.py#L54'>Method: exists</a>
+   ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/#L1'>Instance: extra_aesthetic</a> <b>(Untested)</b>
+   ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/#L1'>Instance: extra_non_aesthetic</a> <b>(Untested)</b>
    ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L62'>Method: filter_relative_filenames</a>
    ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_relations.py#L19'>Method: general_bumped_set</a>
    ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_relations.py#L25'>Method: general_changed_dict</a>
@@ -122,12 +127,16 @@ This package and 3 other make up [ManderaGeneral](https://github.com/Mandera).
    ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_metadata.py#L16'>Method: get_topics</a>
    ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_workflow.py#L22'>Method: get_triggers</a>
    ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_workflow.py#L89'>Method: get_unittest_job</a>
+   ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/#L1'>Instance: git_exclude_lines</a> <b>(Untested)</b>
    ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_markdown.py#L119'>Method: github_link</a>
    ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_markdown.py#L128'>Method: github_link_path_line</a>
    ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_workflow.py#L156'>Method: if_publish_bump</a>
    ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_workflow.py#L163'>Method: if_publish_publish</a>
    ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_metadata.py#L32'>Method: is_bumped</a>
    ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared.py#L4'>Method: is_general</a> <b>(Untested)</b>
+   ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/#L1'>Instance: license</a>
+   ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/#L1'>Instance: os</a>
+   ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/#L1'>Instance: python</a>
    ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L46'>Method: relative_path_is_aesthetic</a>
    ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_workflow.py#L119'>Method: run_ordered_methods</a>
    ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager.py#L66'>Method: spawn_children</a> <b>(Untested)</b>
@@ -156,5 +165,5 @@ This package and 3 other make up [ManderaGeneral](https://github.com/Mandera).
 | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L1'>packager_files.py</a> | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L30'>Watermark generated files to prevent mistake of thinking you can modify them directly.</a> |
 
 <sup>
-Generated 2021-04-08 13:49 CEST for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
+Generated 2021-04-09 12:01 CEST for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
 </sup>
