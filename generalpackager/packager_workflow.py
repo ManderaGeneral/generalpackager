@@ -73,6 +73,7 @@ class _PackagerWorkflow:
             for env_var in packager.localmodule.get_env_vars():
                 if env_var.actions_name and env_var.name not in str(env):
                     env.add_node(f"{env_var.name}: {env_var.actions_name}")
+
         if not env.get_children():
             return None
         return env
