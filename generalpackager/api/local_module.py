@@ -54,7 +54,11 @@ class LocalModule(Recycle, _SharedAPI):
             :rtype: list[generallibrary.EnvVar] """
         new_objInfo = ObjInfo(self.module)
         new_objInfo.all_identifiers = []  # Bad fix for bad circularity prevention
-        return [objInfo.obj for objInfo in new_objInfo.get_children() if isinstance(objInfo.obj, EnvVar)]
+
+        x = new_objInfo.get_children()
+        new_objInfo.view()
+
+        return [objInfo.obj for objInfo in x if isinstance(objInfo.obj, EnvVar)]
 
     @staticmethod
     @deco_cache()

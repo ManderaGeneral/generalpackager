@@ -13,11 +13,11 @@ from generalpackager.api.pypi import PyPI
 
 # print(Packager(name="Mandera", github_owner="Mandera").generate_personal_readme())
 
-Packager().file_workflow.generate()  # HERE ** CI is removing env vars
+# Packager().file_workflow.generate()  # HERE ** CI is removing env vars
 
 # print(Packager(name="Mandera", github_owner="Mandera"))
 
 
-# print(Packager("generalfile").localmodule.get_env_vars())
+print(Packager().localmodule.get_env_vars())
 
 
