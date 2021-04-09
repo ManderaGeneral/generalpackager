@@ -42,7 +42,10 @@ class LocalModule(Recycle, _SharedAPI):
     def objInfo(self):
         objInfo = ObjInfo(self.module)
         assert objInfo.is_module()
+
+        objInfo.children_states = ObjInfo.children_states.copy()
         objInfo.children_states[ObjInfo.is_instance] = False
+
         objInfo.get_children(depth=-1, filt=self._filter, traverse_excluded=False)
         objInfo.disconnect(lambda node: not self._filter(node))
         return objInfo
@@ -53,9 +56,7 @@ class LocalModule(Recycle, _SharedAPI):
 
             :rtype: list[generallibrary.EnvVar] """
         new_objInfo = ObjInfo(self.module)
-
         new_objInfo.all_identifiers = []  # Bad fix for bad circularity prevention
-        new_objInfo.spawned_children = False
         return [objInfo.obj for objInfo in new_objInfo.get_children() if isinstance(objInfo.obj, EnvVar)]
 
     @staticmethod
