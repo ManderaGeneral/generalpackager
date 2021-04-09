@@ -47,11 +47,14 @@ class LocalModule(Recycle, _SharedAPI):
         objInfo.disconnect(lambda node: not self._filter(node))
         return objInfo
 
+    # @deco_cache()
     def get_env_vars(self):
         """ Get a list of EnvVar instances available directly in module.
 
             :rtype: list[generallibrary.EnvVar] """
-        return [objInfo.obj for objInfo in ObjInfo(self.module).get_children() if isinstance(objInfo.obj, EnvVar)]
+        new_objInfo = ObjInfo(self.module)
+        new_objInfo.all_identifiers = []  # Bad fix for bad circularity prevention
+        return [objInfo.obj for objInfo in new_objInfo.get_children() if isinstance(objInfo.obj, EnvVar)]
 
     @staticmethod
     @deco_cache()
