@@ -1,5 +1,5 @@
 
-from generallibrary import CodeLine, Markdown, Date, flatten
+from generallibrary import CodeLine, Markdown, Date, flatten, exclusive
 from generalfile import Path
 
 
@@ -204,7 +204,7 @@ class _PackagerFiles:
         self.get_attributes_markdown().set_parent(parent=markdown)
 
         # Todos
-        todos = self.get_todos()
+        todos = [exclusive(todo, "Package") for todo in self.get_todos()]
         if todos:
             Markdown(header=self._todo_header, parent=markdown).add_table_lines(*todos)
 

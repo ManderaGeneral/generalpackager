@@ -24,7 +24,7 @@ class _PackagerMarkdown:
         """ :param generalpackager.Packager self: """
         path = Path(path)
         return {
-            "Packager": self.name,
+            "Package": Markdown.link(text=self.name, url=self.github.url),
             "Module": self.github_link_path_line(text=path.name(), path=path, line=1),
             "Message": self.github_link_path_line(text=text, path=path, line=line),
         }
