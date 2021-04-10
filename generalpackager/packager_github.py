@@ -33,7 +33,7 @@ class _PackagerGitHub:
         remote.set_url(f"https://Mandera:{PACKAGER_GITHUB_API}@github.com/{self.github.owner}/{self.name}.git")
 
         if tag:
-            tag_ref = repo.create_tag(f"v{self.version}", force=True)
+            tag_ref = repo.create_tag(f"v{self.localrepo.version}", force=True)
             remote.push(refspec=tag_ref)
         try:
             self.commit_sha = remote.push()[0].summary.split("..")[1].rstrip()

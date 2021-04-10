@@ -25,5 +25,3 @@ from generalpackager.api.pypi import PyPI
 
 print(Packager().generate_readme())
 
-
-
