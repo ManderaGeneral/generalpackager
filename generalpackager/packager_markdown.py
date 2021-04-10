@@ -1,5 +1,5 @@
 
-from generallibrary import Markdown, floor, Date
+from generallibrary import Markdown, floor, Date, deco_cache, ObjInfo
 from generalfile import Path
 
 import re
@@ -19,11 +19,18 @@ class _PackagerMarkdown:
             "Operating System": f"[![Generic badge](https://img.shields.io/badge/platforms-{'%20%7C%20'.join(self.os)}-blue.svg)](https://shields.io/)",
         }
 
-    def get_todos(self):
-        """ Get a list of dicts containing cleaned up todos.
 
-            :param generalpackager.Packager self:
-            :rtype: dict[list[str]] """
+    def _create_todo_dict(self, text, path, line):
+        """ :param generalpackager.Packager self: """
+        path = Path(path)
+        return {
+            "Packager": self.name,
+            "Module": self.github_link_path_line(text=path.name(), path=path, line=1),
+            "Message": self.github_link_path_line(text=text, path=path, line=line),
+        }
+
+    def _get_codeline_todos(self):
+        """ :param generalpackager.Packager self: """
         todos = []
         for path in self.path.get_children(depth=-1, gen=True):
             if path.match(*self.git_exclude_lines, "shelved.patch", "readme.md"):
@@ -38,12 +45,27 @@ class _PackagerMarkdown:
             for i, line in enumerate(text.splitlines()):
                 result = re.findall("todo+: (.+)", line, re.I)
                 if result:
-                    todo = re.sub('[" ]*$', "", result[0])
-                    todos.append({
-                        "Module": self.github_link_path_line(text=path.name(), path=relative_path, line=1),
-                        "Message": self.github_link_path_line(text=todo, path=relative_path, line=i + 1),
-                    })
+                    text = re.sub('[" ]*$', "", result[0])
+                    todos.append(self._create_todo_dict(text=text, path=relative_path, line=i + 1))
         return todos
+
+    def _get_untested_todos(self):
+        """ :param generalpackager.Packager self: """
+        todos = []
+        for name, objInfo in self.get_untested_objInfo_dict().items():  # type: ObjInfo
+            text = f"Create unittest for '{name}'."
+            path = objInfo.file(relative=True)
+            line = objInfo.get_definition_line()
+            todos.append(self._create_todo_dict(text=text, path=path, line=line))
+        return todos
+
+    @deco_cache()
+    def get_todos(self):
+        """ Get a list of dicts containing cleaned up todos.
+
+            :param generalpackager.Packager self:
+            :rtype: dict[list[str]] """
+        return self._get_codeline_todos() + self._get_untested_todos()
 
     def get_description_markdown(self):
         """ Get information table.
@@ -145,7 +167,8 @@ class _PackagerMarkdown:
         line = objInfo.get_definition_line()
 
         string = self.github_link_path_line(text=text, path=path, line=line)
-        if not self.localrepo.text_in_tests(text=objInfo.name):
+
+        if objInfo.name in self.get_untested_objInfo_dict():
             string = f"{string} <b>(Untested)</b>"
 
         return string

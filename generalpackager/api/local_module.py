@@ -35,7 +35,7 @@ class LocalModule(Recycle, _SharedAPI):
 
     def _filter(self, objInfo):
         """ :param ObjInfo objInfo: """
-        return objInfo.module().__name__.startswith(self.name) and (objInfo.from_class() or objInfo.from_module())
+        return objInfo.module().__name__.startswith(self.name) and (objInfo.from_class() or objInfo.from_module()) and not objInfo.is_instance()
 
     @property
     @deco_cache()
@@ -43,14 +43,15 @@ class LocalModule(Recycle, _SharedAPI):
         objInfo = ObjInfo(self.module)
         assert objInfo.is_module()
 
-        objInfo.children_states = ObjInfo.children_states.copy()
-        objInfo.children_states[ObjInfo.is_instance] = False
+        # objInfo.children_states = ObjInfo.children_states.copy()
+        # objInfo.children_states[ObjInfo.is_instance] = False
 
         objInfo.get_children(depth=-1, filt=self._filter, traverse_excluded=False)
+
         objInfo.disconnect(lambda node: not self._filter(node))
         return objInfo
 
-    # @deco_cache()
+    @deco_cache()
     def get_env_vars(self):
         """ Get a list of EnvVar instances available directly in module.
 

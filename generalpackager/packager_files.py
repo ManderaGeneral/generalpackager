@@ -1,5 +1,5 @@
 
-from generallibrary import CodeLine, Markdown, Date
+from generallibrary import CodeLine, Markdown, Date, flatten
 from generalfile import Path
 
 
@@ -220,6 +220,8 @@ class _PackagerFiles:
         """ Generate personal readme markdown and overwrite README.md in local repo.
 
             :param generalpackager.Packager self: """
+        ordered_packagers = type(self)().get_ordered_packagers()
+
         # Description
         markdown = Markdown(header="ManderaGeneral").add_list_lines(
             "A collection of connected packages.",
@@ -228,7 +230,12 @@ class _PackagerFiles:
         )
 
         # Package information
-        self.get_information_markdown(*type(self)().get_ordered_packagers()).set_parent(parent=markdown)
+        self.get_information_markdown(*ordered_packagers).set_parent(parent=markdown)
+
+        # Todos
+        todos = flatten([packager.get_todos() for packager in ordered_packagers])
+        if todos:
+            Markdown(header=self._todo_header, parent=markdown).add_table_lines(*todos)
 
         # Footnote
         self.get_footnote_markdown(commit=False).set_parent(parent=markdown)

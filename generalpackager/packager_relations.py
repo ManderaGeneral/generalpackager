@@ -1,5 +1,5 @@
 
-from generallibrary import remove_duplicates
+from generallibrary import remove_duplicates, deco_cache
 
 
 class _PackagerRelations:
@@ -29,3 +29,12 @@ class _PackagerRelations:
             :param aesthetic: """
         return {packager: files for packager in self.get_all() if (files := packager.compare_local_to_github(aesthetic=aesthetic))}
 
+    @deco_cache()
+    def get_untested_objInfo_dict(self):
+        """ Get a recursive view of attributes markdown.
+
+            :param generalpackager.Packager self:
+            :rtype: dict[generallibrary.ObjInfo] """
+        filt = lambda objInfo: not self.localrepo.text_in_tests(text=objInfo.name)
+        all_objInfo = self.localmodule.objInfo.get_all(filt=filt, traverse_excluded=True)
+        return {objInfo.name: objInfo for objInfo in all_objInfo}

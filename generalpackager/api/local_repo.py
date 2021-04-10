@@ -67,7 +67,8 @@ class LocalRepo(Recycle, _SharedAPI):
     def path_exists(cls, path):
         if path.is_file() or not path.exists():
             return False
-        return bool(path.get_child(filt=lambda x: x.name() in ("setup.py", ), traverse_excluded=True))
+        return bool(path.get_child(filt=lambda x: x.name() in ("README.md", ), traverse_excluded=True))
+        # return bool(path.get_child(filt=lambda x: x.name() in ("setup.py", ), traverse_excluded=True))
 
     @classmethod
     def get_repo_path_parent(cls, path=None):
