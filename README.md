@@ -156,5 +156,5 @@ This package and 3 other make up [ManderaGeneral](https://github.com/Mandera).
 | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L1'>packager_files.py</a> | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L30'>Watermark generated files to prevent mistake of thinking you can modify them directly.</a> |
 
 <sup>
-Generated 2021-04-14 18:44 CEST for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
+Generated 2021-04-14 18:44 CEST for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/5d3ae3b'>5d3ae3b</a>.
 </sup>
