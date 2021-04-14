@@ -26,8 +26,6 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
         Todo: Allow github, pypi or local repo not to exist in any combination.
         Todo: Support writing [CI MAJOR] in msg to bump major for example. """
 
-    LocalRepo, LocalModule, GitHub, PyPI = LocalRepo, LocalModule, GitHub, PyPI
-
     author = 'Rickard "Mandera" Abraham'
     email = "rickard.abraham@gmail.com"
     license = "mit"
@@ -55,6 +53,12 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
         """ Just check GitHub for now. """
         return self.github.exists()
 
+    def spawn_children(self):
+        self._spawn(self.localmodule.get_dependants(), parent=self)
+
+    def spawn_parents(self):
+        self._spawn(self.localmodule.get_dependencies(), child=self)
+
     def _spawn(self, modules, child=None, parent=None):
         for local_module in modules:
             if local_module.is_general():
@@ -62,18 +66,6 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
 
                 if packager.localrepo.enabled:
                     (child or packager).set_parent(parent=parent or packager)
-
-    def spawn_children(self):
-        self._spawn(self.localmodule.get_dependants(), parent=self)
-
-    def spawn_parents(self):
-        self._spawn(self.localmodule.get_dependencies(), child=self)
-
-    def generate_localfiles(self, aesthetic=True):
-        """ Generate all local files. """
-        for generate in self.files:
-            if aesthetic or not generate.aesthetic:
-                generate.generate()
 
     def __repr__(self):
         return f"<Packager: {self.name}>"

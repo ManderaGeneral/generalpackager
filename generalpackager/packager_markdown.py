@@ -53,7 +53,7 @@ class _PackagerMarkdown:
         """ :param generalpackager.Packager self: """
         todos = []
         for name, objInfo in self.get_untested_objInfo_dict().items():  # type: ObjInfo
-            text = f"UnitTest: {name}."
+            text = f"UnitTest for {repr(objInfo)}"
             path = objInfo.file(relative=True)
             line = objInfo.get_definition_line()
             todos.append(self._create_todo_dict(text=text, path=path, line=line))

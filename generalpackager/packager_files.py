@@ -239,7 +239,11 @@ class _PackagerFiles:
 
         return markdown
 
-
+    def generate_localfiles(self, aesthetic=True):
+        """ Generate all local files. """
+        for generate in self.files:
+            if aesthetic or not generate.aesthetic:
+                generate.generate()
 
 
 

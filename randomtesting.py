@@ -11,18 +11,5 @@ from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
 
-# print(Packager(name="Mandera", github_owner="Mandera").generate_personal_readme())
-
-# Packager().file_workflow.generate()  # HERE ** CI is removing env vars
-
-# print(Packager(name="Mandera", github_owner="Mandera"))
-
-
-# pprint(Packager().get_untested_objInfo_dict())
-# print(Packager().get_attributes_markdown())
-
-# pprint(Packager().get_todos(), width=500)
-
-# print(Packager().generate_readme())
-
+Packager().file_readme.generate()
 

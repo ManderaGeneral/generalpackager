@@ -31,9 +31,7 @@ class _PackagerRelations:
 
     @deco_cache()
     def get_untested_objInfo_dict(self):
-        """ Get a recursive view of attributes markdown.
-
-            :param generalpackager.Packager self:
+        """ :param generalpackager.Packager self:
             :rtype: dict[generallibrary.ObjInfo] """
         filt = lambda objInfo: not self.localrepo.text_in_tests(text=objInfo.name)
         all_objInfo = self.localmodule.objInfo.get_all(filt=filt, traverse_excluded=True)

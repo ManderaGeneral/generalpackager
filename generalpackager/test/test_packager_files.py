@@ -9,7 +9,9 @@ import unittest
 class TestPackager(unittest.TestCase):
     """ Skip:
         GenerateFile
-        generate """
+        generate
+        generate_localfiles
+        """
     def test_relative_path_is_aesthetic(self):
         packager = Packager()
         self.assertEqual(False, packager.relative_path_is_aesthetic("setup.py"))

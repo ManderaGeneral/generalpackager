@@ -37,3 +37,29 @@ class TestPyPI(unittest.TestCase):
 
     def test_get_date(self):
         self.assertLess(PyPI("generalpackager").get_date(), Date.now())
+
+    def test_reserve_name(self):
+        pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

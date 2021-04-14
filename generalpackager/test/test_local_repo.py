@@ -1,5 +1,5 @@
 
-from generalfile import Path
+from generallibrary import Ver
 from generalpackager.api.local_repo import LocalRepo
 
 import unittest
@@ -11,6 +11,8 @@ class TestLocalRepo(unittest.TestCase):
         unittest
         create_sdist
         upload
+        get_path_from_name
+        get_repo_path_parent
     """
 
     def test_has_metadata(self):
@@ -18,7 +20,14 @@ class TestLocalRepo(unittest.TestCase):
         self.assertEqual(False, LocalRepo("doesntexist").has_metadata())
 
     def test_load_metadata(self):
+        self.assertEqual(True, LocalRepo().enabled)
         self.assertEqual("generalpackager", LocalRepo().name)
+        self.assertIsInstance(LocalRepo().version, Ver)
+        self.assertIsInstance(LocalRepo().description, str)
+        self.assertIsInstance(LocalRepo().install_requires, list)
+        self.assertIsInstance(LocalRepo().extras_require, dict)
+        self.assertIsInstance(LocalRepo().topics, list)
+        self.assertIsInstance(LocalRepo().manifest, list)
 
     def test_exists(self):
         self.assertEqual(True, LocalRepo().exists())
@@ -64,7 +73,9 @@ class TestLocalRepo(unittest.TestCase):
         local_repo.version = version
         self.assertEqual(local_repo.version, version)
 
-
+    def test_get_repo_path_child(self):
+        self.assertEqual(LocalRepo().path, LocalRepo.get_repo_path_child(LocalRepo().path.get_parent()))
+        self.assertEqual(None, LocalRepo.get_repo_path_child(LocalRepo().path))
 
 
 
