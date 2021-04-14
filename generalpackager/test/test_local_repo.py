@@ -74,7 +74,7 @@ class TestLocalRepo(unittest.TestCase):
         self.assertEqual(local_repo.version, version)
 
     def test_get_repo_path_child(self):
-        self.assertEqual(LocalRepo().path, LocalRepo.get_repo_path_child(LocalRepo().path.get_parent()))
+        self.assertNotEqual(None, LocalRepo.get_repo_path_child(LocalRepo().path.get_parent()))
         self.assertEqual(None, LocalRepo.get_repo_path_child(LocalRepo().path))
 
 
