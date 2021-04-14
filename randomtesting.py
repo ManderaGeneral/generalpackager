@@ -23,5 +23,6 @@ from generalpackager.api.pypi import PyPI
 
 # pprint(Packager().get_todos(), width=500)
 
-print(Packager().generate_readme())
+# print(Packager().generate_readme())
+
 

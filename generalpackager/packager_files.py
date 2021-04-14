@@ -1,5 +1,5 @@
 
-from generallibrary import CodeLine, Markdown, Date, flatten, exclusive
+from generallibrary import CodeLine, Markdown, Date, exclusive, deco_cache
 from generalfile import Path
 
 
@@ -68,6 +68,7 @@ class _PackagerFiles:
             :param bool or None aesthetic: """
         return [path for path in filenames if aesthetic is None or aesthetic is self.relative_path_is_aesthetic(path)]
 
+    @deco_cache()
     def _compare_local(self, platform, aesthetic):
         """ :param generalpackager.Packager self: """
         unpack_target = Path.get_cache_dir() / "Python"
@@ -204,9 +205,7 @@ class _PackagerFiles:
         self.get_attributes_markdown().set_parent(parent=markdown)
 
         # Todos
-        todos = [exclusive(todo, "Package") for todo in self.get_todos()]
-        if todos:
-            Markdown(header=self._todo_header, parent=markdown).add_table_lines(*todos)
+        self.get_todos_markdown(self, drop_package_col=True).set_parent(parent=markdown)
 
         # Table of contents - Configuration
         self._configure_contents_markdown(markdown=contents)
@@ -233,9 +232,7 @@ class _PackagerFiles:
         self.get_information_markdown(*ordered_packagers).set_parent(parent=markdown)
 
         # Todos
-        todos = flatten([packager.get_todos() for packager in ordered_packagers])
-        if todos:
-            Markdown(header=self._todo_header, parent=markdown).add_table_lines(*todos)
+        self.get_todos_markdown(*ordered_packagers).set_parent(parent=markdown)
 
         # Footnote
         self.get_footnote_markdown(commit=False).set_parent(parent=markdown)

@@ -47,14 +47,15 @@ class LocalRepo(Recycle, _SharedAPI):
     def load_metadata(self):
         self.has_loaded_metadata = True
 
-        for key, value in self.get_metadata_path().read().items():
-            setattr(self, f"_{key}", value)
+        if self.get_metadata_path().exists():
+            for key, value in self.get_metadata_path().read().items():
+                setattr(self, f"_{key}", value)
 
-        if self.extras_require:
-            self.extras_require["full"] = list(set().union(*self.extras_require.values()))
-            self.extras_require["full"].sort()
+            if self.extras_require:
+                self.extras_require["full"] = list(set().union(*self.extras_require.values()))
+                self.extras_require["full"].sort()
 
-        self.version = Ver(self.version)
+            self.version = Ver(self.version)
 
         if self.name is Ellipsis:
             self.name = self.path.name()

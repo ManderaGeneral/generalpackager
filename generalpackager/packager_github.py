@@ -1,7 +1,5 @@
 
-from generalpackager.api.local_repo import LocalRepo
 from generalpackager import PACKAGER_GITHUB_API
-from generalfile import Path
 
 from git import Repo
 

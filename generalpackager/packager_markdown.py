@@ -1,5 +1,5 @@
 
-from generallibrary import Markdown, floor, Date, deco_cache, ObjInfo
+from generallibrary import Markdown, floor, Date, deco_cache, ObjInfo, flatten, exclusive
 from generalfile import Path
 
 import re
@@ -53,7 +53,7 @@ class _PackagerMarkdown:
         """ :param generalpackager.Packager self: """
         todos = []
         for name, objInfo in self.get_untested_objInfo_dict().items():  # type: ObjInfo
-            text = f"Create unittest for '{name}'."
+            text = f"UnitTest: {name}."
             path = objInfo.file(relative=True)
             line = objInfo.get_definition_line()
             todos.append(self._create_todo_dict(text=text, path=path, line=line))
@@ -67,10 +67,17 @@ class _PackagerMarkdown:
             :rtype: dict[list[str]] """
         return self._get_codeline_todos() + self._get_untested_todos()
 
-    def get_description_markdown(self):
-        """ Get information table.
+    def get_todos_markdown(self, *packagers, drop_package_col=False):
+        """ :param generalpackager.Packager self:
+            :param drop_package_col: """
+        todos = flatten([packager.get_todos() for packager in packagers])
+        if drop_package_col:
+            todos = [exclusive(todo, "Package") for todo in todos]
+        if todos:
+            return Markdown(header=self._todo_header).add_table_lines(*todos)
 
-            :param generalpackager.Packager self: """
+    def get_description_markdown(self):
+        """ :param generalpackager.Packager self: """
         part_of = f"This package and {len(self.get_all()) - 1} other make up {Markdown.link(text='ManderaGeneral', url='https://github.com/Mandera')}."
 
         return Markdown(self.localrepo.description, "\n", part_of, header=self.name)
@@ -87,9 +94,9 @@ class _PackagerMarkdown:
 
         list_of_dicts = []
         for packager in packagers:
-            attrs = packager.localmodule.objInfo.get_children(depth=-1)
-            tested_attrs = [objInfo for objInfo in attrs if packager.localrepo.text_in_tests(text=objInfo.name)]
-            test_percentage = floor(len(tested_attrs) / len(attrs) * 100, 1)
+            attrs = packager._get_attributes_view().count("\n")
+            untested_attrs = len(packager.get_untested_objInfo_dict())
+            test_percentage = floor((attrs - untested_attrs) / attrs * 100, 1)
 
             list_of_dicts.append({
                 "Package": Markdown.link(text=packager.name, url=packager.github.url),
@@ -173,12 +180,16 @@ class _PackagerMarkdown:
 
         return string
 
+    @deco_cache()
+    def _get_attributes_view(self):
+        """ :param generalpackager.Packager self: """
+        return self.localmodule.objInfo.view(custom_repr=self._attr_repr, print_out=False)
+
     def get_attributes_markdown(self):
         """ Get a recursive view of attributes markdown.
 
             :param generalpackager.Packager self: """
-        view_str = self.localmodule.objInfo.view(custom_repr=self._attr_repr, print_out=False)
-        return Markdown(header="Attributes").add_pre_lines(view_str)
+        return Markdown(header="Attributes").add_pre_lines(self._get_attributes_view())
 
     def get_footnote_markdown(self, commit=True):
         """ Get a markdown for footnote containing date, time and commit link.

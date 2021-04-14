@@ -13,6 +13,9 @@ class TestPackager(unittest.TestCase):
     def test_get_todos(self):
         Packager().get_todos()
 
+    def test_get_todos_markdown(self):
+        Packager().get_todos_markdown()
+
     def test_get_description_markdown(self):
         self.assertIn("generalpackager", Packager().get_description_markdown())
 
