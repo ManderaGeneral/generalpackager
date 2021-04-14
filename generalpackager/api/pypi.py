@@ -73,7 +73,7 @@ class PyPI(Recycle, _SharedAPI):
         return Date(re.findall('Generated (.+) for commit', requests.get(self.url).text)[0])
 
     def reserve_name(self):
-        pass
+        pass  # HERE **
 
 
 

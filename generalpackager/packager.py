@@ -22,9 +22,7 @@ from generalpackager.packager_relations import _PackagerRelations
 @initBases
 class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations):
     """ Uses APIs to manage 'general' package.
-        Contains methods that require more than one API as well as methods specific for ManderaGeneral.
-        Todo: Allow github, pypi or local repo not to exist in any combination.
-        Todo: Support writing [CI MAJOR] in msg to bump major for example. """
+        Contains methods that require more than one API as well as methods specific for ManderaGeneral. """
 
     author = 'Rickard "Mandera" Abraham'
     email = "rickard.abraham@gmail.com"

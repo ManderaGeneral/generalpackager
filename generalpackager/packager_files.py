@@ -210,7 +210,7 @@ class _PackagerFiles:
         # Table of contents - Configuration
         self._configure_contents_markdown(markdown=contents)
 
-        # Footnote
+        # Generation timestamp
         self.get_footnote_markdown().set_parent(parent=markdown)
 
         return markdown
@@ -234,7 +234,7 @@ class _PackagerFiles:
         # Todos
         self.get_todos_markdown(*ordered_packagers).set_parent(parent=markdown)
 
-        # Footnote
+        # Generation timestamp
         self.get_footnote_markdown(commit=False).set_parent(parent=markdown)
 
         return markdown
