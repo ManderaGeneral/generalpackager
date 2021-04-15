@@ -11,5 +11,9 @@ from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
 
-Packager().file_readme.generate()
+x = Packager("new")
+
+x.create_blank()
+
+
 

@@ -60,6 +60,12 @@ class LocalRepo(Recycle, _SharedAPI):
         if self.name is Ellipsis:
             self.name = self.path.name()
 
+    def get_metadata_dict(self):
+        return {key: str(getattr(self, key)) if key == "version" else getattr(self, key) for key in self.metadata_keys}
+
+    def write_metadata(self):
+        self.get_metadata_path().write(self.get_metadata_dict(), overwrite=True)
+
     def exists(self):
         """ Return whether this API's target exists. """
         return self.path_exists(path=self.path)
@@ -134,7 +140,6 @@ class LocalRepo(Recycle, _SharedAPI):
     def get_license_path(self):     return self.path / "LICENSE"
     def get_workflow_path(self):    return self.path / ".github/workflows/workflow.yml"
     def get_test_path(self):        return self.path / f"{self.name}/test"
-
 
     @deco_cache()
     def get_test_paths(self):

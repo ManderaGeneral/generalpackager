@@ -62,14 +62,13 @@ class PyPI(Recycle, _SharedAPI):
         """ Get a set of a owner's packages' names on PyPI. """
         return set(re.findall("/project/(.*)/", requests.get(f"https://pypi.org/user/{self.owner}/").text))
 
+    # Todo: Find a faster fetch for latest PyPI version and datetime.
     def get_version(self):
-        """ Get version of latest publish on PyPI.
-            Todo: Find a faster fetch for latest PyPI version. """
+        """ Get version of latest publish on PyPI. """
         return Ver(re.findall(f"{self.name} ([.0-9]+)\n", requests.get(self.url).text)[0])
 
     def get_date(self):
-        """ Get datetime of latest release.
-            Todo: Find a faster fetch for latest PyPI datetime. """
+        """ Get datetime of latest release. """
         return Date(re.findall('Generated (.+) for commit', requests.get(self.url).text)[0])
 
     def reserve_name(self):

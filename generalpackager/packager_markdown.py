@@ -96,7 +96,7 @@ class _PackagerMarkdown:
         for packager in packagers:
             attrs = packager._get_attributes_view().count("\n")
             untested_attrs = len(packager.get_untested_objInfo_dict())
-            test_percentage = floor((attrs - untested_attrs) / attrs * 100, 1)
+            test_percentage = floor((attrs - untested_attrs) / attrs * 100, 1) if attrs else 100
 
             list_of_dicts.append({
                 "Package": Markdown.link(text=packager.name, url=packager.github.url),

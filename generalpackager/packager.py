@@ -1,7 +1,7 @@
 """ Methods specific for my general packages.
     Isolatable methods are put inside APIs.
 
-    Todo: Add a check in workflow to make sure it doesn't use a pypi version in case of wrong order. """
+    Todo: Prevent workflow using pypi to install a general package. """
 
 from generallibrary import initBases, NetworkDiagram, Recycle
 from generalpackager.api.shared import _SharedAPI

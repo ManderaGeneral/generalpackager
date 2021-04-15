@@ -43,6 +43,15 @@ class _PackagerFiles:
 
         self.file_personal_readme = GenerateFile(self.localrepo.get_readme_path(), self.generate_personal_readme, self, aesthetic=True)
 
+    def create_blank(self):
+        """ :param generalpackager.Packager self: """
+        self.localrepo.write_metadata()
+        self.file_setup.generate()
+        self.localrepo.get_readme_path().write(overwrite=True)
+        (self.path / self.name / "__init__.py").text.write("\n", overwrite=True)
+        self.localrepo.pip_install()
+        self.generate_localfiles()
+
     def relative_path_is_aesthetic(self, relative_path):
         """ Relative to package path. False if not defined as a GenerateFile instance.
 
