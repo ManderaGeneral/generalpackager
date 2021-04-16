@@ -176,6 +176,10 @@ class LocalRepo(Recycle, _SharedAPI):
             Subprocess messed up -e flag compared to doing it in terminal, so use the normal one."""
         subprocess.check_call([sys.executable, "-m", "pip", "install", str(self.path)])
 
+    def pip_uninstall(self):
+        """ Uninstall this repository with pip."""
+        subprocess.check_call([sys.executable, "-m", "pip", "uninstall", self.name])
+
     def unittest(self):
         """ Run unittests for this repository. """
         subprocess.check_call([sys.executable, "-m", "unittest", "discover", str(self.get_test_path())])

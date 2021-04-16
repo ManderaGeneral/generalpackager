@@ -1,9 +1,9 @@
 
 from generalpackager.api.shared import _SharedAPI
-from generallibrary import ObjInfo, deco_cache, Recycle, EnvVar
+from generallibrary import ObjInfo, deco_cache, Recycle, EnvVar, get, import_module
 
 import pkg_resources
-from importlib import import_module
+
 
 
 class LocalModule(Recycle, _SharedAPI):
@@ -22,16 +22,12 @@ class LocalModule(Recycle, _SharedAPI):
 
     def exists(self):
         """ Return whether this API's target exists. """
-        try:
-            import_module(name=self.name)
-        except ModuleNotFoundError:
-            return False
-        return True
+        bool(import_module(name=self.name, error=False))
 
     @property
     @deco_cache()
     def module(self):
-        return import_module(self.name)
+        return import_module(self.name, error=False)
 
     def _filter(self, objInfo):
         """ :param ObjInfo objInfo: """
@@ -41,14 +37,17 @@ class LocalModule(Recycle, _SharedAPI):
     @deco_cache()
     def objInfo(self):
         objInfo = ObjInfo(self.module)
-        assert objInfo.is_module()
 
-        # objInfo.children_states = ObjInfo.children_states.copy()
-        # objInfo.children_states[ObjInfo.is_instance] = False
+        if self.module is not None:
+            assert objInfo.is_module()
 
-        objInfo.get_children(depth=-1, filt=self._filter, traverse_excluded=False)
+            # objInfo.children_states = ObjInfo.children_states.copy()
+            # objInfo.children_states[ObjInfo.is_instance] = False
 
-        objInfo.disconnect(lambda node: not self._filter(node))
+            objInfo.get_children(depth=-1, filt=self._filter, traverse_excluded=False)
+
+            objInfo.disconnect(lambda node: not self._filter(node))
+
         return objInfo
 
     @deco_cache()
@@ -69,7 +68,10 @@ class LocalModule(Recycle, _SharedAPI):
     @deco_cache()
     def get_dependencies(self):
         """ Get a list of LocalModules that this module depends on. """
-        return [LocalModule(name=str(name)) for name in pkg_resources.working_set.by_key[self.name.lower()].requires()]
+        pkg = get(pkg_resources.working_set.by_key, self.name.lower())
+        if not pkg:
+            return []
+        return [LocalModule(name=str(name)) for name in pkg.requires()]
 
     @deco_cache()
     def get_dependants(self):

@@ -1,5 +1,5 @@
 
-from generallibrary import CodeLine, Markdown, Date, exclusive, deco_cache
+from generallibrary import CodeLine, Markdown, Date, exclusive, deco_cache, cache_clear
 from generalfile import Path
 
 
@@ -38,7 +38,7 @@ class _PackagerFiles:
         self.file_workflow =        GenerateFile(self.localrepo.get_workflow_path(), self.generate_workflow, self, aesthetic=True)
         self.file_readme =          GenerateFile(self.localrepo.get_readme_path(), self.generate_readme, self, aesthetic=True)
 
-        self.files = [getattr(self, key) for key in dir(self) if key.startswith("file_")]
+        self.files = [getattr(self, key) for key in dir(self) if key.startswith("file_")]  # type: list[GenerateFile]
         self.files_by_relative_path = {file.relative_path: file for file in self.files}
 
         self.file_personal_readme = GenerateFile(self.localrepo.get_readme_path(), self.generate_personal_readme, self, aesthetic=True)
@@ -46,9 +46,10 @@ class _PackagerFiles:
     def create_blank(self):
         """ :param generalpackager.Packager self: """
         self.localrepo.write_metadata()
-        self.file_setup.generate()
-        self.localrepo.get_readme_path().write(overwrite=True)
+        # self.file_setup.generate()
+        # self.localrepo.get_readme_path().write(overwrite=True)
         (self.path / self.name / "__init__.py").text.write("\n", overwrite=True)
+        self.generate_localfiles()
         self.localrepo.pip_install()
         self.generate_localfiles()
 

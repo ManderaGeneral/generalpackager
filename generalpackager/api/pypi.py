@@ -1,6 +1,6 @@
 
 from generalpackager.api.shared import _SharedAPI
-from generallibrary import Ver, Date, Recycle
+from generallibrary import Ver, Date, Recycle, get
 from generalfile import Path
 
 import requests
@@ -65,11 +65,13 @@ class PyPI(Recycle, _SharedAPI):
     # Todo: Find a faster fetch for latest PyPI version and datetime.
     def get_version(self):
         """ Get version of latest publish on PyPI. """
-        return Ver(re.findall(f"{self.name} ([.0-9]+)\n", requests.get(self.url).text)[0])
+        version = get(re.findall(f"{self.name} ([.0-9]+)\n", requests.get(self.url).text), 0)
+        return Ver(version) if version else None
 
     def get_date(self):
         """ Get datetime of latest release. """
-        return Date(re.findall('Generated (.+) for commit', requests.get(self.url).text)[0])
+        date = get(re.findall('Generated (.+) for commit', requests.get(self.url).text), 0)
+        return Date(date) if date else None
 
     def reserve_name(self):
         pass  # HERE **
