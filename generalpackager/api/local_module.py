@@ -22,7 +22,7 @@ class LocalModule(Recycle, _SharedAPI):
 
     def exists(self):
         """ Return whether this API's target exists. """
-        bool(import_module(name=self.name, error=False))
+        return bool(import_module(name=self.name, error=False))
 
     @property
     @deco_cache()
@@ -71,7 +71,11 @@ class LocalModule(Recycle, _SharedAPI):
         pkg = get(pkg_resources.working_set.by_key, self.name.lower())
         if not pkg:
             return []
-        return [LocalModule(name=str(name)) for name in pkg.requires()]
+        try:
+            requires = pkg.requires()
+        except FileNotFoundError:
+            return []
+        return [LocalModule(name=str(name)) for name in requires]
 
     @deco_cache()
     def get_dependants(self):

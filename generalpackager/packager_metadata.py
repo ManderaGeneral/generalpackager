@@ -33,7 +33,7 @@ class _PackagerMetadata:
         """ Return whether this package has been bumped by comparing PyPI and LocalRepo's versions.
 
             :param generalpackager.Packager self: """
-        return self.localrepo.version > self.pypi.get_version()
+        return self.pypi.get_version() is None or self.localrepo.version > self.pypi.get_version()
 
     _lib = {
         "planning": "Development Status :: 1 - Planning",

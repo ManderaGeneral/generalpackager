@@ -43,15 +43,21 @@ class _PackagerFiles:
 
         self.file_personal_readme = GenerateFile(self.localrepo.get_readme_path(), self.generate_personal_readme, self, aesthetic=True)
 
+    def get_new_packager(self):
+        """ :param generalpackager.Packager self: """
+        self.recycle_clear()
+        self.localrepo.recycle_clear()
+        self.localmodule.recycle_clear()
+        self.github.recycle_clear()
+        self.pypi.recycle_clear()
+        return type(self)(self.name)
+
     def create_blank(self):
         """ :param generalpackager.Packager self: """
         self.localrepo.write_metadata()
-        # self.file_setup.generate()
-        # self.localrepo.get_readme_path().write(overwrite=True)
-        (self.path / self.name / "__init__.py").text.write("\n", overwrite=True)
         self.generate_localfiles()
         self.localrepo.pip_install()
-        self.generate_localfiles()
+        self.get_new_packager().generate_localfiles()
 
     def relative_path_is_aesthetic(self, relative_path):
         """ Relative to package path. False if not defined as a GenerateFile instance.
@@ -250,7 +256,13 @@ class _PackagerFiles:
         return markdown
 
     def generate_localfiles(self, aesthetic=True):
-        """ Generate all local files. """
+        """ Generate all local files.
+
+            :param aesthetic:
+            :param generalpackager.Packager self: """
+        if not self.localrepo.get_init_path().exists():
+            self.localrepo.get_init_path().text.write("\n")
+
         for generate in self.files:
             if aesthetic or not generate.aesthetic:
                 generate.generate()

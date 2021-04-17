@@ -140,6 +140,7 @@ class LocalRepo(Recycle, _SharedAPI):
     def get_license_path(self):     return self.path / "LICENSE"
     def get_workflow_path(self):    return self.path / ".github/workflows/workflow.yml"
     def get_test_path(self):        return self.path / f"{self.name}/test"
+    def get_init_path(self):        return self.path / self.name / "__init__.py"
 
     @deco_cache()
     def get_test_paths(self):
@@ -178,7 +179,7 @@ class LocalRepo(Recycle, _SharedAPI):
 
     def pip_uninstall(self):
         """ Uninstall this repository with pip."""
-        subprocess.check_call([sys.executable, "-m", "pip", "uninstall", self.name])
+        subprocess.check_call([sys.executable, "-m", "pip", "uninstall", "-y", self.name])
 
     def unittest(self):
         """ Run unittests for this repository. """

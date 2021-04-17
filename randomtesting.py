@@ -11,10 +11,12 @@ from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
 
+
 x = Packager("hellothere")
 
-x.create_blank()
-# x.localrepo.pip_uninstall()
+x.localrepo.pip_uninstall()
+# x.path.delete()
+# x.create_blank()
 
 
 
