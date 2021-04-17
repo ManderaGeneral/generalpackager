@@ -6,7 +6,7 @@ This package and 3 other make up [ManderaGeneral](https://github.com/Mandera).
 ## Information
 | Package                                                              | Ver                                                | Latest Release        | Python                                                                                                                   | Platform        |   Lvl | Todo                                                         | Tests   |
 |:---------------------------------------------------------------------|:---------------------------------------------------|:----------------------|:-------------------------------------------------------------------------------------------------------------------------|:----------------|------:|:-------------------------------------------------------------|:--------|
-| [generalpackager](https://github.com/ManderaGeneral/generalpackager) | [0.3.2](https://pypi.org/project/generalpackager/) | 2021-04-17 12:24 CEST | [3.8](https://www.python.org/downloads/release/python-380/), [3.9](https://www.python.org/downloads/release/python-390/) | Windows, Ubuntu |     2 | [11](https://github.com/ManderaGeneral/generalpackager#Todo) | 95.1 %  |
+| [generalpackager](https://github.com/ManderaGeneral/generalpackager) | [0.3.2](https://pypi.org/project/generalpackager/) | 2021-04-17 12:25 CEST | [3.8](https://www.python.org/downloads/release/python-380/), [3.9](https://www.python.org/downloads/release/python-390/) | Windows, Ubuntu |     2 | [11](https://github.com/ManderaGeneral/generalpackager#Todo) | 95.1 %  |
 
 ## Contents
 <pre>
@@ -167,5 +167,5 @@ This package and 3 other make up [ManderaGeneral](https://github.com/Mandera).
 | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L1'>packager_files.py</a> | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L46'>UnitTest for Method: get_new_packager</a>                                                  |
 
 <sup>
-Generated 2021-04-17 12:24 CEST for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
+Generated 2021-04-17 12:25 CEST for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/fc45dbc'>fc45dbc</a>.
 </sup>
