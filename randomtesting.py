@@ -12,9 +12,15 @@ from generalpackager.api.pypi import PyPI
 
 
 
-x = Packager("hellothere")
 
-x.localrepo.pip_uninstall()
+# Todo: Vector is being published even though it hasn't changed.
+# Todo: Attribute markdown is using master instead of specific commit.
+
+x = Packager()
+
+print(x.compare_local_to_pypi(aesthetic=False))
+
+# x.localrepo.pip_uninstall()
 # x.path.delete()
 # x.create_blank()
 

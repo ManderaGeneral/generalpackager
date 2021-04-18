@@ -180,9 +180,16 @@ class _PackagerMarkdown:
 
         return string
 
-    @deco_cache()
     def _get_attributes_view(self):
         """ :param generalpackager.Packager self: """
+        return self._cache_get_attributes_view(self.commit_sha)
+
+    @deco_cache()
+    def _cache_get_attributes_view(self, commit_sha):
+        """ Additional method here to store seperate cache for different commit_shas
+
+            :param generalpackager.Packager self:
+            :param commit_sha: """
         return self.localmodule.objInfo.view(custom_repr=self._attr_repr, print_out=False)
 
     def get_attributes_markdown(self):

@@ -30,7 +30,7 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
     python = "3.8", "3.9"  # Only supports basic definition with tuple of major.minor
     os = "windows", "ubuntu"  # , "macos"
 
-    git_exclude_lines = ".idea", "build", "dist", "*.egg-info", "__pycache__", ".git", "test/tests"
+    git_exclude_lines = ".idea", "build", "dist", "*.egg-info", "__pycache__", ".git", "test/tests", "PKG-INFO", "setup.cfg"
     _recycle_keys = LocalModule._recycle_keys
 
     def __init__(self, name=None, github_owner=None, pypi_owner=None):
