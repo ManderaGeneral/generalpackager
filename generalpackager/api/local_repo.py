@@ -112,8 +112,8 @@ class LocalRepo(Recycle, _SharedAPI):
         if path and (name is None or name == path.name()):
             return path
 
-        if Path.get_working_dir().name() == name:
-            return Path.get_working_dir()
+        # if Path.get_working_dir().name() == name:
+        #     return Path.get_working_dir()
 
         if name is None:
             name = "generalpackager"
