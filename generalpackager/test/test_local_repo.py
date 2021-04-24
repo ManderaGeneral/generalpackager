@@ -8,11 +8,13 @@ import unittest
 class TestLocalRepo(unittest.TestCase):
     """ Skipped tests:
         pip_install
+        pip_uninstall
         unittest
         create_sdist
         upload
         get_path_from_name
         get_repo_path_parent
+        write_metadata
     """
 
     def test_has_metadata(self):
@@ -28,6 +30,9 @@ class TestLocalRepo(unittest.TestCase):
         self.assertIsInstance(LocalRepo().extras_require, dict)
         self.assertIsInstance(LocalRepo().topics, list)
         self.assertIsInstance(LocalRepo().manifest, list)
+
+    def test_get_metadata_dict(self):
+        self.assertEqual(True, LocalRepo().get_metadata_dict()["enabled"])
 
     def test_exists(self):
         self.assertEqual(True, LocalRepo().exists())
@@ -45,7 +50,8 @@ class TestLocalRepo(unittest.TestCase):
             "get_manifest_path",
             "get_license_path",
             "get_workflow_path",
-            "get_test_path"
+            "get_test_path",
+            "get_init_path",
         )
         local_repo = LocalRepo()
         for name in method_names:

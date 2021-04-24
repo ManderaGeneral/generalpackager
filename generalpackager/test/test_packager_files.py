@@ -11,6 +11,7 @@ class TestPackager(unittest.TestCase):
         GenerateFile
         generate
         generate_localfiles
+        create_blank
         """
     def test_relative_path_is_aesthetic(self):
         packager = Packager()
@@ -70,5 +71,10 @@ class TestPackager(unittest.TestCase):
         text = str(packager.generate_personal_readme())
         self.assertIn("generallibrary", text)
 
-
+    def test_get_new_packager(self):
+        a = Packager()
+        b = a.get_new_packager()
+        self.assertEqual(a.name, b.name)
+        self.assertIsNot(a, b)
+        self.assertIs(b, Packager())
 

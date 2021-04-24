@@ -45,6 +45,7 @@ class LocalRepo(Recycle, _SharedAPI):
         return self.get_metadata_path().exists()
 
     def load_metadata(self):
+        """ Read metadata path and load values. """
         self.has_loaded_metadata = True
 
         if self.get_metadata_path().exists():
@@ -61,9 +62,11 @@ class LocalRepo(Recycle, _SharedAPI):
             self.name = self.path.name()
 
     def get_metadata_dict(self):
+        """ Get current metadata values as a dict. """
         return {key: str(getattr(self, key)) if key == "version" else getattr(self, key) for key in self.metadata_keys}
 
     def write_metadata(self):
+        """ Write to metadata path using current metadata values. """
         self.get_metadata_path().write(self.get_metadata_dict(), overwrite=True)
 
     def exists(self):
@@ -75,7 +78,7 @@ class LocalRepo(Recycle, _SharedAPI):
         if path.is_file() or not path.exists():
             return False
         return bool(path.get_child(filt=lambda x: x.name() in ("README.md", ), traverse_excluded=True))
-        # return bool(path.get_child(filt=lambda x: x.name() in ("setup.py", ), traverse_excluded=True))
+        # return bool(path.get_child(filt=lambda x: x.name() in ("setup.py", ), traverse_excluded=True))  # setup.py was not included in pypi's sdist
 
     @classmethod
     def get_repo_path_parent(cls, path=None):
@@ -108,6 +111,9 @@ class LocalRepo(Recycle, _SharedAPI):
         path = cls.get_repo_path_parent()
         if path and (name is None or name == path.name()):
             return path
+
+        if Path.get_working_dir().name() == name:
+            return Path.get_working_dir()
 
         if name is None:
             name = "generalpackager"
