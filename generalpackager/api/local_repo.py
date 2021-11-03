@@ -1,12 +1,11 @@
 
 from generalpackager.api.shared import _SharedAPI
 from generalfile import Path
-from generallibrary import Ver, deco_cache, Recycle
+from generallibrary import Ver, deco_cache, Recycle, terminal
 
 from setuptools import find_namespace_packages
 import re
 from git import Repo
-import subprocess
 import sys
 
 
@@ -181,26 +180,26 @@ class LocalRepo(Recycle, _SharedAPI):
     def pip_install(self):
         """ Install this repository with pip, WITHOUT -e flag.
             Subprocess messed up -e flag compared to doing it in terminal, so use the normal one."""
-        subprocess.check_call([sys.executable, "-m", "pip", "install", str(self.path)])
+        terminal("-m", "pip", "install", str(self.path), python=True)
 
     def pip_uninstall(self):
         """ Uninstall this repository with pip."""
-        subprocess.check_call([sys.executable, "-m", "pip", "uninstall", "-y", self.name])
+        terminal("-m", "pip", "uninstall", "-y", self.name, python=True)
 
     def unittest(self):
         """ Run unittests for this repository. """
-        subprocess.check_call([sys.executable, "-m", "unittest", "discover", str(self.get_test_path())])
+        terminal("-m", "unittest", "discover", str(self.get_test_path()), python=True)
 
     def create_sdist(self):
         """ Create source distribution. """
         with self.path.as_working_dir():
-            subprocess.check_call([sys.executable, "setup.py", "sdist", "bdist_wheel"])
+            terminal("setup.py", "sdist", "bdist_wheel", python=True)
 
     def upload(self):
         """ Upload local repo to PyPI. """
         self.create_sdist()
         with self.path.as_working_dir():
-            subprocess.check_call([sys.executable, "-m", "twine", "upload", "dist/*"])
+            terminal("-m", "twine", "upload", "dist/*", python=True)
 
 for key in LocalRepo.metadata_keys:
     value = getattr(LocalRepo, key)
