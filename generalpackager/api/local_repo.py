@@ -201,6 +201,12 @@ class LocalRepo(Recycle, _SharedAPI):
         with self.path.as_working_dir():
             terminal("-m", "twine", "upload", "dist/*", python=True)
 
+    def generate_exe(self, file_path, suppress=False):
+        """ Generate an exe file for target file_path python file. """
+        with self.path.as_working_dir():
+            terminal("-m", "PyInstaller", file_path, "--onefile", "--windowed", python=True, suppress=suppress)
+            # terminal("-m", "PyInstaller", file_path, "--onefile", "--windowed", "--name", self.name, python=True, suppress=suppress)  # Failed for some reason
+
 for key in LocalRepo.metadata_keys:
     value = getattr(LocalRepo, key)
     setattr(LocalRepo, f"_{key}", value)

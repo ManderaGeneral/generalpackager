@@ -13,7 +13,12 @@ from generalpackager.api.pypi import PyPI
 
 
 
-x = Packager()
+x = Packager("generalgui")
+
+x.localrepo.generate_exe("randomtesting.py")
+
+# HERE ** Try uploading exe to mainframe api
+
 
 # print(x.compare_local_to_pypi(aesthetic=False))
 
