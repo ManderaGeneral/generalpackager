@@ -11,11 +11,21 @@ from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
 
+packages = Packager().get_ordered_packagers()
+for p in packages:
+    p.localrepo.pip_install()
+# print(packages)
+
+# packager = Packager("generalpackager")
+# packager.localrepo.pip_install()
 
 
-x = Packager("generalgui")
+# generalbrowser = Packager("generalbrowser")
+# generalbrowser.create_blank()
 
-x.localrepo.generate_exe("randomtesting.py")
+
+# x = Packager("generalgui")
+# x.localrepo.generate_exe("randomtesting.py")
 
 # HERE ** Try uploading exe to mainframe api
 

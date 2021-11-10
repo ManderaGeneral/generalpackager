@@ -180,7 +180,8 @@ class LocalRepo(Recycle, _SharedAPI):
     def pip_install(self):
         """ Install this repository with pip, WITHOUT -e flag.
             Subprocess messed up -e flag compared to doing it in terminal, so use the normal one."""
-        terminal("-m", "pip", "install", str(self.path), python=True)
+        with self.path.as_working_dir():
+            terminal("pip", "install", "-e", ".")
 
     def pip_uninstall(self):
         """ Uninstall this repository with pip."""
