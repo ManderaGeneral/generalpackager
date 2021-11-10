@@ -11,17 +11,19 @@ from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
 
-packages = Packager().get_ordered_packagers()
-for p in packages:
-    p.localrepo.pip_install()
+# packages = Packager().get_ordered_packagers()
+# for p in packages:
+#     p.localrepo.pip_install()
 # print(packages)
 
 # packager = Packager("generalpackager")
 # packager.localrepo.pip_install()
 
 
-# generalbrowser = Packager("generalbrowser")
-# generalbrowser.create_blank()
+generalbrowser = Packager("generalbrowser")
+generalbrowser.localrepo.upload()
+# HERE ** generalbrowser wasn't
+
 
 
 # x = Packager("generalgui")

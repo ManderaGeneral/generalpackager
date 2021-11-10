@@ -36,6 +36,9 @@ class GitHub(Recycle, _SharedAPI):
             :param generalpackager.Packager self:
             :param path:
             :param overwrite: """
+        if not self.exists():
+            return
+
         path = Path(path) / self.name
 
         if path.exists():

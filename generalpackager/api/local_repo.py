@@ -25,7 +25,7 @@ class LocalRepo(Recycle, _SharedAPI):
     name = ...
     version = "0.0.1"  # type: Ver
     description = "Missing description."
-    install_requires = []
+    install_requires = ["generallibrary"]
     extras_require = {}
     topics = []
     manifest = []
@@ -66,7 +66,7 @@ class LocalRepo(Recycle, _SharedAPI):
 
     def write_metadata(self):
         """ Write to metadata path using current metadata values. """
-        self.get_metadata_path().write(self.get_metadata_dict(), overwrite=True)
+        self.get_metadata_path().write(self.get_metadata_dict(), overwrite=True, indent=4)
 
     def exists(self):
         """ Return whether this API's target exists. """
@@ -197,7 +197,8 @@ class LocalRepo(Recycle, _SharedAPI):
             terminal("setup.py", "sdist", "bdist_wheel", python=True)
 
     def upload(self):
-        """ Upload local repo to PyPI. """
+        """ Upload local repo to PyPI.
+            Todo: Make sure twine is installed when trying to upload to pypi. """
         self.create_sdist()
         with self.path.as_working_dir():
             terminal("-m", "twine", "upload", "dist/*", python=True)
