@@ -149,7 +149,8 @@ class _PackagerWorkflow:
             lambda packager: packager.sync_github_metadata(),
         )
 
-        mandera = type(self)(name="Mandera", github_owner="Mandera")
+        Packager = type(self)
+        mandera = Packager(name="Mandera", github_owner="Mandera")
         mandera.file_personal_readme.generate()
         mandera.commit_and_push(message=msg1)
 
