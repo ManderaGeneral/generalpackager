@@ -45,7 +45,7 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
 
         # Quick fix, should probably put download in a workflow step instead
         # Yeah because this prevents us from creating a new package with create_blank
-        if (self.localmodule.is_general() or self.name == "Mandera") and not self.localrepo.exists():
+        if (self.localmodule.is_general() or self.name in ("Mandera", ".github")) and not self.localrepo.exists():
             self.github.download(path=self.path.get_parent())
 
     def exists(self):

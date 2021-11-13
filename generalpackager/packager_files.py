@@ -40,8 +40,9 @@ class _PackagerFiles:
 
         self.files = [getattr(self, key) for key in dir(self) if key.startswith("file_")]  # type: list[GenerateFile]
         self.files_by_relative_path = {file.relative_path: file for file in self.files}
-
-        self.file_personal_readme = GenerateFile(self.localrepo.get_readme_path(), self.generate_personal_readme, self, aesthetic=True)
+        
+        secret_readme_path = self.localrepo.get_org_readme_path() if self.name == ".github" else self.localrepo.get_readme_path()
+        self.file_secret_readme = GenerateFile(secret_readme_path, self.generate_personal_readme, self, aesthetic=True)
 
     def get_new_packager(self):
         """ :param generalpackager.Packager self: """

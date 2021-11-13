@@ -149,10 +149,15 @@ class _PackagerWorkflow:
             lambda packager: packager.sync_github_metadata(),
         )
 
+        self.upload_package_summary(name="Mandera", github_owner="Mandera", msg=msg1)
+        self.upload_package_summary(name=".github", github_owner="ManderaGeneral", msg=msg1)
+
+    def upload_package_summary(self, name, github_owner, msg):
+        """ :param generalpackager.Packager self: """
         Packager = type(self)
-        mandera = Packager(name="Mandera", github_owner="Mandera")
-        mandera.file_personal_readme.generate()
-        mandera.commit_and_push(message=msg1)
+        mandera = Packager(name=name, github_owner=github_owner)
+        mandera.file_secret_readme.generate()
+        mandera.commit_and_push(message=msg)
 
     def if_publish_bump(self):
         """ Bump if updated and any other Packager is bumped.

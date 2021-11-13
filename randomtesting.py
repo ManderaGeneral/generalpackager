@@ -20,10 +20,14 @@ from generalpackager.api.pypi import PyPI
 # packager.localrepo.pip_install()
 
 
-generalbrowser = Packager("generalbrowser")
-generalbrowser.localrepo.upload()
-# HERE ** generalbrowser wasn't uploaded with version 0.0.1
+# generalbrowser = Packager("generalbrowser")
+# generalbrowser.localrepo.upload()
+
+
+
+# HERE ** generalbrowser wasn't uploaded with version 0.0.1 - Not sure why
 # Sync is also failing: https://github.com/ManderaGeneral/generalpackager/runs/4168506133?check_suite_focus=true
+
 # Once that's fixed, look at mindmap, create generalmainframe (first private general repo)
 # Move code from mainframe_api to generalbrowser and generalmainframe
 # Then continue with making purchasing products work

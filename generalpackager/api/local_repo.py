@@ -138,6 +138,7 @@ class LocalRepo(Recycle, _SharedAPI):
         setattr(self, f"_{key}", value)
 
     def get_readme_path(self):      return self.path / "README.md"
+    def get_org_readme_path(self):  return self.path / "profile/README.md"
     def get_metadata_path(self):    return self.path / "metadata.json"
     def get_git_exclude_path(self): return self.path / ".git/info/exclude"
     def get_setup_path(self):       return self.path / "setup.py"

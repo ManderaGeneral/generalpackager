@@ -171,6 +171,7 @@ class _PackagerMarkdown:
             :param generallibrary.ObjInfo objInfo: """
         text = repr(objInfo)
         path = objInfo.file(relative=True)
+
         line = objInfo.get_definition_line()
 
         string = self.github_link_path_line(text=text, path=path, line=line)
