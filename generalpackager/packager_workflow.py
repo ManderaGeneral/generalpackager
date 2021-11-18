@@ -172,7 +172,8 @@ class _PackagerWorkflow:
         if self.is_bumped():
             self.file_readme.generate()
             self.commit_and_push(message=message, tag=True)
-            self.localrepo.upload()
+            if not self.localrepo.private:
+                self.localrepo.upload()
 
 
 

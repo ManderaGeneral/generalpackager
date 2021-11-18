@@ -11,7 +11,8 @@ from git import Repo
 
 
 class GitHub(Recycle, _SharedAPI):
-    """ Tools to interface a GitHub Repository. """
+    """ Tools to interface a GitHub Repository.
+        Todo: Get and Set GitHub repo private. """
     _recycle_keys = {"name": str, "owner": str}
 
     def __init__(self, name=None, owner=None):

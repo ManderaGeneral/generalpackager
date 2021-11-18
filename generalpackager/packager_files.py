@@ -53,18 +53,19 @@ class _PackagerFiles:
         self.pypi.recycle_clear()
         return type(self)(self.name)
 
-    def create_blank(self):
-        """ Create a new general package and update all other ones.
-            Todo: Automatically create new local git repo with create_blank.
+    def create_blank_locally(self):
+        """ Create a new general package locally only.
 
             :param generalpackager.Packager self: """
         self.localrepo.write_metadata()
         self.generate_localfiles()
         self.localrepo.pip_install()
 
-        self.get_new_packager()  # New packager because of caches? Don't remember
-        for packager in self.get_ordered_packagers():
-            packager.generate_localfiles()
+        new_self = self.get_new_packager()  # Reset caches to get updated files
+        new_self.generate_localfiles()
+
+        # for packager in self.get_ordered_packagers():  # This isn't needed as long as blanks first workflow succeeds
+        #     packager.generate_localfiles()
 
     def relative_path_is_aesthetic(self, relative_path):
         """ Relative to package path. False if not defined as a GenerateFile instance.

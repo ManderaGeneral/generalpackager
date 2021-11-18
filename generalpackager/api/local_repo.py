@@ -21,7 +21,9 @@ def load_metadata_before(func):
 class LocalRepo(Recycle, _SharedAPI):
     """ Tools to help Path interface a Local Python Repository.
         Todo: Search for imports to list dependencies. """
+
     enabled = True
+    private = False
     name = ...
     version = "0.0.1"  # type: Ver
     description = "Missing description."
@@ -133,7 +135,7 @@ class LocalRepo(Recycle, _SharedAPI):
         """ Set a metadata's key both in instance and json file. """
         if self.has_metadata() and value != getattr(self, f"_{key}", ...):
             metadata = self.get_metadata_path().read()
-            metadata[key] = str(value)
+            metadata[key] = str(value) if key == "version" else value  # Todo: Decoupled JSON serialize instructions with custom dumps in lib.
             self.get_metadata_path().write(metadata, overwrite=True, indent=4)
         setattr(self, f"_{key}", value)
 
@@ -200,6 +202,9 @@ class LocalRepo(Recycle, _SharedAPI):
     def upload(self):
         """ Upload local repo to PyPI.
             Todo: Make sure twine is installed when trying to upload to pypi. """
+        if self.private:
+            raise AttributeError("Cannot upload private repo.")
+
         self.create_sdist()
         with self.path.as_working_dir():
             terminal("-m", "twine", "upload", "dist/*", python=True)
