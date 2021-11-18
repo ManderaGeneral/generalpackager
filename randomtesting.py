@@ -11,9 +11,13 @@ from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
 
+x = Packager("generalpackager")
+x.file_setup.generate()
+
 # Once that's fixed, look at mindmap, create generalmainframe (first private general repo)
 # Move code from mainframe_api to generalbrowser and manderageneral
 # Then continue with making purchasing products work
+
 
 
 # x = Packager("generalgui")

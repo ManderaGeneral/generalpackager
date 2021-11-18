@@ -131,7 +131,7 @@ class _PackagerFiles:
             "author_email": f'"{self.email}"',
             "version": f'"{self.localrepo.version}"',
             "description": f'"{self.localrepo.description}"',
-            "long_description": f"(Path(__file__).parent / '{readme_path}').read_text(encoding='utf-8')",
+            "long_description": "long_description",
             "long_description_content_type": '"text/markdown"',
             "install_requires": self.localrepo.install_requires,
             "url": f'"{self.github.url}"',
@@ -146,6 +146,9 @@ class _PackagerFiles:
         top = CodeLine()
         top.add_node(CodeLine("from setuptools import setup, find_namespace_packages", space_before=1))
         top.add_node(CodeLine("from pathlib import Path", space_after=1))
+
+        top.add_node(CodeLine("try:")).add_node(CodeLine("long_description = (Path(__file__).parent / 'README.md').read_text(encoding='utf-8')"))
+        top.add_node(CodeLine("except FileNotFoundError:")).add_node(CodeLine("long_description = 'Readme missing'", space_after=1))
 
         setup = top.add_node(CodeLine("setup("))
         for key, value in setup_kwargs.items():
