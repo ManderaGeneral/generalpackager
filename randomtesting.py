@@ -11,7 +11,8 @@ from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
 
-# x = Packager("generalmainframe")
+x = Packager()
+x.file_workflow.generate()
 
 # x.file_randomtesting.generate()
 # x.file_test_template.generate()

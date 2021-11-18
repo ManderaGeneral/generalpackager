@@ -16,6 +16,7 @@ class _PackagerWorkflow:
     _commit_msg = "github.event.head_commit.message"
     _action_checkout = "actions/checkout@v2"
     _action_setup_python = "actions/setup-python@v2"
+    _action_setup_ssh = "webfactory/ssh-agent@v0.5.3"
     _matrix_os = "matrix.os"
     _matrix_python_version = "matrix.python-version"
 
@@ -33,6 +34,12 @@ class _PackagerWorkflow:
             if codeline:
                 step.add_node(codeline)
         return step
+
+    def step_setup_ssh(self):
+        """ :param generalpackager.Packager self: """
+        with_ = CodeLine("with:")
+        with_.add_node("ssh-private-key: ${{ secrets.GIT_SSH }}")
+        return self._get_step(f"Set up Git SSH", f"uses: {self._action_setup_ssh}", with_)
 
     def step_setup_python(self, version):
         """ :param generalpackager.Packager self:
@@ -62,7 +69,12 @@ class _PackagerWorkflow:
             :param generalpackager.Packager self: """
         run = CodeLine(f"run: |")
         for packager in packagers:
-            run.add_node(f"pip install git+https://github.com/{packager.github.owner}/{packager.name}.git")
+            if packager.localrepo.private:
+                # Explicitly clone as ssh install doesn't keep source files for some reason
+                run.add_node(f"pip install git+ssh://git@github.com/{packager.github.owner}/{packager.name}.git")
+                run.add_node(f"git clone ssh://git@github.com/{packager.github.owner}/{packager.name}.git")
+            else:
+                run.add_node(f"pip install git+https://github.com/{packager.github.owner}/{packager.name}.git")
 
         return self._get_step(f"Install {len(packagers)} git repos", run)
 
@@ -81,6 +93,7 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self:
             :param python_version: """
         steps = CodeLine("steps:")
+        steps.add_node(self.step_setup_ssh())
         steps.add_node(self.step_setup_python(version=python_version))
         steps.add_node(self.step_install_necessities())
         steps.add_node(self.step_install_package_git(*self.get_ordered_packagers()))
