@@ -54,11 +54,17 @@ class _PackagerFiles:
         return type(self)(self.name)
 
     def create_blank(self):
-        """ :param generalpackager.Packager self: """
+        """ Create a new general package and update all other ones.
+            Todo: Automatically create new local git repo with create_blank.
+
+            :param generalpackager.Packager self: """
         self.localrepo.write_metadata()
         self.generate_localfiles()
         self.localrepo.pip_install()
-        self.get_new_packager().generate_localfiles()
+
+        self.get_new_packager()  # New packager because of caches? Don't remember
+        for packager in self.get_ordered_packagers():
+            packager.generate_localfiles()
 
     def relative_path_is_aesthetic(self, relative_path):
         """ Relative to package path. False if not defined as a GenerateFile instance.

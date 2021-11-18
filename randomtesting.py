@@ -11,25 +11,27 @@ from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
 
-# packages = Packager().get_ordered_packagers()
-# for p in packages:
-#     p.localrepo.pip_install()
-# print(packages)
-
-# packager = Packager("generalpackager")
-# packager.localrepo.pip_install()
 
 
-# generalbrowser = Packager("generalbrowser")
-# generalbrowser.localrepo.upload()
+# x = Packager("generalmainframe")
+x = Packager("generalpackager")
+# print(x.get_ordered_packagers())
+# x.create_blank()
+# x.generate_localfiles()
+
+
+x.commit_and_push("[CI SKIP] testing")
+
+# for packager in x.get_ordered_packagers():
+#     packager.commit_and_push(["CI SKIP"])
+    # packager.generate_localfiles()
 
 
 
 # HERE ** generalbrowser wasn't uploaded with version 0.0.1 - Not sure why
-# Sync is also failing: https://github.com/ManderaGeneral/generalpackager/runs/4168506133?check_suite_focus=true
 
 # Once that's fixed, look at mindmap, create generalmainframe (first private general repo)
-# Move code from mainframe_api to generalbrowser and generalmainframe
+# Move code from mainframe_api to generalbrowser and manderageneral
 # Then continue with making purchasing products work
 
 

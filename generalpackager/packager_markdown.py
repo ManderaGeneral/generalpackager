@@ -78,7 +78,7 @@ class _PackagerMarkdown:
 
     def get_description_markdown(self):
         """ :param generalpackager.Packager self: """
-        part_of = f"This package and {len(self.get_all()) - 1} other make up {Markdown.link(text='ManderaGeneral', url='https://github.com/Mandera')}."
+        part_of = f"This package and {len(self.get_all()) - 1} other make up {Markdown.link(text='ManderaGeneral', url='https://github.com/ManderaGeneral')}."
 
         return Markdown(self.localrepo.description, "\n", part_of, header=self.name)
 
