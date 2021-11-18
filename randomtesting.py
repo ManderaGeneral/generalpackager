@@ -20,7 +20,13 @@ x = Packager("generalpackager")
 # x.generate_localfiles()
 
 
-x.commit_and_push("[CI SKIP] testing")
+x.commit_and_push("[CI SKIP] testing")  # HERE ** fix error below, workflows for other packages will automatically be updated when blank one is uploaded
+# Automatic upload in create_blank? Should work
+# Just realized generalmainframe should NOT be uploaded as it's private, that should be a setting to prevent upload
+
+# self.commit_sha = remote.push()[0].summary.split("..")[1].rstrip()
+# IndexError: list index out of range
+
 
 # for packager in x.get_ordered_packagers():
 #     packager.commit_and_push(["CI SKIP"])
