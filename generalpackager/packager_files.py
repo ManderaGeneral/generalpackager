@@ -40,9 +40,13 @@ class _PackagerFiles:
 
         self.files = [getattr(self, key) for key in dir(self) if key.startswith("file_")]  # type: list[GenerateFile]
         self.files_by_relative_path = {file.relative_path: file for file in self.files}
-        
+
+        # Organization secret name is .github, user secret name is user
         secret_readme_path = self.localrepo.get_org_readme_path() if self.name == ".github" else self.localrepo.get_readme_path()
         self.file_secret_readme = GenerateFile(secret_readme_path, self.generate_personal_readme, self, aesthetic=True)
+
+        self.file_randomtesting = GenerateFile(self.localrepo.get_randomtesting_path(), self.generate_randomtesting, self, aesthetic=True)
+        self.file_test_template = GenerateFile(self.localrepo.get_test_template_path(), self.generate_test_template, self, aesthetic=False)
 
     def get_new_packager(self):
         """ :param generalpackager.Packager self: """
@@ -63,6 +67,9 @@ class _PackagerFiles:
 
         new_self = self.get_new_packager()  # Reset caches to get updated files
         new_self.generate_localfiles()
+
+        new_self.file_test_template.generate()
+        new_self.file_randomtesting.generate()
 
         # for packager in self.get_ordered_packagers():  # This isn't needed as long as blanks first workflow succeeds
         #     packager.generate_localfiles()
@@ -265,6 +272,24 @@ class _PackagerFiles:
         self.get_footnote_markdown(commit=False).set_parent(parent=markdown)
 
         return markdown
+
+    def generate_randomtesting(self):
+        """ Generate randomtesting.py.
+
+            :param generalpackager.Packager self: """
+        codeline = CodeLine(f"from {self.name} import *", space_before=1, space_after=50)
+
+        return codeline
+
+    def generate_test_template(self):
+        """ Generate test template.
+
+            :param generalpackager.Packager self: """
+        top = CodeLine()
+        top.add_node(CodeLine("from unittest import TestCase", space_after=2))
+        top.add_node("class Test(TestCase):").add_node("def test(self):").add_node("pass")
+
+        return top
 
     def generate_localfiles(self, aesthetic=True):
         """ Generate all local files.
