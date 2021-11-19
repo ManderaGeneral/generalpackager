@@ -24,6 +24,7 @@ class LocalRepo(Recycle, _SharedAPI):
 
     enabled = True
     private = False
+    installable = True
     name = ...
     version = "0.0.1"  # type: Ver
     description = "Missing description."
@@ -161,7 +162,7 @@ class LocalRepo(Recycle, _SharedAPI):
     def text_in_tests(self, text):
         """ Return whether text exists in one of the test files. """
         for path in self.get_test_paths():
-            if path.contains(text=text):
+            if path.contains(text=str(text)):
                 return True
         return False
 
@@ -204,8 +205,8 @@ class LocalRepo(Recycle, _SharedAPI):
     def upload(self):
         """ Upload local repo to PyPI.
             Todo: Make sure twine is installed when trying to upload to pypi. """
-        if self.private:
-            raise AttributeError("Cannot upload private repo.")
+        # if self.private:
+        #     raise AttributeError("Cannot upload private repo.")
 
         self.create_sdist()
         with self.path.as_working_dir():

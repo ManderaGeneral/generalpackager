@@ -73,8 +73,13 @@ class _PackagerMarkdown:
         todos = flatten([packager.get_todos() for packager in packagers])
         if drop_package_col:
             todos = [exclusive(todo, "Package") for todo in todos]
+
+        markdown = Markdown(header=self._todo_header)
         if todos:
-            return Markdown(header=self._todo_header).add_table_lines(*todos)
+            markdown.add_table_lines(*todos)
+        else:
+            markdown.add_node("No todos!")
+        return markdown
 
     def get_description_markdown(self):
         """ :param generalpackager.Packager self: """
@@ -183,6 +188,8 @@ class _PackagerMarkdown:
 
     def _get_attributes_view(self):
         """ :param generalpackager.Packager self: """
+        if self.localmodule.module is None:
+            return "No module to get attributes"
         return self._cache_get_attributes_view(self.commit_sha)
 
     @deco_cache()

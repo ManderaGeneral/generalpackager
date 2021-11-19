@@ -36,17 +36,17 @@ class LocalModule(Recycle, _SharedAPI):
     @property
     @deco_cache()
     def objInfo(self):
+        if self.module is None:
+            return None
+
         objInfo = ObjInfo(self.module)
+        assert objInfo.is_module()
 
-        if self.module is not None:
-            assert objInfo.is_module()
+        # objInfo.children_states = ObjInfo.children_states.copy()
+        # objInfo.children_states[ObjInfo.is_instance] = False
 
-            # objInfo.children_states = ObjInfo.children_states.copy()
-            # objInfo.children_states[ObjInfo.is_instance] = False
-
-            objInfo.get_children(depth=-1, filt=self._filter, traverse_excluded=False)
-
-            objInfo.disconnect(lambda node: not self._filter(node))
+        objInfo.get_children(depth=-1, filt=self._filter, traverse_excluded=False)
+        objInfo.disconnect(lambda node: not self._filter(node))
 
         return objInfo
 

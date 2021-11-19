@@ -5,17 +5,20 @@ from generalfile import Path
 
 class GenerateFile:
     """ Handle generation of files. """
-    def __init__(self, path, text_func, packager, aesthetic):
+    def __init__(self, path, text_func, packager, aesthetic, overwrite=True):
+        """ :param generalpackager.Packager packager: """
         self.text_func = text_func
         self.packager = packager
         self.aesthetic = aesthetic
+        self.overwrite = overwrite
 
         self.relative_path = path.relative(base=packager.path)
         self.path = packager.path / self.relative_path
 
     def generate(self):
         """ Generate actual file. """
-        self.path.text.write(f"{self.text_func()}\n", overwrite=True)
+        if self.overwrite or not self.path.exists():
+            self.path.text.write(f"{self.text_func()}\n", overwrite=self.overwrite)
 
 
 class _PackagerFiles:
@@ -38,6 +41,9 @@ class _PackagerFiles:
         self.file_workflow =        GenerateFile(self.localrepo.get_workflow_path(), self.generate_workflow, self, aesthetic=True)
         self.file_readme =          GenerateFile(self.localrepo.get_readme_path(), self.generate_readme, self, aesthetic=True)
 
+        self.file_randomtesting = GenerateFile(self.localrepo.get_randomtesting_path(), self.generate_randomtesting, self, aesthetic=True, overwrite=False)
+        self.file_test_template = GenerateFile(self.localrepo.get_test_template_path(), self.generate_test_template, self, aesthetic=False, overwrite=False)
+
         self.files = [getattr(self, key) for key in dir(self) if key.startswith("file_")]  # type: list[GenerateFile]
         self.files_by_relative_path = {file.relative_path: file for file in self.files}
 
@@ -45,8 +51,6 @@ class _PackagerFiles:
         secret_readme_path = self.localrepo.get_org_readme_path() if self.name == ".github" else self.localrepo.get_readme_path()
         self.file_secret_readme = GenerateFile(secret_readme_path, self.generate_personal_readme, self, aesthetic=True)
 
-        self.file_randomtesting = GenerateFile(self.localrepo.get_randomtesting_path(), self.generate_randomtesting, self, aesthetic=True)
-        self.file_test_template = GenerateFile(self.localrepo.get_test_template_path(), self.generate_test_template, self, aesthetic=False)
 
     def get_new_packager(self):
         """ :param generalpackager.Packager self: """
@@ -57,22 +61,18 @@ class _PackagerFiles:
         self.pypi.recycle_clear()
         return type(self)(self.name)
 
-    def create_blank_locally(self):
+    def create_blank_locally(self, install=True):
         """ Create a new general package locally only.
 
-            :param generalpackager.Packager self: """
+            :param generalpackager.Packager self:
+            :param install: Whether to pip install. """
         self.localrepo.write_metadata()
         self.generate_localfiles()
-        self.localrepo.pip_install()
+        if install:
+            self.localrepo.pip_install()
 
         new_self = self.get_new_packager()  # Reset caches to get updated files
         new_self.generate_localfiles()
-
-        new_self.file_test_template.generate()
-        new_self.file_randomtesting.generate()
-
-        # for packager in self.get_ordered_packagers():  # This isn't needed as long as blanks first workflow succeeds
-        #     packager.generate_localfiles()
 
     def relative_path_is_aesthetic(self, relative_path):
         """ Relative to package path. False if not defined as a GenerateFile instance.

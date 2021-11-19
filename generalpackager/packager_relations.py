@@ -3,6 +3,23 @@ from generallibrary import remove_duplicates, deco_cache
 
 
 class _PackagerRelations:
+    def get_dependencies(self):
+        """ Get a list of dependencies as Packagers.
+            Combines localmodules dependencies with localrepos install_requires.
+
+            :param generalpackager.Packager self: """
+        packagers = {type(self)(localmodule.name) for localmodule in self.localmodule.get_dependencies()}
+        packagers.update({type(self)(name) for name in self.localrepo.install_requires})
+        return list(packagers)
+
+    def get_dependants(self):
+        """ Get a list of dependants as Packagers.
+            Same as localmodules but Packager instead of localmodule.
+
+            :param generalpackager.Packager self: """
+        packagers = {type(self)(localmodule.name) for localmodule in self.localmodule.get_dependants()}
+        return list(packagers)
+
     def get_ordered_packagers(self):
         """ Get a list of enabled ordered packagers from the dependency chain, sorted by name in each lvl.
 
@@ -33,6 +50,9 @@ class _PackagerRelations:
     def get_untested_objInfo_dict(self):
         """ :param generalpackager.Packager self:
             :rtype: dict[generallibrary.ObjInfo] """
+        if not self.localmodule.objInfo:
+            return {}
+
         filt = lambda objInfo: not self.localrepo.text_in_tests(text=objInfo.name)
         all_objInfo = self.localmodule.objInfo.get_all(filt=filt, traverse_excluded=True)
         return {objInfo.name: objInfo for objInfo in all_objInfo}
