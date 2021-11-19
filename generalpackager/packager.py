@@ -32,6 +32,7 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
 
     git_exclude_lines = ".idea", "build", "dist", "*.egg-info", "__pycache__", ".git", "test/tests", "PKG-INFO", "setup.cfg"
     _recycle_keys = LocalModule._recycle_keys
+    _recycle_keys["path"] = str
 
     def __init__(self, name=None, github_owner=None, pypi_owner=None, path=None):
         self.localmodule = LocalModule(name=name)

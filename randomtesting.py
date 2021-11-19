@@ -11,16 +11,10 @@ from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
 
-# x = Packager()
-x = Packager("manderageneral", path="generalpackager/test/tests")
-
-print(x.path)
-
-# x.create_blank_locally(install=False)
+x = Packager()
 
 # x.generate_localfiles()
 
-# x.localrepo.upload()
 
 # for y in x.get_ordered_packagers():
 #     y.file_workflow.generate()
