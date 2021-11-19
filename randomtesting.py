@@ -12,8 +12,13 @@ from generalpackager.api.pypi import PyPI
 
 
 # x = Packager()
-x = Packager("manderageneral")
-x.generate_localfiles()
+x = Packager("manderageneral", path="generalpackager/test/tests")
+
+print(x.path)
+
+# x.create_blank_locally(install=False)
+
+# x.generate_localfiles()
 
 # x.localrepo.upload()
 

@@ -36,8 +36,14 @@ class LocalRepo(Recycle, _SharedAPI):
     metadata_keys = [key for key, value in locals().items() if not key.startswith("_")]
     _recycle_keys = {"name": lambda name: str(LocalRepo.get_path_from_name(name=name))}
 
-    def __init__(self, name=None):
-        self.path = self.get_path_from_name(name=name)
+    def __init__(self, name=None, path=None):
+        if path is None:
+            self.path = self.get_path_from_name(name=name)
+        else:
+            path = Path(path)
+            if not path.endswith(name):
+                path /= name
+            self.path = path
         self.has_loaded_metadata = False
 
     def __repr__(self):
@@ -205,8 +211,8 @@ class LocalRepo(Recycle, _SharedAPI):
     def upload(self):
         """ Upload local repo to PyPI.
             Todo: Make sure twine is installed when trying to upload to pypi. """
-        # if self.private:
-        #     raise AttributeError("Cannot upload private repo.")
+        if self.private:
+            raise AttributeError("Cannot upload private repo.")
 
         self.create_sdist()
         with self.path.as_working_dir():

@@ -33,11 +33,11 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
     git_exclude_lines = ".idea", "build", "dist", "*.egg-info", "__pycache__", ".git", "test/tests", "PKG-INFO", "setup.cfg"
     _recycle_keys = LocalModule._recycle_keys
 
-    def __init__(self, name=None, github_owner=None, pypi_owner=None):
+    def __init__(self, name=None, github_owner=None, pypi_owner=None, path=None):
         self.localmodule = LocalModule(name=name)
         self.name = self.localmodule.name
 
-        self.localrepo = LocalRepo(name=self.name)
+        self.localrepo = LocalRepo(name=self.name, path=path)
         self.path = self.localrepo.path
 
         self.github = GitHub(name=self.name, owner=github_owner)
@@ -45,8 +45,8 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
 
         # Quick fix, should probably put download in a workflow step instead
         # Yeah because this prevents us from creating a new package with create_blank
-        if (self.localmodule.is_general() or self.name in ("Mandera", ".github")) and not self.localrepo.exists():
-            self.github.download(path=self.path.get_parent())
+        # if (self.localmodule.is_general() or self.name in ("Mandera", ".github")) and not self.localrepo.exists():
+        #     self.github.download(path=self.path.get_parent())
 
     def spawn_children(self):
         """ :param generalpackager.Packager self: """
