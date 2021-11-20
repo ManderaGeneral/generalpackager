@@ -69,12 +69,8 @@ class _PackagerWorkflow:
             :param generalpackager.Packager self: """
         run = CodeLine(f"run: |")
         for packager in packagers:
-            if packager.localrepo.private:
-                # Explicitly clone as ssh install doesn't keep source files for some reason
-                run.add_node(f"pip install git+ssh://git@github.com/{packager.github.owner}/{packager.name}.git")
-                run.add_node(f"git clone ssh://git@github.com/{packager.github.owner}/{packager.name}.git")
-            else:
-                run.add_node(f"pip install git+https://github.com/{packager.github.owner}/{packager.name}.git")
+            run.add_node(f"pip install git+ssh://git@github.com/{packager.github.owner}/{packager.name}.git")
+            run.add_node(f"git clone ssh://git@github.com/{packager.github.owner}/{packager.name}.git")
 
         return self._get_step(f"Install {len(packagers)} git repos", run)
 

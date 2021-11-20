@@ -51,7 +51,6 @@ class _PackagerFiles:
         secret_readme_path = self.localrepo.get_org_readme_path() if self.name == ".github" else self.localrepo.get_readme_path()
         self.file_secret_readme = GenerateFile(secret_readme_path, self.generate_personal_readme, self, aesthetic=True)
 
-
     def get_new_packager(self):
         """ :param generalpackager.Packager self: """
         self.recycle_clear()

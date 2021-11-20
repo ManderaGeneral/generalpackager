@@ -13,7 +13,7 @@ from generalpackager.api.pypi import PyPI
 
 x = Packager()
 
-# x.generate_localfiles()
+x.generate_localfiles()
 
 
 # for y in x.get_ordered_packagers():
