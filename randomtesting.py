@@ -12,13 +12,13 @@ from generalpackager.api.pypi import PyPI
 
 
 x = Packager()
+# x.generate_localfiles()
 
-x.generate_localfiles()
 
-
-# for y in x.get_ordered_packagers():
-#     y.file_workflow.generate()
-#     print(y)
+for y in x.get_ordered_packagers():
+    # y.file_workflow.generate()
+    y.generate_localfiles(print_out=True)
+    # print(y)
 
 # x.file_randomtesting.generate()
 # x.file_test_template.generate()

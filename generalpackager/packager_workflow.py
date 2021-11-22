@@ -162,8 +162,6 @@ class _PackagerWorkflow:
             lambda packager: packager.sync_github_metadata(),
         )
 
-        # HERE ** The two repos are no longer being downloaded automatically upon init, maybe clone if commit_and_push fails?
-        # Or clone in workflow
         for packager in self.summary_packagers:
             packager.upload_package_summary(msg=msg1)
 

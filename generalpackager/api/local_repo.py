@@ -158,6 +158,7 @@ class LocalRepo(Recycle, _SharedAPI):
     def get_test_template_path(self):       return self.get_test_path() / f"test_{self.name}.py"
     def get_init_path(self):                return self.path / self.name / "__init__.py"
     def get_randomtesting_path(self):       return self.path / "randomtesting.py"
+    def get_generate_path(self):            return self.path / "generate.py"
 
     @deco_cache()
     def get_test_paths(self):

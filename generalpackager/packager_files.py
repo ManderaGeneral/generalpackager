@@ -1,5 +1,5 @@
 
-from generallibrary import CodeLine, Markdown, Date, exclusive, deco_cache, cache_clear
+from generallibrary import CodeLine, Markdown, Date, exclusive, deco_cache, cache_clear, Timer
 from generalfile import Path
 
 
@@ -19,6 +19,9 @@ class GenerateFile:
         """ Generate actual file. """
         if self.overwrite or not self.path.exists():
             self.path.text.write(f"{self.text_func()}\n", overwrite=self.overwrite)
+
+    def __str__(self):
+        return f"<GenerateFile: {self.packager.name} - {self.relative_path}>"
 
 
 class _PackagerFiles:
@@ -40,9 +43,11 @@ class _PackagerFiles:
         self.file_license =         GenerateFile(self.localrepo.get_license_path(), self.generate_license, self, aesthetic=True)
         self.file_workflow =        GenerateFile(self.localrepo.get_workflow_path(), self.generate_workflow, self, aesthetic=True)
         self.file_readme =          GenerateFile(self.localrepo.get_readme_path(), self.generate_readme, self, aesthetic=True)
+        self.file_generate =        GenerateFile(self.localrepo.get_generate_path(), self.generate_generate, self, aesthetic=True)
 
-        self.file_randomtesting = GenerateFile(self.localrepo.get_randomtesting_path(), self.generate_randomtesting, self, aesthetic=True, overwrite=False)
-        self.file_test_template = GenerateFile(self.localrepo.get_test_template_path(), self.generate_test_template, self, aesthetic=False, overwrite=False)
+        self.file_init =            GenerateFile(self.localrepo.get_init_path(), self.generate_init, self, aesthetic=False, overwrite=False)
+        self.file_randomtesting =   GenerateFile(self.localrepo.get_randomtesting_path(), self.generate_randomtesting, self, aesthetic=True, overwrite=False)
+        self.file_test_template =   GenerateFile(self.localrepo.get_test_template_path(), self.generate_test_template, self, aesthetic=False, overwrite=False)
 
         self.files = [getattr(self, key) for key in dir(self) if key.startswith("file_")]  # type: list[GenerateFile]
         self.files_by_relative_path = {file.relative_path: file for file in self.files}
@@ -272,6 +277,14 @@ class _PackagerFiles:
 
         return markdown
 
+    def generate_init(self):
+        """ Generate __init__.py.
+
+            :param generalpackager.Packager self: """
+        codeline = CodeLine(f"", space_before=1, space_after=50)
+
+        return codeline
+
     def generate_randomtesting(self):
         """ Generate randomtesting.py.
 
@@ -279,6 +292,16 @@ class _PackagerFiles:
         codeline = CodeLine(f"from {self.name} import *", space_before=1, space_after=50)
 
         return codeline
+
+    def generate_generate(self):
+        """ Generate randomtesting.py.
+
+            :param generalpackager.Packager self: """
+        top = CodeLine()
+        top.add_node(CodeLine(f"from generalpackager import Packager", space_before=1, space_after=1))
+        top.add_node(CodeLine(f"""Packager("{self.name}").generate_localfiles(print_out=True)""", space_after=50))
+
+        return top
 
     def generate_test_template(self):
         """ Generate test template.
@@ -290,17 +313,20 @@ class _PackagerFiles:
 
         return top
 
-    def generate_localfiles(self, aesthetic=True):
+    def generate_localfiles(self, aesthetic=True, print_out=False):
         """ Generate all local files.
 
             :param aesthetic:
-            :param generalpackager.Packager self: """
-        if not self.localrepo.get_init_path().exists():
-            self.localrepo.get_init_path().text.write("\n")
-
+            :param generalpackager.Packager self:
+            :param print_out: """
+        timer = Timer()
         for generate in self.files:
             if aesthetic or not generate.aesthetic:
+                if print_out:
+                    print(f"Generating {generate}")
                 generate.generate()
+        if print_out:
+            timer.print()
 
 
 
