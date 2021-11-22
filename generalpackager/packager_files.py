@@ -320,6 +320,10 @@ class _PackagerFiles:
             :param generalpackager.Packager self:
             :param print_out: """
         timer = Timer()
+
+        # Not in files because it writes with json not text, it's also a bit unique
+        self.localrepo.write_metadata()
+
         for generate in self.files:
             if aesthetic or not generate.aesthetic:
                 if print_out:
