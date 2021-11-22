@@ -24,7 +24,7 @@ class LocalRepo(Recycle, _SharedAPI):
 
     enabled = True
     private = False
-    installable = True
+    installable = True  # Might not need this, generalmainframe can be installable, just not on pypi
     name = ...
     version = "0.0.1"  # type: Ver
     description = "Missing description."
