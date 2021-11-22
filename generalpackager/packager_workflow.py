@@ -1,6 +1,8 @@
 
 from generallibrary import CodeLine, comma_and_and, EnvVar
 
+from itertools import chain
+
 
 class _PackagerWorkflow:
     """ Light handling of workflow logic. """
@@ -70,9 +72,11 @@ class _PackagerWorkflow:
         run = CodeLine(f"run: |")
         for packager in packagers:
             run.add_node(f"pip install git+ssh://git@github.com/{packager.github.owner}/{packager.name}.git")
+
+        for packager in chain(packagers, self.summary_packagers):  # Also clone summary_packagers for syncing
             run.add_node(f"git clone ssh://git@github.com/{packager.github.owner}/{packager.name}.git")
 
-        return self._get_step(f"Install {len(packagers)} git repos", run)
+        return self._get_step(f"Install and clone {len(packagers)} git repos", run)
 
     def get_env(self):
         """ :param generalpackager.Packager self: """
@@ -158,15 +162,15 @@ class _PackagerWorkflow:
             lambda packager: packager.sync_github_metadata(),
         )
 
-        self.upload_package_summary(name="Mandera", github_owner="Mandera", msg=msg1)
-        self.upload_package_summary(name=".github", github_owner="ManderaGeneral", msg=msg1)
+        # HERE ** The two repos are no longer being downloaded automatically upon init, maybe clone if commit_and_push fails?
+        # Or clone in workflow
+        for packager in self.summary_packagers:
+            packager.upload_package_summary(msg=msg1)
 
-    def upload_package_summary(self, name, github_owner, msg):
+    def upload_package_summary(self, msg):
         """ :param generalpackager.Packager self: """
-        Packager = type(self)
-        mandera = Packager(name=name, github_owner=github_owner)
-        mandera.file_secret_readme.generate()
-        mandera.commit_and_push(message=msg)
+        self.file_secret_readme.generate()
+        self.commit_and_push(message=msg)
 
     def if_publish_bump(self):
         """ Bump if updated and any other Packager is bumped.

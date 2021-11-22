@@ -34,6 +34,8 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
     _recycle_keys = LocalModule._recycle_keys
     _recycle_keys["path"] = str
 
+    summary_packagers = []
+
     def __init__(self, name=None, github_owner=None, pypi_owner=None, path=None):
         self.localmodule = LocalModule(name=name)
         self.name = self.localmodule.name
@@ -68,7 +70,10 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
     def __repr__(self):
         return f"<Packager: {self.name}>"
 
-
+Packager.summary_packagers = [
+    Packager(name="Mandera", github_owner="Mandera"),
+    Packager(name=".github", github_owner="ManderaGeneral"),
+]
 
 
 
