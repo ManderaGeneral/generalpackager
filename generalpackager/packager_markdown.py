@@ -65,7 +65,9 @@ class _PackagerMarkdown:
 
             :param generalpackager.Packager self:
             :rtype: dict[list[str]] """
-        return self._get_codeline_todos() + self._get_untested_todos()
+        todos = self._get_codeline_todos() + self._get_untested_todos()
+        # Todo: Sort todos by name to decrease automatic commit changes.
+        return todos
 
     def get_todos_markdown(self, *packagers, drop_package_col=False):
         """ :param generalpackager.Packager self:

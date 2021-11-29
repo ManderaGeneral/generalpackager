@@ -11,16 +11,18 @@ from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
 
-x = Packager()
+# x = Packager("generalgui")
+# x = Packager("generalpackager")
 # x.generate_localfiles()
 # x.localrepo.write_metadata()
 
 
-for y in x.get_ordered_packagers():
-    print(y)
-    y.localrepo.write_metadata()
-    # y.file_workflow.generate()
-    # y.generate_localfiles(print_out=True)
+
+# for y in x.get_ordered_packagers():  # manderageneral not included
+#     print(y)
+#     y.localrepo.write_metadata()
+#     # y.file_workflow.generate()
+#     # y.generate_localfiles(print_out=True)
 
 # x.file_randomtesting.generate()
 # x.file_test_template.generate()
@@ -32,9 +34,11 @@ for y in x.get_ordered_packagers():
 # Then continue with making purchasing products work
 
 
+print(list({"a": 1}))
 
-# x = Packager("generalgui")
-# x.localrepo.generate_exe("randomtesting.py")
+
+# x = Packager("generalmainframe")
+# x.localrepo.generate_exe("exetarget.py")
 
 # HERE ** Try uploading exe to mainframe api
 
