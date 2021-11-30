@@ -179,7 +179,8 @@ class _PackagerWorkflow:
             self.localrepo.bump_version()
 
     def if_publish_publish(self, message):
-        """ Generate new readme, commit and push with tag.
+        """ Only does anything if bumped.
+            Generate new readme, commit and push with tag.
             Upload to PyPI unless private.
             Upload exe if exetarget.py exists.
 
