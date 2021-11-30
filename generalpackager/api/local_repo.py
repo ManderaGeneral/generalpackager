@@ -158,6 +158,8 @@ class LocalRepo(Recycle, _SharedAPI):
     def get_init_path(self):                return self.path / self.name / "__init__.py"
     def get_randomtesting_path(self):       return self.path / "randomtesting.py"
     def get_generate_path(self):            return self.path / "generate.py"
+    def get_exetarget_path(self):           return self.path / "exetarget.py"
+    def get_exeproduct_path(self):          return self.path / "dist/exetarget.py"
 
     @deco_cache()
     def get_test_paths(self):
@@ -218,8 +220,12 @@ class LocalRepo(Recycle, _SharedAPI):
         with self.path.as_working_dir():
             terminal("-m", "twine", "upload", "dist/*", python=True)
 
-    def generate_exe(self, file_path, suppress=False):
+    def generate_exe(self, file_path=None, suppress=False):
         """ Generate an exe file for target file_path python file. """
+        if file_path is None:
+            file_path = self.get_exetarget_path()
+        assert file_path.exists()
+
         with self.path.as_working_dir():
             terminal("-m", "PyInstaller", file_path, "--onefile", "--windowed", python=True, suppress=suppress)
             # terminal("-m", "PyInstaller", file_path, "--onefile", "--windowed", "--name", self.name, python=True, suppress=suppress)  # Failed for some reason

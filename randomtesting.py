@@ -34,13 +34,11 @@ from generalpackager.api.pypi import PyPI
 # Then continue with making purchasing products work
 
 
-print(list({"a": 1}))
 
+x = Packager("generalmainframe")
+x.localrepo.generate_exe("exetarget.py")
 
-# x = Packager("generalmainframe")
-# x.localrepo.generate_exe("exetarget.py")
-
-# HERE ** Try uploading exe to mainframe api
+# HERE ** Upload exe automatically in publish step
 
 
 # print(x.compare_local_to_pypi(aesthetic=False))

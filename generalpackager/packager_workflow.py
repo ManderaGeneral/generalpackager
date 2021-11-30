@@ -1,4 +1,5 @@
 
+from generalmainframe import MainframeClient
 from generallibrary import CodeLine, comma_and_and, EnvVar
 
 from itertools import chain
@@ -83,7 +84,7 @@ class _PackagerWorkflow:
         env = CodeLine("env:")
         for packager in self.get_all():
             for env_var in packager.localmodule.get_env_vars():
-                if env_var.actions_name and env_var.name not in str(env):
+                if env_var.actions_name and env_var.name not in str(env):  # Coupled to generallibrary.EnvVar
                     env.add_node(f"{env_var.name}: {env_var.actions_name}")
         if not env.get_children():
             return None
@@ -178,13 +179,21 @@ class _PackagerWorkflow:
             self.localrepo.bump_version()
 
     def if_publish_publish(self, message):
-        """ :param generalpackager.Packager self:
+        """ Generate new readme, commit and push with tag.
+            Upload to PyPI unless private.
+            Upload exe if exetarget.py exists.
+
+            :param generalpackager.Packager self:
             :param message: """
         if self.is_bumped():
             self.file_readme.generate()
             self.commit_and_push(message=message, tag=True)
             if not self.localrepo.private:
                 self.localrepo.upload()
+            if self.localrepo.get_exetarget_path().exists():
+                self.localrepo.generate_exe()
+                MainframeClient().upload_exe(exe_path=self.localrepo.get_exeproduct_path(), name=self.name, version=self.localrepo.version)
+
 
 
 
