@@ -230,6 +230,69 @@ class LocalRepo(Recycle, _SharedAPI):
             terminal("-m", "PyInstaller", file_path, "--onefile", "--windowed", python=True, suppress=suppress)
             # terminal("-m", "PyInstaller", file_path, "--onefile", "--windowed", "--name", self.name, python=True, suppress=suppress)  # Failed for some reason
 
+    @staticmethod
+    def _camel_to_under(match):
+        return "".join(f"_{c.lower()}" if c.isupper() else c for c in match[0])
+
+    def replace_camel_case(self, text):
+        return re.sub(r"\W([a-z]+(?:[A-Z][a-z]*)+)", self._camel_to_under, text)
+
+    @staticmethod
+    def _format_docstring(match):
+        lines = match[0].splitlines()  # type: list[str]
+
+        indent = lines[0].find('"')
+
+        if len(lines) == 1:
+            stripped_line = match[0].strip('" ')
+            return f'{" " * indent}""" {stripped_line} """'
+
+        first_line_is_only_quotes = lines[0].strip() == '"""'
+        last_line_is_only_quotes = lines[-1].strip() == '"""'
+
+        if first_line_is_only_quotes:
+            lines[1] = f'{" " * indent}""" {lines[1].strip()}'
+            del lines[0]
+
+        if last_line_is_only_quotes:
+            lines[-2] = f'{" " * indent}    {lines[-2].strip()} """'
+            del lines[-1]
+
+        for i in range(1, len(lines) - 1):
+            lines[i] = f'{" " * indent}    {lines[i].strip()}'
+
+        return "\n".join(lines)
+
+
+    def replace_docstrings(self, text):
+        return re.sub(r' +""".*?"""', self._format_docstring, text, flags=re.S)
+
+
+    def format_file(self, path, write=True):
+        """ Overwrite a file to replace camelCase with under_scores. """
+        path = Path(path)
+        old_text = path.text.read()
+        new_text = self.replace_camel_case(text=old_text)
+        new_text = self.replace_docstrings(text=old_text)
+
+
+        if write:
+            path.text.write(new_text, overwrite=True)
+        else:
+            from selenium import webdriver
+            from webdriver_manager.chrome import ChromeDriverManager
+
+            driver = webdriver.Chrome(ChromeDriverManager().install())
+            driver.get("https://text-compare.com/")
+            driver.maximize_window()
+            driver.execute_script("arguments[0].value = arguments[1];", driver.find_element_by_id("inputText1"), old_text)
+            driver.execute_script("arguments[0].value = arguments[1];", driver.find_element_by_id("inputText2"), new_text)
+            driver.find_element_by_class_name("compareButtonText").click()
+
+            while True:
+                pass
+
+
 for key in LocalRepo.metadata_keys:
     value = getattr(LocalRepo, key)
     setattr(LocalRepo, f"_{key}", value)

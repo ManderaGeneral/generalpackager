@@ -51,6 +51,10 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
         # if (self.localmodule.is_general() or self.name in ("Mandera", ".github")) and not self.localrepo.exists():
         #     self.github.download(path=self.path.get_parent())
 
+    @property
+    def simple_name(self):
+        return self.name.replace("general", "")
+
     def spawn_children(self):
         """ :param generalpackager.Packager self: """
         for packager in self.get_dependants():

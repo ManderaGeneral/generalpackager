@@ -1,4 +1,3 @@
-
 from generalpackager import Packager
 from generalfile import Path
 from pprint import pprint
@@ -12,7 +11,9 @@ from generalpackager.api.pypi import PyPI
 
 
 # x = Packager("generalgui")
-# x = Packager("generalpackager")
+x = Packager("generalpackager")
+x.localrepo.format_file(x.localrepo.get_randomtesting_path())
+
 # x.generate_localfiles()
 # x.localrepo.write_metadata()
 
@@ -35,8 +36,8 @@ from generalpackager.api.pypi import PyPI
 
 
 
-x = Packager("generalmainframe")
-x.localrepo.generate_exe("exetarget.py")
+# x = Packager("generalmainframe")
+# x.localrepo.generate_exe("exetarget.py")
 
 # HERE ** Upload exe automatically in publish step
 
