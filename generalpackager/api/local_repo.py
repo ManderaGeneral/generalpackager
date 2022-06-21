@@ -27,7 +27,7 @@ class LocalRepo(Recycle, _SharedAPI):
     name = ...
     version = "0.0.1"  # type: Ver
     description = "Missing description."
-    install_requires = ["generallibrary"]
+    install_requires = []
     extras_require = {}
     topics = []
     manifest = []
@@ -170,6 +170,11 @@ class LocalRepo(Recycle, _SharedAPI):
     def get_generate_path(self):            return self.path / "generate.py"
     def get_exetarget_path(self):           return self.path / "exetarget.py"
     def get_exeproduct_path(self):          return self.path / "dist/exetarget"
+    def get_git_ignore_path(self):          return self.path / ".gitignore"
+
+    def get_npm_ignore_path(self):          return self.path / ".npmignore"
+    def get_index_js_path(self):            return self.path / "index.js"
+    def get_test_js_path(self):             return self.path / "test.js"
     def get_package_json_path(self):        return self.path / "package.json"
 
     @deco_cache()

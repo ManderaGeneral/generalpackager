@@ -31,7 +31,10 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
     python = "3.8", "3.9"  # Only supports basic definition with tuple of major.minor
     os = "windows", "ubuntu"  # , "macos"
 
-    git_exclude_lines = ".idea", "build", "dist", "*.egg-info", "__pycache__", ".git", "test/tests", "PKG-INFO", "setup.cfg"
+    git_exclude_lines = npm_ignore_lines = ".idea", "dist", ".git", "test/tests"
+    git_exclude_lines += "build", "*.egg-info", "__pycache__", "PKG-INFO", "setup.cfg"
+    npm_ignore_lines += "node_modules", ".parcel-cache"
+
     _recycle_keys = LocalModule._recycle_keys
     _recycle_keys["path"] = str
 

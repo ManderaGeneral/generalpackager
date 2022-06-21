@@ -2,6 +2,8 @@
 from generallibrary import CodeLine, Markdown, Date, exclusive, deco_cache, cache_clear, Timer
 from generalfile import Path
 
+from json import dumps
+
 
 class GenerateFile:
     """ Handle generation of files. """
@@ -36,11 +38,11 @@ class _PackagerFiles:
         """ Todo: Watermark generated files to prevent mistake of thinking you can modify them directly.
 
             :param generalpackager.Packager self: """
-        self.file_git_exclude =     GenerateFile(self.localrepo.get_git_exclude_path(), self.generate_git_exclude, self, aesthetic=True)
-        self.file_license =         GenerateFile(self.localrepo.get_license_path(), self.generate_license, self, aesthetic=True)
-        self.file_workflow =        GenerateFile(self.localrepo.get_workflow_path(), self.generate_workflow, self, aesthetic=True)
-        self.file_readme =          GenerateFile(self.localrepo.get_readme_path(), self.generate_readme, self, aesthetic=True)
-        self.file_generate =        GenerateFile(self.localrepo.get_generate_path(), self.generate_generate, self, aesthetic=True)
+        self.file_git_exclude =         GenerateFile(self.localrepo.get_git_exclude_path(), self.generate_git_exclude, self, aesthetic=True)
+        self.file_license =             GenerateFile(self.localrepo.get_license_path(), self.generate_license, self, aesthetic=True)
+        self.file_workflow =            GenerateFile(self.localrepo.get_workflow_path(), self.generate_workflow, self, aesthetic=True)
+        self.file_readme =              GenerateFile(self.localrepo.get_readme_path(), self.generate_readme, self, aesthetic=True)
+        self.file_generate =            GenerateFile(self.localrepo.get_generate_path(), self.generate_generate, self, aesthetic=True)
 
         if self.is_python():
             self.file_setup =           GenerateFile(self.localrepo.get_setup_path(), self.generate_setup, self, aesthetic=False)
@@ -50,7 +52,10 @@ class _PackagerFiles:
             self.file_test_template =   GenerateFile(self.localrepo.get_test_template_path(), self.generate_test_template, self, aesthetic=False, overwrite=False)
 
         elif self.is_node():
-            pass  # HERE **
+            self.file_npm_ignore =      GenerateFile(self.localrepo.get_npm_ignore_path(), self.generate_npm_ignore, self, aesthetic=True)
+            self.file_index_js =        GenerateFile(self.localrepo.get_index_js_path(), self.generate_index_js, self, aesthetic=True)
+            self.file_test_js =         GenerateFile(self.localrepo.get_test_js_path(), self.generate_test_js, self, aesthetic=True)
+            self.file_package_json =    GenerateFile(self.localrepo.get_package_json_path(), self.generate_package_json, self, aesthetic=True)
 
         self.files = [getattr(self, key) for key in dir(self) if key.startswith("file_")]  # type: list[GenerateFile]
         self.files_by_relative_path = {file.relative_path: file for file in self.files}
@@ -315,6 +320,52 @@ class _PackagerFiles:
         top.add_node("class Test(TestCase):").add_node("def test(self):").add_node("pass")
 
         return top
+
+    def generate_npm_ignore(self):
+        """ Generate .npmignore
+
+            :param generalpackager.Packager self: """
+        return "\n".join(self.npm_ignore_lines)
+
+    def generate_index_js(self):
+        """ Generate index.js
+
+            :param generalpackager.Packager self: """
+        top = CodeLine()
+        top.add_node(CodeLine('exports.Vec2 = require("./vec2");', space_before=1, space_after=1))
+
+        return top
+
+    def generate_test_js(self):
+        """ Generate test template.
+
+            :param generalpackager.Packager self: """
+        top = CodeLine()
+        top.add_node("/**")
+        top.add_node(" * @jest-environment jsdom")
+        top.add_node(CodeLine(" */", space_after=1))
+        top.add_node(CodeLine("// https://jestjs.io/docs/configuration#testenvironment-string", space_after=1))
+        top.add_node(CodeLine('const Vec2 = require("./vec2");', space_after=1))
+        top.add_node('test("Vec2 initializing", () => {').add_node("expect(new Vec2().x).toBe(0);")
+        top.add_node("})")
+
+        return top
+
+    def generate_package_json(self):
+        """ Generate test template.
+
+            :param generalpackager.Packager self: """
+        info = {
+            "name": self.localrepo.name,
+            "version": self.localrepo.version,
+            "description": self.localrepo.description,
+            "scripts": {
+                "start": "parcel index.html",
+                "build": "parcel build index.html",
+                "test": "jest"
+            }
+            # HERE **
+        }
 
     def generate_localfiles(self, aesthetic=True, print_out=False):
         """ Generate all local files.
