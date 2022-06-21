@@ -44,6 +44,7 @@ class LocalRepo(Recycle, _SharedAPI):
                 path /= name
             self.path = path
         self.has_loaded_metadata = False
+        self.package_type = self.get_package_type()
 
     def __repr__(self):
         return str(self.path)
@@ -67,6 +68,15 @@ class LocalRepo(Recycle, _SharedAPI):
 
         if self.name is Ellipsis:
             self.name = self.path.name()
+
+    def get_package_type(self):
+        """ Return Node, Python or None """
+        if self.get_package_json_path().exists():
+            return "Node"
+        elif self.get_setup_path().exists():
+            return "Python"
+        else:
+            return None
 
     def get_metadata_dict(self):
         """ Get current metadata values as a dict. """
@@ -160,6 +170,7 @@ class LocalRepo(Recycle, _SharedAPI):
     def get_generate_path(self):            return self.path / "generate.py"
     def get_exetarget_path(self):           return self.path / "exetarget.py"
     def get_exeproduct_path(self):          return self.path / "dist/exetarget"
+    def get_package_json_path(self):        return self.path / "package.json"
 
     @deco_cache()
     def get_test_paths(self):

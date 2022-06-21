@@ -9,10 +9,14 @@ from generalpackager.api.local_repo import LocalRepo
 from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
-x = Packager("genlibrary", path="C:/Python/JS/genlibrary")
 
-print(x.localrepo.exists())
+x = Packager("genlibrary", path="C:/Python/JS/genlibrary", package_type="Node")
+y = Packager("generallibrary")
 
+print(x)
+print(y)
+
+# x.create_blank_locally(install=False)
 
 
 # x = Packager("generalgui")

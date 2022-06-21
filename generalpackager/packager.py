@@ -17,10 +17,11 @@ from generalpackager.packager_metadata import _PackagerMetadata
 from generalpackager.packager_pypi import _PackagerPypi
 from generalpackager.packager_workflow import _PackagerWorkflow
 from generalpackager.packager_relations import _PackagerRelations
+from generalpackager.packager_package_type import _PackagerPackageType
 
 
-@initBases
-class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations):
+# @initBases
+class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerPackageType, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations):
     """ Uses APIs to manage 'general' package.
         Contains methods that require more than one API as well as methods specific for ManderaGeneral. """
 
@@ -34,9 +35,9 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
     _recycle_keys = LocalModule._recycle_keys
     _recycle_keys["path"] = str
 
-    summary_packagers = []
+    summary_packagers = []  # Organization and profile
 
-    def __init__(self, name=None, github_owner=None, pypi_owner=None, path=None):
+    def __init__(self, name=None, github_owner=None, pypi_owner=None, path=None, package_type=None):
         self.localmodule = LocalModule(name=name)
         self.name = self.localmodule.name
 
@@ -72,7 +73,7 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
         return self.github.exists()
 
     def __repr__(self):
-        return f"<Packager: {self.name}>"
+        return f"<Packager [{self.package_type}]: {self.name}>"
 
 Packager.summary_packagers = [
     Packager(name="Mandera", github_owner="Mandera"),

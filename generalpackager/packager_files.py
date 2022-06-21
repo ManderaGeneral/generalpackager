@@ -36,18 +36,21 @@ class _PackagerFiles:
         """ Todo: Watermark generated files to prevent mistake of thinking you can modify them directly.
 
             :param generalpackager.Packager self: """
-        self.file_setup =           GenerateFile(self.localrepo.get_setup_path(), self.generate_setup, self, aesthetic=False)
-        self.file_manifest =        GenerateFile(self.localrepo.get_manifest_path(), self.generate_manifest, self, aesthetic=False)
-
         self.file_git_exclude =     GenerateFile(self.localrepo.get_git_exclude_path(), self.generate_git_exclude, self, aesthetic=True)
         self.file_license =         GenerateFile(self.localrepo.get_license_path(), self.generate_license, self, aesthetic=True)
         self.file_workflow =        GenerateFile(self.localrepo.get_workflow_path(), self.generate_workflow, self, aesthetic=True)
         self.file_readme =          GenerateFile(self.localrepo.get_readme_path(), self.generate_readme, self, aesthetic=True)
         self.file_generate =        GenerateFile(self.localrepo.get_generate_path(), self.generate_generate, self, aesthetic=True)
 
-        self.file_init =            GenerateFile(self.localrepo.get_init_path(), self.generate_init, self, aesthetic=False, overwrite=False)
-        self.file_randomtesting =   GenerateFile(self.localrepo.get_randomtesting_path(), self.generate_randomtesting, self, aesthetic=True, overwrite=False)
-        self.file_test_template =   GenerateFile(self.localrepo.get_test_template_path(), self.generate_test_template, self, aesthetic=False, overwrite=False)
+        if self.is_python():
+            self.file_setup =           GenerateFile(self.localrepo.get_setup_path(), self.generate_setup, self, aesthetic=False)
+            self.file_manifest =        GenerateFile(self.localrepo.get_manifest_path(), self.generate_manifest, self, aesthetic=False)
+            self.file_init =            GenerateFile(self.localrepo.get_init_path(), self.generate_init, self, aesthetic=False, overwrite=False)
+            self.file_randomtesting =   GenerateFile(self.localrepo.get_randomtesting_path(), self.generate_randomtesting, self, aesthetic=True, overwrite=False)
+            self.file_test_template =   GenerateFile(self.localrepo.get_test_template_path(), self.generate_test_template, self, aesthetic=False, overwrite=False)
+
+        elif self.is_node():
+            pass  # HERE **
 
         self.files = [getattr(self, key) for key in dir(self) if key.startswith("file_")]  # type: list[GenerateFile]
         self.files_by_relative_path = {file.relative_path: file for file in self.files}
@@ -65,7 +68,7 @@ class _PackagerFiles:
         self.pypi.recycle_clear()
         return type(self)(self.name)
 
-    def create_blank_locally(self, install=True):
+    def create_blank_locally(self, install=False):
         """ Create a new general package locally only.
 
             :param generalpackager.Packager self:
