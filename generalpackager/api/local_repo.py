@@ -273,7 +273,7 @@ class LocalRepo(Recycle, _SharedAPI):
         path = Path(path)
         old_text = path.text.read()
         new_text = self.replace_camel_case(text=old_text)
-        new_text = self.replace_docstrings(text=old_text)
+        new_text = self.replace_docstrings(text=new_text)
 
 
         if write:
