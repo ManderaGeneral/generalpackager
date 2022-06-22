@@ -32,6 +32,9 @@ class LocalRepo(Recycle, _SharedAPI):
     topics = []
     manifest = []
 
+    dependencies = []
+    devDependencies = ["jest-environment-jsdom", "parcel"]
+
     metadata_keys = [key for key, value in locals().items() if not key.startswith("_")]
     _recycle_keys = {"name": lambda name: str(LocalRepo.get_path_from_name(name=name))}
 
@@ -39,7 +42,7 @@ class LocalRepo(Recycle, _SharedAPI):
         if path is None:
             self.path = self.get_path_from_name(name=name)
         else:
-            path = Path(path)
+            path = Path(path).absolute()
             if not path.endswith(name):
                 path /= name
             self.path = path
@@ -94,8 +97,7 @@ class LocalRepo(Recycle, _SharedAPI):
     def path_exists(cls, path):
         if path.is_file() or not path.exists():
             return False
-        return bool(path.get_child(filt=lambda x: x.name() in ("README.md", ), traverse_excluded=True))
-        # return bool(path.get_child(filt=lambda x: x.name() in ("setup.py", ), traverse_excluded=True))  # setup.py was not included in pypi's sdist
+        return bool(path.get_child(filt=lambda x: x.name() in ("README.md", ), traverse_excluded=True))  # setup.py was not included in pypi's sdist
 
     @classmethod
     def get_repo_path_parent(cls, path=None):
@@ -208,7 +210,7 @@ class LocalRepo(Recycle, _SharedAPI):
         self.version = self.version.bump()
 
     def pip_install(self):
-        """ Install this repository with pip, WITHOUT -e flag.
+        """ Install this repository with pip and -e flag.
             Subprocess messed up -e flag compared to doing it in terminal, so use the normal one."""
         with self.path.as_working_dir():
             terminal("pip", "install", "-e", ".")

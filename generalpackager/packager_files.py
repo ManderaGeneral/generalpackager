@@ -2,7 +2,7 @@
 from generallibrary import CodeLine, Markdown, Date, exclusive, deco_cache, cache_clear, Timer
 from generalfile import Path
 
-from json import dumps
+import json
 
 
 class GenerateFile:
@@ -73,7 +73,7 @@ class _PackagerFiles:
         self.pypi.recycle_clear()
         return type(self)(self.name)
 
-    def create_blank_locally(self, install=False):
+    def create_blank_locally(self, install=True):
         """ Create a new general package locally only.
 
             :param generalpackager.Packager self:
@@ -207,7 +207,9 @@ class _PackagerFiles:
         """ Generate LICENSE by using Packager.license.
 
             :param generalpackager.Packager self: """
-        text = Path(self.localrepo.get_repos_path() / f"generalpackager/generalpackager/licenses/{self.license}").text.read()
+        # text = Path(self.localrepo.get_repos_path() / f"generalpackager/generalpackager/licenses/{self.license}").text.read()
+        text = (type(self)("generalpackager").path / "generalpackager/licenses" / self.license).text.read()
+
         assert "$" in text
         text = text.replace("$year", str(Date.now().datetime.year))
         text = text.replace("$author", self.author)
@@ -357,15 +359,20 @@ class _PackagerFiles:
             :param generalpackager.Packager self: """
         info = {
             "name": self.localrepo.name,
-            "version": self.localrepo.version,
+            "version": str(self.localrepo.version),
             "description": self.localrepo.description,
             "scripts": {
                 "start": "parcel index.html",
                 "build": "parcel build index.html",
                 "test": "jest"
-            }
-            # HERE **
+            },
+            "dependencies": self.localrepo.dependencies,
+            "devDependencies": self.localrepo.devDependencies,
+            "keywords": self.get_topics(),
+            "license": self.license,
+            "author": self.author,
         }
+        return json.dumps(info, indent=4)
 
     def generate_localfiles(self, aesthetic=True, print_out=False):
         """ Generate all local files.

@@ -1,6 +1,7 @@
 
 from generalpackager.api.shared import _SharedAPI
 from generallibrary import ObjInfo, deco_cache, Recycle, EnvVar, get, import_module
+from generalfile import Path
 
 import pkg_resources
 
@@ -12,6 +13,10 @@ class LocalModule(Recycle, _SharedAPI):
 
     def __init__(self, name=None):
         self.name = self._scrub_name(name=name)
+
+    @property
+    def path(self):
+        return Path(self.module.__file__)
 
     @classmethod
     def _scrub_name(cls, name):

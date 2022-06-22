@@ -11,7 +11,7 @@ from generalpackager.api.pypi import PyPI
 
 
 x = Packager("genlibrary", path="C:/Python/JS/genlibrary", package_type="Node")
-y = Packager("generallibrary")
+y = Packager("generalpackager").path
 
 print(x)
 print(y)

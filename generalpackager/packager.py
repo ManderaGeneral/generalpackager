@@ -42,18 +42,19 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
 
     def __init__(self, name=None, github_owner=None, pypi_owner=None, path=None, package_type=None):
         self.localmodule = LocalModule(name=name)
-        self.name = self.localmodule.name
-
         self.localrepo = LocalRepo(name=self.name, path=path)
-        self.path = self.localrepo.path
-
         self.github = GitHub(name=self.name, owner=github_owner)
         self.pypi = PyPI(name=self.name, owner=pypi_owner)
 
-        # Quick fix, should probably put download in a workflow step instead
-        # Yeah because this prevents us from creating a new package with create_blank
-        # if (self.localmodule.is_general() or self.name in ("Mandera", ".github")) and not self.localrepo.exists():
-        #     self.github.download(path=self.path.get_parent())
+    @property
+    def name(self):
+        return self.localmodule.name
+
+    @property
+    def path(self):
+        if not self.localrepo.exists() and self.localmodule.exists():
+            return self.localrepo.get_repo_path_parent(self.localmodule.path)
+        return self.localrepo.path
 
     @property
     def simple_name(self):
@@ -71,9 +72,9 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
             if packager.is_general() and packager.localrepo.enabled:
                 self.set_parent(parent=packager)
 
-    def exists(self):
-        """ Just check GitHub for now. """
-        return self.github.exists()
+    # def exists(self):  # Not sure why we should have this seems ambigous
+    #     """ Just check GitHub for now. """
+    #     return self.github.exists()
 
     def __repr__(self):
         return f"<Packager [{self.package_type}]: {self.name}>"
