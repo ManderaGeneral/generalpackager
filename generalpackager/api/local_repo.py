@@ -209,7 +209,7 @@ class LocalRepo(Recycle, _SharedAPI):
         """ Bump micro version in metadata.json. """
         self.version = self.version.bump()
 
-    def pip_install(self):
+    def pip_install(self):  # HERE ** Do version for npm install
         """ Install this repository with pip and -e flag.
             Subprocess messed up -e flag compared to doing it in terminal, so use the normal one."""
         with self.path.as_working_dir():

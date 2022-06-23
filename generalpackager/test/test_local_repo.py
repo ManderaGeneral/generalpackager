@@ -6,16 +6,15 @@ import unittest
 
 
 class TestLocalRepo(unittest.TestCase):
-    """ Skipped tests:
-        pip_install
-        pip_uninstall
-        unittest
-        create_sdist
-        upload
-        get_path_from_name
-        get_repo_path_parent
-        write_metadata
-    """
+    LocalRepo.pip_install  # Skipped test
+    LocalRepo.pip_uninstall  # Skipped test
+    LocalRepo.unittest  # Skipped test
+    LocalRepo.create_sdist  # Skipped test
+    LocalRepo.upload  # Skipped test
+    LocalRepo.get_path_from_name  # Skipped test
+    LocalRepo.get_repo_path_parent  # Skipped test
+    LocalRepo.write_metadata  # Skipped test
+
 
     def test_has_metadata(self):
         self.assertEqual(True, LocalRepo().has_metadata())

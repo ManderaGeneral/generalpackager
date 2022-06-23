@@ -53,9 +53,9 @@ class _PackagerFiles:
 
         elif self.is_node():
             self.file_npm_ignore =      GenerateFile(self.localrepo.get_npm_ignore_path(), self.generate_npm_ignore, self, aesthetic=True)
-            self.file_index_js =        GenerateFile(self.localrepo.get_index_js_path(), self.generate_index_js, self, aesthetic=True)
-            self.file_test_js =         GenerateFile(self.localrepo.get_test_js_path(), self.generate_test_js, self, aesthetic=True)
-            self.file_package_json =    GenerateFile(self.localrepo.get_package_json_path(), self.generate_package_json, self, aesthetic=True)
+            self.file_index_js =        GenerateFile(self.localrepo.get_index_js_path(), self.generate_index_js, self, aesthetic=False, overwrite=False)
+            self.file_test_js =         GenerateFile(self.localrepo.get_test_js_path(), self.generate_test_js, self, aesthetic=False, overwrite=False)
+            self.file_package_json =    GenerateFile(self.localrepo.get_package_json_path(), self.generate_package_json, self, aesthetic=False)
 
         self.files = [getattr(self, key) for key in dir(self) if key.startswith("file_")]  # type: list[GenerateFile]
         self.files_by_relative_path = {file.relative_path: file for file in self.files}
@@ -366,8 +366,8 @@ class _PackagerFiles:
                 "build": "parcel build index.html",
                 "test": "jest"
             },
-            "dependencies": self.localrepo.dependencies,
-            "devDependencies": self.localrepo.devDependencies,
+            "dependencies": {dep: "latest" for dep in self.localrepo.dependencies},
+            "devDependencies": {dep: "latest" for dep in self.localrepo.devDependencies},
             "keywords": self.get_topics(),
             "license": self.license,
             "author": self.author,

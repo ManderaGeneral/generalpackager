@@ -7,12 +7,11 @@ import unittest
 
 
 class TestPackager(unittest.TestCase):
-    """ Skipped:
-        workflow_unittest
-        workflow_sync
-        if_publish_bump
-        if_publish_publish
-        """
+    Packager.workflow_unittest  # Skipped test
+    Packager.workflow_sync  # Skipped test
+    Packager.if_publish_bump  # Skipped test
+    Packager.if_publish_publish  # Skipped test
+
     def test_get_triggers(self):
         self.assertIn("branches", Packager().get_triggers())
 

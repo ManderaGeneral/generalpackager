@@ -18,7 +18,8 @@ class _PackagerMetadata:
 
             :param generalpackager.Packager self: """
         topics = self.localrepo.topics.copy()
-        topics.extend([f"python{ver.replace('.', '')}" for ver in self.python])
+        if self.is_python():
+            topics.extend([f"python{ver.replace('.', '')}" for ver in self.python])
         topics.append(f"{self.license}-license")
         topics.extend(self.os)
         return topics
