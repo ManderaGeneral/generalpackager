@@ -1,6 +1,7 @@
 
-from generallibrary import CodeLine, Markdown, Date, exclusive, deco_cache, cache_clear, Timer
+from generallibrary import CodeLine, Markdown, Date, exclusive, deco_cache, cache_clear, Timer, Log
 from generalfile import Path
+
 
 import json
 
@@ -13,6 +14,8 @@ class GenerateFile:
         self.packager = packager
         self.aesthetic = aesthetic
         self.overwrite = overwrite
+
+        Log().debug(f"Creating {type(self)} for {packager} with path {packager.path}")
 
         self.relative_path = path.relative(base=packager.path)
         self.path = packager.path / self.relative_path

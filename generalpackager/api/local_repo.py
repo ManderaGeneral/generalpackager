@@ -1,12 +1,11 @@
 
 from generalpackager.api.shared import _SharedAPI
 from generalfile import Path
-from generallibrary import Ver, deco_cache, Recycle, terminal
+from generallibrary import Ver, deco_cache, Recycle, terminal, EnvVar
 
 from setuptools import find_namespace_packages
 import re
 from git import Repo
-import sys
 
 
 def load_metadata_before(func):
@@ -208,6 +207,13 @@ class LocalRepo(Recycle, _SharedAPI):
     def bump_version(self):
         """ Bump micro version in metadata.json. """
         self.version = self.version.bump()
+
+    @staticmethod
+    def get_venv_path():
+        """ Return an absolute path to the current VENV.
+
+            :raises KeyError: If no VENV """
+        return Path(EnvVar("VIRTUAL_ENV").value)
 
     def pip_install(self):  # HERE ** Do version for npm install
         """ Install this repository with pip and -e flag.

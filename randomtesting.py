@@ -10,11 +10,14 @@ from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
 
-x = Packager("genlibrary", path="C:/Python/JS/genlibrary", package_type="Node")
-y = Packager("generalpackager").path
+# x = Packager("genlibrary", path="C:/Python/JS/genlibrary", package_type="Node")
+# y = Packager("generalpackager").path
+#
+# print(x)
+# print(y)
 
-print(x)
-print(y)
+print(LocalRepo.get_venv_path())
+
 
 # x.create_blank_locally(install=False)
 
