@@ -1,5 +1,5 @@
 
-from generallibrary import CodeLine, Markdown, Date, exclusive, deco_cache, cache_clear, Timer, Log
+from generallibrary import CodeLine, Markdown, Date, deco_cache, Timer, Log
 from generalfile import Path
 
 

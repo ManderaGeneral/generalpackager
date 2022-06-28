@@ -2,13 +2,16 @@ from generalpackager import Packager
 from generalfile import Path
 from pprint import pprint
 import sys
-from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line, ObjInfo, SigInfo, EnvVar, remove_duplicates, import_module
+from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line, ObjInfo, SigInfo, EnvVar, remove_duplicates, import_module, Log
 
 from generalpackager.api.github import GitHub
 from generalpackager.api.local_repo import LocalRepo
 from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
+Log().configure_file()
+
+Log().info("hi there")
 
 # x = Packager("genlibrary", path="C:/Python/JS/genlibrary", package_type="Node")
 # y = Packager("generalpackager").path
@@ -16,7 +19,7 @@ from generalpackager.api.pypi import PyPI
 # print(x)
 # print(y)
 
-print(LocalRepo.get_venv_path())
+# print(LocalRepo.get_venv_path())
 
 
 # x.create_blank_locally(install=False)
