@@ -10,8 +10,12 @@ from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
 Log().configure_file()
+# Log().info("hi there")
 
-Log().info("hi there")
+
+print(Packager().get_ordered_packagers())
+
+
 
 # x = Packager("genlibrary", path="C:/Python/JS/genlibrary", package_type="Node")
 # y = Packager("generalpackager").path

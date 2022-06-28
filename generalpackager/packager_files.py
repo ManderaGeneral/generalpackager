@@ -15,7 +15,7 @@ class GenerateFile:
         self.aesthetic = aesthetic
         self.overwrite = overwrite
 
-        Log().debug(f"Creating {type(self)} for {packager} with path {packager.path}")
+        Log().debug(f"Creating {text_func.__name__} handler for {packager.name} with path {packager.path}")
 
         self.relative_path = path.relative(base=packager.path)
         self.path = packager.path / self.relative_path

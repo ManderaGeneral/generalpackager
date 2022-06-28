@@ -3,21 +3,23 @@ from generallibrary import remove_duplicates, deco_cache
 
 
 class _PackagerRelations:
-    def get_dependencies(self):
+    def get_dependencies(self, only_general=False):
         """ Get a list of dependencies as Packagers.
             Combines localmodules dependencies with localrepos install_requires.
 
-            :param generalpackager.Packager self: """
-        packagers = {type(self)(localmodule.name) for localmodule in self.localmodule.get_dependencies()}
-        packagers.update({type(self)(name) for name in self.localrepo.install_requires})
+            :param generalpackager.Packager self:
+            :param bool only_general: Whether to only return general packages. """
+        packagers = {type(self)(localmodule.name) for localmodule in self.localmodule.get_dependencies() if not only_general or self.name_is_general(localmodule.name)}
+        packagers.update({type(self)(name) for name in self.localrepo.install_requires if not only_general or self.name_is_general(name)})
         return list(packagers)
 
-    def get_dependants(self):
+    def get_dependants(self, only_general=False):
         """ Get a list of dependants as Packagers.
             Same as localmodules but Packager instead of localmodule.
 
-            :param generalpackager.Packager self: """
-        packagers = {type(self)(localmodule.name) for localmodule in self.localmodule.get_dependants()}
+            :param generalpackager.Packager self:
+            :param bool only_general: Whether to only return general packages. """
+        packagers = {type(self)(localmodule.name) for localmodule in self.localmodule.get_dependants() if not only_general or self.name_is_general(localmodule.name)}
         return list(packagers)
 
     def get_ordered_packagers(self):

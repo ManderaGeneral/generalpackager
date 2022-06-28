@@ -3,7 +3,7 @@
 
     Todo: Prevent workflow using pypi to install a general package. """
 
-from generallibrary import initBases, NetworkDiagram, Recycle
+from generallibrary import initBases, NetworkDiagram, Recycle, Log
 from generalpackager.api.shared import _SharedAPI
 from generalpackager.api.local_repo import LocalRepo
 from generalpackager.api.local_module import LocalModule
@@ -62,14 +62,14 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
 
     def spawn_children(self):
         """ :param generalpackager.Packager self: """
-        for packager in self.get_dependants():
-            if packager.is_general() and packager.localrepo.enabled:
+        for packager in self.get_dependants(only_general=True):
+            if packager.localrepo.enabled:
                 packager.set_parent(parent=self)
 
     def spawn_parents(self):
         """ :param generalpackager.Packager self: """
-        for packager in self.get_dependencies():
-            if packager.is_general() and packager.localrepo.enabled:
+        for packager in self.get_dependencies(only_general=True):
+            if packager.localrepo.enabled:
                 self.set_parent(parent=packager)
 
     # def exists(self):  # Not sure why we should have this seems ambigous
