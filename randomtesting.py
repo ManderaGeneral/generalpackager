@@ -9,11 +9,17 @@ from generalpackager.api.local_repo import LocalRepo
 from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
-Log().configure_file()
+# print(Packager("generallibrary").localrepo.get_repo_path_child("C:/Python/Repos/generalpackager"))
+# print(Packager("generallibrary").localrepo.get_repos_path())
+print(Packager("generallibrary").localrepo.path)
+
+
+
+# Log().configure_file()
 # Log().info("hi there")
 
 
-print(Packager().get_ordered_packagers())
+# print(Packager().get_ordered_packagers())
 
 
 

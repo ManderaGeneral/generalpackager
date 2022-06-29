@@ -3,7 +3,7 @@
 
     Todo: Prevent workflow using pypi to install a general package. """
 
-from generallibrary import initBases, NetworkDiagram, Recycle, Log
+from generallibrary import classproperty, initBases, NetworkDiagram, Recycle, Log
 from generalpackager.api.shared import _SharedAPI
 from generalpackager.api.local_repo import LocalRepo
 from generalpackager.api.local_module import LocalModule
@@ -38,13 +38,18 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
     _recycle_keys = LocalModule._recycle_keys
     _recycle_keys["path"] = str
 
-    summary_packagers = []  # Organization and profile
-
     def __init__(self, name=None, github_owner=None, pypi_owner=None, path=None, package_type=None):
         self.localmodule = LocalModule(name=name)
         self.localrepo = LocalRepo(name=self.name, path=path)
         self.github = GitHub(name=self.name, owner=github_owner)
         self.pypi = PyPI(name=self.name, owner=pypi_owner)
+
+    @staticmethod
+    def summary_packagers():
+        return [
+            Packager(name="Mandera", github_owner="Mandera"),
+            Packager(name=".github", github_owner="ManderaGeneral"),
+        ]
 
     @property
     def name(self):
@@ -79,10 +84,6 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
     def __repr__(self):
         return f"<Packager [{self.package_type}]: {self.name}>"
 
-Packager.summary_packagers = [
-    Packager(name="Mandera", github_owner="Mandera"),
-    Packager(name=".github", github_owner="ManderaGeneral"),
-]
 
 
 

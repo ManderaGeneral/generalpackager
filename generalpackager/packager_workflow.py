@@ -74,7 +74,7 @@ class _PackagerWorkflow:
         for packager in packagers:
             run.add_node(f"pip install git+ssh://git@github.com/{packager.github.owner}/{packager.name}.git")
 
-        for packager in chain(packagers, self.summary_packagers):  # Also clone summary_packagers for syncing
+        for packager in chain(packagers, self.summary_packagers()):  # Also clone summary_packagers for syncing
             run.add_node(f"git clone ssh://git@github.com/{packager.github.owner}/{packager.name}.git")
 
         return self._get_step(f"Install and clone {len(packagers)} git repos", run)
@@ -165,7 +165,7 @@ class _PackagerWorkflow:
             lambda packager: packager.sync_github_metadata(),
         )
 
-        for packager in self.summary_packagers:
+        for packager in self.summary_packagers():
             packager.upload_package_summary(msg=msg1)
 
     def upload_package_summary(self, msg):

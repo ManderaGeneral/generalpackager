@@ -1,7 +1,7 @@
 
 from generalpackager.api.shared import _SharedAPI
 from generalfile import Path
-from generallibrary import Ver, deco_cache, Recycle, terminal, EnvVar
+from generallibrary import Ver, deco_cache, Recycle, terminal, EnvVar, Log
 
 from setuptools import find_namespace_packages
 import re
@@ -38,15 +38,18 @@ class LocalRepo(Recycle, _SharedAPI):
     _recycle_keys = {"name": lambda name: str(LocalRepo.get_path_from_name(name=name))}
 
     def __init__(self, name=None, path=None):
+        self.path = self._resolve_path(name=name, path=path)
+        self.has_loaded_metadata = False
+        self.package_type = self.get_package_type()
+
+    def _resolve_path(self, name, path):
         if path is None:
-            self.path = self.get_path_from_name(name=name)
+            return self.get_path_from_name(name=name)
         else:
             path = Path(path).absolute()
             if not path.endswith(name):
                 path /= name
-            self.path = path
-        self.has_loaded_metadata = False
-        self.package_type = self.get_package_type()
+            return path
 
     def __repr__(self):
         return str(self.path)
@@ -109,7 +112,9 @@ class LocalRepo(Recycle, _SharedAPI):
     @classmethod
     def get_repo_path_child(cls, folder_path):
         """ Return whether there's atleast one repo in folder. """
-        return Path(folder_path).get_child(filt=LocalRepo.path_exists, traverse_excluded=True)
+        path = Path(folder_path).get_child(filt=LocalRepo.path_exists, traverse_excluded=True)
+        Log().debug(f"Found folder which holds a repo: {path}")
+        return path
 
     @classmethod
     def get_repos_path(cls, path=None):
