@@ -142,7 +142,7 @@ class _PackagerWorkflow:
         Log().configure_stream()
 
         from generalfile import Path
-        Path().absolute().view(spawn=True)
+        Path().absolute().view_paths()
 
         self.run_ordered_methods(
             lambda packager: packager.generate_localfiles(aesthetic=False),

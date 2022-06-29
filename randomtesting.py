@@ -13,6 +13,7 @@ from generalpackager.api.pypi import PyPI
 # print(Packager("generallibrary").localrepo.get_repos_path())
 # print(Packager("generallibrary").localrepo.path)
 
+Path().view_paths()
 
 
 # Log().configure_file()
