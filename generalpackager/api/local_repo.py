@@ -99,7 +99,8 @@ class LocalRepo(Recycle, _SharedAPI):
     def path_exists(cls, path):
         if path.is_file() or not path.exists():
             return False
-        return bool(path.get_child(filt=lambda x: x.name() in ("README.md", ), traverse_excluded=True))  # setup.py was not included in pypi's sdist
+        return bool(path.get_child(filt=lambda x: x.name() in (".git", "metadata.json"), traverse_excluded=True))  # setup.py was not included in pypi's sdist
+        # return bool(path.get_child(filt=lambda x: x.name() in ("README.md", ), traverse_excluded=True))  # setup.py was not included in pypi's sdist
 
     @classmethod
     def get_repo_path_parent(cls, path=None):
