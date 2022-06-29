@@ -11,7 +11,7 @@ from generalpackager.api.pypi import PyPI
 
 # print(Packager("generallibrary").localrepo.get_repo_path_child("C:/Python/Repos/generalpackager"))
 # print(Packager("generallibrary").localrepo.get_repos_path())
-print(Packager("generallibrary").localrepo.path)
+# print(Packager("generallibrary").localrepo.path)
 
 
 

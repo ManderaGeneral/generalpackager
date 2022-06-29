@@ -141,6 +141,9 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self: """
         Log().configure_stream()
 
+        from generalfile import Path
+        Path().absolute().view(spawn=True)
+
         self.run_ordered_methods(
             lambda packager: packager.generate_localfiles(aesthetic=False),
             lambda packager: packager.localrepo.pip_install(),
