@@ -1,5 +1,5 @@
 
-from generalpackager.api.shared import _SharedAPI
+from generalpackager.api.shared import _SharedGitAndRepo
 from generalpackager import PACKAGER_GITHUB_API
 from generallibrary import Recycle, deco_cache
 from generalfile import Path
@@ -10,20 +10,16 @@ import re
 from git import Repo
 
 
-class GitHub(Recycle, _SharedAPI):
+class GitHub(_SharedGitAndRepo):
     """ Tools to interface a GitHub Repository.
         Todo: Get and Set GitHub repo private. """
-    _recycle_keys = {"name": str, "owner": str}
 
     def __init__(self, name=None, owner=None):
-        if name is None:
-            name = "generalpackager"
-        if owner is None:
-            owner = "ManderaGeneral"
-        self.name = name
-        self.owner = owner
+        pass
 
-        self.url = f"https://github.com/{self.owner}/{self.name}"
+    @property
+    def url(self):
+        return f"https://github.com/{self.owner}/{self.name}"
 
     def exists(self):
         """ Return whether this API's target exists. """
@@ -32,11 +28,7 @@ class GitHub(Recycle, _SharedAPI):
     def download(self, path, overwrite=False):
         """ Clone a GitHub repo into a path.
             Creates a folder with Package's name first.
-            Target must be empty.
-
-            :param generalpackager.Packager self:
-            :param path:
-            :param overwrite: """
+            Target must be empty. """
         if not self.exists():
             return
 

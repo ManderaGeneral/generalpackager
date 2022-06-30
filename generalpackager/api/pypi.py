@@ -1,5 +1,6 @@
 
-from generalpackager.api.shared import _SharedAPI
+from generalpackager.api.shared import _SharedGitAndRepo
+
 from generallibrary import Ver, Date, Recycle, get
 from generalfile import Path
 
@@ -22,19 +23,16 @@ def download(url, path):
     return path
 
 
-class PyPI(Recycle, _SharedAPI):
+class PyPI(_SharedGitAndRepo):
     """ Tools to interface pypi.org """
-    _recycle_keys = {"name": str, "owner": str}
+    DEFAULT_OWNER = "Mandera"
 
     def __init__(self, name=None, owner=None):
-        if name is None:
-            name = "generalpackager"
-        if owner is None:
-            owner = "Mandera"
-        self.name = name
-        self.owner = owner
+        pass
 
-        self.url = f"https://pypi.org/project/{self.name}/"
+    @property
+    def url(self):
+        return f"https://pypi.org/project/{self.name}/"
 
     def exists(self):
         """ Return whether this API's target exists. """

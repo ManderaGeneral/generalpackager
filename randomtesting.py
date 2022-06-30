@@ -9,9 +9,14 @@ from generalpackager.api.local_repo import LocalRepo
 from generalpackager.api.local_module import LocalModule
 from generalpackager.api.pypi import PyPI
 
+
+print(Packager())
+
 # print(Packager("generallibrary").localrepo.get_repo_path_child("C:/Python/Repos/generalpackager"))
 # print(Packager("generallibrary").localrepo.get_repos_path())
-print(Packager("generallibrary").localrepo.path)
+# print(Packager("generallibrary").localrepo.path)
+# print(Packager("generallibrary").localrepo.path)
+
 
 # Path().view_paths()
 

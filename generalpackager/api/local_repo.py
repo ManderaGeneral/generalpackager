@@ -11,13 +11,13 @@ from git import Repo
 def load_metadata_before(func):
     def _wrapper(self, *args, **kwargs):
         """ :param LocalRepo self: """
-        if not self.has_loaded_metadata:
+        if hasattr(self, "has_loaded_metadata") and not self.has_loaded_metadata:
             self.load_metadata()
         return func(self, *args, **kwargs)
     return _wrapper
 
 
-class LocalRepo(Recycle, _SharedAPI):
+class LocalRepo(_SharedAPI):
     """ Tools to help Path interface a Local Python Repository.
         Todo: Search for imports to list dependencies. """
 
@@ -38,9 +38,26 @@ class LocalRepo(Recycle, _SharedAPI):
     _recycle_keys = {"name": lambda name: str(LocalRepo.get_path_from_name(name=name))}
 
     def __init__(self, name=None, path=None):
+        """ Name is always set.
+            If path is set then path will be exactly that.
+            If path isn't set it will try to be resolved:
+                Firstly search through CWD and it's parents to find a valid repo folder with the same name.
+                If not then path will be set to the first parent (Including CWD) which is NOT a valid repo. """
         self.path = self._resolve_path(name=name, path=path)
         self.has_loaded_metadata = False
         self.package_type = self.get_package_type()
+
+
+        # self.get_path_from_name
+        # self._resolve_path
+        # self.get_repos_path
+        # self.get_repo_path_child
+        # self.get_repo_path_parent
+
+    @classmethod
+    def new_get_repo_path(cls):
+        """ Find Start at current working dir """
+
 
     def _resolve_path(self, name, path):
         if path is None:
@@ -95,12 +112,14 @@ class LocalRepo(Recycle, _SharedAPI):
         """ Return whether this API's target exists. """
         return self.path_exists(path=self.path)
 
+
     @classmethod
     def path_exists(cls, path):
         if path.is_file() or not path.exists():
             return False
         return bool(path.get_child(filt=lambda x: x.name() in (".git", "metadata.json"), traverse_excluded=True))  # setup.py was not included in pypi's sdist
         # return bool(path.get_child(filt=lambda x: x.name() in ("README.md", ), traverse_excluded=True))  # setup.py was not included in pypi's sdist
+
 
     @classmethod
     def get_repo_path_parent(cls, path=None):

@@ -21,7 +21,7 @@ from generalpackager.packager_package_type import _PackagerPackageType
 
 
 # @initBases
-class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerPackageType, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations):
+class Packager(_SharedAPI, NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerPackageType, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations):
     """ Uses APIs to manage 'general' package.
         Contains methods that require more than one API as well as methods specific for ManderaGeneral. """
 
@@ -35,14 +35,14 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
     git_exclude_lines += "build", "*.egg-info", "__pycache__", "PKG-INFO", "setup.cfg"
     npm_ignore_lines += "node_modules", ".parcel-cache"
 
-    _recycle_keys = LocalModule._recycle_keys
+    _recycle_keys = _SharedAPI._recycle_keys.copy()
     _recycle_keys["path"] = str
 
     def __init__(self, name=None, github_owner=None, pypi_owner=None, path=None, package_type=None):
         self.localmodule = LocalModule(name=name)
-        self.localrepo = LocalRepo(name=self.name, path=path)
-        self.github = GitHub(name=self.name, owner=github_owner)
-        self.pypi = PyPI(name=self.name, owner=pypi_owner)
+        self.localrepo = LocalRepo(name=name, path=path)
+        self.github = GitHub(name=name, owner=github_owner)
+        self.pypi = PyPI(name=name, owner=pypi_owner)
 
     @staticmethod
     def summary_packagers():
@@ -50,10 +50,6 @@ class Packager(Recycle, _SharedAPI, NetworkDiagram, _PackagerMarkdown, _Packager
             Packager(name="Mandera", github_owner="Mandera"),
             Packager(name=".github", github_owner="ManderaGeneral"),
         ]
-
-    @property
-    def name(self):
-        return self.localmodule.name
 
     @property
     def path(self):

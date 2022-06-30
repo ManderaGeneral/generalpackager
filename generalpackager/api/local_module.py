@@ -7,12 +7,11 @@ import pkg_resources
 
 
 
-class LocalModule(Recycle, _SharedAPI):
+class LocalModule(_SharedAPI):
     """ Tools to interface a Local Python Module. """
-    _recycle_keys = {"name": lambda name: LocalModule._scrub_name(name=name)}
 
     def __init__(self, name=None):
-        self.name = self._scrub_name(name=name)
+        pass
 
     @property
     def path(self):
