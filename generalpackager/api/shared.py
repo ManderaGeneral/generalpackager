@@ -2,6 +2,7 @@
 from generallibrary import Recycle, AutoInitBases
 
 
+
 class _SharedAPI(Recycle, metaclass=AutoInitBases):
     DEFAULT_NAME = "generalpackager"
 
