@@ -3,9 +3,9 @@
 
     Todo: Prevent workflow using pypi to install a general package. """
 
-from generallibrary import classproperty, initBases, NetworkDiagram, Recycle, Log
+from generallibrary import NetworkDiagram
 from generalpackager.api.shared import _SharedAPI
-from generalpackager.api.local_repo import LocalRepo
+from generalpackager.api.localrepo.local_repo import LocalRepo
 from generalpackager.api.local_module import LocalModule
 from generalpackager.api.github import GitHub
 from generalpackager.api.pypi import PyPI
@@ -38,7 +38,7 @@ class Packager(_SharedAPI, NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _
     _recycle_keys = _SharedAPI._recycle_keys.copy()
     _recycle_keys["path"] = str
 
-    def __init__(self, name=None, github_owner=None, pypi_owner=None, path=None, package_type=None):
+    def __init__(self, name=None, github_owner=None, pypi_owner=None, path=None):
         self.localmodule = LocalModule(name=name)
         self.localrepo = LocalRepo(name=name, path=path)
         self.github = GitHub(name=name, owner=github_owner)

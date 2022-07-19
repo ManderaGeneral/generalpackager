@@ -1,6 +1,6 @@
 
 from generallibrary import Ver
-from generalpackager.api.local_repo import LocalRepo
+from generalpackager.api.localrepo.local_repo import LocalRepo
 
 import unittest
 
@@ -35,7 +35,7 @@ class TestLocalRepo(unittest.TestCase):
 
     def test_exists(self):
         self.assertEqual(True, LocalRepo().exists())
-        self.assertEqual(True, LocalRepo.path_exists(LocalRepo().path))
+        self.assertEqual(True, LocalRepo.repo_exists(LocalRepo().path))
 
     def test_get_local_repos(self):
         self.assertEqual(LocalRepo().path.get_parent(), LocalRepo.get_repos_path())

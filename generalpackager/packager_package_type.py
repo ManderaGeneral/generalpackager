@@ -5,13 +5,6 @@ class _PackagerPackageType:
 
     def __init_post__(self, package_type):
         self._package_type_check(package_type)
-        self.package_type = package_type or self.localrepo.package_type or "Python"
-
-    def is_python(self):
-        return self.package_type == "Python"
-
-    def is_node(self):
-        return self.package_type == "Node"
 
     def _package_type_check(self, package_type):
         if package_type not in (None, ) + self.supported_package_types:

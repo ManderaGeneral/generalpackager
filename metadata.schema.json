@@ -1,0 +1,13 @@
+{
+    "type":  "object",
+    "properties": {
+        "enabled": {
+            "description": "Whether to include this package in workflows.",
+            "type": "boolean"
+        },
+        "target": {
+            "enum": ["python", "npm", "django", "exe"]
+        }
+    },
+    "required": ["enabled"]
+}
