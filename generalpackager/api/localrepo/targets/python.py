@@ -1,11 +1,13 @@
 
-from generalpackager.api.localrepo.local_repo import LocalRepo, deco_require_metadata
+from generalpackager.api.localrepo.base import LocalRepo, deco_require_metadata
 
 from generalfile import Path
 from generallibrary import terminal, EnvVar
 
 
 class LocalRepo_Python(LocalRepo):
+    target = "python"
+
     @staticmethod
     def get_venv_path():
         """ Return an absolute path to the current VENV.

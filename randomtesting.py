@@ -6,7 +6,8 @@ from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line, O
 
 # from generalpackager import Packager
 # from generalpackager.api.github import GitHub
-from generalpackager.api.localrepo.local_repo import LocalRepo
+from generalpackager.api.localrepo.base import LocalRepo
+from generalpackager.api.localrepo.base import LocalRepo
 # from generalpackager.api.local_module import LocalModule
 # from generalpackager.api.pypi import PyPI
 

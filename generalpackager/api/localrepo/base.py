@@ -2,6 +2,7 @@
 from generalpackager.api.shared import _SharedAPI
 from generalpackager.api.localrepo.configfile import Metadata
 from generalpackager.api.localrepo.paths import _LocalRepo_Paths
+from generalpackager.api.localrepo.target import _LocalRepo_Target
 
 from generalfile import Path
 from generallibrary import Ver, deco_cache, terminal, EnvVar, Log, SigInfo
@@ -9,6 +10,7 @@ from generallibrary import Ver, deco_cache, terminal, EnvVar, Log, SigInfo
 from setuptools import find_namespace_packages
 import re
 from git import Repo
+
 
 def deco_require_metadata(func):
     def _wrapper(*args, **kwargs):
@@ -19,7 +21,7 @@ def deco_require_metadata(func):
     return _wrapper
 
 
-class LocalRepo(_SharedAPI, _LocalRepo_Paths):
+class LocalRepo(_SharedAPI, _LocalRepo_Paths, _LocalRepo_Target):
     """ Tools to help Path interface a Local Repository.
         Base functionality.
         Inherited by classes in targets folder for extended functionality.

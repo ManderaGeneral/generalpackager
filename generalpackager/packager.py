@@ -5,7 +5,7 @@
 
 from generallibrary import NetworkDiagram
 from generalpackager.api.shared import _SharedAPI
-from generalpackager.api.localrepo.local_repo import LocalRepo
+from generalpackager.api.localrepo.base import LocalRepo
 from generalpackager.api.local_module import LocalModule
 from generalpackager.api.github import GitHub
 from generalpackager.api.pypi import PyPI
