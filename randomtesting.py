@@ -1,21 +1,22 @@
-from generalfile import Path
-from pprint import pprint
-import sys
-import json
-from generallibrary import Timer, Ver, print_link_to_obj, get_definition_line, ObjInfo, SigInfo, EnvVar, remove_duplicates, import_module, Log, deco_extend
 
-# from generalpackager import Packager
-# from generalpackager.api.github import GitHub
-from generalpackager.api.localrepo.base import LocalRepo
-from generalpackager.api.localrepo.base import LocalRepo
-# from generalpackager.api.local_module import LocalModule
-# from generalpackager.api.pypi import PyPI
+from generalpackager import Packager, LocalRepo
 
 
 
-localrepo = LocalRepo("")
+localrepo = LocalRepo("").extended()
+print(LocalRepo.cls_target_classes)
+print(type(localrepo).__name__)
 
-print(localrepo.metadata)  # HERE ** How would we initialize a new package with a sepcific target?
+# class A:
+#     def __init_subclass__(cls):
+#         print(cls)
+#
+# class C:
+#     pass
+#
+# class B(C, A):
+#     pass
+#
 
 
 

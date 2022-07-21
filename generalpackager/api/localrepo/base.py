@@ -1,6 +1,6 @@
 
 from generalpackager.api.shared import _SharedAPI
-from generalpackager.api.localrepo.configfile import Metadata
+from generalpackager.api.localrepo.metadata import Metadata
 from generalpackager.api.localrepo.paths import _LocalRepo_Paths
 from generalpackager.api.localrepo.target import _LocalRepo_Target
 

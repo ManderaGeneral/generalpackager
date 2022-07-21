@@ -12,21 +12,31 @@ class _LocalRepo_Target:
         django = "django"
         exe = "exe"
 
-    target = None
+    cls_target = None
+    cls_target_classes = {}
 
     def __init_subclass__(cls, **kwargs):
-        assert cls.target in cls.Targets.keys()
+        super().__init_subclass__(**kwargs)
+        assert cls.__name__ == "LocalRepo" or cls.cls_target in cls.Targets.field_values_defaults()
+        cls.cls_target_classes[cls.cls_target] = cls
+
+    def extended(self):
+        """ Return another LocalRepo object which has extended functionality based on target of metadata.
+
+            :param generalpackager.LocalRepo self: """
+        if self.metadata.exists():
+            return self.cls_target_classes[self.metadata.target](path=self.path)
 
 
-    @classproperty
-    def target_is_None(cls):    return cls.target is None
-    @classproperty
-    def target_is_python(cls):  return cls.target == "python"
-    @classproperty
-    def target_is_npm(cls):     return cls.target == "npm"
-    @classproperty
-    def target_is_django(cls):  return cls.target == "django"
-    @classproperty
-    def target_is_exe(cls):     return cls.target == "exe"
+    @classmethod
+    def target_is_None(cls):    return cls.cls_target is None
+    @classmethod
+    def target_is_python(cls):  return cls.cls_target == cls.Targets.python
+    @classmethod
+    def target_is_npm(cls):     return cls.cls_target == cls.Targets.npm
+    @classmethod
+    def target_is_django(cls):  return cls.cls_target == cls.Targets.django
+    @classmethod
+    def target_is_exe(cls):     return cls.cls_target == cls.Targets.exe
 
 

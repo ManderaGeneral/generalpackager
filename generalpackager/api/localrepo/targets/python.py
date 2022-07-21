@@ -4,9 +4,8 @@ from generalpackager.api.localrepo.base import LocalRepo, deco_require_metadata
 from generalfile import Path
 from generallibrary import terminal, EnvVar
 
-
 class LocalRepo_Python(LocalRepo):
-    target = "python"
+    cls_target = LocalRepo.Targets.python
 
     @staticmethod
     def get_venv_path():
