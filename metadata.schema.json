@@ -6,7 +6,7 @@
             "type": "boolean"
         },
         "target": {
-            "enum": ["python", "npm", "django", "exe"]
+            "enum": ["python", "node", "django", "exe"]
         }
     },
     "required": ["enabled"]

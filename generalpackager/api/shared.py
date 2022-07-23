@@ -4,6 +4,7 @@ from generallibrary import Recycle, AutoInitBases
 
 
 class _SharedAPI(Recycle, metaclass=AutoInitBases):
+    """ Shared by Packager, LocalModule, GitHub and PyPI. """
     DEFAULT_NAME = "generalpackager"
 
     _recycle_keys = {"name": lambda name: _SharedAPI._scrub_name(name=name)}

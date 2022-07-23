@@ -1,11 +1,13 @@
 
-from generalpackager.api.localrepo.base import LocalRepo, deco_require_metadata
+from generalpackager.api.localrepo.base.localrepo import LocalRepo, deco_require_metadata
+from generalpackager.api.localrepo.python.metadata_python import Metadata_Python
 
 from generalfile import Path
 from generallibrary import terminal, EnvVar
 
 class LocalRepo_Python(LocalRepo):
     cls_target = LocalRepo.Targets.python
+    cls_metadata = Metadata_Python
 
     @staticmethod
     def get_venv_path():
@@ -28,7 +30,7 @@ class LocalRepo_Python(LocalRepo):
     @deco_require_metadata
     def pip_uninstall(self):
         """ Uninstall this repository with pip."""
-        terminal("-m", "pip", "uninstall", "-y", self.name, python=True)
+        terminal("-m", "pip", "uninstall", "-y", self.metadata.name, python=True)
 
     @deco_require_metadata
     def create_sdist(self):

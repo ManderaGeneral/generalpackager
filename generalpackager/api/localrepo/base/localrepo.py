@@ -1,11 +1,11 @@
 
-from generalpackager.api.shared import _SharedAPI
-from generalpackager.api.localrepo.metadata import Metadata
-from generalpackager.api.localrepo.paths import _LocalRepo_Paths
-from generalpackager.api.localrepo.target import _LocalRepo_Target
+from generallibrary import Recycle, AutoInitBases
+
+from generalpackager.api.localrepo.base.paths import _LocalRepo_Paths
+from generalpackager.api.localrepo.base.target import _LocalRepo_Target
 
 from generalfile import Path
-from generallibrary import Ver, deco_cache, terminal, EnvVar, Log, SigInfo
+from generallibrary import deco_cache, SigInfo
 
 from setuptools import find_namespace_packages
 import re
@@ -21,7 +21,7 @@ def deco_require_metadata(func):
     return _wrapper
 
 
-class LocalRepo(_SharedAPI, _LocalRepo_Paths, _LocalRepo_Target):
+class LocalRepo(Recycle, _LocalRepo_Paths, _LocalRepo_Target, metaclass=AutoInitBases):
     """ Tools to help Path interface a Local Repository.
         Base functionality.
         Inherited by classes in targets folder for extended functionality.
@@ -32,7 +32,7 @@ class LocalRepo(_SharedAPI, _LocalRepo_Paths, _LocalRepo_Target):
 
     def __init__(self, path):
         self.path = self._scrub_path(path=path)
-        self.metadata = Metadata(path=self.get_metadata_path())
+        self.metadata = self.cls_metadata(path=self.get_metadata_path())
 
     @staticmethod
     def _scrub_path(path):

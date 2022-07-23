@@ -5,7 +5,7 @@
 
 from generallibrary import NetworkDiagram
 from generalpackager.api.shared import _SharedAPI
-from generalpackager.api.localrepo.base import LocalRepo
+from generalpackager.api.localrepo.base.localrepo import LocalRepo
 from generalpackager.api.local_module import LocalModule
 from generalpackager.api.github import GitHub
 from generalpackager.api.pypi import PyPI
@@ -20,7 +20,6 @@ from generalpackager.packager_relations import _PackagerRelations
 from generalpackager.packager_package_type import _PackagerPackageType
 
 
-# @initBases
 class Packager(_SharedAPI, NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerPackageType, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations):
     """ Uses APIs to manage 'general' package.
         Contains methods that require more than one API as well as methods specific for ManderaGeneral. """

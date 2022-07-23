@@ -1,6 +1,6 @@
 
 from generallibrary import Ver
-from generalpackager.api.localrepo.base import LocalRepo
+from generalpackager.api.localrepo.base.localrepo import LocalRepo
 
 import unittest
 
