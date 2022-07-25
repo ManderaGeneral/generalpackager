@@ -29,13 +29,19 @@ class _LocalRepo_Target:
 
         cls.cls_target_classes[cls.cls_target] = cls
 
-    def targetted(self):
+    def targetted(self, target=...):
         """ Return another LocalRepo object which has extended functionality based on target of metadata.
 
-            :param generalpackager.LocalRepo self: """
-        if self.metadata.exists():
-            return self.cls_target_classes[self.metadata.target](path=self.path)
-        else:
+            :param generalpackager.LocalRepo self:
+            :param target:
+            :rtype: generalpackager.api.localrepo.node.localrepo_node.LocalRepo_Node or generalpackager.api.localrepo.python.localrepo_python.LocalRepo_Python """
+
+        if target is Ellipsis and self.metadata.exists():
+            target = self.metadata.target
+
+        if target is None:
             return self
+        else:
+            return self.cls_target_classes[target](path=self.path)
 
 

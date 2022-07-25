@@ -13,3 +13,4 @@ class Metadata(ConfigFile):
     description = "Missing description."
     topics = []
     manifest = []
+

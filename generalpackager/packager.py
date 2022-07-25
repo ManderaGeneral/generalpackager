@@ -9,6 +9,7 @@ from generalpackager.api.localrepo.base.localrepo import LocalRepo
 from generalpackager.api.local_module import LocalModule
 from generalpackager.api.github import GitHub
 from generalpackager.api.pypi import PyPI
+from generalpackager.api.npm import NPM
 
 from generalpackager.packager_files import _PackagerFiles
 from generalpackager.packager_github import _PackagerGitHub
@@ -37,10 +38,19 @@ class Packager(_SharedAPI, NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _
     _recycle_keys = _SharedAPI._recycle_keys.copy()
     _recycle_keys["path"] = str
 
-    def __init__(self, name=None, github_owner=None, pypi_owner=None, path=None):
-        self.localmodule = LocalModule(name=name)
-        self.localrepo = LocalRepo(name=name, path=path)
+    class APIs(LocalRepo.Targets):
+        """ Here we can define which APIs are available based on target.
+            More granularity can be made inside each API (Disable PyPI if private). """
+        python =    LocalRepo, GitHub, LocalModule, PyPI
+        node =      LocalRepo, GitHub, NPM
+        django =    LocalRepo, GitHub
+        exe =       LocalRepo, GitHub, LocalModule, PyPI
+
+    def __init__(self, name=None, target=..., github_owner=None, pypi_owner=None, path=None):
+        self.localrepo = LocalRepo(path=path, target=target)
         self.github = GitHub(name=name, owner=github_owner)
+
+        self.localmodule = LocalModule(name=name)
         self.pypi = PyPI(name=name, owner=pypi_owner)
 
     @staticmethod
