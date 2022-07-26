@@ -3,13 +3,12 @@
 
     Todo: Prevent workflow using pypi to install a general package. """
 
-from generallibrary import NetworkDiagram
+from generallibrary import NetworkDiagram, deco_cache
 from generalpackager.api.shared import _SharedAPI
 from generalpackager.api.localrepo.base.localrepo import LocalRepo
 from generalpackager.api.local_module import LocalModule
 from generalpackager.api.github import GitHub
 from generalpackager.api.pypi import PyPI
-from generalpackager.api.npm import NPM
 
 from generalpackager.packager_files import _PackagerFiles
 from generalpackager.packager_github import _PackagerGitHub
@@ -18,10 +17,11 @@ from generalpackager.packager_metadata import _PackagerMetadata
 from generalpackager.packager_pypi import _PackagerPypi
 from generalpackager.packager_workflow import _PackagerWorkflow
 from generalpackager.packager_relations import _PackagerRelations
-from generalpackager.packager_package_type import _PackagerPackageType
+
+from generalpackager.other.packages import Packages
 
 
-class Packager(_SharedAPI, NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerPackageType, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations):
+class Packager(_SharedAPI, NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations):
     """ Uses APIs to manage 'general' package.
         Contains methods that require more than one API as well as methods specific for ManderaGeneral. """
 
@@ -35,23 +35,47 @@ class Packager(_SharedAPI, NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _
     git_exclude_lines += "build", "*.egg-info", "__pycache__", "PKG-INFO", "setup.cfg"
     npm_ignore_lines += "node_modules", ".parcel-cache"
 
+    Packages = Packages
+
     _recycle_keys = _SharedAPI._recycle_keys.copy()
     _recycle_keys["path"] = str
 
-    class APIs(LocalRepo.Targets):
-        """ Here we can define which APIs are available based on target.
-            More granularity can be made inside each API (Disable PyPI if private). """
-        python =    LocalRepo, GitHub, LocalModule, PyPI
-        node =      LocalRepo, GitHub, NPM
-        django =    LocalRepo, GitHub
-        exe =       LocalRepo, GitHub, LocalModule, PyPI
+    _SENTINEL = object()
 
-    def __init__(self, name=None, target=..., github_owner=None, pypi_owner=None, path=None):
-        self.localrepo = LocalRepo(path=path, target=target)
-        self.github = GitHub(name=name, owner=github_owner)
+    def __init__(self, name=None, path=None, target=_SENTINEL, github_owner=None, pypi_owner=None):
+        self._name = name
+        self._path = path
+        self._target = target
+        self._github_owner = github_owner
+        self._pypi_owner = pypi_owner
 
-        self.localmodule = LocalModule(name=name)
-        self.pypi = PyPI(name=name, owner=pypi_owner)
+    @property
+    @deco_cache()
+    def localrepo(self):
+        return LocalRepo(path=self._path).targetted(target=self._target)
+
+    @property
+    @deco_cache()
+    def github(self):
+        return GitHub(name=self._name, owner=self._github_owner)
+
+    @property
+    @deco_cache()
+    def localmodule(self):
+        if self.target == self.localrepo.Targets.python:
+            return LocalModule(name=name)
+
+    @property
+    @deco_cache()
+    def pypi(self):
+        return PyPI(name=name, owner=pypi_owner)
+
+    @property
+    def target(self):
+        if self._target is self._SENTINEL:
+            return self.localrepo.metadata.target
+        else:
+            return self._target
 
     @staticmethod
     def summary_packagers():

@@ -1,6 +1,6 @@
-property, python, node, django, exe
-Local Repo API, Yes, Yes, Yes, Yes
-GitHub API, Yes, Yes, Yes, Yes
-Local Module API, Yes, No, No, Yes
-PyPI API, If Public, No, No, Maybe
-NPM API, No, Yes, No, No
+property,python,node,django,exe
+Local Repo API,Custom,Custom,Custom,Custom
+GitHub API,Yes,Yes,Yes,Yes
+Local Module API,Yes,No,No,No
+PyPI API,Yes,No,No,No
+NPM API,No,Yes,No,No

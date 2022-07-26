@@ -28,6 +28,7 @@ class LocalRepo(Recycle, _LocalRepo_Paths, _LocalRepo_Target, metaclass=AutoInit
         Packager will chose correct class by using LocalRepo.metadata.target
         Todo: Search for imports to list dependencies. """
 
+    _BASE_CLS_NAME = "LocalRepo"
     _recycle_keys = {"path": lambda path: str(LocalRepo._scrub_path(path=path))}
 
     def __init__(self, path):

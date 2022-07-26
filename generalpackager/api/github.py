@@ -1,5 +1,5 @@
 
-from generalpackager.api.shared import _SharedGitAndRepo
+from generalpackager.api.shared import _SharedGitAndPypi
 from generalpackager import PACKAGER_GITHUB_API
 from generallibrary import Recycle, deco_cache
 from generalfile import Path
@@ -10,7 +10,7 @@ import re
 from git import Repo
 
 
-class GitHub(_SharedGitAndRepo):
+class GitHub(_SharedGitAndPypi):
     """ Tools to interface a GitHub Repository.
         Todo: Get and Set GitHub repo private. """
 

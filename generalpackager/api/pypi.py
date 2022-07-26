@@ -1,5 +1,5 @@
 
-from generalpackager.api.shared import _SharedGitAndRepo
+from generalpackager.api.shared import _SharedGitAndPypi
 
 from generallibrary import Ver, Date, Recycle, get
 from generalfile import Path
@@ -23,7 +23,7 @@ def download(url, path):
     return path
 
 
-class PyPI(_SharedGitAndRepo):
+class PyPI(_SharedGitAndPypi):
     """ Tools to interface pypi.org """
     DEFAULT_OWNER = "Mandera"
 

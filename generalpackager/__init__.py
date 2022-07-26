@@ -1,16 +1,17 @@
 
-from generallibrary import EnvVar
-
-PACKAGER_GITHUB_API = EnvVar("PACKAGER_GITHUB_API", "secrets.PACKAGER_GITHUB_API")
-TWINE_USERNAME = EnvVar("TWINE_USERNAME", "secrets.TWINE_USERNAME")
-TWINE_PASSWORD = EnvVar("TWINE_PASSWORD", "secrets.TWINE_PASSWORD")
+from generalpackager.other.envvars import PACKAGER_GITHUB_API, TWINE_USERNAME, TWINE_PASSWORD
 
 from generalpackager.packager import Packager
 
 from generalpackager.api.localrepo.base.localrepo import LocalRepo
 from generalpackager.api.localrepo.python.localrepo_python import LocalRepo_Python
+from generalpackager.api.localrepo.node.localrepo_node import LocalRepo_Node
 
 from generalpackager.api.local_module import LocalModule
 from generalpackager.api.github import GitHub
 from generalpackager.api.pypi import PyPI
+
+
+class _LocalRepos_DOCS(LocalRepo_Python, LocalRepo_Node, LocalRepo):
+    pass
 

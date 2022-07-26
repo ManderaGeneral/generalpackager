@@ -22,17 +22,16 @@ class _SharedAPI(Recycle, metaclass=AutoInitBases):
 
     def is_general(self):
         """ Just use name for now, can generalize in the future.
-
-            :param generalpackager.api.pypi.PyPI or generalpackager.api.local_module.LocalModule or generalpackager.api.local_repo.LocalRepo or generalpackager.api.github.GitHub self: """
+            Todo: Generate Python file in generalpackager containing general packages. """
         return self.name_is_general(name=self.name)
 
 
 
-class _SharedGitAndRepo(_SharedAPI):
+class _SharedGitAndPypi(_SharedAPI):
     DEFAULT_OWNER = ...
 
     _recycle_keys = _SharedAPI._recycle_keys.copy()
-    _recycle_keys["owner"] = lambda owner: _SharedGitAndRepo._scrub_owner(owner=owner)
+    _recycle_keys["owner"] = lambda owner: _SharedGitAndPypi._scrub_owner(owner=owner)
 
     def __init__(self, name=None, owner=None):
         self.owner = self._scrub_owner(owner=owner)
