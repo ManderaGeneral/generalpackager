@@ -37,12 +37,12 @@ class Packager(_SharedAPI, _SharedName, NetworkDiagram, _PackagerMarkdown, _Pack
 
     Packages = Packages
 
-    _recycle_keys = _SharedAPI._recycle_keys.copy()
-    _recycle_keys["path"] = str
+    _recycle_keys = {"path": str}
 
     _SENTINEL = object()
 
     def __init__(self, name=None, path=None, target=_SENTINEL, github_owner=None, pypi_owner=None):
+        """ Storing pars as is. Name and target have some custom properties. """
         self._name = name
         self._path = path
         self._target = target
@@ -63,12 +63,13 @@ class Packager(_SharedAPI, _SharedName, NetworkDiagram, _PackagerMarkdown, _Pack
     @deco_cache()
     def localmodule(self):
         if self.target == self.localrepo.Targets.python:
-            return LocalModule(name=name)
+            return LocalModule(name=self._name)
 
     @property
     @deco_cache()
     def pypi(self):
-        return PyPI(name=name, owner=pypi_owner)
+        if self.target == self.localrepo.Targets.python and self.localrepo.metadata.private is False:
+            return PyPI(name=self._name, owner=self._pypi_owner)
 
     @property
     def target(self):
@@ -90,10 +91,6 @@ class Packager(_SharedAPI, _SharedName, NetworkDiagram, _PackagerMarkdown, _Pack
             return self.localrepo.get_repo_path_parent(self.localmodule.path)
         return self.localrepo.path
 
-    @property
-    def simple_name(self):
-        return self.name.replace("general", "")
-
     def spawn_children(self):
         """ :param generalpackager.Packager self: """
         for packager in self.get_dependants(only_general=True):
@@ -106,12 +103,8 @@ class Packager(_SharedAPI, _SharedName, NetworkDiagram, _PackagerMarkdown, _Pack
             if packager.localrepo.enabled:
                 self.set_parent(parent=packager)
 
-    # def exists(self):  # Not sure why we should have this seems ambigous
-    #     """ Just check GitHub for now. """
-    #     return self.github.exists()
-
     def __repr__(self):
-        return f"<Packager [{self.package_type}]: {self.name}>"
+        return f"<Packager [{self.target}]: {self.name}>"
 
 
 

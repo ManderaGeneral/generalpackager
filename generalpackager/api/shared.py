@@ -13,10 +13,13 @@ class _SharedAPI(Recycle, metaclass=AutoInitBases):
     def is_general(self):
         return self.name_is_general(name=self.name)
 
+    @property
+    def simple_name(self):
+        return self.name.replace("general", "")  # Make this work for NPM's "gen" too
 
 
 class _SharedName:
-    """ Shared by Packager, LocalModule, GitHub and PyPI. """
+    """ Shared by Packager, LocalModule, GitHub and PyPI. """  # HERE ** Maybe this should be in LocalRepo too after all, that way is_general can work
     DEFAULT_NAME = "generalpackager"
 
     _recycle_keys = {"name": lambda name: _SharedName._scrub_name(name=name)}
