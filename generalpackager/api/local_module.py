@@ -1,5 +1,5 @@
 
-from generalpackager.api.shared import _SharedAPI
+from generalpackager.api.shared import _SharedAPI, _SharedName
 from generallibrary import ObjInfo, deco_cache, Recycle, EnvVar, get, import_module
 from generalfile import Path
 
@@ -7,7 +7,7 @@ import pkg_resources
 
 
 
-class LocalModule(_SharedAPI):
+class LocalModule(_SharedAPI, _SharedName):
     """ Tools to interface a Local Python Module. """
 
     def __init__(self, name=None):

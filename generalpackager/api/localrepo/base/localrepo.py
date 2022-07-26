@@ -1,6 +1,5 @@
 
-from generallibrary import Recycle, AutoInitBases
-
+from generalpackager.api.shared import _SharedAPI
 from generalpackager.api.localrepo.base.paths import _LocalRepo_Paths
 from generalpackager.api.localrepo.base.target import _LocalRepo_Target
 
@@ -21,7 +20,7 @@ def deco_require_metadata(func):
     return _wrapper
 
 
-class LocalRepo(Recycle, _LocalRepo_Paths, _LocalRepo_Target, metaclass=AutoInitBases):
+class LocalRepo(_SharedAPI, _LocalRepo_Paths, _LocalRepo_Target):
     """ Tools to help Path interface a Local Repository.
         Base functionality.
         Inherited by classes in targets folder for extended functionality.
@@ -29,6 +28,7 @@ class LocalRepo(Recycle, _LocalRepo_Paths, _LocalRepo_Target, metaclass=AutoInit
         Todo: Search for imports to list dependencies. """
 
     _BASE_CLS_NAME = "LocalRepo"
+
     _recycle_keys = {"path": lambda path: str(LocalRepo._scrub_path(path=path))}
 
     def __init__(self, path):
@@ -38,6 +38,11 @@ class LocalRepo(Recycle, _LocalRepo_Paths, _LocalRepo_Target, metaclass=AutoInit
     @staticmethod
     def _scrub_path(path):
         return Path(path).absolute()
+
+    @property
+    def name(self):
+        """ Only getter for name to make _SharedAPI work. """
+        return self.metadata.name
 
     def __repr__(self):
         return f"<{type(self).__name__} for '{self.path}'>"

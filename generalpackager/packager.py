@@ -4,7 +4,7 @@
     Todo: Prevent workflow using pypi to install a general package. """
 
 from generallibrary import NetworkDiagram, deco_cache
-from generalpackager.api.shared import _SharedAPI
+from generalpackager.api.shared import _SharedAPI, _SharedName
 from generalpackager.api.localrepo.base.localrepo import LocalRepo
 from generalpackager.api.local_module import LocalModule
 from generalpackager.api.github import GitHub
@@ -21,7 +21,7 @@ from generalpackager.packager_relations import _PackagerRelations
 from generalpackager.other.packages import Packages
 
 
-class Packager(_SharedAPI, NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations):
+class Packager(_SharedAPI, _SharedName, NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations):
     """ Uses APIs to manage 'general' package.
         Contains methods that require more than one API as well as methods specific for ManderaGeneral. """
 
