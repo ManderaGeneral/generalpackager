@@ -1,5 +1,6 @@
 
 from generallibrary import Recycle, AutoInitBases
+from generalfile import Path
 
 from generalpackager.other.packages import Packages
 
@@ -11,15 +12,22 @@ class _SharedAPI(Recycle, metaclass=AutoInitBases):
         return name in Packages.all_packages()
 
     def is_general(self):
+        """ :param generalpackager.Packager self: """
         return self.name_is_general(name=self.name)
 
     @property
     def simple_name(self):
-        return self.name.replace("general", "")  # Make this work for NPM's "gen" too
+        """ :param generalpackager.Packager self: """
+        if self.name.startswith("general"):
+            return self.name.replace("general", "")
+        elif self.name.startswith("gen"):
+            return self.name.replace("gen", "")
+        else:
+            return self.name
 
 
 class _SharedName:
-    """ Shared by Packager, LocalModule, GitHub and PyPI. """  # HERE ** Maybe this should be in LocalRepo too after all, that way is_general can work
+    """ Shared by Packager, LocalModule, GitHub and PyPI. """
     DEFAULT_NAME = "generalpackager"
 
     _recycle_keys = {"name": lambda name: _SharedName._scrub_name(name=name)}
@@ -44,6 +52,18 @@ class _SharedOwner:
     @classmethod
     def _scrub_owner(cls, owner):
         return owner or cls.DEFAULT_OWNER
+
+
+class _SharedPath:
+    """ Shared by Packager and LocalRepo. """
+    _recycle_keys = {"path": lambda path: _SharedPath._scrub_path(path=path)}
+
+    def __init__(self, path=None):
+        self.path = self._scrub_path(path=path)
+
+    @classmethod
+    def _scrub_path(cls, path):
+        return Path(path).absolute()
 
 
 

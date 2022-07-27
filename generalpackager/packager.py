@@ -4,7 +4,7 @@
     Todo: Prevent workflow using pypi to install a general package. """
 
 from generallibrary import NetworkDiagram, deco_cache
-from generalpackager.api.shared import _SharedAPI, _SharedName
+from generalpackager.api.shared import _SharedAPI, _SharedName, _SharedPath
 from generalpackager.api.localrepo.base.localrepo import LocalRepo
 from generalpackager.api.local_module import LocalModule
 from generalpackager.api.github import GitHub
@@ -21,7 +21,9 @@ from generalpackager.packager_relations import _PackagerRelations
 from generalpackager.other.packages import Packages
 
 
-class Packager(_SharedAPI, _SharedName, NetworkDiagram, _PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations):
+class Packager(NetworkDiagram,
+               _SharedAPI, _SharedName, _SharedPath,
+               _PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations):
     """ Uses APIs to manage 'general' package.
         Contains methods that require more than one API as well as methods specific for ManderaGeneral. """
 
@@ -36,8 +38,6 @@ class Packager(_SharedAPI, _SharedName, NetworkDiagram, _PackagerMarkdown, _Pack
     npm_ignore_lines += "node_modules", ".parcel-cache"
 
     Packages = Packages
-
-    _recycle_keys = {"path": str}
 
     _SENTINEL = object()
 
@@ -68,7 +68,7 @@ class Packager(_SharedAPI, _SharedName, NetworkDiagram, _PackagerMarkdown, _Pack
     @property
     @deco_cache()
     def pypi(self):
-        if self.target == self.localrepo.Targets.python and self.localrepo.metadata.private is False:
+        if self.target == self.localrepo.Targets.python and not self.localrepo.metadata.private:
             return PyPI(name=self._name, owner=self._pypi_owner)
 
     @property
@@ -84,12 +84,6 @@ class Packager(_SharedAPI, _SharedName, NetworkDiagram, _PackagerMarkdown, _Pack
             Packager(name="Mandera", github_owner="Mandera"),
             Packager(name=".github", github_owner="ManderaGeneral"),
         ]
-
-    @property
-    def path(self):
-        if not self.localrepo.exists() and self.localmodule.exists():
-            return self.localrepo.get_repo_path_parent(self.localmodule.path)
-        return self.localrepo.path
 
     def spawn_children(self):
         """ :param generalpackager.Packager self: """

@@ -1,5 +1,6 @@
 
-from generalpackager.api.localrepo.base.target import _LocalRepo_Target
+from generalpackager.api.localrepo.base.localrepo_target import _LocalRepo_Target
+from generallibrary import deco_cache
 
 from itertools import chain
 
@@ -24,6 +25,7 @@ class Packages(_LocalRepo_Target.Targets):
     exe = []
 
     @classmethod
+    @deco_cache()
     def all_packages(cls):
         return list(chain(*cls.field_values_defaults()))
 

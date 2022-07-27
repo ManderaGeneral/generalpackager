@@ -6,17 +6,3 @@
 
 # print(localrepo)
 # print(targetted)
-
-
-class A:
-    B = 5
-
-
-class C:
-    A.B = 2
-
-print(A.B)
-
-
-
-
