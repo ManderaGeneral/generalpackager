@@ -3,18 +3,37 @@ from generallibrary import DataClass
 from generalpackager.api.localrepo.base.metadata import Metadata
 
 
-class _LocalRepo_Target:
+class Targets(DataClass):
+    python = "python"
+    node = "node"
+    django = "django"
+    exe = "exe"
+
+
+class _SharedTarget:
+    def is_python(self):
+        """ :param generalpackager.Packager or generalpackager.LocalRepo self: """
+        return self.target == Targets.python
+
+    def is_node(self):
+        """ :param generalpackager.Packager or generalpackager.LocalRepo self: """
+        return self.target == Targets.node
+
+    def is_django(self):
+        """ :param generalpackager.Packager or generalpackager.LocalRepo self: """
+        return self.target == Targets.django
+
+    def is_exe(self):
+        """ :param generalpackager.Packager or generalpackager.LocalRepo self: """
+        return self.target == Targets.exe
+
+
+class _LocalRepo_Target(_SharedTarget):
     """ Target of None is only for packages without a metadata.json file. """
     cls_target = None
     cls_metadata = Metadata
-
+    Targets = Targets
     cls_target_classes = {}
-
-    class Targets(DataClass):
-        python = "python"
-        node = "node"
-        django = "django"
-        exe = "exe"
 
     assert set(Metadata.field_dict_literals()["target"]) == set(Targets.field_values_defaults()), "Targets aren't synced, couldn't make this DRY."
 

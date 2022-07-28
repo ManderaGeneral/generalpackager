@@ -48,6 +48,13 @@ class LocalRepo(_SharedAPI, _SharedPath,
     def __init__(self, path=None):
         self.metadata = self.cls_metadata(path=self.get_metadata_path())
 
+    @property
+    def target(self):
+        # Maybe we can cache exists for metadata
+        if self.metadata.exists():
+            return self.metadata.target
+        else:
+            return None
 
     @property
     def name(self):

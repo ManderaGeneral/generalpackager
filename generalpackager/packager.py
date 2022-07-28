@@ -6,6 +6,7 @@
 from generallibrary import NetworkDiagram, deco_cache
 from generalpackager.api.shared import _SharedAPI, _SharedName, _SharedPath
 from generalpackager.api.localrepo.base.localrepo import LocalRepo
+from generalpackager.api.localrepo.base.localrepo_target import _SharedTarget
 from generalpackager.api.local_module import LocalModule
 from generalpackager.api.github import GitHub
 from generalpackager.api.pypi import PyPI
@@ -22,7 +23,7 @@ from generalpackager.other.packages import Packages
 
 
 class Packager(NetworkDiagram,
-               _SharedAPI, _SharedName, _SharedPath,
+               _SharedAPI, _SharedName, _SharedPath, _SharedTarget,
                _PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations):
     """ Uses APIs to manage 'general' package.
         Contains methods that require more than one API as well as methods specific for ManderaGeneral. """

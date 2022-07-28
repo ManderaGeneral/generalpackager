@@ -66,4 +66,3 @@ class _SharedPath:
         return Path(path).absolute()
 
 
-
