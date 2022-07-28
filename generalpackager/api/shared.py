@@ -6,7 +6,7 @@ from generalpackager.other.packages import Packages
 
 
 class _SharedAPI(Recycle, metaclass=AutoInitBases):
-    """ Shared by Packager and all APIs. """
+    """ Shared by all (Packager and APIs). """
     @staticmethod
     def name_is_general(name):
         return name in Packages.all_packages()

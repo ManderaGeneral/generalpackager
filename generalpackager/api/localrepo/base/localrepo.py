@@ -11,13 +11,28 @@ import re
 from git import Repo
 
 
-def deco_require_metadata(func):
-    def _wrapper(*args, **kwargs):
-        siginfo = SigInfo(func, *args, **kwargs)
-        local_repo: LocalRepo = siginfo["self"]
-        assert local_repo.metadata.exists(), f"{func.__name__} cannot be called unless metadata exists."
-        return siginfo.call()
-    return _wrapper
+
+from typing import Callable
+
+
+def deco_require(assertion: Callable[[Any], bool], message: Callable[[Any], str] = None):
+    """ Decorator factory to produce decorate which raises AssertionError if assertion returns False.
+        """
+    def _deco(func):
+        def _wrapper(*args, **kwargs):
+            siginfo = SigInfo(func, *args, **kwargs)
+            if not assertion(self=siginfo["self"]):
+                if message is None:
+                    message_string = f"{func.__name__} cannot be called unless metadata exists."
+                else:
+                    message_string = message(func=func)
+                raise AssertionError(message_string)
+
+            return siginfo.call()
+        return _wrapper
+    return _deco
+
+deco_require_metadata = deco_require(lambda self: self.metadata.exists(), )
 
 
 class LocalRepo(_SharedAPI, _SharedPath,
