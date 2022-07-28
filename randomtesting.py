@@ -1,14 +1,6 @@
-from generalpackager import Packager
-# from generallibrary import terminal
-
-# localrepo = LocalRepo("")
-# targetted = localrepo.targetted()
-
-# print(localrepo)
-# print(targetted)
+from generalpackager import *
 
 
-packager = Packager()
-
-print(packager)
-
+github = GitHub()
+print(github.owner)  # HERE ** Not sure why owner is still Ellipsis for Reycle
+# print(github.get_owners_packages())

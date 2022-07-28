@@ -13,6 +13,7 @@ from git import Repo
 class GitHub(_SharedAPI, _SharedOwner, _SharedName):
     """ Tools to interface a GitHub Repository.
         Todo: Get and Set GitHub repo private. """
+    DEFAULT_OWNER = "ManderaGeneral"
 
     def __init__(self, name=None, owner=None):
         pass
@@ -45,10 +46,13 @@ class GitHub(_SharedAPI, _SharedOwner, _SharedName):
 
     def get_owners_packages(self):
         """ Get a set of a owner's packages' names on GitHub. """
-        return set(re.findall(f'"/{self.owner}/(.+)/hovercard"', requests.get(f"https://github.com/{self.owner}?tab=repositories").text))
+        # repos = requests.get(f"https://api.github.com/users/{self.owner}/repos", **self.request_kwargs()).json()  # This only gave public
+
+        repos = requests.get(f"https://api.github.com/search/repositories?q=user:{self.owner}", **self.request_kwargs()).json()["items"]
+        return set(repo["name"] for repo in repos)
 
     def _api_url(self, endpoint=None):
-        """ Get URL from owner, name and enpoint. """
+        """ Get URL from owner, name and endpoint. """
         return "/".join(("https://api.github.com", "repos", self.owner, self.name) + ((endpoint, ) if endpoint else ()))
 
     def get_website(self):
@@ -83,15 +87,23 @@ class GitHub(_SharedAPI, _SharedOwner, _SharedName):
         """ Set a description for the GitHub repository. """
         return self._request(method="patch", name=self.name, description=description)
 
+    def request_kwargs(self):
+        # return {
+        #     "headers": {
+        #         "Accept": "application/vnd.github.mercy-preview+json",
+        #         "Authorization": f"token {PACKAGER_GITHUB_API.value}"
+        #     },
+        # }
+        return {
+            "headers": {"Accept": "application/vnd.github.mercy-preview+json"},
+            "auth": (self.owner, PACKAGER_GITHUB_API.value),
+        }
+
     @deco_cache()
     def _request(self, method="get", url=None, endpoint=None, **data):
         """ :rtype: requests.Response """
         method = getattr(requests, method.lower())
-
-        kwargs = {
-            "headers": {"Accept": "application/vnd.github.mercy-preview+json"},
-            "auth": (self.owner, PACKAGER_GITHUB_API.value),
-        }
+        kwargs = self.request_kwargs()
         if data:
             kwargs["data"] = json.dumps(data)
         if url is None:

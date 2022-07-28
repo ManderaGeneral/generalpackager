@@ -25,6 +25,7 @@ def download(url, path):
 
 class PyPI(_SharedAPI, _SharedOwner, _SharedName):
     """ Tools to interface pypi.org """
+    DEFAULT_OWNER = "Mandera"
 
     def __init__(self, name=None, owner=None):
         pass
