@@ -56,7 +56,7 @@ class _SharedOwner:
 
 class _SharedPath:
     """ Shared by Packager and LocalRepo. """
-    _recycle_keys = {"path": lambda path: _SharedPath._scrub_path(path=path)}
+    _recycle_keys = {"path": lambda path: str(_SharedPath._scrub_path(path=path))}
 
     def __init__(self, path=None):
         self.path = self._scrub_path(path=path)

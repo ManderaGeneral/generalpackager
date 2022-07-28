@@ -1,5 +1,5 @@
 
-from generalpackager.api.localrepo.base.localrepo import LocalRepo, deco_require_metadata
+from generalpackager.api.localrepo.base.localrepo import LocalRepo
 from generalpackager.api.localrepo.node.metadata_node import Metadata_Node
 
 

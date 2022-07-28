@@ -1,4 +1,4 @@
-# from generalpackager import Packager, LocalRepo, LocalRepo_Python
+from generalpackager import Packager
 # from generallibrary import terminal
 
 # localrepo = LocalRepo("")
@@ -7,4 +7,8 @@
 # print(localrepo)
 # print(targetted)
 
+
+packager = Packager()
+
+print(packager)
 

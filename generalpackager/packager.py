@@ -40,9 +40,7 @@ class Packager(NetworkDiagram, *shared, *parts):
 
     Packages = Packages
 
-    _SENTINEL = object()
-
-    def __init__(self, name=None, path=None, target=_SENTINEL, github_owner=None, pypi_owner=None):
+    def __init__(self, name=None, path=None, target=..., github_owner=None, pypi_owner=None):
         """ Storing pars as is. Name and target have some custom properties. """
         self._name = name
         self._path = path
@@ -74,7 +72,7 @@ class Packager(NetworkDiagram, *shared, *parts):
 
     @property
     def target(self):
-        if self._target is self._SENTINEL:
+        if self._target is Ellipsis:
             return self.localrepo.metadata.target
         else:
             return self._target

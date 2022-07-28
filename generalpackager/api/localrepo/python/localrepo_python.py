@@ -1,9 +1,9 @@
 
-from generalpackager.api.localrepo.base.localrepo import LocalRepo, deco_require_metadata
+from generalpackager.api.localrepo.base.localrepo import LocalRepo
 from generalpackager.api.localrepo.python.metadata_python import Metadata_Python
 
 from generalfile import Path
-from generallibrary import terminal, EnvVar
+from generallibrary import terminal, EnvVar, deco_require
 
 class LocalRepo_Python(LocalRepo):
     cls_target = LocalRepo.Targets.python
@@ -20,25 +20,25 @@ class LocalRepo_Python(LocalRepo):
         """ Run unittests for this repository. """
         terminal("-m", "unittest", "discover", str(self.get_test_path()), python=True)
 
-    @deco_require_metadata
+    @deco_require(LocalRepo.exists)
     def pip_install(self):
         """ Install this repository with pip and -e flag.
             Subprocess messed up -e flag compared to doing it in terminal, so use the normal one."""
         with self.path.as_working_dir():
             terminal("pip", "install", "-e", ".")
 
-    @deco_require_metadata
+    @deco_require(LocalRepo.exists)
     def pip_uninstall(self):
         """ Uninstall this repository with pip."""
         terminal("-m", "pip", "uninstall", "-y", self.metadata.name, python=True)
 
-    @deco_require_metadata
+    @deco_require(LocalRepo.exists)
     def create_sdist(self):
         """ Create source distribution. """
         with self.path.as_working_dir():
             terminal("setup.py", "sdist", "bdist_wheel", python=True)
 
-    @deco_require_metadata
+    @deco_require(LocalRepo.exists)
     def upload(self):
         """ Upload local repo to PyPI.
             Todo: Make sure twine is installed when trying to upload to pypi. """
@@ -49,7 +49,7 @@ class LocalRepo_Python(LocalRepo):
         with self.path.as_working_dir():
             terminal("-m", "twine", "upload", "dist/*", python=True)
 
-    @deco_require_metadata
+    @deco_require(LocalRepo.exists)
     def generate_exe(self, file_path=None, suppress=False):
         """ Generate an exe file for target file_path python file. """
         if file_path is None:
