@@ -4,39 +4,16 @@ from generalpackager.api.localrepo.base.localrepo_paths import _LocalRepo_Paths
 from generalpackager.api.localrepo.base.localrepo_target import _LocalRepo_Target
 
 from generalfile import Path
-from generallibrary import deco_cache, SigInfo
+from generallibrary import deco_cache, SigInfo, deco_require
 
 from setuptools import find_namespace_packages
 import re
 from git import Repo
 
+shared = _SharedAPI, _SharedPath
+parts = _LocalRepo_Paths, _LocalRepo_Target
 
-
-from typing import Callable
-
-
-def deco_require(assertion: Callable[[Any], bool], message: Callable[[Any], str] = None):
-    """ Decorator factory to produce decorate which raises AssertionError if assertion returns False.
-        """
-    def _deco(func):
-        def _wrapper(*args, **kwargs):
-            siginfo = SigInfo(func, *args, **kwargs)
-            if not assertion(self=siginfo["self"]):
-                if message is None:
-                    message_string = f"{func.__name__} cannot be called unless metadata exists."
-                else:
-                    message_string = message(func=func)
-                raise AssertionError(message_string)
-
-            return siginfo.call()
-        return _wrapper
-    return _deco
-
-deco_require_metadata = deco_require(lambda self: self.metadata.exists(), )
-
-
-class LocalRepo(_SharedAPI, _SharedPath,
-                _LocalRepo_Paths, _LocalRepo_Target):
+class LocalRepo(*shared, *parts):
     """ Tools to help Path interface a Local Repository.
         Base functionality.
         Inherited by classes in targets folder for extended functionality.
@@ -45,18 +22,23 @@ class LocalRepo(_SharedAPI, _SharedPath,
 
     _BASE_CLS_NAME = "LocalRepo"
 
+    # _deco_require_metadata = deco_require(lambda self: self.metadata.exists(), lambda func: f"{func.__name__} requires metadata.")
+
     def __init__(self, path=None):
         self.metadata = self.cls_metadata(path=self.get_metadata_path())
 
     @property
     def target(self):
-        # Maybe we can cache exists for metadata
         if self.metadata.exists():
             return self.metadata.target
         else:
             return None
 
+    def metadata_exists(self):
+        return self.metadata.exists()
+
     @property
+    @deco_require(metadata_exists)
     def name(self):
         """ Only getter for name to make _SharedAPI work. """
         return self.metadata.name
@@ -100,6 +82,7 @@ class LocalRepo(_SharedAPI, _SharedPath,
         repo = Repo(str(self.path))
         return [Path(file) for file in re.findall("diff --git a/(.*) " + "b/", repo.git.diff())]
 
+    @deco_require(metadata_exists)
     def bump_version(self):
         """ Bump micro version in metadata.json. """
         self.metadata.version = self.metadata.version.bump()

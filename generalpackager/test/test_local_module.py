@@ -1,5 +1,5 @@
 
-from generalpackager.api.local_module import LocalModule
+from generalpackager.api.localmodule import LocalModule
 
 import unittest
 
