@@ -44,7 +44,8 @@ class _SharedOwner:
     """ Shared by GitHub, PyPI and NPM. """
     DEFAULT_OWNER = ...
 
-    _recycle_keys = {"owner": lambda owner: _SharedOwner._scrub_owner(owner=owner)}
+    # _recycle_keys = {"owner": lambda owner: _SharedOwner._scrub_owner(owner=owner)}
+    _recycle_keys = {"owner": lambda cls, owner: cls._scrub_owner(owner=owner)}
 
     def __init__(self, owner=None):
         self.owner = self._scrub_owner(owner=owner)

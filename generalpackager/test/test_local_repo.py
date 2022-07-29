@@ -1,23 +1,30 @@
 
 from generallibrary import Ver
 from generalpackager.api.localrepo.base.localrepo import LocalRepo
+from generalfile import Path
+import generalpackager
 
 import unittest
 
+import importlib
 
 class TestLocalRepo(unittest.TestCase):
-    LocalRepo.pip_install  # Skipped test
-    LocalRepo.pip_uninstall  # Skipped test
-    LocalRepo.unittest  # Skipped test
-    LocalRepo.create_sdist  # Skipped test
-    LocalRepo.upload  # Skipped test
-    LocalRepo.get_path_from_name  # Skipped test
-    LocalRepo.get_repo_path_parent  # Skipped test
-    LocalRepo.write_metadata  # Skipped test
+    # LocalRepo.pip_install  # Skipped test
+    # LocalRepo.pip_uninstall  # Skipped test
+    # LocalRepo.unittest  # Skipped test
+    # LocalRepo.create_sdist  # Skipped test
+    # LocalRepo.upload  # Skipped test
+    # LocalRepo.get_path_from_name  # Skipped test
+    # LocalRepo.get_repo_path_parent  # Skipped test
+    # LocalRepo.write_metadata  # Skipped test
+
+    def setUpClass(self):
+        path = Path(generalpackager.__file__).get_parent(1, 1)  # type: Path
+        path.set_working_dir()
 
 
     def test_has_metadata(self):
-        self.assertEqual(True, LocalRepo().has_metadata())
+        self.assertEqual(True, LocalRepo().has_metadata())  # HERE **
         self.assertEqual(False, LocalRepo("doesntexist").has_metadata())
 
     def test_load_metadata(self):
