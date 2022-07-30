@@ -16,8 +16,8 @@ class TestPackager(unittest.TestCase):
     def test_is_bumped(self):
         packager = Packager()
         packager.is_bumped()
-        version = packager.localrepo.version
+        version = packager.localrepo.metadata.version
         packager.localrepo.bump_version()
         self.assertEqual(True, packager.is_bumped())
-        packager.localrepo.version = version
+        packager.localrepo.metadata.version = version
 

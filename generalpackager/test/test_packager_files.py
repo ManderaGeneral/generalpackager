@@ -38,7 +38,7 @@ class TestPackager(unittest.TestCase):
     def test_generate_setup(self):
         packager = Packager()
         text = packager.generate_setup()
-        self.assertIn(str(packager.localrepo.version), text)
+        self.assertIn(str(packager.localrepo.metadata.version), text)
         self.assertIn(str(packager.localrepo.name), text)
 
     def test_generate_manifest(self):

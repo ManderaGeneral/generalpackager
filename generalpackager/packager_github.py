@@ -14,7 +14,7 @@ class _PackagerGitHub:
 
             :param generalpackager.Packager self: """
         self.github.set_website(self.pypi.url)
-        self.github.set_description(self.localrepo.description)
+        self.github.set_description(self.localrepo.metadata.description)
         self.github.set_topics(*self.get_topics())
 
     def commit_and_push(self, message=None, tag=False):
@@ -31,7 +31,7 @@ class _PackagerGitHub:
         remote.set_url(f"https://Mandera:{PACKAGER_GITHUB_API}@github.com/{self.github.owner}/{self.name}.git")
 
         if tag:
-            tag_ref = repo.create_tag(f"v{self.localrepo.version}", force=True)
+            tag_ref = repo.create_tag(f"v{self.localrepo.metadata.version}", force=True)
             remote.push(refspec=tag_ref)
         try:
             self.commit_sha = remote.push()[0].summary.split("..")[1].rstrip()

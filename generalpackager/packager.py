@@ -21,10 +21,10 @@ from generalpackager.packager_relations import _PackagerRelations
 
 from generalpackager.other.packages import Packages
 
-shared = _SharedAPI, _SharedName, _SharedPath, _SharedTarget
-parts = _PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations
 
-class Packager(NetworkDiagram, *shared, *parts):
+class Packager(NetworkDiagram,
+               _SharedAPI, _SharedName, _SharedPath, _SharedTarget,
+               _PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations):
     """ Uses APIs to manage 'general' package.
         Contains methods that require more than one API as well as methods specific for ManderaGeneral. """
 
@@ -87,13 +87,13 @@ class Packager(NetworkDiagram, *shared, *parts):
     def spawn_children(self):
         """ :param generalpackager.Packager self: """
         for packager in self.get_dependants(only_general=True):
-            if packager.localrepo.enabled:
+            if packager.localrepo.metadata.enabled:
                 packager.set_parent(parent=self)
 
     def spawn_parents(self):
         """ :param generalpackager.Packager self: """
         for packager in self.get_dependencies(only_general=True):
-            if packager.localrepo.enabled:
+            if packager.localrepo.metadata.enabled:
                 self.set_parent(parent=packager)
 
     def __repr__(self):

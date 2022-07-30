@@ -41,7 +41,7 @@ class _PackagerFiles:
     @deco_cache()
     def files(self):
         """ Todo: Watermark generated files to prevent mistake of thinking you can modify them directly.
-
+            # HERE ** Need to have a way to retrive specific GeneralFile, I do self.file_readme.generate() somewhere for example
             :param generalpackager.Packager self: """
         files = [
             GenerateFile(self.localrepo.get_git_exclude_path(), self.generate_git_exclude, self, aesthetic=True),
@@ -168,16 +168,16 @@ class _PackagerFiles:
             "name": f'"{self.localrepo.name}"',
             "author": f"'{self.author}'",
             "author_email": f'"{self.email}"',
-            "version": f'"{self.localrepo.version}"',
-            "description": f'"{self.localrepo.description}"',
+            "version": f'"{self.localrepo.metadata.version}"',
+            "description": f'"{self.localrepo.metadata.description}"',
             "long_description": "long_description",
             "long_description_content_type": '"text/markdown"',
-            "install_requires": self.localrepo.install_requires,
+            "install_requires": self.localrepo.metadata.install_requires,
             "url": f'"{self.github.url}"',
             "license": f'"{self.license}"',
             "python_requires": f'">={self.python[0]}, <{last_version_bumped_micro}"',
             "packages": 'find_namespace_packages(exclude=("build*", "dist*"))',
-            "extras_require": self.localrepo.extras_require,
+            "extras_require": self.localrepo.metadata.extras_require,
             "classifiers": self.get_classifiers(),
             # "include_package_data": True,
         }
@@ -215,7 +215,7 @@ class _PackagerFiles:
         default_manifest = [
             self.localrepo.get_metadata_path().relative(self.path),
         ]
-        return "\n".join([f"include {path}" for path in self.localrepo.manifest + default_manifest])
+        return "\n".join([f"include {path}" for path in self.localrepo.metadata.manifest + default_manifest])
 
     def generate_git_exclude(self):
         """ Generate git exclude file.
@@ -379,8 +379,8 @@ class _PackagerFiles:
             :param generalpackager.Packager self: """
         info = {
             "name": self.localrepo.name,
-            "version": str(self.localrepo.version),
-            "description": self.localrepo.description,
+            "version": str(self.localrepo.metadata.version),
+            "description": self.localrepo.metadata.description,
             "scripts": {
                 "start": "parcel index.html",
                 "build": "parcel build index.html",

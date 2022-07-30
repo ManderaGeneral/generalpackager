@@ -194,11 +194,11 @@ class _PackagerWorkflow:
         if self.is_bumped():
             self.file_readme.generate()
             self.commit_and_push(message=message, tag=True)
-            if not self.localrepo.private:
+            if not self.localrepo.metadata.private:
                 self.localrepo.upload()
             if self.localrepo.get_exetarget_path().exists():
                 self.localrepo.generate_exe()
-                MainframeClient().upload_exe(exe_path=self.localrepo.get_exeproduct_path(), name=self.name, version=self.localrepo.version)
+                MainframeClient().upload_exe(exe_path=self.localrepo.get_exeproduct_path(), name=self.name, version=self.localrepo.metadata.version)
 
 
 

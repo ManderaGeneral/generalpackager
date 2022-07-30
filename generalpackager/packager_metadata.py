@@ -17,7 +17,7 @@ class _PackagerMetadata:
         """ Get a complete list of topics by using package specific as well as hardcoded magic values.
 
             :param generalpackager.Packager self: """
-        topics = self.localrepo.topics.copy()
+        topics = self.localrepo.metadata.topics.copy()
         if self.is_python():
             topics.extend([f"python{ver.replace('.', '')}" for ver in self.python])
         topics.append(f"{self.license}-license")
@@ -34,7 +34,7 @@ class _PackagerMetadata:
         """ Return whether this package has been bumped by comparing PyPI and LocalRepo's versions.
 
             :param generalpackager.Packager self: """
-        return self.pypi.get_version() is None or self.localrepo.version > self.pypi.get_version()
+        return self.pypi.get_version() is None or self.localrepo.metadata.version > self.pypi.get_version()
 
     _lib = {
         "planning": "Development Status :: 1 - Planning",

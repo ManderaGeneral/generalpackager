@@ -88,7 +88,7 @@ class _PackagerMarkdown:
         """ :param generalpackager.Packager self: """
         part_of = f"This package and {len(self.get_all()) - 1} other make up {Markdown.link(text='ManderaGeneral', url='https://github.com/ManderaGeneral')}."
 
-        return Markdown(self.localrepo.description, "\n", part_of, header=self.name)
+        return Markdown(self.localrepo.metadata.description, "\n", part_of, header=self.name)
 
     def get_information_markdown(self, *packagers):
         """ Get information table.
@@ -108,7 +108,7 @@ class _PackagerMarkdown:
 
             list_of_dicts.append({
                 "Package": Markdown.link(text=packager.name, url=packager.github.url),
-                "Ver": Markdown.link(text=packager.localrepo.version, url=packager.pypi.url),
+                "Ver": Markdown.link(text=packager.localrepo.metadata.version, url=packager.pypi.url),
                 "Latest Release": packager.get_latest_release(),
                 "Python": ", ".join([Markdown.link(text=ver, url=f"{python_url}{str(ver).replace('.', '')}0/") for ver in packager.python]),
                 "Platform": ", ".join(map(str.capitalize, packager.os)),
@@ -125,7 +125,7 @@ class _PackagerMarkdown:
             :param generalpackager.Packager self: """
         markdown = Markdown(header="Installation")
 
-        dependencies_required = self.localrepo.install_requires.copy()
+        dependencies_required = self.localrepo.metadata.install_requires.copy()
         dependencies_optional = list(set().union(*self.localrepo.extras_require.values()))
         dependencies_optional.sort()
 

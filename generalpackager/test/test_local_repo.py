@@ -18,24 +18,24 @@ class TestLocalRepo(unittest.TestCase):
     # LocalRepo.get_repo_path_parent  # Skipped test
     # LocalRepo.write_metadata  # Skipped test
 
-    def setUpClass(self):
+    @classmethod
+    def setUpClass(cls):
         path = Path(generalpackager.__file__).get_parent(1, 1)  # type: Path
         path.set_working_dir()
 
-
-    def test_has_metadata(self):
-        self.assertEqual(True, LocalRepo().has_metadata())  # HERE **
-        self.assertEqual(False, LocalRepo("doesntexist").has_metadata())
+    def test_metadata_exists(self):
+        self.assertEqual(True, LocalRepo().metadata_exists())  # HERE **
+        self.assertEqual(False, LocalRepo("doesntexist").metadata_exists())
 
     def test_load_metadata(self):
-        self.assertEqual(True, LocalRepo().enabled)
+        self.assertEqual(True, LocalRepo().metadata.enabled)
         self.assertEqual("generalpackager", LocalRepo().name)
-        self.assertIsInstance(LocalRepo().version, Ver)
-        self.assertIsInstance(LocalRepo().description, str)
-        self.assertIsInstance(LocalRepo().install_requires, list)
-        self.assertIsInstance(LocalRepo().extras_require, dict)
-        self.assertIsInstance(LocalRepo().topics, list)
-        self.assertIsInstance(LocalRepo().manifest, list)
+        self.assertIsInstance(LocalRepo().metadata.version, Ver)
+        self.assertIsInstance(LocalRepo().metadata.description, str)
+        self.assertIsInstance(LocalRepo().metadata.install_requires, list)
+        self.assertIsInstance(LocalRepo().metadata.extras_require, dict)
+        self.assertIsInstance(LocalRepo().metadata.topics, list)
+        self.assertIsInstance(LocalRepo().metadata.manifest, list)
 
     def test_get_metadata_dict(self):
         self.assertEqual(True, LocalRepo().get_metadata_dict()["enabled"])
@@ -78,12 +78,12 @@ class TestLocalRepo(unittest.TestCase):
 
     def test_get_changed_files(self):
         local_repo = LocalRepo()
-        version = local_repo.version
+        version = local_repo.metadata.version
         local_repo.bump_version()
-        self.assertNotEqual(local_repo.version, version)
+        self.assertNotEqual(local_repo.metadata.version, version)
         self.assertIn("metadata.json", local_repo.git_changed_files())
-        local_repo.version = version
-        self.assertEqual(local_repo.version, version)
+        local_repo.metadata.version = version
+        self.assertEqual(local_repo.metadata.version, version)
 
     def test_get_repo_path_child(self):
         self.assertNotEqual(None, LocalRepo.get_repo_path_child(LocalRepo().path.get_parent()))

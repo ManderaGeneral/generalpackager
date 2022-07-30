@@ -1,9 +1,10 @@
 from generalpackager import *
 
 
-github = GitHub()
-print(github.owner)
-print(github.get_owners_packages())
+# github = GitHub()
+# print(github.owner)
+# print(github.get_owners_packages())
+
 
 
 # class Foo:

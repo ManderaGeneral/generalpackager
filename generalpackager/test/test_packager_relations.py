@@ -17,10 +17,10 @@ class TestPackager(unittest.TestCase):
         packager = Packager()
         packager.general_bumped_set()
 
-        version = packager.localrepo.version
+        version = packager.localrepo.metadata.version
         packager.localrepo.bump_version()
         self.assertLess(0, len(packager.general_bumped_set()))
-        packager.localrepo.version = version
+        packager.localrepo.metadata.version = version
 
     def test_general_changed_dict(self):
         Packager().general_changed_dict()
