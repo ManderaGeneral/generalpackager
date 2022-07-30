@@ -10,10 +10,8 @@ from setuptools import find_namespace_packages
 import re
 from git import Repo
 
-shared = _SharedAPI, _SharedPath
-parts = _LocalRepo_Paths, _LocalRepo_Target
 
-class LocalRepo(*shared, *parts):
+class LocalRepo(_SharedAPI, _SharedPath, _LocalRepo_Paths, _LocalRepo_Target):
     """ Tools to help Path interface a Local Repository.
         Base functionality.
         Inherited by classes in targets folder for extended functionality.

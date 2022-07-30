@@ -51,6 +51,7 @@ class Packager(NetworkDiagram,
     @property
     @deco_cache()
     def localrepo(self):
+        """ :rtype: generalpackager.LocalRepos_DOCS """
         return LocalRepo(path=self._path).targetted(target=self._target)
 
     @property

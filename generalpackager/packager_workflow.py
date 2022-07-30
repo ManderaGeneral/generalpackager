@@ -192,7 +192,7 @@ class _PackagerWorkflow:
             :param generalpackager.Packager self:
             :param message: """
         if self.is_bumped():
-            self.file_readme.generate()
+            self.file_by_path(self.localrepo.get_readme_path()).generate()
             self.commit_and_push(message=message, tag=True)
             if not self.localrepo.metadata.private:
                 self.localrepo.upload()

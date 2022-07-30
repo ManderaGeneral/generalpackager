@@ -41,7 +41,7 @@ class _PackagerFiles:
     @deco_cache()
     def files(self):
         """ Todo: Watermark generated files to prevent mistake of thinking you can modify them directly.
-            # HERE ** Need to have a way to retrive specific GeneralFile, I do self.file_readme.generate() somewhere for example
+            # HERE ** Maybe this should require metadata?
             :param generalpackager.Packager self: """
         files = [
             GenerateFile(self.localrepo.get_git_exclude_path(), self.generate_git_exclude, self, aesthetic=True),
@@ -75,6 +75,11 @@ class _PackagerFiles:
     def files_by_relative_path(self):
         """ :param generalpackager.Packager self: """
         return {file.relative_path: file for file in self.files}
+
+    def file_by_path(self, path):
+        """ :param generalpackager.Packager self:
+            :param path: """
+        return self.files_by_relative_path[path.relative(base=self.path)]
 
     @property
     @deco_cache()
