@@ -51,7 +51,7 @@ class Packager(NetworkDiagram,
     @property
     @deco_cache()
     def localrepo(self):
-        """ :rtype: generalpackager.LocalRepos_DOCS """
+        """ :rtype: generalpackager.LocalRepo_Python or generalpackager.LocalRepo_Node """
         return LocalRepo(path=self._path).targetted(target=self._target)
 
     @property
@@ -73,10 +73,14 @@ class Packager(NetworkDiagram,
 
     @property
     def target(self):
-        if self._target is Ellipsis:
-            return self.localrepo.metadata.target
-        else:
+        if self._target is not Ellipsis:
             return self._target
+        else:
+            if self.localrepo.metadata_exists():
+                return self.localrepo.metadata.target
+            else:
+                return None
+
 
     @staticmethod
     def summary_packagers():
@@ -99,6 +103,7 @@ class Packager(NetworkDiagram,
 
     def __repr__(self):
         return f"<Packager [{self.target}]: {self.name}>"
+        # return f"<Packager [{self.target}]: {self.name}>"
 
 
 

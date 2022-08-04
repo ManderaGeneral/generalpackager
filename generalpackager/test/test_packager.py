@@ -7,8 +7,8 @@ import unittest
 
 
 class TestPackager(unittest.TestCase):
-    Packager.spawn_children  # Skipped test
-    Packager.spawn_parents  # Skipped test
+    # Packager.spawn_children  # Skipped test
+    # Packager.spawn_parents  # Skipped test
 
     def test_name(self):
         self.assertEqual("generalpackager", Packager().name)

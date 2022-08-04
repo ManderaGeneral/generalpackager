@@ -11,15 +11,3 @@ from generalpackager.api.localmodule import LocalModule
 from generalpackager.api.github import GitHub
 from generalpackager.api.pypi import PyPI
 
-
-# from typing import Union
-#
-# LocalRepos_DOCS = Union[LocalRepo_Python, LocalRepo_Node, LocalRepo]
-#
-# def LocalRepos_DOCS() -> Union[LocalRepo_Python, LocalRepo_Node, LocalRepo]:
-#     pass
-
-class LocalRepos_DOCS(LocalRepo_Python, LocalRepo_Node, LocalRepo):
-    pass
-
-

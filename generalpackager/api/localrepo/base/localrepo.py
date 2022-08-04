@@ -10,6 +10,7 @@ from setuptools import find_namespace_packages
 import re
 from git import Repo
 
+import traceback
 
 class LocalRepo(_SharedAPI, _SharedPath, _LocalRepo_Paths, _LocalRepo_Target):
     """ Tools to help Path interface a Local Repository.
@@ -23,6 +24,10 @@ class LocalRepo(_SharedAPI, _SharedPath, _LocalRepo_Paths, _LocalRepo_Target):
     # _deco_require_metadata = deco_require(lambda self: self.metadata.exists(), lambda func: f"{func.__name__} requires metadata.")
 
     def __init__(self, path=None):
+        # print(self, type(self), self.cls_metadata)
+        import sys
+        # traceback.print_stack(file=sys.stdout)
+        # print("")
         self.metadata = self.cls_metadata(path=self.get_metadata_path())
 
     @property
@@ -33,6 +38,7 @@ class LocalRepo(_SharedAPI, _SharedPath, _LocalRepo_Paths, _LocalRepo_Target):
             return None
 
     def metadata_exists(self):
+        """ Needed to make deco_require be able to use this. """
         return self.metadata.exists()
 
     @property
@@ -55,8 +61,8 @@ class LocalRepo(_SharedAPI, _SharedPath, _LocalRepo_Paths, _LocalRepo_Target):
         return bool(path.get_child(filt=lambda x: x.name() in (".git", "metadata.json"), traverse_excluded=True))  # setup.py was not included in pypi's sdist
 
     @deco_cache()
-    def get_test_paths(self):
-        """ Yield paths to each test python file. """
+    def get_test_paths(self) -> list[Path]:
+        """ List of paths to each test python file. """
         return self.get_test_path().get_children(depth=-1, filt=lambda path: path.endswith(".py") and not path.match("/tests/"), traverse_excluded=True)
 
     @deco_cache()

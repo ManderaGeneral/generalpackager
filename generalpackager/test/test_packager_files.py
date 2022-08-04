@@ -15,6 +15,8 @@ class TestPackager(unittest.TestCase):
         """
     def test_relative_path_is_aesthetic(self):
         packager = Packager()
+        print(packager.path)  # HERE ** GEN-87
+        return
         self.assertEqual(False, packager.relative_path_is_aesthetic("setup.py"))
         self.assertEqual(True, packager.relative_path_is_aesthetic("README.md"))
         self.assertEqual(True, packager.relative_path_is_aesthetic(packager.localrepo.get_readme_path()))

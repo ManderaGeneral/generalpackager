@@ -24,7 +24,7 @@ class TestLocalRepo(unittest.TestCase):
         path.set_working_dir()
 
     def test_metadata_exists(self):
-        self.assertEqual(True, LocalRepo().metadata_exists())  # HERE **
+        self.assertEqual(True, LocalRepo().metadata_exists())
         self.assertEqual(False, LocalRepo("doesntexist").metadata_exists())
 
     def test_load_metadata(self):
@@ -32,39 +32,21 @@ class TestLocalRepo(unittest.TestCase):
         self.assertEqual("generalpackager", LocalRepo().name)
         self.assertIsInstance(LocalRepo().metadata.version, Ver)
         self.assertIsInstance(LocalRepo().metadata.description, str)
-        self.assertIsInstance(LocalRepo().metadata.install_requires, list)
-        self.assertIsInstance(LocalRepo().metadata.extras_require, dict)
         self.assertIsInstance(LocalRepo().metadata.topics, list)
         self.assertIsInstance(LocalRepo().metadata.manifest, list)
 
-    def test_get_metadata_dict(self):
-        self.assertEqual(True, LocalRepo().get_metadata_dict()["enabled"])
+        self.assertIsInstance(LocalRepo().targetted().metadata.install_requires, list)
+        self.assertIsInstance(LocalRepo().targetted().metadata.extras_require, dict)
 
     def test_exists(self):
         self.assertEqual(True, LocalRepo().exists())
         self.assertEqual(True, LocalRepo.repo_exists(LocalRepo().path))
 
-    def test_get_local_repos(self):
-        self.assertEqual(LocalRepo().path.get_parent(), LocalRepo.get_repos_path())
-
-    def test_paths(self):
-        method_names = (
-            "get_readme_path",
-            "get_metadata_path",
-            "get_git_exclude_path",
-            "get_setup_path",
-            "get_manifest_path",
-            "get_license_path",
-            "get_workflow_path",
-            "get_test_path",
-            "get_init_path",
-        )
-        local_repo = LocalRepo()
-        for name in method_names:
-            self.assertEqual(True, getattr(local_repo, name)().exists())
+        self.assertEqual(False, LocalRepo("doesntexist").exists())
 
     def test_get_test_paths(self):
         self.assertLess(2, len(list(LocalRepo().get_test_paths())))
+        self.assertIn(LocalRepo().get_test_path() / "test_local_repo.py", LocalRepo().get_test_paths())
 
     def test_text_in_tests(self):
         self.assertEqual(True, LocalRepo().text_in_tests("stringthatexists"))
@@ -84,10 +66,6 @@ class TestLocalRepo(unittest.TestCase):
         self.assertIn("metadata.json", local_repo.git_changed_files())
         local_repo.metadata.version = version
         self.assertEqual(local_repo.metadata.version, version)
-
-    def test_get_repo_path_child(self):
-        self.assertNotEqual(None, LocalRepo.get_repo_path_child(LocalRepo().path.get_parent()))
-        self.assertEqual(None, LocalRepo.get_repo_path_child(LocalRepo().path))
 
 
 

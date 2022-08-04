@@ -1,6 +1,8 @@
 from generalpackager import *
 
 
+print(Packager())
+
 # github = GitHub()
 # print(github.owner)
 # print(github.get_owners_packages())
@@ -20,3 +22,5 @@ from generalpackager import *
 # meth.__self__ = Bar
 # meth()
 # print(dir(Foo.x))
+
+

@@ -5,7 +5,7 @@ class Metadata_Python(Metadata):
     extras_require = {}
 
     def read_hook(self):
-        extras_require = self.__dict__["extras_require"]
+        extras_require = self.halt_getattr("extras_require")
         if extras_require:
             keys = [key for key in extras_require.values() if key != "full"]
             extras_require["full"] = list(set().union(*keys))
