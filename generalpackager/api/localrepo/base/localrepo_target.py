@@ -56,12 +56,13 @@ class _LocalRepo_Target(_SharedTarget):
             :param target:
             :rtype: generalpackager._LocalRepos_DOCS """
 
-        if target is Ellipsis and self.metadata.exists():
-            target = self.metadata.target
+        if target is Ellipsis:
+            if self.metadata.exists():
+                target = self.metadata.target
 
-        if target is None:
-            return self
-        else:
+        if target in self.cls_target_classes:
             return self.cls_target_classes[target](path=self.path)
+        else:
+            return self
 
 

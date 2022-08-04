@@ -1,14 +1,9 @@
 
 from generallibrary import Ver
 from generalpackager.api.localrepo.base.localrepo import LocalRepo
-from generalfile import Path
-import generalpackager
+from generalpackager.test.workingdir import WorkingDirTestCase
 
-import unittest
-
-import importlib
-
-class TestLocalRepo(unittest.TestCase):
+class TestLocalRepo(WorkingDirTestCase):
     # LocalRepo.pip_install  # Skipped test
     # LocalRepo.pip_uninstall  # Skipped test
     # LocalRepo.unittest  # Skipped test
@@ -18,10 +13,6 @@ class TestLocalRepo(unittest.TestCase):
     # LocalRepo.get_repo_path_parent  # Skipped test
     # LocalRepo.write_metadata  # Skipped test
 
-    @classmethod
-    def setUpClass(cls):
-        path = Path(generalpackager.__file__).get_parent(1, 1)  # type: Path
-        path.set_working_dir()
 
     def test_metadata_exists(self):
         self.assertEqual(True, LocalRepo().metadata_exists())

@@ -1,12 +1,8 @@
 
-
 from generalpackager import Packager
-from generalfile.test.setup_workdir import setup_workdir
+from generalpackager.test.workingdir import WorkingDirTestCase
 
-import unittest
-
-
-class TestPackager(unittest.TestCase):
+class TestPackager(WorkingDirTestCase):
     """ Skip:
         GenerateFile
         generate
@@ -15,8 +11,6 @@ class TestPackager(unittest.TestCase):
         """
     def test_relative_path_is_aesthetic(self):
         packager = Packager()
-        print(packager.path)  # HERE ** GEN-87
-        return
         self.assertEqual(False, packager.relative_path_is_aesthetic("setup.py"))
         self.assertEqual(True, packager.relative_path_is_aesthetic("README.md"))
         self.assertEqual(True, packager.relative_path_is_aesthetic(packager.localrepo.get_readme_path()))
@@ -28,12 +22,10 @@ class TestPackager(unittest.TestCase):
         self.assertEqual([], packager.filter_relative_filenames("setup.py", aesthetic=True))
 
     def test_compare_local_to_github(self):
-        setup_workdir(use_working_dir=True)
         packager = Packager()
         packager.compare_local_to_github()
 
     def test_compare_local_to_pypi(self):
-        setup_workdir(use_working_dir=True)
         packager = Packager()
         packager.compare_local_to_pypi()
 

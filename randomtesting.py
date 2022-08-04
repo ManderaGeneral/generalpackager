@@ -1,7 +1,22 @@
 from generalpackager import *
 
+from generalfile import Path
 
-print(Packager())
+
+# print(Packager().get_ordered_packagers())
+
+# for packager in Packager().get_all():  # type: Packager
+#     print(packager, packager.get_parents())
+
+
+module = LocalModule("generallibrary")
+print(module.get_dependencies())
+
+packager = Packager("generallibrary")
+# print(packager.localmodule.get_dependencies())
+print(packager.get_dependencies())  # HERE ** Not right
+# print(packager.get_parents())
+
 
 # github = GitHub()
 # print(github.owner)

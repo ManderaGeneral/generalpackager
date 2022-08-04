@@ -3,10 +3,9 @@
 from generalpackager import Packager
 from generalfile.test.setup_workdir import setup_workdir
 
-import unittest
+from generalpackager.test.workingdir import WorkingDirTestCase
 
-
-class TestPackager(unittest.TestCase):
+class TestPackager(WorkingDirTestCase):
     def test_badges_dict(self):
         self.assertLess(2, len(Packager().get_badges_dict()))
 
@@ -17,7 +16,7 @@ class TestPackager(unittest.TestCase):
         Packager().get_todos_markdown()
 
     def test_get_description_markdown(self):
-        self.assertIn("generalpackager", Packager().get_description_markdown())
+        self.assertIn("generalpackager", Packager().get_description_markdown())  # HERE **
 
     def test_get_information_markdown(self):
         self.assertIn("generalpackager", Packager().get_information_markdown())

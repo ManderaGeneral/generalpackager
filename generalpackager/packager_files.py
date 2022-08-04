@@ -155,6 +155,7 @@ class _PackagerFiles:
             :param aesthetic: """
         return self._compare_local(platform=self.github, aesthetic=aesthetic)
 
+
     def compare_local_to_pypi(self, aesthetic=None):
         """ Get a list of changed files compared to pypi with optional aesthetic files.
 
