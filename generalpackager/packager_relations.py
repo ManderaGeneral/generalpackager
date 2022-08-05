@@ -1,6 +1,7 @@
 
 from generallibrary import remove_duplicates, deco_cache
 
+from itertools import chain
 
 class _PackagerRelations:
     def get_dependencies(self, only_general=False):
@@ -9,6 +10,8 @@ class _PackagerRelations:
 
             :param generalpackager.Packager self:
             :param bool only_general: Whether to only return general packages. """
+        # names = chain()
+
         packagers = {type(self)(localmodule.name) for localmodule in self.localmodule.get_dependencies() if not only_general or self.name_is_general(localmodule.name)}
         packagers.update({type(self)(name) for name in self.localrepo.metadata.install_requires if not only_general or self.name_is_general(name)})
         return list(packagers)

@@ -2,6 +2,8 @@ from generalpackager import *
 
 from generalfile import Path
 
+from generallibrary import Recycle
+
 
 # print(Packager().get_ordered_packagers())
 
@@ -9,12 +11,28 @@ from generalfile import Path
 #     print(packager, packager.get_parents())
 
 
-module = LocalModule("generallibrary")
-print(module.get_dependencies())
+def names(x):
+    print(sorted([y.name for y in x]))
 
-packager = Packager("generallibrary")
-# print(packager.localmodule.get_dependencies())
-print(packager.get_dependencies())  # HERE ** Not right
+
+packager = Packager()
+# packager = Packager("generallibrary")
+
+print(LocalModule("generallibrary").path)
+
+
+# names(packager.get_dependencies())
+#
+# module = LocalModule("generallibrary")
+# names(module.get_dependencies())
+#
+#
+#
+# print(packager.localrepo)
+# print(packager.localrepo.metadata)
+# print(packager.localrepo.metadata.install_requires)
+
+
 # print(packager.get_parents())
 
 

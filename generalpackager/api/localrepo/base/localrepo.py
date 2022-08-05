@@ -24,10 +24,6 @@ class LocalRepo(_SharedAPI, _SharedPath, _LocalRepo_Paths, _LocalRepo_Target):
     # _deco_require_metadata = deco_require(lambda self: self.metadata.exists(), lambda func: f"{func.__name__} requires metadata.")
 
     def __init__(self, path=None):
-        # print(self, type(self), self.cls_metadata)
-        import sys
-        # traceback.print_stack(file=sys.stdout)
-        # print("")
         self.metadata = self.cls_metadata(path=self.get_metadata_path())
 
     @property

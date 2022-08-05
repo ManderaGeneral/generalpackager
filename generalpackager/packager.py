@@ -40,6 +40,8 @@ class Packager(NetworkDiagram,
 
     Packages = Packages
 
+    _recycle_keys = {"path": lambda path: str(_SharedPath._scrub_path(path=path))}  # Override _SharedPath's path ** HERE **
+
     def __init__(self, name=None, path=None, target=..., github_owner=None, pypi_owner=None):
         """ Storing pars as is. Name and target have some custom properties. """
         self._name = name
@@ -52,7 +54,9 @@ class Packager(NetworkDiagram,
     @deco_cache()
     def localrepo(self):
         """ :rtype: generalpackager.LocalRepo_Python or generalpackager.LocalRepo_Node """
-        return LocalRepo(path=self._path).targetted(target=self._target)
+        if not self.path.endswith(self.name):
+            raise AttributeError(f"Path '{self.path}' seems to be wrong for '{self.name}'.")
+        return LocalRepo(path=self.path).targetted(target=self._target)
 
     @property
     @deco_cache()
