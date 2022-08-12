@@ -4,16 +4,6 @@ from generalpackager.api.localrepo.base.localrepo import LocalRepo
 from generalpackager.test.workingdir import WorkingDirTestCase
 
 class TestLocalRepo(WorkingDirTestCase):
-    # LocalRepo.pip_install  # Skipped test
-    # LocalRepo.pip_uninstall  # Skipped test
-    # LocalRepo.unittest  # Skipped test
-    # LocalRepo.create_sdist  # Skipped test
-    # LocalRepo.upload  # Skipped test
-    # LocalRepo.get_path_from_name  # Skipped test
-    # LocalRepo.get_repo_path_parent  # Skipped test
-    # LocalRepo.write_metadata  # Skipped test
-
-
     def test_metadata_exists(self):
         self.assertEqual(True, LocalRepo().metadata_exists())
         self.assertEqual(False, LocalRepo("doesntexist").metadata_exists())

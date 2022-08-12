@@ -3,12 +3,6 @@ from generalpackager import Packager
 from generalpackager.test.workingdir import WorkingDirTestCase
 
 class TestPackager(WorkingDirTestCase):
-    """ Skip:
-        GenerateFile
-        generate
-        generate_localfiles
-        create_blank
-        """
     def test_relative_path_is_aesthetic(self):
         packager = Packager()
         self.assertEqual(False, packager.relative_path_is_aesthetic("setup.py"))
@@ -63,7 +57,7 @@ class TestPackager(WorkingDirTestCase):
     def test_generate_personal_readme(self):
         packager = Packager()
         text = str(packager.generate_personal_readme())
-        self.assertIn("generallibrary", text)
+        self.assertIn("generallibrary", text)  # HERE ** This jsut passed
 
     def test_get_new_packager(self):
         a = Packager()

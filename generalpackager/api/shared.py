@@ -78,7 +78,8 @@ class _Packager_Path:
 
     @classmethod
     def _scrub_path(cls, name, path):
-        """ :param generalpackager.Packager cls: """
+        """ :param generalpackager.Packager cls:
+            :rtype: Path or None """
         if path is None:
             localmodule = cls.LocalModule(name=name)
             if localmodule.exists():
@@ -88,7 +89,7 @@ class _Packager_Path:
         else:
             path = Path(path).absolute()
 
-        if path is None or not path.endswith(name):
+        if path is not None and not path.endswith(name):
             raise AttributeError(f"Path '{path}' seems to be wrong for '{name}'.")
         return path
 

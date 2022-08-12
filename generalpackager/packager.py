@@ -53,6 +53,14 @@ class Packager(NetworkDiagram,
         self._github_owner = github_owner
         self._pypi_owner = pypi_owner
 
+    def _assert_target_is_python(self):
+        if self.target != self.localrepo.Targets.python:
+            raise AttributeError(f"Packager {self}'s target '{self.target}' is not '{self.localrepo.Targets.python}'")
+
+    def _assert_not_private(self):
+        if self.localrepo.metadata.private:
+            raise AttributeError(f"Packager {self} is private.")
+
     @property
     @deco_cache()
     def localrepo(self):
@@ -67,14 +75,15 @@ class Packager(NetworkDiagram,
     @property
     @deco_cache()
     def localmodule(self):
-        if self.target == self.localrepo.Targets.python:
-            return LocalModule(name=self.name)
+        self._assert_target_is_python()
+        return LocalModule(name=self.name)
 
     @property
     @deco_cache()
     def pypi(self):
-        if self.target == self.localrepo.Targets.python and not self.localrepo.metadata.private:
-            return PyPI(name=self.name, owner=self._pypi_owner)
+        self._assert_target_is_python()
+        self._assert_not_private()
+        return PyPI(name=self.name, owner=self._pypi_owner)
 
     @property
     def target(self):

@@ -6,18 +6,15 @@ from generallibrary import Recycle, SigInfo
 
 
 
+# HERE ** metadata is being weirdly overwritten somehow, take a look
+
+
 # print(Packager().get_ordered_packagers())
 
 # for packager in Packager().get_all():  # type: Packager
 #     print(packager, packager.get_parents())
 
 
-
-"""
-First issue:
-    
-    Packager and LocalModule get_dependencies() is returning different results
-"""
 # def names(x):
 #     print(sorted([y.name for y in x]))
 # packager = Packager()
@@ -26,16 +23,8 @@ First issue:
 # names(module.get_dependencies())
 
 
-"""
-Second issue:
-    Packager's path has to be supplied even when they are very easy to retrieve
-    
-    Recycle keys will be an issue if we can resolve path
-    
-    Packager("generallibrary") and Packager("generallibrary", "./generallibrary")
-"""
 
-# Packager("generallibrary")
+# print(Packager("generalmainframe").pypi)
 
 
 

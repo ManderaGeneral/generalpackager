@@ -293,7 +293,9 @@ class _PackagerFiles:
         """ Generate personal readme markdown and overwrite README.md in local repo.
 
             :param generalpackager.Packager self: """
-        ordered_packagers = type(self)().get_ordered_packagers()
+        # ordered_packagers = type(self)().get_ordered_packagers()
+        ordered_packagers = self.get_ordered_packagers(include_private=False)
+
 
         # Description
         markdown = Markdown(header="ManderaGeneral").add_list_lines(
