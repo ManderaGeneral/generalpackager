@@ -5,10 +5,6 @@ import unittest
 
 
 class TestGitHub(unittest.TestCase):
-    GitHub.set_website  # Skipped test
-    GitHub.set_topics  # Skipped test
-    GitHub.set_description  # Skipped test
-
     def test_exists(self):
         self.assertEqual(True, GitHub("generalpackager").exists())
 

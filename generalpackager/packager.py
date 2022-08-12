@@ -4,7 +4,9 @@
     Todo: Prevent workflow using pypi to install a general package. """
 
 from generallibrary import NetworkDiagram, deco_cache
-from generalpackager.api.shared import _SharedAPI, _SharedName, _SharedPath
+from generalfile import Path
+
+from generalpackager.api.shared import _SharedAPI, _SharedName, _Packager_Path
 from generalpackager.api.localrepo.base.localrepo import LocalRepo
 from generalpackager.api.localrepo.base.localrepo_target import _SharedTarget
 from generalpackager.api.localmodule import LocalModule
@@ -23,7 +25,7 @@ from generalpackager.other.packages import Packages
 
 
 class Packager(NetworkDiagram,
-               _SharedAPI, _SharedName, _SharedPath, _SharedTarget,
+               _SharedAPI, _SharedName, _SharedTarget, _Packager_Path,
                _PackagerMarkdown, _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations):
     """ Uses APIs to manage 'general' package.
         Contains methods that require more than one API as well as methods specific for ManderaGeneral. """
@@ -40,12 +42,13 @@ class Packager(NetworkDiagram,
 
     Packages = Packages
 
-    _recycle_keys = {"path": lambda path: str(_SharedPath._scrub_path(path=path))}  # Override _SharedPath's path ** HERE **
+    LocalRepo = LocalRepo
+    LocalModule = LocalModule
+    GitHub = GitHub
+    PyPI = PyPI
 
     def __init__(self, name=None, path=None, target=..., github_owner=None, pypi_owner=None):
         """ Storing pars as is. Name and target have some custom properties. """
-        self._name = name
-        self._path = path
         self._target = target
         self._github_owner = github_owner
         self._pypi_owner = pypi_owner
@@ -54,26 +57,24 @@ class Packager(NetworkDiagram,
     @deco_cache()
     def localrepo(self):
         """ :rtype: generalpackager.LocalRepo_Python or generalpackager.LocalRepo_Node """
-        if not self.path.endswith(self.name):
-            raise AttributeError(f"Path '{self.path}' seems to be wrong for '{self.name}'.")
         return LocalRepo(path=self.path).targetted(target=self._target)
 
     @property
     @deco_cache()
     def github(self):
-        return GitHub(name=self._name, owner=self._github_owner)
+        return GitHub(name=self.name, owner=self._github_owner)
 
     @property
     @deco_cache()
     def localmodule(self):
         if self.target == self.localrepo.Targets.python:
-            return LocalModule(name=self._name)
+            return LocalModule(name=self.name)
 
     @property
     @deco_cache()
     def pypi(self):
         if self.target == self.localrepo.Targets.python and not self.localrepo.metadata.private:
-            return PyPI(name=self._name, owner=self._pypi_owner)
+            return PyPI(name=self.name, owner=self._pypi_owner)
 
     @property
     def target(self):

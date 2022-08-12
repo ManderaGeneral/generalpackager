@@ -1,18 +1,17 @@
 
-from generalpackager.api.shared import _SharedAPI, _SharedPath
+from generalpackager.api.shared import _SharedAPI, _LocalRepo_Path
 from generalpackager.api.localrepo.base.localrepo_paths import _LocalRepo_Paths
 from generalpackager.api.localrepo.base.localrepo_target import _LocalRepo_Target
 
 from generalfile import Path
-from generallibrary import deco_cache, SigInfo, deco_require
+from generallibrary import deco_cache, deco_require
 
 from setuptools import find_namespace_packages
 import re
 from git import Repo
 
-import traceback
 
-class LocalRepo(_SharedAPI, _SharedPath, _LocalRepo_Paths, _LocalRepo_Target):
+class LocalRepo(_SharedAPI, _LocalRepo_Path, _LocalRepo_Paths, _LocalRepo_Target):
     """ Tools to help Path interface a Local Repository.
         Base functionality.
         Inherited by classes in targets folder for extended functionality.

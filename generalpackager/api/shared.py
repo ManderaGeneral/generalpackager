@@ -59,9 +59,8 @@ class _SharedOwner:
         return owner or cls.DEFAULT_OWNER
 
 
-class _SharedPath:
-    """ Shared by Packager and LocalRepo. """
-    _recycle_keys = {"path": lambda path: str(_SharedPath._scrub_path(path=path))}
+class _LocalRepo_Path:
+    _recycle_keys = {"path": lambda path: str(_LocalRepo_Path._scrub_path(path=path))}
 
     def __init__(self, path=None):
         self.path = self._scrub_path(path=path)
@@ -69,5 +68,28 @@ class _SharedPath:
     @classmethod
     def _scrub_path(cls, path):
         return Path(path).absolute()
+
+
+class _Packager_Path:
+    _recycle_keys = {"path": lambda cls, name, path: str(cls._scrub_path(name=name, path=path))}
+
+    def __init__(self, name=None, path=None):
+        self.path = self._scrub_path(name=name, path=path)
+
+    @classmethod
+    def _scrub_path(cls, name, path):
+        """ :param generalpackager.Packager cls: """
+        if path is None:
+            localmodule = cls.LocalModule(name=name)
+            if localmodule.exists():
+                localmodule_repo = localmodule.path.get_parent_repo()
+                if localmodule_repo is not None:
+                    path = localmodule_repo
+        else:
+            path = Path(path).absolute()
+
+        if path is None or not path.endswith(name):
+            raise AttributeError(f"Path '{path}' seems to be wrong for '{name}'.")
+        return path
 
 
