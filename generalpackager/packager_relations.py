@@ -11,11 +11,14 @@ class _PackagerRelations:
 
             :param generalpackager.Packager self:
             :param bool only_general: Whether to only return general packages. """
-        # names = chain()  # HERE ** I think I was cleaning this up
+        names_from_module = (localmodule.name for localmodule in self.localmodule.get_dependencies())
+        names_from_repo = self.localrepo.metadata.install_requires
+        names = chain(names_from_module, names_from_repo)
+        return list({type(self)(name) for name in names if not only_general or self.name_is_general(name)})
 
-        packagers = {type(self)(localmodule.name) for localmodule in self.localmodule.get_dependencies() if not only_general or self.name_is_general(localmodule.name)}
-        packagers.update({type(self)(name) for name in self.localrepo.metadata.install_requires if not only_general or self.name_is_general(name)})
-        return list(packagers)
+        # packagers = {type(self)(localmodule.name) for localmodule in self.localmodule.get_dependencies() if not only_general or self.name_is_general(localmodule.name)}
+        # packagers.update({type(self)(name) for name in self.localrepo.metadata.install_requires if not only_general or self.name_is_general(name)})
+        # return list(packagers)
 
     def get_dependants(self, only_general=False):
         """ Get a list of dependants as Packagers.

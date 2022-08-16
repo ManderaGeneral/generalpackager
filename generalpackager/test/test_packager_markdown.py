@@ -16,12 +16,12 @@ class TestPackager(WorkingDirTestCase):
         Packager().get_todos_markdown()
 
     def test_get_description_markdown(self):
-        self.assertIn("generalpackager", Packager().get_description_markdown())  # HERE **
+        self.assertIn("generalpackager", Packager().get_description_markdown())
 
     def test_get_information_markdown(self):
         self.assertIn("generalpackager", Packager().get_information_markdown())
 
-    def test_get_installation_markdown(self):
+    def test_get_installation_markdown(self):  # HERE **
         self.assertIn("pip install generalpackager", Packager().get_installation_markdown())
 
     def test_github_link(self):

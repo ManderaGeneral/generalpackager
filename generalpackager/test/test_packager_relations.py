@@ -13,7 +13,7 @@ class TestPackager(unittest.TestCase):
     def test_get_owners_package_names(self):
         self.assertLess(4, len(Packager().get_owners_package_names()))
 
-    def test_general_bumped_set(self):
+    def test_general_bumped_set(self):  # HERE ** AttributeError: Packager <Packager [python]: generalmainframe> is private.
         packager = Packager()
         packager.general_bumped_set()
 

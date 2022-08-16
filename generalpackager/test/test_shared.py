@@ -5,7 +5,7 @@ import unittest
 
 
 class TestGitHub(unittest.TestCase):
-    def test_is_general(self):
+    def test_is_general(self):  # HERE ** AttributeError: Packager <Packager [None]: pandas>'s target 'None' is not 'python'
         self.assertEqual(True, Packager().is_general())
         self.assertEqual(True, Packager().github.is_general())
         self.assertEqual(True, Packager().pypi.is_general())

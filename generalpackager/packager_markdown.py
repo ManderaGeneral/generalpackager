@@ -126,11 +126,11 @@ class _PackagerMarkdown:
         markdown = Markdown(header="Installation")
 
         dependencies_required = self.localrepo.metadata.install_requires.copy()
-        dependencies_optional = list(set().union(*self.localrepo.extras_require.values()))
+        dependencies_optional = list(set().union(*self.localrepo.metadata.extras_require.values()))
         dependencies_optional.sort()
 
         options = {self.name: dependencies_required}
-        options.update({f"{self.name}[{key}]": value + dependencies_required for key, value in self.localrepo.extras_require.items()})
+        options.update({f"{self.name}[{key}]": value + dependencies_required for key, value in self.localrepo.metadata.extras_require.items()})
 
         list_of_dicts = []
 

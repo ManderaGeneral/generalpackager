@@ -49,7 +49,7 @@ class TestPackager(WorkingDirTestCase):
         text = packager.generate_workflow()
         self.assertIn("runs-on", text)
 
-    def test_generate_readme(self):
+    def test_generate_readme(self):  # HERE **
         packager = Packager()
         text = str(packager.generate_readme())
         self.assertIn("pip install", text)
@@ -57,7 +57,7 @@ class TestPackager(WorkingDirTestCase):
     def test_generate_personal_readme(self):
         packager = Packager()
         text = str(packager.generate_personal_readme())
-        self.assertIn("generallibrary", text)  # HERE ** This jsut passed
+        self.assertIn("generallibrary", text)
 
     def test_get_new_packager(self):
         a = Packager()
