@@ -36,6 +36,17 @@ class _PackagerMetadata:
             :param generalpackager.Packager self: """
         return self.pypi.get_version() is None or self.localrepo.metadata.version > self.pypi.get_version()
 
+    @property
+    def target(self):
+        """ :param generalpackager.Packager self: """
+        if self._target is not Ellipsis:
+            return self._target
+        else:
+            if self.localrepo.metadata_exists():
+                return self.localrepo.metadata.target
+            else:
+                return None
+
     _lib = {
         "planning": "Development Status :: 1 - Planning",
         "pre-alpha": "Development Status :: 2 - Pre-Alpha",
