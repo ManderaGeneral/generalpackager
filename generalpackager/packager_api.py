@@ -12,12 +12,14 @@ class _PackagerAPIs:
     GitHub = GitHub
     PyPI = PyPI
 
+    Targets = LocalRepo.Targets
+
     API_NOT_AVAILABLE_ERROR = AttributeError
 
     def _assert_target_is_python_or_none(self):
         """ :param generalpackager.Packager self: """
-        if self.target not in (None, self.localrepo.Targets.python):
-            raise self.API_NOT_AVAILABLE_ERROR(f"Packager {self}'s target '{self.target}' is not '{self.localrepo.Targets.python}'")
+        if self.target not in (None, self.Targets.python):
+            raise self.API_NOT_AVAILABLE_ERROR(f"Packager {self}'s target '{self.target}' is not '{self.Targets.python}'")
 
     def _assert_not_private(self):
         """ :param generalpackager.Packager self: """
