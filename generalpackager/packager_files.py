@@ -78,7 +78,9 @@ class _PackagerFiles:
 
     def file_by_path(self, path):
         """ :param generalpackager.Packager self:
-            :param path: """
+            :param path:
+            :rtype: GenerateFile """
+        path = Path(path)
         return self.files_by_relative_path[path.relative(base=self.path)]
 
     @property
@@ -103,7 +105,7 @@ class _PackagerFiles:
 
             :param generalpackager.Packager self:
             :param install: Whether to pip install. """
-        self.localrepo.write_metadata()
+        self.localrepo.metadata.write_config()
         self.generate_localfiles()
         if install:
             self.localrepo.pip_install()
@@ -411,7 +413,7 @@ class _PackagerFiles:
         timer = Timer()
 
         # Not in files because it writes with json not text, it's also a bit unique
-        self.localrepo.write_metadata()
+        self.localrepo.metadata.write_config()
 
         for generate in self.files:
             if aesthetic or not generate.aesthetic:

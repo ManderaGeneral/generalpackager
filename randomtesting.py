@@ -3,5 +3,4 @@ from generalpackager import *
 from generalfile import Path
 from generallibrary import Recycle, SigInfo
 
-print(PyPI("pandas").is_general())
-
+print(Packager().file_by_path("README.md").generate())
