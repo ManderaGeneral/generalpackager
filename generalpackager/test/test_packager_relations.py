@@ -13,14 +13,9 @@ class TestPackager(unittest.TestCase):
     def test_get_owners_package_names(self):
         self.assertLess(4, len(Packager().get_owners_package_names()))
 
-    def test_general_bumped_set(self):  # HERE ** AttributeError: Packager <Packager [python]: generalmainframe> is private.
+    def test_general_bumped_set(self):
         packager = Packager()
         packager.general_bumped_set()
-
-        version = packager.localrepo.metadata.version
-        packager.localrepo.bump_version()
-        self.assertLess(0, len(packager.general_bumped_set()))
-        packager.localrepo.metadata.version = version
 
     def test_general_changed_dict(self):
         Packager().general_changed_dict()

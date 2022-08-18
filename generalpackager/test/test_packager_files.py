@@ -49,7 +49,7 @@ class TestPackager(WorkingDirTestCase):
         text = packager.generate_workflow()
         self.assertIn("runs-on", text)
 
-    def test_generate_readme(self):  # HERE **
+    def test_generate_readme(self):
         packager = Packager()
         text = str(packager.generate_readme())
         self.assertIn("pip install", text)

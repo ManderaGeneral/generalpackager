@@ -21,7 +21,7 @@ class TestPackager(WorkingDirTestCase):
     def test_get_information_markdown(self):
         self.assertIn("generalpackager", Packager().get_information_markdown())
 
-    def test_get_installation_markdown(self):  # HERE **
+    def test_get_installation_markdown(self):
         self.assertIn("pip install generalpackager", Packager().get_installation_markdown())
 
     def test_github_link(self):

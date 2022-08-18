@@ -60,9 +60,10 @@ class PyPI(_SharedAPI, _SharedOwner, _SharedName):
         """ Get a set of a owner's packages' names on PyPI. """
         return set(re.findall("/project/(.*)/", requests.get(f"https://pypi.org/user/{self.owner}/").text))
 
-    # Todo: Find a faster fetch for latest PyPI version and datetime.
     def get_version(self):
-        """ Get version of latest publish on PyPI. """
+        """ Get version of latest publish on PyPI.
+
+            Todo: Find a faster fetch for latest PyPI version and datetime. """
         version = get(re.findall(f"{self.name} ([.0-9]+)\n", requests.get(self.url).text), 0)
         return Ver(version) if version else None
 

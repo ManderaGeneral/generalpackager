@@ -14,9 +14,9 @@ class _PackagerAPIs:
 
     API_NOT_AVAILABLE_ERROR = AttributeError
 
-    def _assert_target_is_python(self):
+    def _assert_target_is_python_or_none(self):
         """ :param generalpackager.Packager self: """
-        if self.target != self.localrepo.Targets.python:
+        if self.target not in (None, self.localrepo.Targets.python):
             raise self.API_NOT_AVAILABLE_ERROR(f"Packager {self}'s target '{self.target}' is not '{self.localrepo.Targets.python}'")
 
     def _assert_not_private(self):
@@ -51,7 +51,7 @@ class _PackagerAPIs:
         """ :param generalpackager.Packager self: """
         return self._available(
 
-            self._assert_target_is_python,
+            self._assert_target_is_python_or_none,
 
             api_name="LocalModule", error=error)
 
@@ -59,7 +59,7 @@ class _PackagerAPIs:
         """ :param generalpackager.Packager self: """
         return self._available(
 
-            self._assert_target_is_python,
+            self._assert_target_is_python_or_none,
             self._assert_not_private,
 
             api_name="PyPI", error=error)

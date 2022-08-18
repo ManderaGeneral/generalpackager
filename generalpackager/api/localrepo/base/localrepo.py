@@ -37,10 +37,9 @@ class LocalRepo(_SharedAPI, _LocalRepo_Path, _LocalRepo_Paths, _LocalRepo_Target
         return self.metadata.exists()
 
     @property
-    @deco_require(metadata_exists)
     def name(self):
         """ Only getter for name to make _SharedAPI work. """
-        return self.metadata.name
+        return self.metadata.name if self.metadata_exists() else self.path.stem()
 
     def __repr__(self):
         return f"<{type(self).__name__} for '{self.path}'>"
