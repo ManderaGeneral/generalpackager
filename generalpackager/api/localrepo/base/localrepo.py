@@ -55,8 +55,10 @@ class LocalRepo(_SharedAPI, _LocalRepo_Path, _LocalRepo_Paths, _LocalRepo_Target
         return bool(path.get_child(filt=lambda x: x.name() in (".git", "metadata.json"), traverse_excluded=True))  # setup.py was not included in pypi's sdist
 
     @deco_cache()
-    def get_test_paths(self) -> list[Path]:
-        """ List of paths to each test python file. """
+    def get_test_paths(self):
+        """ List of paths to each test python file.
+
+            :rtype: list[Path] """
         return self.get_test_path().get_children(depth=-1, filt=lambda path: path.endswith(".py") and not path.match("/tests/"), traverse_excluded=True)
 
     @deco_cache()
