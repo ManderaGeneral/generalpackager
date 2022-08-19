@@ -142,7 +142,7 @@ class _PackagerWorkflow:
         Log().configure_stream()
 
         from generalfile import Path
-        Log().info("path here", Path().absolute())
+        Log().debug("Working dir:", Path().absolute())
         Path().view_paths()
 
         self.run_ordered_methods(

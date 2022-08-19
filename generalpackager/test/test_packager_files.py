@@ -1,3 +1,5 @@
+from generalfile import Path
+from generallibrary import Log
 
 from generalpackager import Packager
 from generalpackager.test.workingdir import WorkingDirTestCase
@@ -55,7 +57,9 @@ class TestPackager(WorkingDirTestCase):
         self.assertIn("pip install", text)
 
     def test_generate_personal_readme(self):
+        Log().debug("Working dir:", Path().absolute())
         packager = Packager()
+        self.assertIsNotNone(packager.path)
         text = str(packager.generate_personal_readme())
         self.assertIn("generallibrary", text)
 

@@ -83,7 +83,6 @@ class _Packager_Path:
         localmodule = cls.LocalModule(name=name)
         if localmodule.exists():
             path = localmodule.path.get_parent_repo()
-            Log().info(f"Resolving path with local module for '{name}', got '{path}'. LocalModule's path is '{localmodule.path}'.")
             return path
 
     @classmethod
@@ -98,10 +97,16 @@ class _Packager_Path:
     def _resolve_path(cls, name):
         """ :param generalpackager.Packager cls:
             :rtype: Path or None """
-        if path := cls._localmodule_resolve_path(name=name):
-            return path
-        if path := cls._workingdir_resolve_path(name=name):
-            return path
+        methods = (
+            cls._localmodule_resolve_path,
+            cls._workingdir_resolve_path,
+        )
+
+        for method in methods:
+            path = method(name=name)
+            if path:
+                Log().debug(f"Resolved path with '{method.__name__}' for '{name}', got '{path}'.")
+                return path
 
     @classmethod
     def _scrub_path(cls, name, path):
