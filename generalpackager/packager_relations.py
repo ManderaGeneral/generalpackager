@@ -12,7 +12,7 @@ class _PackagerRelations:
             :param generalpackager.Packager self:
             :param bool only_general: Whether to only return general packages. """
 
-        names = {(localmodule.name for localmodule in self.localmodule.get_dependencies())}
+        names = {localmodule.name for localmodule in self.localmodule.get_dependencies()}
 
         if self.target == self.Targets.python:
             names.update(self.localrepo.metadata.install_requires)

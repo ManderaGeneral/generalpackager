@@ -18,7 +18,7 @@ class GenerateFile:
         Log().debug(f"Creating {text_func.__name__} handler for {packager.name} with path {packager.path}")
 
         self.relative_path = path.relative(base=packager.path)
-        self.path = packager.path / self.relative_path
+        self.path = packager.path / self.relative_path  # HERE ** This doesn't work if Packager's path is None
 
     def generate(self):
         """ Generate actual file. """
