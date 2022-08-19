@@ -1,5 +1,5 @@
 
-from generallibrary import Recycle, AutoInitBases
+from generallibrary import Recycle, AutoInitBases, Log
 from generalfile import Path
 
 from generalpackager.other.packages import Packages
@@ -77,15 +77,21 @@ class _Packager_Path:
         self.path = self._scrub_path(name=name, path=path)
 
     @classmethod
+    def localmodule_resolve_path(cls, name):
+        """ :param generalpackager.Packager cls:
+            :rtype: Path or None """
+        localmodule = cls.LocalModule(name=name)
+        if localmodule.exists():
+            path = localmodule.path.get_parent_repo()
+            Log().info(f"Resolving path with local module for '{name}', got '{path}'.")
+            return path
+
+    @classmethod
     def _scrub_path(cls, name, path):
         """ :param generalpackager.Packager cls:
             :rtype: Path or None """
         if path is None:
-            localmodule = cls.LocalModule(name=name)
-            if localmodule.exists():
-                localmodule_repo = localmodule.path.get_parent_repo()
-                if localmodule_repo is not None:
-                    path = localmodule_repo
+            path = cls.localmodule_resolve_path(name=name)
         else:
             path = Path(path).absolute()
 
