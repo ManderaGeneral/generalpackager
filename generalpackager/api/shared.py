@@ -114,8 +114,8 @@ class _Packager_Path:
             :rtype: Path or None """
         if path is None:
             path = cls._resolve_path(name=name)
-        else:
-            path = Path(path).absolute()
+
+        path = Path(path).absolute()
 
         if path is not None and not path.endswith(name):
             raise AttributeError(f"Path '{path}' seems to be wrong for '{name}'.")

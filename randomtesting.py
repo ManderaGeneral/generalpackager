@@ -5,11 +5,13 @@ from generallibrary import Recycle, SigInfo, getsize
 
 
 
-print([packager.path for packager in Packager().get_all()])
+# print([packager.path for packager in Packager().get_all()])
 
 # Path().absolute().view_paths(spawn=False)
 
-
+with Path("../").as_working_dir():
+    print(Path().absolute())
+    print(Packager("Mandera"))
 
 """
 
