@@ -45,7 +45,7 @@ class _PackagerRelations:
             packagers = [packager for packager in packagers if not packager.localrepo.metadata.private]
 
         for packager in packagers:
-            assert packager.path, f"Packager '{packager}' doesn't have it path resolved"  # HERE **
+            assert packager.path, f"Packager '{packager}' doesn't have its path resolved"  # HERE **
 
         return packagers
 

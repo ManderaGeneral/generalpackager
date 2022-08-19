@@ -115,10 +115,12 @@ class _Packager_Path:
         if path is None:
             path = cls._resolve_path(name=name)
 
-        path = Path(path).absolute()
+        if path is not None:
+            path = Path(path).absolute()
 
-        if path is not None and not path.endswith(name):
-            raise AttributeError(f"Path '{path}' seems to be wrong for '{name}'.")
+            if not path.endswith(name):
+                raise AttributeError(f"Path '{path}' seems to be wrong for '{name}'.")
+
         return path
 
 
