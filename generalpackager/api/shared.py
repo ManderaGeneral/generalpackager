@@ -77,7 +77,7 @@ class _Packager_Path:
         self.path = self._scrub_path(name=name, path=path)
 
     @classmethod
-    def localmodule_resolve_path(cls, name):
+    def _localmodule_resolve_path(cls, name):
         """ :param generalpackager.Packager cls:
             :rtype: Path or None """
         localmodule = cls.LocalModule(name=name)
@@ -87,11 +87,28 @@ class _Packager_Path:
             return path
 
     @classmethod
+    def _workingdir_resolve_path(cls, name):
+        """ :param generalpackager.Packager cls:
+            :rtype: Path or None """
+        path = Path(name)
+        if path.is_repo():
+            return path
+
+    @classmethod
+    def _resolve_path(cls, name):
+        """ :param generalpackager.Packager cls:
+            :rtype: Path or None """
+        if path := cls._localmodule_resolve_path(name=name):
+            return path
+        if path := cls._workingdir_resolve_path(name=name):
+            return path
+
+    @classmethod
     def _scrub_path(cls, name, path):
         """ :param generalpackager.Packager cls:
             :rtype: Path or None """
         if path is None:
-            path = cls.localmodule_resolve_path(name=name)
+            path = cls._resolve_path(name=name)
         else:
             path = Path(path).absolute()
 
