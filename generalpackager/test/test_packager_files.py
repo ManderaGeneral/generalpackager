@@ -57,6 +57,7 @@ class TestPackager(WorkingDirTestCase):
         self.assertIn("pip install", text)
 
     def test_generate_personal_readme(self):
+        Log().configure_stream()
         Log().debug("Working dir:", Path().absolute())
         packager = Packager()
         self.assertIsNotNone(packager.path)
