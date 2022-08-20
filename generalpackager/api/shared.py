@@ -119,7 +119,7 @@ class _Packager_Path:
             path = Path(path).absolute()
 
             if not path.endswith(name):
-                raise AttributeError(f"Path '{path}' seems to be wrong for '{name}'.")
+                raise AttributeError(f"Path '{path}' seems to be wrong for '{name}'. Workdir is '{Path().absolute()}'.")
 
         return path
 
