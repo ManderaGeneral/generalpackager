@@ -4,14 +4,9 @@ from generalfile import Path
 from generallibrary import Recycle, SigInfo, getsize
 
 
+with Path("generalpackager/api").as_working_dir():
+    print(Packager("Mandera").path)
 
-# print([packager.path for packager in Packager().get_all()])
-
-# Path().absolute().view_paths(spawn=False)
-
-with Path("../").as_working_dir():
-    print(Path().absolute())
-    print(Packager("Mandera"))
 
 """
 
