@@ -41,7 +41,6 @@ class Packager(NetworkDiagram,
 
 
     @staticmethod
-    @deco_cache()
     def summary_packagers():
         """ Packagers to hold summary of environment. """
         return [

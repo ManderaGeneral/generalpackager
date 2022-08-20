@@ -4,8 +4,11 @@ from generalfile import Path
 from generallibrary import Recycle, SigInfo, getsize
 
 
-with Path("generalpackager/api").as_working_dir():
-    print(Packager("Mandera").path)
+# with Path("generalpackager/api").as_working_dir():
+#     print(Packager("Mandera").path)
+
+
+
 
 
 """

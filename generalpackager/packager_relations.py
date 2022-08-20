@@ -44,9 +44,6 @@ class _PackagerRelations:
         if not include_private:
             packagers = [packager for packager in packagers if not packager.localrepo.metadata.private]
 
-        for packager in packagers:
-            assert packager.path, f"Packager '{packager}' doesn't have its path resolved"  # HERE **
-
         return packagers
 
     def get_owners_package_names(self):
