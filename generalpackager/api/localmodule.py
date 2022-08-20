@@ -65,12 +65,12 @@ class LocalModule(_SharedAPI, _SharedName):
         return [objInfo.obj for objInfo in new_objInfo.get_children() if isinstance(objInfo.obj, EnvVar)]
 
     @staticmethod
-    @deco_cache()
+    # @deco_cache()
     def get_all_local_modules():
         """ Get a list of all available LocalModules. """
         return [LocalModule(name=pkg.project_name) for pkg in pkg_resources.working_set]
 
-    @deco_cache()
+    # @deco_cache()
     def get_dependencies(self):
         """ Get a list of LocalModules that this module depends on. """
         pkg = get(pkg_resources.working_set.by_key, self.name.lower())
@@ -82,7 +82,7 @@ class LocalModule(_SharedAPI, _SharedName):
             return []
         return [LocalModule(name=str(name)) for name in requires]
 
-    @deco_cache()
+    # @deco_cache()
     def get_dependants(self):
         """ Get a list of LocalModules that depend on this module. """
         return [local_module for local_module in self.get_all_local_modules() if self in local_module.get_dependencies()]
