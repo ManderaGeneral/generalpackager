@@ -1,14 +1,16 @@
 from dataclasses import dataclass, fields
 from generalpackager import *
 from generalfile import Path
-from generallibrary import Recycle, SigInfo, getsize
-
+from generallibrary import Recycle, SigInfo, getsize, Log
 
 # with Path("generalpackager/api").as_working_dir():
 #     print(Packager("Mandera").path)
 
 
+Log().configure_stream()
 
+print(Packager())
+print(Packager().path)
 
 
 """

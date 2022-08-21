@@ -97,7 +97,8 @@ class _Packager_Path:
     def _resolve_path(cls, name):
         """ :param generalpackager.Packager cls:
             :rtype: Path or None """
-        for method in (cls._resolve_path_localmodule, cls._resolve_path_workingdir_traverse_parents):
+        for method in (cls._resolve_path_workingdir_traverse_parents, ):
+        # for method in (cls._resolve_path_localmodule, cls._resolve_path_workingdir_traverse_parents):
             path = method(name=name)
             if path:
                 Log().debug(f"Resolved path with '{method.__name__}' for '{name}', got '{path}'.")
@@ -107,6 +108,8 @@ class _Packager_Path:
     def _scrub_path(cls, name, path):
         """ :param generalpackager.Packager cls:
             :rtype: Path or None """
+        name = cls._scrub_name(name=name)
+
         if path is None:
             path = cls._resolve_path(name=name)
 
