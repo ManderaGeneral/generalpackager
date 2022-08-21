@@ -3,7 +3,8 @@ from generalpackager.api.localrepo.base.localrepo import LocalRepo
 from generalpackager.api.localrepo.python.metadata_python import Metadata_Python
 
 from generalfile import Path
-from generallibrary import terminal, EnvVar, deco_require
+from generallibrary import terminal, EnvVar, deco_require, Log
+
 
 class LocalRepo_Python(LocalRepo):
     cls_target = LocalRepo.Targets.python
@@ -25,6 +26,7 @@ class LocalRepo_Python(LocalRepo):
         """ Install this repository with pip and -e flag.
             Subprocess messed up -e flag compared to doing it in terminal, so use the normal one."""
         with self.path.as_working_dir():
+            Log().debug(f"Pip install for {self}")
             terminal("pip", "install", "-e", ".")
 
     @deco_require(LocalRepo.exists)
