@@ -1,6 +1,6 @@
 
 from generalpackager.api.shared import _SharedAPI, _SharedName
-from generallibrary import ObjInfo, deco_cache, EnvVar, get, import_module, deco_require
+from generallibrary import ObjInfo, deco_cache, EnvVar, get, import_module, deco_require, Log
 from generalfile import Path
 
 import pkg_resources
@@ -75,10 +75,12 @@ class LocalModule(_SharedAPI, _SharedName):
         """ Get a list of LocalModules that this module depends on. """
         pkg = get(pkg_resources.working_set.by_key, self.name.lower())
         if not pkg:
+            Log().debug(f"pkg empty for {self.name}")
             return []
         try:
             requires = pkg.requires()
         except FileNotFoundError:
+            Log().debug(f"FileNotFoundError for {self.name}")
             return []
         return [LocalModule(name=str(name)) for name in requires]
 

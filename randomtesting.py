@@ -9,8 +9,7 @@ from generallibrary import Recycle, SigInfo, getsize, Log
 
 Log().configure_stream()
 
-print(Packager())
-print(Packager().path)
+print(LocalModule().get_dependencies())
 
 
 """
