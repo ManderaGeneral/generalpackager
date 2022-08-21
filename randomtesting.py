@@ -7,9 +7,10 @@ from generallibrary import Recycle, SigInfo, getsize, Log
 #     print(Packager("Mandera").path)
 
 
-Log().configure_stream()
+# Log().configure_stream()
 
-print(LocalModule().get_dependencies())
+print(LocalModule(name="Mandera").exists())
+print(Packager.get_ordered_packagers())
 
 
 """

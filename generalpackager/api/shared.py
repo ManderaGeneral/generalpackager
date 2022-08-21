@@ -83,6 +83,7 @@ class _Packager_Path:
         localmodule = cls.LocalModule(name=name)
         if localmodule.exists():
             path = localmodule.path.get_parent_repo()
+            Log().debug(f"Found path {path} for {name}. Modules path is {localmodule.path}.")
             return path
 
     @classmethod

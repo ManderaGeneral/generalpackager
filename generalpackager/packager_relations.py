@@ -1,5 +1,5 @@
 
-from generallibrary import remove_duplicates, deco_cache
+from generallibrary import remove_duplicates, deco_cache, Log
 
 from itertools import chain
 
@@ -33,16 +33,20 @@ class _PackagerRelations:
         packagers = {type(self)(localmodule.name) for localmodule in self.localmodule.get_dependants() if not only_general or self.name_is_general(localmodule.name)}
         return list(packagers)
 
-    def get_ordered_packagers(self, include_private=True):
+    @classmethod
+    def get_ordered_packagers(cls, include_private=True):
         """ Get a list of enabled ordered packagers from the dependency chain, sorted by name in each lvl.
 
-            :param generalpackager.Packager self:
+            :param generalpackager.Packager cls:
             :param include_private:
             :rtype: list[generalpackager.Packager] """
-        packagers = [packager for packager_set in self.get_ordered(flat=False) for packager in sorted(packager_set, key=lambda x: x.name)]
+        packager = cls()
+        packagers = [packager for packager_set in packager.get_ordered(flat=False) for packager in sorted(packager_set, key=lambda x: x.name)]
         packagers = remove_duplicates(packagers)
         if not include_private:
             packagers = [packager for packager in packagers if not packager.localrepo.metadata.private]
+
+        Log().debug("Ordered packagers:", packagers)
 
         return packagers
 
