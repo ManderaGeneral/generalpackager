@@ -11,10 +11,12 @@ from generallibrary import Recycle, SigInfo, getsize, Log
 
 # Log().configure_stream()
 
-# with Path("../generallibrary").as_working_dir():
-#     print(LocalModule().get_dependencies())
+with Path("../generallibrary").as_working_dir():
+    print(LocalModule().get_dependencies())
 
 print([str(name) for name in pkg_resources.working_set.by_key["generalpackager"].requires()])
+
+
 
 
 """
