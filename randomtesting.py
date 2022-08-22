@@ -1,23 +1,21 @@
 from dataclasses import dataclass, fields
 from importlib import import_module
 
+import pkg_resources
+
 from generalpackager import *
 from generalfile import Path
 from generallibrary import Recycle, SigInfo, getsize, Log
 
-# with Path("generalpackager/api").as_working_dir():
-#     print(Packager("Mandera").path)
 
 
 # Log().configure_stream()
 
-# print(LocalModule(name="Mandera").module)
+# with Path("../generallibrary").as_working_dir():
+#     print(LocalModule().get_dependencies())
 
+print(pkg_resources.working_set.by_key)
 
-print(import_module(".api", "generalpackager").__file__)
-
-
-# print(Packager.get_ordered_packagers())
 
 """
 So two issues

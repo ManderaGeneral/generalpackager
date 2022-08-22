@@ -27,7 +27,8 @@ class LocalRepo_Python(LocalRepo):
             Subprocess messed up -e flag compared to doing it in terminal, so use the normal one."""
         with self.path.as_working_dir():
             Log().debug(f"Pip install for {self}")
-            terminal("pip", "install", "-e", ".")
+            terminal("pip", "install", ".")
+            # terminal("pip", "install", "-e", ".")
 
     @deco_require(LocalRepo.exists)
     def pip_uninstall(self):

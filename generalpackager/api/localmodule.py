@@ -77,6 +77,7 @@ class LocalModule(_SharedAPI, _SharedName):
         if not pkg:
             Log().debug(f"pkg empty for {self.name}")
             return []
+
         try:
             requires = pkg.requires()
         except FileNotFoundError:
