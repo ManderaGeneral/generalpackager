@@ -147,7 +147,7 @@ class _PackagerWorkflow:
 
         self.run_ordered_methods(
             lambda packager: packager.generate_localfiles(aesthetic=False),
-            lambda packager: packager.localrepo.pip_install(),
+            # lambda packager: packager.localrepo.pip_install(),  # Ohh this was needed when we didn't have editable install!
             lambda packager: packager.localrepo.unittest(),
         )
 
@@ -162,8 +162,8 @@ class _PackagerWorkflow:
         self.run_ordered_methods(
             lambda packager: packager.if_publish_bump(),
             lambda packager: packager.generate_localfiles(aesthetic=True),
-            lambda packager: packager.localrepo.pip_install(),
-            # lambda packager: packager.localrepo.unittest(),  # For good measure  # Display 1:0 keeps failing here for some reason
+            # lambda packager: packager.localrepo.pip_install(),  # Ohh this was needed when we didn't have editable install!
+            lambda packager: packager.localrepo.unittest(),  # For good measure  # Display 1:0 keeps failing here for some reason
             lambda packager, msg=msg1: packager.commit_and_push(message=msg, tag=False),
             lambda packager, msg=msg2: packager.if_publish_publish(message=msg),
             lambda packager: packager.sync_github_metadata(),

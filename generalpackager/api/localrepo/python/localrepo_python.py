@@ -23,11 +23,9 @@ class LocalRepo_Python(LocalRepo):
 
     @deco_require(LocalRepo.exists)
     def pip_install(self):
-        """ Install this repository with pip and -e flag.
-            Subprocess messed up -e flag compared to doing it in terminal, so use the normal one."""
+        """ Install this repository with pip and -e flag. """
         with self.path.as_working_dir():
             Log().debug(f"Pip install for {self}")
-            # terminal("pip", "install", ".")
             terminal("pip", "install", "-e", ".")
 
     @deco_require(LocalRepo.exists)

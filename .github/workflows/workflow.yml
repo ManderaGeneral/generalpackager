@@ -1,9 +1,6 @@
 
 name: workflow
-on:
-  push:
-    branches:
-      - master
+on: push
 
 defaults:
   run:
@@ -53,6 +50,7 @@ jobs:
           MANDERAGENERAL_TOKEN: ${{ secrets.MANDERAGENERAL_TOKEN }}
   sync:
     needs: unittest
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       - name: Set up Git SSH
