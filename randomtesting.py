@@ -11,23 +11,13 @@ from generallibrary import Recycle, SigInfo, getsize, Log
 
 # Log().configure_stream()
 
-with Path("../generallibrary").as_working_dir():
-    print(LocalModule().get_dependencies())
+# with Path("../generallibrary").as_working_dir():
+#     print(LocalModule().get_dependencies())
 
-print([str(name) for name in pkg_resources.working_set.by_key["generalpackager"].requires()])
-
-
+# print([str(name) for name in pkg_resources.working_set.by_key["generalpackager"].requires()])
 
 
-"""
-So two issues
-    Resolved path is allowed to not have correct stem
-        Path is None, maybe module shouldnt exist if Path is None?
-    Somehow Mandera is installed
-        Name has (namespace) suffix
-        It's not installed with pip_install
-"""
-
+Packager().file_by_relative_path(".github/workflows/workflow.yml").generate()  # HERE ** Create new workflow described below
 
 """
     Do this after run passes

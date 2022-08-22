@@ -72,16 +72,16 @@ class _PackagerFiles:
 
     @property
     @deco_cache()
-    def files_by_relative_path(self):
+    def all_files_by_relative_path(self):
         """ :param generalpackager.Packager self: """
         return {file.relative_path: file for file in self.files}
 
-    def file_by_path(self, path):
+    def file_by_relative_path(self, path):
         """ :param generalpackager.Packager self:
             :param path:
             :rtype: GenerateFile """
         path = Path(path)
-        return self.files_by_relative_path[path.relative(base=self.path)]
+        return self.all_files_by_relative_path[path.relative(base=self.path)]
 
     @property
     @deco_cache()
@@ -119,7 +119,7 @@ class _PackagerFiles:
             :param generalpackager.Packager self:
             :param Path or str relative_path: """
         relative_path = Path(relative_path).relative(self.path)
-        aesthetic_attr = getattr(self.files_by_relative_path.get(relative_path, None), "aesthetic", None)
+        aesthetic_attr = getattr(self.all_files_by_relative_path.get(relative_path, None), "aesthetic", None)
         if aesthetic_attr is None:
             if relative_path.match(*self.extra_aesthetic):
                 return True
