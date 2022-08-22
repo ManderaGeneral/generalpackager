@@ -102,7 +102,7 @@ class _Packager_Path:
         # for method in (cls._resolve_path_workingdir_traverse_parents, ):
         for method in (cls._resolve_path_localmodule, cls._resolve_path_workingdir_traverse_parents):
             path = method(name=name)
-            if path:
+            if path and path.endswith(name):
                 Log().debug(f"Resolved path with '{method.__name__}' for '{name}', got '{path}'.")
                 return path
 
