@@ -19,7 +19,6 @@ setup(
     install_requires=[
         'generallibrary',
         'generalfile',
-        'generalmainframe',
         'pandas',
         'gitpython',
         'requests',
