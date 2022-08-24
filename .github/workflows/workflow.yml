@@ -46,7 +46,7 @@ jobs:
           pip install -e generalpackager
       - name: Run Packager method 'workflow_unittest'
         run: |
-          python -c "from generalpackager import Packager; Packager('generalpackager').workflow_unittest()"
+          python -c "from generalpackager import Packager; Packager().workflow_unittest()"
         env:
           PACKAGER_GITHUB_API: ${{ secrets.PACKAGER_GITHUB_API }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
@@ -57,14 +57,17 @@ jobs:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
+      - name: Create folder
+        working-directory: ../../
+        run: mkdir main
       - name: Set up Git SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.GIT_SSH }}
-      - name: Set up python version 3.8
+      - name: Set up python version ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: ${{ matrix.python-version }}
       - name: Install necessities pip, setuptools, wheel, twine
         run: |
           python -m pip install --upgrade pip
@@ -74,6 +77,7 @@ jobs:
           git clone ssh://git@github.com/ManderaGeneral/generallibrary.git
           git clone ssh://git@github.com/ManderaGeneral/generalfile.git
           git clone ssh://git@github.com/ManderaGeneral/generalvector.git
+          git clone ssh://git@github.com/ManderaGeneral/generalpackager.git
           git clone ssh://git@github.com/Mandera/Mandera.git
           git clone ssh://git@github.com/ManderaGeneral/.github.git
       - name: Install 4 git repos
@@ -84,7 +88,7 @@ jobs:
           pip install -e generalpackager
       - name: Run Packager method 'workflow_sync'
         run: |
-          python -c "from generalpackager import Packager; Packager('generalpackager').workflow_sync()"
+          python -c "from generalpackager import Packager; Packager().workflow_sync()"
         env:
           PACKAGER_GITHUB_API: ${{ secrets.PACKAGER_GITHUB_API }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
