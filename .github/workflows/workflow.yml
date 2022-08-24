@@ -4,7 +4,7 @@ on: push
 
 defaults:
   run:
-    working-directory: ../../here
+    working-directory: ../../main
 
 jobs:
   unittest:
@@ -16,7 +16,8 @@ jobs:
         os: [windows-latest, ubuntu-latest]
     steps:
       - name: Create folder
-        run: mkdir ../here
+        working-directory: ../../
+        run: mkdir main
       - name: Set up Git SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
