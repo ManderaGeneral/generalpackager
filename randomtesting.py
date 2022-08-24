@@ -9,6 +9,8 @@ from generallibrary import Recycle, SigInfo, getsize, Log
 
 
 
+Packager().file_by_relative_path("setup.py").generate()
+
 
 # Log().configure_stream()
 
@@ -19,9 +21,6 @@ from generallibrary import Recycle, SigInfo, getsize, Log
 
 # Packager().file_by_relative_path(".github/workflows/workflow.yml").generate()  # HERE ** Create new workflow described below
 
-
-
-Path().view_paths()
 
 
 
