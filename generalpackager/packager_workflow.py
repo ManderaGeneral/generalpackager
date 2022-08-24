@@ -139,11 +139,10 @@ class _PackagerWorkflow:
 
     def workflow_unittest(self):
         """ :param generalpackager.Packager self: """
-        Log().configure_stream()
-
-        from generalfile import Path
-        Log().debug("Working dir:", Path().absolute())
-        Path().view_paths()
+        # Log().configure_stream()
+        # from generalfile import Path
+        # Log().debug("Working dir:", Path().absolute())
+        # Path().view_paths()
 
         self.run_ordered_methods(
             lambda packager: packager.generate_localfiles(aesthetic=False),
