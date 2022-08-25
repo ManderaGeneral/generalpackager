@@ -8,34 +8,34 @@ import unittest
 
 class TestPackager(unittest.TestCase):
     def test_get_triggers(self):
-        self.assertIn("branches", Packager().get_triggers())
+        self.assertIn("branches", Packager()._get_triggers())
 
     def test_step_setup_python(self):
-        self.assertIn("3.8", Packager().step_setup_python("3.8"))
+        self.assertIn("3.8", Packager()._step_setup_python("3.8"))
 
     def test_step_install_necessities(self):
-        self.assertIn("pip install", Packager().step_install_necessities())
+        self.assertIn("pip install", Packager()._step_install_necessities())
 
     def test_step_install_package_pip(self):
-        self.assertIn("pip install", Packager().step_install_package_pip(*Packager().get_ordered_packagers()))
+        self.assertIn("pip install", Packager()._step_install_package_pip(*Packager().get_ordered_packagers()))
 
     def test_step_install_package_git(self):
-        self.assertIn("pip install git", Packager().step_install_package_git(*Packager().get_ordered_packagers()))
+        self.assertIn("pip install git", Packager()._step_install_package_git(*Packager().get_ordered_packagers()))
 
     def test_get_env(self):
-        self.assertIn("TWINE", Packager().get_env())
+        self.assertIn("TWINE", Packager()._get_env())
 
     def test_steps_setup(self):
-        self.assertIn("pip install", Packager().steps_setup("3.8"))
+        self.assertIn("pip install", Packager()._steps_setup("3.8"))
 
     def test_get_unittest_job(self):
-        self.assertIn("pip install", Packager().get_unittest_job())
+        self.assertIn("pip install", Packager()._get_unittest_job())
 
     def test_get_sync_job(self):
-        self.assertIn("pip install", Packager().get_sync_job())
+        self.assertIn("pip install", Packager()._get_sync_job())
 
     def test_step_run_packager_method(self):
-        self.assertIn("Packager(", Packager().step_run_packager_method("foo"))
+        self.assertIn("Packager(", Packager()._step_run_packager_method("foo"))
 
     def test_run_ordered_methods(self):
         x = []

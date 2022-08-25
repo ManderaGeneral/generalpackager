@@ -1,5 +1,6 @@
 
 # from generalmainframe import MainframeClient
+from generalfile import Path
 from generallibrary import CodeLine, comma_and_and, EnvVar, Log
 
 from itertools import chain
@@ -23,13 +24,14 @@ class _PackagerWorkflow:
     _matrix_os = "matrix.os"
     _matrix_python_version = "matrix.python-version"
 
-    def get_triggers(self):
+    def _get_triggers(self):
         """ :param generalpackager.Packager self: """
-        on = CodeLine("on:")
-        push = on.add_node("push:")
-        branches = push.add_node("branches:")
-        branches.add_node("- master")
+        on = CodeLine("on: push")
         return on
+
+    def _get_defaults(self):
+        """ :param generalpackager.Packager self: """
+        defaults = CodeLine("defaults:")
 
     def _get_step(self, name, *codelines):
         step = CodeLine(f"- name: {name}")
@@ -38,27 +40,27 @@ class _PackagerWorkflow:
                 step.add_node(codeline)
         return step
 
-    def step_setup_ssh(self):
+    def _step_setup_ssh(self):
         """ :param generalpackager.Packager self: """
         with_ = CodeLine("with:")
         with_.add_node("ssh-private-key: ${{ secrets.GIT_SSH }}")
         return self._get_step(f"Set up Git SSH", f"uses: {self._action_setup_ssh}", with_)
 
-    def step_setup_python(self, version):
+    def _step_setup_python(self, version):
         """ :param generalpackager.Packager self:
             :param version: """
         with_ = CodeLine("with:")
         with_.add_node(f"python-version: {version}")
         return self._get_step(f"Set up python version {version}", f"uses: {self._action_setup_python}", with_)
 
-    def step_install_necessities(self):
+    def _step_install_necessities(self):
         """ :param generalpackager.Packager self: """
         run = CodeLine("run: |")
         run.add_node("python -m pip install --upgrade pip")
         run.add_node(f"pip install setuptools wheel twine")
         return self._get_step(f"Install necessities pip, setuptools, wheel, twine", run)
 
-    def step_install_package_pip(self, *packagers):
+    def _step_install_package_pip(self, *packagers):
         """ Supply Packagers to create pip install steps for.
 
             :param generalpackager.Packager self: """
@@ -66,7 +68,7 @@ class _PackagerWorkflow:
         run = CodeLine(f"run: pip install {' '.join(names)}")
         return self._get_step(f"Install pip packages {comma_and_and(*names, period=False)}", run)
 
-    def step_install_package_git(self, *packagers):
+    def _step_install_package_git(self, *packagers):
         """ Supply Packagers to create git install steps for.
 
             :param generalpackager.Packager self: """
@@ -79,7 +81,7 @@ class _PackagerWorkflow:
 
         return self._get_step(f"Install and clone {len(packagers)} git repos", run)
 
-    def get_env(self):
+    def _get_env(self):
         """ :param generalpackager.Packager self: """
         env = CodeLine("env:")
         for packager in self.get_all():
@@ -90,17 +92,17 @@ class _PackagerWorkflow:
             return None
         return env
 
-    def steps_setup(self, python_version):
+    def _steps_setup(self, python_version):
         """ :param generalpackager.Packager self:
             :param python_version: """
         steps = CodeLine("steps:")
-        steps.add_node(self.step_setup_ssh())
-        steps.add_node(self.step_setup_python(version=python_version))
-        steps.add_node(self.step_install_necessities())
-        steps.add_node(self.step_install_package_git(*self.get_ordered_packagers()))
+        steps.add_node(self._step_setup_ssh())
+        steps.add_node(self._step_setup_python(version=python_version))
+        steps.add_node(self._step_install_necessities())
+        steps.add_node(self._step_install_package_git(*self.get_ordered_packagers()))
         return steps
 
-    def get_unittest_job(self):
+    def _get_unittest_job(self):
         """ :param generalpackager.Packager self: """
         job = CodeLine("unittest:")
         job.add_node(self._commit_msg_if(SKIP=False, AUTO=False))
@@ -110,25 +112,25 @@ class _PackagerWorkflow:
         matrix.add_node(f"python-version: {list(self.python)}".replace("'", ""))
         matrix.add_node(f"os: {[f'{os}-latest' for os in self.os]}".replace("'", ""))
 
-        steps = job.add_node(self.steps_setup(python_version=self._var(self._matrix_python_version)))
-        steps.add_node(self.step_run_packager_method("workflow_unittest"))
+        steps = job.add_node(self._steps_setup(python_version=self._var(self._matrix_python_version)))
+        steps.add_node(self._step_run_packager_method("workflow_unittest"))
         return job
 
-    def get_sync_job(self):
+    def _get_sync_job(self):
         """ :param generalpackager.Packager self: """
         job = CodeLine("sync:")
         job.add_node("needs: unittest")
         job.add_node(f"runs-on: ubuntu-latest")
-        steps = job.add_node(self.steps_setup(python_version=self.python[0]))
-        steps.add_node(self.step_run_packager_method("workflow_sync"))
+        steps = job.add_node(self._steps_setup(python_version=self.python[0]))
+        steps.add_node(self._step_run_packager_method("workflow_sync"))
         return job
 
-    def step_run_packager_method(self, method):
+    def _step_run_packager_method(self, method):
         """ :param generalpackager.Packager self:
             :param method: """
         run = CodeLine(f'run: |')
         run.add_node(f'python -c "from generalpackager import Packager; Packager(\'generalpackager\').{method}()"')
-        return self._get_step(f"Run Packager method '{method}'", run, self.get_env())
+        return self._get_step(f"Run Packager method '{method}'", run, self._get_env())
 
     def run_ordered_methods(self, *funcs):
         """ :param generalpackager.Packager self: """
@@ -139,14 +141,10 @@ class _PackagerWorkflow:
 
     def workflow_unittest(self):
         """ :param generalpackager.Packager self: """
-        # Log().configure_stream()
-        # from generalfile import Path
-        # Log().debug("Working dir:", Path().absolute())
-        # Path().view_paths()
+        Log().debug("Working dir for workflow_unittest:", Path().absolute())
 
         self.run_ordered_methods(
             lambda packager: packager.generate_localfiles(aesthetic=False),
-            # lambda packager: packager.localrepo.pip_install(),  # Ohh this was needed when we didn't have editable install!
             lambda packager: packager.localrepo.unittest(),
         )
 
@@ -161,7 +159,6 @@ class _PackagerWorkflow:
         self.run_ordered_methods(
             lambda packager: packager.if_publish_bump(),
             lambda packager: packager.generate_localfiles(aesthetic=True),
-            # lambda packager: packager.localrepo.pip_install(),  # Ohh this was needed when we didn't have editable install!
             lambda packager: packager.localrepo.unittest(),  # For good measure  # Display 1:0 keeps failing here for some reason
             lambda packager, msg=msg1: packager.commit_and_push(message=msg, tag=False),
             lambda packager, msg=msg2: packager.if_publish_publish(message=msg),

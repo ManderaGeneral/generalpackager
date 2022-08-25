@@ -253,11 +253,11 @@ class _PackagerFiles:
         workflow.indent_str = " " * 2
 
         workflow.add_node("name: workflow")
-        workflow.add_node(self.get_triggers())
+        workflow.add_node(self._get_triggers())
 
         jobs = workflow.add_node("jobs:")
-        jobs.add_node(self.get_unittest_job())
-        jobs.add_node(self.get_sync_job())
+        jobs.add_node(self._get_unittest_job())
+        jobs.add_node(self._get_sync_job())
 
         return workflow.text()
 
