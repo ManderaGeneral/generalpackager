@@ -194,6 +194,8 @@ class _PackagerWorkflow:
         msg1 = f"[CI AUTO] Sync triggered by {trigger_repo}"
         msg2 = f"[CI AUTO] Publish triggered by {trigger_repo}"
 
+        Log().configure_stream()
+
         self.run_ordered_methods(
             lambda packager: packager.if_publish_bump(),
             lambda packager: packager.generate_localfiles(aesthetic=True),
