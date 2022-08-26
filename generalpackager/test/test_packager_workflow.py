@@ -20,7 +20,7 @@ class TestPackager(unittest.TestCase):
         self.assertIn("pip install", Packager()._step_install_package_pip(*Packager().get_ordered_packagers()))
 
     def test_step_install_package_git(self):
-        self.assertIn("pip install git", Packager()._step_install_package_git(*Packager().get_ordered_packagers()))
+        self.assertIn("pip install git", Packager()._step_clone_repos())
 
     def test_get_env(self):
         self.assertIn("TWINE", Packager()._get_env())

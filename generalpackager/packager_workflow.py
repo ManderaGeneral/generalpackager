@@ -24,20 +24,35 @@ class _PackagerWorkflow:
     _matrix_os = "matrix.os"
     _matrix_python_version = "matrix.python-version"
 
+    def _get_name(self):
+        """ :param generalpackager.Packager self: """
+        name = CodeLine("name: workflow")
+        return name
+
     def _get_triggers(self):
         """ :param generalpackager.Packager self: """
-        on = CodeLine("on: push")
+        on = CodeLine("on: push", space_after=1)
         return on
 
     def _get_defaults(self):
         """ :param generalpackager.Packager self: """
         defaults = CodeLine("defaults:")
+        defaults.add_node("run:").add_node("working-directory: ../../main", space_after=1)
+        return defaults
 
     def _get_step(self, name, *codelines):
+        """ :param generalpackager.Packager self: """
         step = CodeLine(f"- name: {name}")
         for codeline in codelines:
             if codeline:
                 step.add_node(codeline)
+        return step
+
+    def _step_make_workdir(self):
+        """ :param generalpackager.Packager self: """
+        step = CodeLine("- name: Create folder")
+        step.add_node("working-directory: ../../")
+        step.add_node("run: mkdir main")
         return step
 
     def _step_setup_ssh(self):
@@ -68,18 +83,32 @@ class _PackagerWorkflow:
         run = CodeLine(f"run: pip install {' '.join(names)}")
         return self._get_step(f"Install pip packages {comma_and_and(*names, period=False)}", run)
 
-    def _step_install_package_git(self, *packagers):
+    def _step_clone_repos(self):
         """ Supply Packagers to create git install steps for.
 
             :param generalpackager.Packager self: """
-        run = CodeLine(f"run: |")
+        packagers = self.get_ordered_packagers(include_private=False, include_summary_packagers=True)
+
+        step = CodeLine(f"- name: Clone {len(packagers)} repos")
+        run = step.add_node(f"run: |")
+
         for packager in packagers:
-            run.add_node(f"pip install git+ssh://git@github.com/{packager.github.owner}/{packager.name}.git")
+            run.add_node(packager.github.git_clone_command())
+        return step
 
-        for packager in chain(packagers, self.summary_packagers()):  # Also clone summary_packagers for syncing
-            run.add_node(f"git clone ssh://git@github.com/{packager.github.owner}/{packager.name}.git")
+    def _step_install_repos(self):
+        """ Supply Packagers to create git install steps for.
 
-        return self._get_step(f"Install and clone {len(packagers)} git repos", run)
+            :param generalpackager.Packager self: """
+        packagers = self.get_ordered_packagers(include_private=False)
+
+        step = CodeLine(f"- name: Install {len(packagers)} repos")
+        run = step.add_node(f"run: |")
+
+        for packager in packagers:
+            if packager.target == packager.Targets.python:
+                run.add_node(f"pip install -e {packager.name}")
+        return step
 
     def _get_env(self):
         """ :param generalpackager.Packager self: """
@@ -96,23 +125,31 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self:
             :param python_version: """
         steps = CodeLine("steps:")
+        steps.add_node(self._step_make_workdir())
         steps.add_node(self._step_setup_ssh())
         steps.add_node(self._step_setup_python(version=python_version))
         steps.add_node(self._step_install_necessities())
-        steps.add_node(self._step_install_package_git(*self.get_ordered_packagers()))
+        steps.add_node(self._step_clone_repos())
+        steps.add_node(self._step_install_repos())
         return steps
+
+    def _get_strategy(self):
+        """ :param generalpackager.Packager self: """
+        strategy = CodeLine("strategy:")
+        matrix = strategy.add_node("matrix:")
+        matrix.add_node(f"python-version: {list(self.python)}".replace("'", ""))
+        matrix.add_node(f"os: {[f'{os}-latest' for os in self.os]}".replace("'", ""))
+        return strategy
 
     def _get_unittest_job(self):
         """ :param generalpackager.Packager self: """
         job = CodeLine("unittest:")
         job.add_node(self._commit_msg_if(SKIP=False, AUTO=False))
         job.add_node(f"runs-on: {self._var(self._matrix_os)}")
-        strategy = job.add_node("strategy:")
-        matrix = strategy.add_node("matrix:")
-        matrix.add_node(f"python-version: {list(self.python)}".replace("'", ""))
-        matrix.add_node(f"os: {[f'{os}-latest' for os in self.os]}".replace("'", ""))
+        job.add_node(self._get_strategy())
 
-        steps = job.add_node(self._steps_setup(python_version=self._var(self._matrix_python_version)))
+        python_version = self._var(self._matrix_python_version)
+        steps = job.add_node(self._steps_setup(python_version=python_version))
         steps.add_node(self._step_run_packager_method("workflow_unittest"))
         return job
 
@@ -120,6 +157,7 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self: """
         job = CodeLine("sync:")
         job.add_node("needs: unittest")
+        job.add_node("if: github.ref == 'refs/heads/master'")
         job.add_node(f"runs-on: ubuntu-latest")
         steps = job.add_node(self._steps_setup(python_version=self.python[0]))
         steps.add_node(self._step_run_packager_method("workflow_sync"))
@@ -129,7 +167,7 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self:
             :param method: """
         run = CodeLine(f'run: |')
-        run.add_node(f'python -c "from generalpackager import Packager; Packager(\'generalpackager\').{method}()"')
+        run.add_node(f'python -c "from generalpackager import Packager; Packager().{method}()"')
         return self._get_step(f"Run Packager method '{method}'", run, self._get_env())
 
     def run_ordered_methods(self, *funcs):

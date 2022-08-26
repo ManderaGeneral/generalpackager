@@ -22,6 +22,12 @@ class GitHub(_SharedAPI, _SharedOwner, _SharedName):
     def url(self):
         return f"https://github.com/{self.owner}/{self.name}"
 
+    def git_clone_command(self):
+        return f"git clone ssh://git@github.com/{self.owner}/{self.name}.git"
+
+    def pip_install_command(self):
+        return f"pip install git+ssh://git@github.com/{self.owner}/{self.name}.git"
+
     def exists(self):
         """ Return whether this API's target exists. """
         return requests.get(url=self.url).status_code == 200

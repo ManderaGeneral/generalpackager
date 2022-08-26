@@ -252,8 +252,9 @@ class _PackagerFiles:
         workflow = CodeLine()
         workflow.indent_str = " " * 2
 
-        workflow.add_node("name: workflow")
+        workflow.add_node(self._get_name())
         workflow.add_node(self._get_triggers())
+        workflow.add_node(self._get_defaults())
 
         jobs = workflow.add_node("jobs:")
         jobs.add_node(self._get_unittest_job())
