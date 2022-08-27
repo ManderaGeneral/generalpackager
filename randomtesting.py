@@ -15,5 +15,6 @@ from pprint import pprint
 
 # Packager().localrepo.metadata.write_config()
 
-Packager().file_by_relative_path(Packager().localrepo.get_setup_path()).generate()
+# Packager().file_by_relative_path(Packager().localrepo.get_setup_path()).generate()
 
+Packager().generate_localfiles(aesthetic=True)
