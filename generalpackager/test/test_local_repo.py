@@ -1,6 +1,7 @@
 
 from generallibrary import Ver
 from generalpackager.api.localrepo.base.localrepo import LocalRepo
+from generalpackager.api.localrepo.python.localrepo_python import LocalRepo_Python
 from generalpackager.test.workingdir import WorkingDirTestCase
 
 class TestLocalRepo(WorkingDirTestCase):
@@ -40,14 +41,19 @@ class TestLocalRepo(WorkingDirTestCase):
         self.assertNotIn(LocalRepo().path, package_paths)
 
     def test_get_changed_files(self):
-        local_repo = LocalRepo()
+        local_repo = LocalRepo_Python()
         version = local_repo.metadata.version
+
         local_repo.bump_version()
         self.assertNotEqual(local_repo.metadata.version, version)
         self.assertIn("metadata.json", local_repo.git_changed_files())
+
         local_repo.metadata.version = version
         self.assertEqual(local_repo.metadata.version, version)
 
+    def test_wrong_localrepo_for_target(self):
+        local_repo = LocalRepo()
+        self.assertRaises(AssertionError, local_repo.bump_version)
 
 
 

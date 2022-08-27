@@ -14,3 +14,9 @@ class Metadata(ConfigFile):
     topics = []
     manifest = []
 
+    def _assert_correct_class_for_target(self):
+        assert type(self).__name__.lower().endswith(self.target), f"{self} tried to write but its class name '{type(self).__name__}' doesn't end with its target '{self.target}'."
+
+    def write_hook_pre(self):
+        if self.target:
+            self._assert_correct_class_for_target()
