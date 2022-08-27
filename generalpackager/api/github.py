@@ -22,9 +22,11 @@ class GitHub(_SharedAPI, _SharedOwner, _SharedName):
     def url(self):
         return f"https://github.com/{self.owner}/{self.name}"
 
+    @property
     def git_clone_command(self):
         return f"git clone ssh://git@github.com/{self.owner}/{self.name}.git"
 
+    @property
     def pip_install_command(self):
         return f"pip install git+ssh://git@github.com/{self.owner}/{self.name}.git"
 
@@ -68,7 +70,9 @@ class GitHub(_SharedAPI, _SharedOwner, _SharedName):
         return self._request(method="get").json()["homepage"]
 
     def set_website(self, website):
-        """ Set a website for the GitHub repository. """
+        """ Set a website for the GitHub repository.
+
+            :rtype: requests.Response """
         return self._request(method="patch", name=self.name, homepage=website)
 
     def get_topics(self):
@@ -80,7 +84,8 @@ class GitHub(_SharedAPI, _SharedOwner, _SharedName):
     def set_topics(self, *topics):
         """ Set topics for the GitHub repository.
 
-            :param str topics: """
+            :param str topics:
+            :rtype: requests.Response """
         return self._request(method="put", endpoint="topics", names=topics)
 
     def get_description(self):
@@ -90,7 +95,9 @@ class GitHub(_SharedAPI, _SharedOwner, _SharedName):
         return self._request(method="get").json()["description"]
 
     def set_description(self, description):
-        """ Set a description for the GitHub repository. """
+        """ Set a description for the GitHub repository.
+
+            :rtype: requests.Response """
         return self._request(method="patch", name=self.name, description=description)
 
     def request_kwargs(self):

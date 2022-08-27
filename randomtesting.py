@@ -12,11 +12,12 @@ from generallibrary import Recycle, SigInfo, getsize, Log, replace
 from pprint import pprint
 
 
+x = GitHub().get_topics()
 
-# Packager().localrepo.metadata.write_config()
+print(x)
 
-# Packager().file_by_relative_path(Packager().localrepo.get_setup_path()).generate()
+GitHub().set_topics(*x, "test")
 
-# Packager().generate_localfiles(aesthetic=True)
+x.remove("test")
 
-LocalRepo().bump_version()
+GitHub().set_topics(*x)

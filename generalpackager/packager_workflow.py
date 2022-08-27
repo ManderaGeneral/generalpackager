@@ -93,7 +93,7 @@ class _PackagerWorkflow:
         run = step.add_node(f"run: |")
 
         for packager in packagers:
-            run.add_node(packager.github.git_clone_command())
+            run.add_node(packager.github.git_clone_command)
         return step
 
     def _step_install_repos(self):
