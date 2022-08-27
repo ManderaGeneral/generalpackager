@@ -1,5 +1,12 @@
 {
-    "install_requires": [],
+    "install_requires": [
+        "generallibrary",
+        "generalfile",
+        "pandas",
+        "gitpython",
+        "requests",
+        "pyinstaller"
+    ],
     "extras_require": {},
     "enabled": true,
     "private": false,
