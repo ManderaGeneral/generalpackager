@@ -69,8 +69,8 @@ class _PackagerAPIs:
     @property
     @deco_cache()
     def localrepo(self):
-        """ :param generalpackager.Packager self: """
-        """ :rtype: generalpackager.LocalRepo_Python or generalpackager.LocalRepo_Node """
+        """ :param generalpackager.Packager self:
+            :rtype: generalpackager.LocalRepo_Python or generalpackager.LocalRepo_Node """
         self.localrepo_available(error=True)
         localrepo = LocalRepo(path=self.path).targetted(target=self._target)
         Log().debug(f"Packager {self.name} got localrepo with target {localrepo.target}")
