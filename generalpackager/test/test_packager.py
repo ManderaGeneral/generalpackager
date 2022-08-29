@@ -11,6 +11,15 @@ class TestPackager(unittest.TestCase):
 
     def test_all_packages(self):
         all_packages = Packager.Packages.all_packages()
+        self.assertIn("generallibrary", all_packages)
+        self.assertIn("generalfile", all_packages)
+        self.assertIn("genlibrary", all_packages)
+
+        self.assertIn("generallibrary", Packager.Packages.python)
+        self.assertIn("generalfile", Packager.Packages.python)
+        self.assertIn("genlibrary", Packager.Packages.node)
+
+
 
 
 

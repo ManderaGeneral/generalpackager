@@ -34,7 +34,7 @@ class _PackagerMetadata:
         """ Return whether this package has been bumped by comparing PyPI and LocalRepo's versions.
 
             :param generalpackager.Packager self: """
-        if not self.pypi_available():
+        if not self.pypi_available() or not self.localrepo.metadata:
             return None
 
         version = self.pypi.get_version()

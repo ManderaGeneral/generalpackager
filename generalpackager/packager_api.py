@@ -23,7 +23,7 @@ class _PackagerAPIs:
 
     def _assert_not_private(self):
         """ :param generalpackager.Packager self: """
-        if self.localrepo.metadata.private:
+        if self.localrepo.metadata and self.localrepo.metadata.private:
             raise self.API_NOT_AVAILABLE_ERROR(f"Packager {self} is private.")
 
     def _available(self, *asserts, api_name, error):

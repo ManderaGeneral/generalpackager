@@ -1,8 +1,9 @@
 
-from generalpackager.api.localrepo.base.localrepo_target import _LocalRepo_Target
+from itertools import chain
+
 from generallibrary import deco_cache
 
-from itertools import chain
+from generalpackager.api.localrepo.base.localrepo_target import _LocalRepo_Target
 
 
 class Packages(_LocalRepo_Target.Targets):
@@ -14,15 +15,18 @@ class Packages(_LocalRepo_Target.Targets):
         "generalvector",
         "generalgui",
         "generalbrowser",
-        "generalmainframe",
         "generalpackager",
     ]
     node = [
         "genlibrary",
         "genvector",
     ]
-    django = []
-    exe = []
+    django = [
+
+    ]
+    exe = [
+        "generalmainframe",
+    ]
 
     @classmethod
     @deco_cache()
