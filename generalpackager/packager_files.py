@@ -1,9 +1,8 @@
 
-from generallibrary import CodeLine, Markdown, Date, deco_cache, Timer, Log
-from generalfile import Path
-
-
 import json
+
+from generalfile import Path
+from generallibrary import CodeLine, Markdown, Date, deco_cache, Timer, Log
 
 
 class GenerateFile:
@@ -41,7 +40,6 @@ class _PackagerFiles:
     @deco_cache()
     def files(self):
         """ Todo: Watermark generated files to prevent mistake of thinking you can modify them directly.
-            # HERE ** Maybe this should require metadata?
             :param generalpackager.Packager self: """
         files = [
             GenerateFile(self.localrepo.get_git_exclude_path(), self.generate_git_exclude, self, aesthetic=True),
@@ -70,7 +68,6 @@ class _PackagerFiles:
 
         return files
 
-    @property
     @deco_cache()
     def all_files_by_relative_path(self):
         """ :param generalpackager.Packager self: """
@@ -81,7 +78,7 @@ class _PackagerFiles:
             :param path:
             :rtype: GenerateFile """
         path = Path(path)
-        return self.all_files_by_relative_path[path.relative(base=self.path)]
+        return self.all_files_by_relative_path()[path.relative(base=self.path)]
 
     @property
     @deco_cache()
@@ -92,7 +89,9 @@ class _PackagerFiles:
         return GenerateFile(secret_readme_path, self.generate_personal_readme, self, aesthetic=True)
 
     def get_new_packager(self):
-        """ :param generalpackager.Packager self: """
+        """ Todo: Generalize get_new_packager which calls recycle_clear on all attributes.
+
+            :param generalpackager.Packager self: """
         self.recycle_clear()
         self.localrepo.recycle_clear()
         self.localmodule.recycle_clear()
@@ -100,17 +99,24 @@ class _PackagerFiles:
         self.pypi.recycle_clear()
         return type(self)(self.name)
 
-    def create_blank_locally(self, install=True):
+    @classmethod
+    def create_blank_locally_python(cls, path, install=True):
         """ Create a new general package locally only.
 
-            :param generalpackager.Packager self:
+            :param generalpackager.Packager or Any cls:
+            :param Path or str path:
             :param install: Whether to pip install. """
-        self.localrepo.metadata.write_config()
-        self.generate_localfiles()
-        if install:
-            self.localrepo.pip_install()
+        path = Path(path)
+        assert path.empty()
+        packager = cls(name=path.name(), path=path, target=cls.Targets.python)
 
-        new_self = self.get_new_packager()  # Reset caches to get updated files
+        packager.localrepo.metadata.write_config()
+        packager.generate_localfiles()
+
+        if install:
+            packager.localrepo.pip_install_editable()
+
+        new_self = packager.get_new_packager()  # Reset caches to get updated files
         new_self.generate_localfiles()
 
     def relative_path_is_aesthetic(self, relative_path):
@@ -119,7 +125,7 @@ class _PackagerFiles:
             :param generalpackager.Packager self:
             :param Path or str relative_path: """
         relative_path = Path(relative_path).relative(self.path)
-        aesthetic_attr = getattr(self.all_files_by_relative_path.get(relative_path, None), "aesthetic", None)
+        aesthetic_attr = getattr(self.all_files_by_relative_path().get(relative_path, None), "aesthetic", None)
         if aesthetic_attr is None:
             if relative_path.match(*self.extra_aesthetic):
                 return True

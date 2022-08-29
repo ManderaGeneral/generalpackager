@@ -3,8 +3,6 @@
 from generalfile import Path
 from generallibrary import CodeLine, comma_and_and, EnvVar, Log
 
-from itertools import chain
-
 
 class _PackagerWorkflow:
     PIP_NECESSARY_PACKAGES = (
@@ -121,7 +119,7 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self: """
         env = CodeLine("env:")
         for packager in self.get_all():
-            for env_var in packager.localmodule.get_env_vars():
+            for env_var in packager.localmodule.get_env_vars(error=False):
                 if env_var.actions_name and env_var.name not in str(env):  # Coupled to generallibrary.EnvVar
                     env.add_node(f"{env_var.name}: {env_var.actions_name}")
         if not env.get_children():

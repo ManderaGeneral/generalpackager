@@ -1,9 +1,8 @@
 
-from generalpackager.api.localrepo.base.localrepo import LocalRepo
-from generalpackager.api.localrepo.python.metadata_python import Metadata_Python
-
 from generalfile import Path
 from generallibrary import terminal, EnvVar, deco_require, Log
+from generalpackager.api.localrepo.base.localrepo import LocalRepo
+from generalpackager.api.localrepo.python.metadata_python import Metadata_Python
 
 
 class LocalRepo_Python(LocalRepo):
@@ -26,7 +25,7 @@ class LocalRepo_Python(LocalRepo):
         terminal("-m", "unittest", "discover", str(self.get_test_path()), python=True)
 
     @deco_require(LocalRepo.exists)
-    def pip_install(self):
+    def pip_install_editable(self):
         """ Install this repository with pip and -e flag. """
         with self.path.as_working_dir():
             Log().debug(f"Pip install for {self}")

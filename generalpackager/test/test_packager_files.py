@@ -1,8 +1,7 @@
 from generalfile import Path
-from generallibrary import Log
-
-from generalpackager import Packager
 from generalfile.test.test_path import PathTest
+from generalpackager import Packager
+
 
 class TestPackager(PathTest):
     def test_relative_path_is_aesthetic(self):
@@ -69,3 +68,11 @@ class TestPackager(PathTest):
         self.assertIsNot(a, b)
         self.assertIs(b, Packager())
 
+    def test_all_files_by_relative_path(self):
+        self.assertIn(Path("README.md"), Packager().all_files_by_relative_path())
+        self.assertIn(Path("setup.py"), Packager().all_files_by_relative_path())
+
+    def test_create_blank_locally_python(self):
+        Packager.create_blank_locally_python("newblank", install=False)
+        self.assertEqual(True, Path("newblank/README.md").exists())
+        self.assertEqual(True, Path("newblank/newblank").exists())

@@ -1,13 +1,11 @@
-
-
-from generalpackager import Packager
-
 import unittest
 
 
 class TestPackager(unittest.TestCase):
-    pass
-    # def test_clone_repo(self):
-    #     setup_workdir()
-    #     self.assertEqual(True, Packager().clone_repo("").exists())
+    """ Inside workflow:
+        commit_and_push """
+
+    def test_commit_and_push(self):
+        pass
+        # Packager().commit_and_push()
 

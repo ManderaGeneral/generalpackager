@@ -1,9 +1,8 @@
 
-from generalpackager.api.shared import _SharedAPI, _SharedName
-from generallibrary import ObjInfo, deco_cache, EnvVar, get, import_module, deco_require, Log
-from generalfile import Path
-
 import pkg_resources
+from generalfile import Path
+from generallibrary import ObjInfo, deco_cache, EnvVar, get, import_module, deco_require, Log
+from generalpackager.api.shared import _SharedAPI, _SharedName
 
 
 class LocalModule(_SharedAPI, _SharedName):
@@ -55,8 +54,8 @@ class LocalModule(_SharedAPI, _SharedName):
         return objInfo
 
     @deco_cache()
-    @deco_require(exists)
-    def get_env_vars(self):
+    @deco_require(exists, default=[])
+    def get_env_vars(self, error=True):
         """ Get a list of EnvVar instances available directly in module.
 
             :rtype: list[generallibrary.EnvVar] """

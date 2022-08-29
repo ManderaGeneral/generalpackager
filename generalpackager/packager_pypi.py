@@ -1,7 +1,6 @@
 
-from generallibrary import Date
 from generalfile import Path
-
+from generallibrary import Date
 from requests import ConnectionError
 
 
@@ -20,14 +19,15 @@ class _PackagerPypi:
         else:
             return self.pypi.get_date()
 
-    def reserve_name(self):
+    @classmethod
+    def reserve_name(cls, name):
         """ Reserve a name on PyPI with template files.
             Untested.
 
-            :param generalpackager.Packager self: """
-        path = Path.get_cache_dir() / "python/pypi_reserve"  # type: Path
-        packager = type(self)(self.name, path=path)
-        packager.create_blank_locally(install=False)
+            :param generalpackager.Packager cls:
+            :param name: """
+        path = Path.get_cache_dir() / "python/pypi_reserve/" / name
+        packager = cls.create_blank_locally_python(path=path, install=False)
         packager.localrepo.upload()
         path.delete()
 
