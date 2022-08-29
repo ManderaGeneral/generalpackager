@@ -7,8 +7,8 @@ from generallibrary import terminal, EnvVar, deco_require, Log
 
 
 class LocalRepo_Python(LocalRepo):
-    cls_target = LocalRepo.Targets.python
-    cls_metadata = Metadata_Python
+    _cls_target = LocalRepo.Targets.python
+    _cls_metadata = Metadata_Python
 
     @staticmethod
     def get_venv_path():

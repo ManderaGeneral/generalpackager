@@ -17,7 +17,7 @@ class TestPyPI(unittest.TestCase):
         self.assertEqual(True, pypi.name in pypi.get_tarball_url(version="1.0.0"))
 
     def test_download(self):
-        setup_workdir(use_working_dir=True)
+        setup_workdir()
 
         path = PyPI("generalpackager").download(path="repo")
         self.assertEqual(True, "generalpackager" in path.get_child())

@@ -1,7 +1,6 @@
 
 
 class _LocalRepo_Paths:
-    
     def get_readme_path(self):
         """ :param generalpackager.LocalRepo_Python or generalpackager.LocalRepo_Node self: """
         return self.path / "README.md"

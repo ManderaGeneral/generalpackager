@@ -1,8 +1,11 @@
-
+from generalfile import Path
 from generallibrary import Ver
 from generalpackager.api.localrepo.base.localrepo import LocalRepo
 from generalpackager.api.localrepo.python.localrepo_python import LocalRepo_Python
 from generalpackager.test.workingdir import WorkingDirTestCase
+
+from generalfile.test.setup_workdir import setup_workdir
+
 
 class TestLocalRepo(WorkingDirTestCase):
     def test_metadata_exists(self):
@@ -55,7 +58,66 @@ class TestLocalRepo(WorkingDirTestCase):
         local_repo = LocalRepo()
         self.assertRaises(AssertionError, local_repo.bump_version)
 
+    def test_targets(self):
+        self.assertEqual(LocalRepo().metadata.target, LocalRepo.Targets.python)
 
+    def test_format_file_function(self):
+        setup_workdir()
+
+        Path("foo").text.write(
+            "def camelCase():\n"
+            '    """ '
+            '        Bad docstrings\n'
+            '    """'
+        )
+
+        LocalRepo.format_file("foo")
+
+        self.assertEqual(
+            'def camel_case():\n'
+            '    """ Bad docstrings """',
+            Path("foo").text.read())
+
+    def test_format_file_method(self):
+        setup_workdir()
+
+        Path("foo").text.write(
+            "class FooBar:\n"
+            "    def camelCase(self):\n"
+            '        """ '
+            '            Bad docstrings\n'
+            '        """'
+        )
+
+        LocalRepo.format_file("foo")
+
+        self.assertEqual(
+            'class FooBar:\n'
+            '    def camel_case(self):\n'
+            '        """ Bad docstrings """',
+            Path("foo").text.read())
+
+    def test_get_paths(self):
+        self.assertIn("generalpackager", LocalRepo().get_readme_path())
+        self.assertIn("generalpackager", LocalRepo().get_org_readme_path())
+        self.assertIn("generalpackager", LocalRepo().get_metadata_path())
+        self.assertIn("generalpackager", LocalRepo().get_git_exclude_path())
+        self.assertIn("generalpackager", LocalRepo().get_setup_path())
+        self.assertIn("generalpackager", LocalRepo().get_manifest_path())
+        self.assertIn("generalpackager", LocalRepo().get_license_path())
+        self.assertIn("generalpackager", LocalRepo().get_workflow_path())
+        self.assertIn("generalpackager", LocalRepo().get_test_path())
+        self.assertIn("generalpackager", LocalRepo().get_test_template_path())
+        self.assertIn("generalpackager", LocalRepo().get_init_path())
+        self.assertIn("generalpackager", LocalRepo().get_randomtesting_path())
+        self.assertIn("generalpackager", LocalRepo().get_generate_path())
+        self.assertIn("generalpackager", LocalRepo().get_exetarget_path())
+        self.assertIn("generalpackager", LocalRepo().get_exeproduct_path())
+        self.assertIn("generalpackager", LocalRepo().get_git_ignore_path())
+        self.assertIn("generalpackager", LocalRepo().get_npm_ignore_path())
+        self.assertIn("generalpackager", LocalRepo().get_index_js_path())
+        self.assertIn("generalpackager", LocalRepo().get_test_js_path())
+        self.assertIn("generalpackager", LocalRepo().get_package_json_path())
 
 
 

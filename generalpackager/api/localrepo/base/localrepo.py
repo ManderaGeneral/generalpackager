@@ -23,7 +23,7 @@ class LocalRepo(_SharedAPI, _LocalRepo_Path, _LocalRepo_Paths, _LocalRepo_Target
     # _deco_require_metadata = deco_require(lambda self: self.metadata.exists(), lambda func: f"{func.__name__} requires metadata.")
 
     def __init__(self, path=None):
-        self.metadata = self.cls_metadata(path=self.get_metadata_path())
+        self.metadata = self._cls_metadata(path=self.get_metadata_path())
 
     @property
     def target(self):
@@ -91,48 +91,44 @@ class LocalRepo(_SharedAPI, _LocalRepo_Path, _LocalRepo_Paths, _LocalRepo_Target
     def _camel_to_under(match):
         return "".join(f"_{c.lower()}" if c.isupper() else c for c in match[0])
 
-    def replace_camel_case(self, text):
-        return re.sub(r"\W([a-z]+(?:[A-Z][a-z]*)+)", self._camel_to_under, text)
+    @classmethod
+    def _replace_camel_case(cls, text):
+        return re.sub(r"\W([a-z]+(?:[A-Z][a-z]*)+)", cls._camel_to_under, text)
 
     @staticmethod
-    def _format_docstring(match):
-        lines = match[0].splitlines()  # type: list[str]
+    def _strip_line(line):
+        return line.replace('"""', "").strip()
 
+    @classmethod
+    def _format_docstring(cls, match):
+        lines = match[0].splitlines()  # type: list[str]
         indent = lines[0].find('"')
 
-        if len(lines) == 1:
-            stripped_line = match[0].strip('" ')
-            return f'{" " * indent}""" {stripped_line} """'
-
-        first_line_is_only_quotes = lines[0].strip() == '"""'
-        last_line_is_only_quotes = lines[-1].strip() == '"""'
-
-        if first_line_is_only_quotes:
-            lines[1] = f'{" " * indent}""" {lines[1].strip()}'
-            del lines[0]
-
-        if last_line_is_only_quotes:
-            lines[-2] = f'{" " * indent}    {lines[-2].strip()} """'
-            del lines[-1]
-
-        for i in range(1, len(lines) - 1):
-            lines[i] = f'{" " * indent}    {lines[i].strip()}'
+        lines = [x for line in lines if (x := (cls._strip_line(line)))]  # Strip
+        lines = [f'{" " * (indent + 4)}{line}' for line in lines]  # Indent all
+        lines[0] = f'{" " * indent}""" {lines[0][indent + 4:]}'  # Quotes first line
+        lines[-1] += ' """'  # Quotes last line
 
         return "\n".join(lines)
 
-    def replace_docstrings(self, text):
-        return re.sub(r' +""".*?"""', self._format_docstring, text, flags=re.S)
+    @classmethod
+    def _replace_docstrings(cls, text):
+        return re.sub(r' +""".*?"""', cls._format_docstring, text, flags=re.S)
 
-    def format_file(self, path, write=True):
-        """ Overwrite a file to replace camelCase with under_scores. """
+    @classmethod
+    def format_file(cls, path, write=True):
+        """ Format a file by overwriting it with proper format.
+            Replaces camelCase with under_scores.
+            Replaces bad docstrings with good. """
         path = Path(path)
         old_text = path.text.read()
-        new_text = self.replace_camel_case(text=old_text)
-        new_text = self.replace_docstrings(text=new_text)
-
+        new_text = cls._replace_camel_case(text=old_text)
+        new_text = cls._replace_docstrings(text=new_text)
 
         if write:
             path.text.write(new_text, overwrite=True)
+            return new_text
+
         else:
             from selenium import webdriver
             from webdriver_manager.chrome import ChromeDriverManager

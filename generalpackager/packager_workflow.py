@@ -7,6 +7,13 @@ from itertools import chain
 
 
 class _PackagerWorkflow:
+    PIP_NECESSARY_PACKAGES = (
+        "setuptools",
+        "wheel",
+        "twine",
+        "coverage",
+    )
+
     """ Light handling of workflow logic. """
     @staticmethod
     def _var(string):
@@ -72,7 +79,7 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self: """
         run = CodeLine("run: |")
         run.add_node("python -m pip install --upgrade pip")
-        run.add_node(f"pip install setuptools wheel twine")
+        run.add_node(f"pip install {' '.join(self.PIP_NECESSARY_PACKAGES)}")
         return self._get_step(f"Install necessities pip, setuptools, wheel, twine", run)
 
     def _step_install_package_pip(self, *packagers):
