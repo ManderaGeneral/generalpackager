@@ -1,7 +1,6 @@
 from generallibrary import Log
 
 from generalpackager import Packager
-from generalfile.test.setup_workdir import setup_workdir
 
 import unittest
 

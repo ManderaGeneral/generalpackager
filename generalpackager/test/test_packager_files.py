@@ -2,9 +2,9 @@ from generalfile import Path
 from generallibrary import Log
 
 from generalpackager import Packager
-from generalpackager.test.workingdir import WorkingDirTestCase
+from generalfile.test.test_path import PathTest
 
-class TestPackager(WorkingDirTestCase):
+class TestPackager(PathTest):
     def test_relative_path_is_aesthetic(self):
         packager = Packager()
         self.assertEqual(False, packager.relative_path_is_aesthetic("setup.py"))

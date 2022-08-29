@@ -2,12 +2,10 @@ from generalfile import Path
 from generallibrary import Ver
 from generalpackager.api.localrepo.base.localrepo import LocalRepo
 from generalpackager.api.localrepo.python.localrepo_python import LocalRepo_Python
-from generalpackager.test.workingdir import WorkingDirTestCase
-
-from generalfile.test.setup_workdir import setup_workdir
+from generalfile.test.test_path import PathTest
 
 
-class TestLocalRepo(WorkingDirTestCase):
+class TestLocalRepo(PathTest):
     def test_metadata_exists(self):
         self.assertEqual(True, LocalRepo().metadata_exists())
         self.assertEqual(False, LocalRepo("doesntexist").metadata_exists())
@@ -62,8 +60,6 @@ class TestLocalRepo(WorkingDirTestCase):
         self.assertEqual(LocalRepo().metadata.target, LocalRepo.Targets.python)
 
     def test_format_file_function(self):
-        setup_workdir()
-
         Path("foo").text.write(
             "def camelCase():\n"
             '    """ '
@@ -79,8 +75,6 @@ class TestLocalRepo(WorkingDirTestCase):
             Path("foo").text.read())
 
     def test_format_file_method(self):
-        setup_workdir()
-
         Path("foo").text.write(
             "class FooBar:\n"
             "    def camelCase(self):\n"
@@ -119,9 +113,18 @@ class TestLocalRepo(WorkingDirTestCase):
         self.assertIn("generalpackager", LocalRepo().get_test_js_path())
         self.assertIn("generalpackager", LocalRepo().get_package_json_path())
 
+    def test_is_target(self):
+        self.assertEqual(True, LocalRepo().is_python())
+        self.assertEqual(False, LocalRepo().is_exe())
+        self.assertEqual(False, LocalRepo().is_node())
+        self.assertEqual(False, LocalRepo().is_django())
 
 
 
+class TestLocalRepoPython(PathTest):
+    def test_get_venv_path(self):
+        venv = LocalRepo_Python().get_venv_path()
+        self.assertEqual(True, venv is None or venv.is_venv())
 
 
 

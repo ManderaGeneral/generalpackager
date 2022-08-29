@@ -1,11 +1,10 @@
 
 
 from generalpackager import Packager
-from generalfile.test.setup_workdir import setup_workdir
 
-from generalpackager.test.workingdir import WorkingDirTestCase
+from generalfile.test.test_path import PathTest
 
-class TestPackager(WorkingDirTestCase):
+class TestPackager(PathTest):
     def test_badges_dict(self):
         self.assertLess(2, len(Packager().get_badges_dict()))
 

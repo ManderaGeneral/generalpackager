@@ -12,13 +12,17 @@ class LocalRepo_Python(LocalRepo):
 
     @staticmethod
     def get_venv_path():
-        """ Return an absolute path to the current VENV.
-
-            :raises KeyError: If no VENV """
-        return Path(EnvVar("VIRTUAL_ENV").value)
+        """ Return an absolute path to the current VENV or None. """
+        try:
+            return Path(EnvVar("VIRTUAL_ENV").value)
+        except KeyError:
+            return None
 
     def unittest(self):
-        """ Run unittests for this repository. """
+        """ Run unittests for this repository.
+            Todo: Use coverage for LocalRepo.unittest """
+        # with self.get_test_path().as_working_dir():
+        #     terminal("coverage", "run", "-m", "unittest", "discover")
         terminal("-m", "unittest", "discover", str(self.get_test_path()), python=True)
 
     @deco_require(LocalRepo.exists)
