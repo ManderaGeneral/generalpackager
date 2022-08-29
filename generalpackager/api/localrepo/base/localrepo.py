@@ -35,7 +35,7 @@ class LocalRepo(_SharedAPI, _SharedName, _SharedPath, _LocalRepo_Paths, _LocalRe
 
     @property
     def target(self):
-        if self.metadata.exists():
+        if self.metadata and self.metadata.exists():
             return self.metadata.target
         else:
             return None

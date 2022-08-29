@@ -1,5 +1,6 @@
 
 from generallibrary import DataClass
+
 from generalpackager.api.localrepo.base.metadata import Metadata
 
 
@@ -58,7 +59,7 @@ class _LocalRepo_Target(_SharedTarget):
             :rtype: generalpackager._LocalRepos_DOCS """
 
         if target is Ellipsis:
-            if self.metadata.exists():
+            if self.metadata and self.metadata.exists():
                 target = self.metadata.target
 
         if target in self._cls_target_classes:

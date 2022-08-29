@@ -1,8 +1,8 @@
 from generallibrary import deco_cache, Log
 
-from generalpackager.api.localrepo.base.localrepo import LocalRepo
-from generalpackager.api.localmodule import LocalModule
 from generalpackager.api.github import GitHub
+from generalpackager.api.localmodule import LocalModule
+from generalpackager.api.localrepo.base.localrepo import LocalRepo
 from generalpackager.api.pypi import PyPI
 
 
@@ -72,7 +72,7 @@ class _PackagerAPIs:
         """ :param generalpackager.Packager self:
             :rtype: generalpackager.LocalRepo_Python or generalpackager.LocalRepo_Node """
         self.localrepo_available(error=True)
-        localrepo = LocalRepo(path=self.path).targetted(target=self._target)
+        localrepo = LocalRepo(name=self.name, path=self.path).targetted(target=self._target)
         Log().debug(f"Packager {self.name} got localrepo with target {localrepo.target}")
         return localrepo
 

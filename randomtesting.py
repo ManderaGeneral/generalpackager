@@ -7,5 +7,5 @@ from generalpackager import *
 
 # Log().configure_stream()
 
-print(Packager().get_all())
+print(Packager("pandas").localrepo.is_general())
 
