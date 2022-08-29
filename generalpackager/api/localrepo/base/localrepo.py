@@ -1,5 +1,5 @@
 
-from generalpackager.api.shared import _SharedAPI, _LocalRepo_Path
+from generalpackager.api.shared import _SharedAPI, _Shared_Path, _SharedName
 from generalpackager.api.localrepo.base.localrepo_paths import _LocalRepo_Paths
 from generalpackager.api.localrepo.base.localrepo_target import _LocalRepo_Target
 
@@ -11,7 +11,7 @@ import re
 from git import Repo
 
 
-class LocalRepo(_SharedAPI, _LocalRepo_Path, _LocalRepo_Paths, _LocalRepo_Target):
+class LocalRepo(_SharedAPI, _SharedName, _Shared_Path, _LocalRepo_Paths, _LocalRepo_Target):
     """ Tools to help Path interface a Local Repository.
         Base functionality.
         Inherited by classes in targets folder for extended functionality.
@@ -22,8 +22,16 @@ class LocalRepo(_SharedAPI, _LocalRepo_Path, _LocalRepo_Paths, _LocalRepo_Target
 
     # _deco_require_metadata = deco_require(lambda self: self.metadata.exists(), lambda func: f"{func.__name__} requires metadata.")
 
-    def __init__(self, path=None):
-        self.metadata = self._cls_metadata(path=self.get_metadata_path())
+    def __init__(self, name=None, path=None):
+        pass
+
+    @property
+    @deco_cache()
+    def metadata(self):
+        if self.path is None:
+            return None
+        else:
+            return self._cls_metadata(path=self.get_metadata_path())
 
     @property
     def target(self):
@@ -34,12 +42,12 @@ class LocalRepo(_SharedAPI, _LocalRepo_Path, _LocalRepo_Paths, _LocalRepo_Target
 
     def metadata_exists(self):
         """ Needed to make deco_require be able to use this. """
-        return self.metadata.exists()
+        return bool(self.metadata and self.metadata.exists())
 
-    @property
-    def name(self):
-        """ Only getter for name to make _SharedAPI work. """
-        return self.metadata.name if self.metadata_exists() else self.path.stem()
+    # @property
+    # def name(self):
+    #     """ Only getter for name to make _SharedAPI work. """
+    #     return self.metadata.name if self.metadata_exists() else self.path.stem()
 
     def __repr__(self):
         return f"<{type(self).__name__} for '{self.path}'>"
@@ -50,7 +58,7 @@ class LocalRepo(_SharedAPI, _LocalRepo_Path, _LocalRepo_Paths, _LocalRepo_Target
 
     @classmethod
     def repo_exists(cls, path):
-        if path.is_file() or not path.exists():
+        if path is None or path.is_file() or not path.exists():
             return False
         return bool(path.get_child(filt=lambda x: x.name() in (".git", "metadata.json"), traverse_excluded=True))  # setup.py was not included in pypi's sdist
 

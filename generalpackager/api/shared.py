@@ -27,16 +27,24 @@ class _SharedAPI(Recycle, metaclass=AutoInitBases):
 
 
 class _SharedName:
-    """ Shared by Packager, LocalModule, GitHub and PyPI. """
+    """ Shared by Packager, LocalModule, GitHub and PyPI.
+        GitHub and PyPI wont use the path parameter.
+        Path takes presedence. """
     DEFAULT_NAME = "generalpackager"
 
-    _recycle_keys = {"name": lambda name: _SharedName._scrub_name(name=name)}
+    _recycle_keys = {"name": lambda name, path: _SharedName._scrub_name(name=name, path=path)}
 
-    def __init__(self, name=None):
-        self.name = self._scrub_name(name=name)
+    def __init__(self, name=None, path=None):
+        self.name = self._scrub_name(name=name, path=path)
 
     @classmethod
-    def _scrub_name(cls, name):
+    def _scrub_name(cls, name, path):
+        if path:
+            path = Path(path)
+            if name and not path.endswith(name):
+                raise AttributeError(f"Both path and name was set for {cls} but {path} doesn't end with {name}.")
+
+            return path.stem()
         return name or cls.DEFAULT_NAME
 
 
@@ -59,18 +67,8 @@ class _SharedOwner:
         return owner or cls.DEFAULT_OWNER
 
 
-class _LocalRepo_Path:
-    _recycle_keys = {"path": lambda path: str(_LocalRepo_Path._scrub_path(path=path))}
-
-    def __init__(self, path=None):
-        self.path = self._scrub_path(path=path)
-
-    @classmethod
-    def _scrub_path(cls, path):
-        return Path(path).absolute()
-
-
-class _Packager_Path:
+class _Shared_Path:
+    """ Shared by Packager and LocalRepo. """
     _recycle_keys = {"path": lambda cls, name, path: str(cls._scrub_path(name=name, path=path))}
 
     def __init__(self, name=None, path=None):
@@ -109,7 +107,7 @@ class _Packager_Path:
     def _scrub_path(cls, name, path):
         """ :param generalpackager.Packager cls:
             :rtype: Path or None """
-        name = cls._scrub_name(name=name)
+        name = cls._scrub_name(name=name, path=path)
 
         if path is None:
             path = cls._resolve_path(name=name)

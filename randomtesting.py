@@ -11,6 +11,13 @@ from generallibrary import Recycle, SigInfo, getsize, Log, replace
 
 from pprint import pprint
 
-print(Packager("generallibrary").localrepo.unittest())
+# print(Packager("generallibrary").localrepo.unittest())
+
+# print(LocalRepo())
+
+
+Log().configure_stream()
+
+print(LocalRepo("doesntexist").exists())
 
 
