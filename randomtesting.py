@@ -1,23 +1,11 @@
-import json
-import os
-from dataclasses import dataclass, fields
-from importlib import import_module
-
-import pkg_resources
-
 from generalpackager import *
-from generalfile import Path
-from generallibrary import Recycle, SigInfo, getsize, Log, replace
-
-from pprint import pprint
 
 # print(Packager("generallibrary").localrepo.unittest())
 
 # print(LocalRepo())
 
 
-Log().configure_stream()
+# Log().configure_stream()
 
-print(LocalRepo("doesntexist").exists())
-
+print(Packager().get_all())
 

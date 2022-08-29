@@ -1,6 +1,6 @@
 
-from generallibrary import Recycle, AutoInitBases, Log
 from generalfile import Path
+from generallibrary import Recycle, AutoInitBases, Log
 
 from generalpackager.other.packages import Packages
 
@@ -39,7 +39,7 @@ class _SharedName:
 
     @classmethod
     def _scrub_name(cls, name, path):
-        if path:
+        if path and hasattr(cls, "_scrub_path"):
             path = Path(path)
             if name and not path.endswith(name):
                 raise AttributeError(f"Both path and name was set for {cls} but {path} doesn't end with {name}.")
@@ -67,7 +67,7 @@ class _SharedOwner:
         return owner or cls.DEFAULT_OWNER
 
 
-class _Shared_Path:
+class _SharedPath:
     """ Shared by Packager and LocalRepo. """
     _recycle_keys = {"path": lambda cls, name, path: str(cls._scrub_path(name=name, path=path))}
 
