@@ -2,3 +2,6 @@
 
 # print(LocalRepo())
 
+from generalpackager import Packager
+
+Packager()
