@@ -1,6 +1,7 @@
 
 from generalfile import Path
 from generallibrary import terminal, EnvVar, deco_require, Log
+
 from generalpackager.api.localrepo.base.localrepo import LocalRepo
 from generalpackager.api.localrepo.python.metadata_python import Metadata_Python
 
@@ -45,7 +46,9 @@ class LocalRepo_Python(LocalRepo):
     @deco_require(LocalRepo.exists)
     def upload(self):
         """ Upload local repo to PyPI.
-            Todo: Make sure twine is installed when trying to upload to pypi. """
+            Todo: Make sure twine is installed when trying to upload to pypi.
+            Todo: Look into private PyPI server where we could also do dry runs for test.
+            https://github.com/pypa/twine/issues/207"""
         if self.metadata.private:
             raise AttributeError("Cannot upload private repo.")
 

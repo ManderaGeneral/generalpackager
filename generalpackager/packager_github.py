@@ -1,7 +1,7 @@
 
-from generalpackager import PACKAGER_GITHUB_API
-
 from git import Repo
+
+from generalpackager import PACKAGER_GITHUB_API
 
 
 class _PackagerGitHub:
@@ -13,9 +13,9 @@ class _PackagerGitHub:
         """ Sync GitHub with local metadata.
 
             :param generalpackager.Packager self: """
-        self.github.set_website(self.pypi.url)
-        self.github.set_description(self.localrepo.metadata.description)
-        self.github.set_topics(*self.get_topics())
+        assert self.github.set_website(self.pypi.url).ok
+        assert self.github.set_description(self.localrepo.metadata.description).ok
+        assert self.github.set_topics(*self.get_topics()).ok
 
     def commit_and_push(self, message=None, tag=False):
         """ Commit and push this local repo to GitHub.

@@ -19,5 +19,9 @@ class TestPackager(unittest.TestCase):
         self.assertIn("generalfile", Packager.Packages.python)
         self.assertIn("genlibrary", Packager.Packages.node)
 
+    def test_summary_packagers(self):
+        self.assertEqual(True, Packager.summary_packagers()[0].localrepo.exists())
+        self.assertEqual(True, Packager.summary_packagers()[1].localrepo.exists())
+
 
 

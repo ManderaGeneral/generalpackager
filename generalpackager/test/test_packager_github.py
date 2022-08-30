@@ -3,9 +3,9 @@ import unittest
 
 class TestPackager(unittest.TestCase):
     """ Inside workflow:
-        commit_and_push """
-
-    def test_commit_and_push(self):
-        pass
-        # Packager().commit_and_push()
+        commit_and_push
+        sync_github_metadata
+        upload_package_summary
+        workflow_sync
+        workflow_unittest """
 

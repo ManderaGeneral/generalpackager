@@ -1,9 +1,13 @@
 from generalfile import Path
 from generalfile.test.test_path import PathTest
+
 from generalpackager import Packager
 
 
 class TestPackager(PathTest):
+    """ Inside workflow:
+        generate_localfiles """
+
     def test_relative_path_is_aesthetic(self):
         packager = Packager()
         self.assertEqual(False, packager.relative_path_is_aesthetic("setup.py"))
@@ -61,6 +65,26 @@ class TestPackager(PathTest):
         text = str(packager.generate_personal_readme())
         self.assertIn("generallibrary", text)
 
+    def test_generate_generate(self):
+        packager = Packager()
+        text = str(packager.generate_generate())
+        self.assertIn("Packager", text)
+
+    def test_generate_init(self):
+        packager = Packager()
+        text = str(packager.generate_init())
+        self.assertEqual(True, len(text) > 2)
+
+    def test_generate_randomtesting(self):
+        packager = Packager()
+        text = str(packager.generate_randomtesting())
+        self.assertIn("generalpackager", text)
+
+    def test_generate_test_python(self):
+        packager = Packager()
+        text = str(packager.generate_test_python())
+        self.assertIn("unittest", text)
+
     def test_get_new_packager(self):
         a = Packager()
         b = a.get_new_packager()
@@ -76,3 +100,12 @@ class TestPackager(PathTest):
         Packager.create_blank_locally_python("newblank", install=False)
         self.assertEqual(True, Path("newblank/README.md").exists())
         self.assertEqual(True, Path("newblank/newblank").exists())
+
+    def test_file_by_relative_path(self):
+        self.assertIs(Packager(), Packager().file_by_relative_path("README.md").packager)
+        self.assertIs(None, Packager().file_by_relative_path("doesntexist"))
+
+    def test_file_secret_readme(self):
+        self.assertIs(Packager(), Packager().file_secret_readme.packager)
+
+

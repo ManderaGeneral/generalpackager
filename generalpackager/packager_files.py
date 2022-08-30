@@ -55,14 +55,14 @@ class _PackagerFiles:
                 GenerateFile(self.localrepo.get_manifest_path(), self.generate_manifest, self, aesthetic=False),
                 GenerateFile(self.localrepo.get_init_path(), self.generate_init, self, aesthetic=False, overwrite=False),
                 GenerateFile(self.localrepo.get_randomtesting_path(), self.generate_randomtesting, self, aesthetic=True, overwrite=False),
-                GenerateFile(self.localrepo.get_test_template_path(), self.generate_test_template, self, aesthetic=False, overwrite=False),
+                GenerateFile(self.localrepo.get_test_template_path(), self.generate_test_python, self, aesthetic=False, overwrite=False),
             ])
 
         elif self.is_node():
             files.extend([
                 GenerateFile(self.localrepo.get_npm_ignore_path(), self.generate_npm_ignore, self, aesthetic=True),
                 GenerateFile(self.localrepo.get_index_js_path(), self.generate_index_js, self, aesthetic=False, overwrite=False),
-                GenerateFile(self.localrepo.get_test_js_path(), self.generate_test_js, self, aesthetic=False, overwrite=False),
+                GenerateFile(self.localrepo.get_test_js_path(), self.generate_test_node, self, aesthetic=False, overwrite=False),
                 GenerateFile(self.localrepo.get_package_json_path(), self.generate_package_json, self, aesthetic=False),
             ])
 
@@ -75,17 +75,24 @@ class _PackagerFiles:
 
     def file_by_relative_path(self, path):
         """ :param generalpackager.Packager self:
-            :param path:
+            :param Path or str path:
             :rtype: GenerateFile """
         path = Path(path)
-        return self.all_files_by_relative_path()[path.relative(base=self.path)]
+        try:
+            return self.all_files_by_relative_path()[path.relative(base=self.path)]
+        except KeyError:
+            return None
 
     @property
     @deco_cache()
     def file_secret_readme(self):
         """ :param generalpackager.Packager self: """
         # Organization secret name is .github, user secret name is user
-        secret_readme_path = self.localrepo.get_org_readme_path() if self.name == ".github" else self.localrepo.get_readme_path()
+        if self.name == ".github":
+            secret_readme_path = self.localrepo.get_org_readme_path()
+        else:
+            secret_readme_path = self.localrepo.get_readme_path()
+
         return GenerateFile(secret_readme_path, self.generate_personal_readme, self, aesthetic=True)
 
     def get_new_packager(self):
@@ -350,7 +357,7 @@ class _PackagerFiles:
 
         return top
 
-    def generate_test_template(self):
+    def generate_test_python(self):
         """ Generate test template.
 
             :param generalpackager.Packager self: """
@@ -375,7 +382,7 @@ class _PackagerFiles:
 
         return top
 
-    def generate_test_js(self):
+    def generate_test_node(self):
         """ Generate test template.
 
             :param generalpackager.Packager self: """

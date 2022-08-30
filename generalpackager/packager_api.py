@@ -31,7 +31,7 @@ class _PackagerAPIs:
         try:
             for func in asserts:
                 func()
-        except self.API_NOT_AVAILABLE_ERROR as e:
+        except self.API_NOT_AVAILABLE_ERROR:
             if error:
                 raise self.API_NOT_AVAILABLE_ERROR(f"API '{api_name}' not available.")
             else:

@@ -22,7 +22,6 @@ class _PackagerPypi:
     @classmethod
     def reserve_name(cls, name):
         """ Reserve a name on PyPI with template files.
-            Untested.
 
             :param generalpackager.Packager cls:
             :param name: """
