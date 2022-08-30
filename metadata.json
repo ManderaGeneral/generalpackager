@@ -5,7 +5,8 @@
         "pandas",
         "gitpython",
         "requests",
-        "pyinstaller"
+        "pyinstaller",
+        "coverage"
     ],
     "extras_require": {},
     "enabled": true,

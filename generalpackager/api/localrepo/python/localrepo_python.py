@@ -1,6 +1,6 @@
-
+from coverage import Coverage
 from generalfile import Path
-from generallibrary import terminal, EnvVar, deco_require, Log
+from generallibrary import terminal, EnvVar, deco_require, Log, RedirectStdout
 
 from generalpackager.api.localrepo.base.localrepo import LocalRepo
 from generalpackager.api.localrepo.python.metadata_python import Metadata_Python
@@ -9,6 +9,9 @@ from generalpackager.api.localrepo.python.metadata_python import Metadata_Python
 class LocalRepo_Python(LocalRepo):
     _cls_target = LocalRepo.Targets.python
     _cls_metadata = Metadata_Python
+
+    def __init__(self):
+        self.coverage = "-"
 
     @staticmethod
     def get_venv_path():
@@ -20,10 +23,16 @@ class LocalRepo_Python(LocalRepo):
 
     def unittest(self):
         """ Run unittests for this repository.
-            Todo: Use coverage for LocalRepo.unittest """
-        # with self.get_test_path().as_working_dir():
-        #     terminal("coverage", "run", "-m", "unittest", "discover")
-        terminal("-m", "unittest", "discover", str(self.get_test_path()), python=True)
+            Sets self.coverage to total percentage with one decimal. """
+
+        with self.get_test_path().as_working_dir():
+            terminal("coverage", "run", "-m", "unittest", "discover")
+            coverage = Coverage()
+            coverage.load()
+            with RedirectStdout():
+                self.coverage = round(coverage.report(), 1)
+
+        # terminal("-m", "unittest", "discover", str(self.get_test_path()), python=True)
 
     @deco_require(LocalRepo.exists)
     def pip_install_editable(self):

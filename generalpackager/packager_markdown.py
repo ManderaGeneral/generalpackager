@@ -102,9 +102,9 @@ class _PackagerMarkdown:
 
         list_of_dicts = []
         for packager in packagers:
-            attrs = packager._get_attributes_view().count("\n")
-            untested_attrs = len(packager.get_untested_objInfo_dict())
-            test_percentage = floor((attrs - untested_attrs) / attrs * 100, 1) if attrs else 100
+            # attrs = packager._get_attributes_view().count("\n")
+            # untested_attrs = len(packager.get_untested_objInfo_dict())
+            # test_percentage = floor((attrs - untested_attrs) / attrs * 100, 1) if attrs else 100
 
             list_of_dicts.append({
                 "Package": Markdown.link(text=packager.name, url=packager.github.url),
@@ -114,7 +114,7 @@ class _PackagerMarkdown:
                 "Platform": ", ".join(map(str.capitalize, packager.os)),
                 "Lvl": packager.get_ordered_index(),
                 "Todo": Markdown.link(text=len(packager.get_todos()), url=f"{packager.github.url}#{self._todo_header}"),
-                "Tests": f"{test_percentage} %",
+                "Cover": f"{packager.localrepo.coverage} %",
             })
         markdown.add_table_lines(*list_of_dicts, sort_by=["Lvl", "Package"])
         return markdown

@@ -23,6 +23,7 @@ setup(
         'gitpython',
         'requests',
         'pyinstaller',
+        'coverage',
     ],
     url="https://github.com/ManderaGeneral/generalpackager",
     license="mit",
