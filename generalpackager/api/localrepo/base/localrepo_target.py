@@ -63,7 +63,7 @@ class _LocalRepo_Target(_SharedTarget):
                 target = self.metadata.target
 
         if target in self._cls_target_classes:
-            return self._cls_target_classes[target](path=self.path)
+            return self._cls_target_classes[target](name=self.name, path=self.path)
         else:
             return self
 

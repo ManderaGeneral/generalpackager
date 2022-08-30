@@ -9,9 +9,7 @@ from generalpackager.api.localrepo.python.metadata_python import Metadata_Python
 class LocalRepo_Python(LocalRepo):
     _cls_target = LocalRepo.Targets.python
     _cls_metadata = Metadata_Python
-
-    def __init__(self):
-        self.coverage = "-"
+    coverage = "-"
 
     @staticmethod
     def get_venv_path():
