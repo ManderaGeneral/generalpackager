@@ -15,13 +15,13 @@ jobs:
         python-version: [3.8, 3.9]
         os: [windows-latest, ubuntu-latest]
     steps:
+      - name: Create folder
+        working-directory: ../../
+        run: mkdir main
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
-      - name: GITHUB_RUN_NUMBER
-        run: |
-          echo "${{ github.job_id }}"
       - name: Set up Git SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
@@ -63,9 +63,10 @@ jobs:
       - name: Create folder
         working-directory: ../../
         run: mkdir main
-      - name: GITHUB_RUN_NUMBER
-        run: |
-          echo "${{ env.job_id }}"
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
       - name: Set up Git SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
