@@ -15,6 +15,8 @@ jobs:
         python-version: [3.8, 3.9]
         os: [windows-latest, ubuntu-latest]
     steps:
+      - name: GITHUB_RUN_NUMBER
+        run: echo ${{ env.GITHUB_RUN_NUMBER }}
       - name: Create folder
         working-directory: ../../
         run: mkdir main
@@ -56,6 +58,8 @@ jobs:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
+      - name: GITHUB_RUN_NUMBER
+        run: echo ${{ env.GITHUB_RUN_NUMBER }}
       - name: Create folder
         working-directory: ../../
         run: mkdir main
