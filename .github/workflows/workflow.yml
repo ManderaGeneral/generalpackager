@@ -15,9 +15,10 @@ jobs:
         python-version: [3.8, 3.9]
         os: [windows-latest, ubuntu-latest]
     steps:
-      - name: Create folder
-        working-directory: ../../
-        run: mkdir main
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
       - name: GITHUB_RUN_NUMBER
         run: |
           echo "${{ github.job_id }}"
