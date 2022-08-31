@@ -15,11 +15,11 @@ jobs:
         python-version: [3.8, 3.9]
         os: [windows-latest, ubuntu-latest]
     steps:
-      - name: GITHUB_RUN_NUMBER
-        run: echo ${ GITHUB_RUN_NUMBER }
       - name: Create folder
         working-directory: ../../
         run: mkdir main
+      - name: GITHUB_RUN_NUMBER
+        run: echo ${{ env.GITHUB_RUN_NUMBER }}
       - name: Set up Git SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
@@ -58,11 +58,11 @@ jobs:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
-      - name: GITHUB_RUN_NUMBER
-        run: echo ${ GITHUB_RUN_NUMBER }
       - name: Create folder
         working-directory: ../../
         run: mkdir main
+      - name: GITHUB_RUN_NUMBER
+        run: echo ${{ env.GITHUB_RUN_NUMBER }}
       - name: Set up Git SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
