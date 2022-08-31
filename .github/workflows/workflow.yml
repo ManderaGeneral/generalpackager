@@ -19,7 +19,8 @@ jobs:
         working-directory: ../../
         run: mkdir main
       - name: GITHUB_RUN_NUMBER
-        run: echo ${{ env.GITHUB_RUN_NUMBER }}
+        run: |
+          echo ${{ env.GITHUB_RUN_NUMBER }}
       - name: Set up Git SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
@@ -62,7 +63,8 @@ jobs:
         working-directory: ../../
         run: mkdir main
       - name: GITHUB_RUN_NUMBER
-        run: echo ${{ env.GITHUB_RUN_NUMBER }}
+        run: |
+          echo ${{ env.GITHUB_RUN_NUMBER }}
       - name: Set up Git SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
