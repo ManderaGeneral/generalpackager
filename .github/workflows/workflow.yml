@@ -20,7 +20,7 @@ jobs:
         run: mkdir main
       - name: GITHUB_RUN_NUMBER
         run: |
-          echo "${{ env.GITHUB_RUN_NUMBER }}"
+          echo "${{ github.run_number }}"
       - name: Set up Git SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
