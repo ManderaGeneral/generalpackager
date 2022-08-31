@@ -16,8 +16,7 @@ jobs:
         os: [windows-latest, ubuntu-latest]
     steps:
       - name: GITHUB_RUN_NUMBER
-        run: |
-          echo $GITHUB_RUN_NUMBER
+        run: echo ${ GITHUB_RUN_NUMBER }
       - name: Create folder
         working-directory: ../../
         run: mkdir main
@@ -60,8 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: GITHUB_RUN_NUMBER
-        run: |
-          echo $GITHUB_RUN_NUMBER
+        run: echo ${ GITHUB_RUN_NUMBER }
       - name: Create folder
         working-directory: ../../
         run: mkdir main
