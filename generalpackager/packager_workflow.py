@@ -192,6 +192,8 @@ class _PackagerWorkflow:
 
     def workflow_sync(self):
         """ Runs in workflow once Packagers have created each LocalRepo from latest master commit.
+            Todo: Add single job to make sure workflow is up to date.
+            It can generate new workflow, compare, and then stop workflow after commiting and pushing.
 
             :param generalpackager.Packager self: """
         trigger_repo = str(EnvVar('GITHUB_REPOSITORY')).split('/')[1]

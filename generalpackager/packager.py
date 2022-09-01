@@ -1,3 +1,4 @@
+from generalfile import Path
 from generallibrary import NetworkDiagram
 
 from generalpackager.api.localrepo.base.localrepo_target import _SharedTarget
@@ -22,7 +23,7 @@ class Packager(NetworkDiagram,
     author = 'Rickard "Mandera" Abraham'
     email = "rickard.abraham@gmail.com"
     license = "mit"
-    python = "3.8", "3.9"  # Only supports basic definition with tuple of major.minor
+    python = "3.8", "3.9", "3.10"  # Only supports basic definition with tuple of major.minor
     os = "windows", "ubuntu"  # , "macos"
 
     git_exclude_lines = npm_ignore_lines = ".idea", "dist", ".git", "test/tests", ".coverage"
@@ -37,6 +38,28 @@ class Packager(NetworkDiagram,
         self._github_owner = github_owner
         self._pypi_owner = pypi_owner
 
+
+    @classmethod
+    def packagers_from_packages(cls):
+        """ Get all packagers defined in Packages even if they don't exist.
+            Paths are set to working_dir / name. """
+        packagers = []
+        for target, names in cls.Packages.field_dict_defaults().items():
+            for name in names:
+                # packager = Packager(name=name, target=target)
+                packager = Packager(name=name, path=name, target=target)
+                print(packager.path)
+                packagers.append(packager)
+        return packagers
+
+    @classmethod
+    def clone_all_packages(cls, path):
+        """ Creates a new clean environment for the packages.
+            Clones all into a (preferably empty) specified folder. """
+        path = Path(path).set_working_dir()
+
+        with path.as_working_dir():
+            cls.packagers_from_packages()
 
     @staticmethod
     def summary_packagers():

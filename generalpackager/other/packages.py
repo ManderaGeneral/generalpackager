@@ -1,7 +1,7 @@
 
 from itertools import chain
 
-from generallibrary import deco_cache
+from generallibrary import deco_cache, flatten
 
 from generalpackager.api.localrepo.base.localrepo_target import Targets
 
@@ -31,5 +31,5 @@ class Packages(Targets):
     @classmethod
     @deco_cache()
     def all_packages(cls):
-        return list(chain(*cls.field_values_defaults()))
+        return flatten(cls.field_values_defaults())
 
