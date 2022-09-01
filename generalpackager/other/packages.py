@@ -3,11 +3,11 @@ from itertools import chain
 
 from generallibrary import deco_cache
 
-from generalpackager.api.localrepo.base.localrepo_target import _LocalRepo_Target
+from generalpackager.api.localrepo.base.localrepo_target import Targets
 
 
-class Packages(_LocalRepo_Target.Targets):
-    """ Names of all general packages categorized by target.
+class Packages(Targets):
+    """ Purpose is to easily see if name is general and what target it has.
         Todo: Generate Python file in generalpackager containing general packages. """
     python = [
         "generallibrary",
