@@ -1,12 +1,11 @@
 
 from generalpackager.api.shared import _SharedAPI, _SharedOwner, _SharedName
 from generalpackager import PACKAGER_GITHUB_API
-from generallibrary import Recycle, deco_cache
+from generallibrary import Log
 from generalfile import Path
 
 import requests
 import json
-import re
 from git import Repo
 
 
@@ -22,6 +21,10 @@ class GitHub(_SharedAPI, _SharedOwner, _SharedName):
     def url(self):
         return f"https://github.com/{self.owner}/{self.name}"
 
+    def api_url(self, endpoint=None):
+        """ Get URL from owner, name and endpoint. """
+        return "/".join(("https://api.github.com", "repos", self.owner, self.name) + ((endpoint, ) if endpoint else ()))
+
     @property
     def git_clone_command(self):
         return f"git clone ssh://git@github.com/{self.owner}/{self.name}.git"
@@ -32,13 +35,13 @@ class GitHub(_SharedAPI, _SharedOwner, _SharedName):
 
     def exists(self):
         """ Return whether this API's target exists. """
-        return requests.get(url=self.url).status_code == 200
+        return self._request().ok
 
-    def download(self, path, overwrite=False):
-        """ Clone a GitHub repo into a path.
-            Creates a folder with Package's name first.
-            Target must be empty. """
+    def download(self, path=None, overwrite=False):
+        """ Clone a GitHub repo into a path, defaults to working_dir / name.
+            Creates a folder with Package's name first. """
         if not self.exists():
+            Log(__name__).info(f"Cannot download {self.name}, couldn't find on GitHub.")
             return
 
         path = Path(path) / self.name
@@ -49,6 +52,8 @@ class GitHub(_SharedAPI, _SharedOwner, _SharedName):
             else:
                 raise AttributeError(f"Clone target exists and overwrite is False.")
 
+        # Not quiet sure how this somehow gets auth for private repos
+        # Tried changing token in env and .git/config
         Repo.clone_from(url=self.url, to_path=path)
         return path
 
@@ -58,10 +63,6 @@ class GitHub(_SharedAPI, _SharedOwner, _SharedName):
 
         repos = requests.get(f"https://api.github.com/search/repositories?q=user:{self.owner}", **self.request_kwargs()).json()["items"]
         return set(repo["name"] for repo in repos)
-
-    def _api_url(self, endpoint=None):
-        """ Get URL from owner, name and endpoint. """
-        return "/".join(("https://api.github.com", "repos", self.owner, self.name) + ((endpoint, ) if endpoint else ()))
 
     def get_website(self):
         """ Get website specified in repository details.
@@ -108,11 +109,14 @@ class GitHub(_SharedAPI, _SharedOwner, _SharedName):
         #     },
         # }
         return {
-            "headers": {"Accept": "application/vnd.github.mercy-preview+json"},
+            # "headers": {"Accept": "application/vnd.github.mercy-preview+json"},
+            "headers": {
+                # "Authorization": f"token {PACKAGER_GITHUB_API}",
+                "Accept": "application/vnd.github.v3+json",
+            },
             "auth": (self.owner, PACKAGER_GITHUB_API.value),
         }
 
-    @deco_cache()
     def _request(self, method="get", url=None, endpoint=None, **data):
         """ :rtype: requests.Response """
         method = getattr(requests, method.lower())
@@ -120,7 +124,7 @@ class GitHub(_SharedAPI, _SharedOwner, _SharedName):
         if data:
             kwargs["data"] = json.dumps(data)
         if url is None:
-            url = self._api_url(endpoint=endpoint)
+            url = self.api_url(endpoint=endpoint)
         return method(url=url, **kwargs)
 
 

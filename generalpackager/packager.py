@@ -1,5 +1,5 @@
 from generalfile import Path
-from generallibrary import NetworkDiagram
+from generallibrary import NetworkDiagram, Log
 
 from generalpackager.api.localrepo.base.localrepo_target import _SharedTarget
 from generalpackager.api.shared import _SharedAPI, _SharedName, _SharedPath
@@ -23,7 +23,8 @@ class Packager(NetworkDiagram,
     author = 'Rickard "Mandera" Abraham'
     email = "rickard.abraham@gmail.com"
     license = "mit"
-    python = "3.8", "3.9", "3.10"  # Only supports basic definition with tuple of major.minor
+    python = "3.8", "3.9"  # Only supports basic definition with tuple of major.minor
+    # python = "3.8", "3.9", "3.10"  # Only supports basic definition with tuple of major.minor
     os = "windows", "ubuntu"  # , "macos"
 
     git_exclude_lines = npm_ignore_lines = ".idea", "dist", ".git", "test/tests", ".coverage"
@@ -46,20 +47,25 @@ class Packager(NetworkDiagram,
         packagers = []
         for target, names in cls.Packages.field_dict_defaults().items():
             for name in names:
-                # packager = Packager(name=name, target=target)
                 packager = Packager(name=name, path=name, target=target)
-                print(packager.path)
                 packagers.append(packager)
         return packagers
 
     @classmethod
-    def clone_all_packages(cls, path):
+    def new_clean_environment(cls, path=None):
         """ Creates a new clean environment for the packages.
-            Clones all into a (preferably empty) specified folder. """
-        path = Path(path).set_working_dir()
+            Clones all into a (preferably empty) specified folder.
+            Create and activate new venv.
+            Install python packages as editable. """
+        path = Path(path)
+        assert path.empty()
 
         with path.as_working_dir():
-            cls.packagers_from_packages()
+            packagers = cls.packagers_from_packages()
+
+            for packager in packagers:
+                Log(__name__).info(f"Downloading {packager.name} from GitHub.")
+                packager.github.download()
 
     @staticmethod
     def summary_packagers():
