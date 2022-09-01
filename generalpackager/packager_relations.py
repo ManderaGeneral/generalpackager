@@ -37,7 +37,7 @@ class _PackagerRelations:
     def get_ordered_packagers(cls, include_private=True, include_summary_packagers=False):
         """ Get a list of enabled ordered packagers from the dependency chain, sorted by name in each lvl.
 
-            :param generalpackager.Packager cls:
+            :param generalpackager.Packager or Any cls:
             :param include_private:
             :param include_summary_packagers:
             :rtype: list[generalpackager.Packager] """
