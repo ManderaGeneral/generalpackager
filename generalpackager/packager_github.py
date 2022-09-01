@@ -34,6 +34,11 @@ class _PackagerGitHub:
             tag_ref = repo.create_tag(f"v{self.localrepo.metadata.version}", force=True)
             remote.push(refspec=tag_ref)
         try:
+            """ Todo: Fetch commit sha locally before pushing, possibly generate sha before commit.
+                
+                import git
+                repo = git.Repo(search_parent_directories=True)
+                sha = repo.head.object.hexsha """
             self.commit_sha = remote.push()[0].summary.split("..")[1].rstrip()
         except OSError:  # Just suppressing weird invalid handle error
             pass
