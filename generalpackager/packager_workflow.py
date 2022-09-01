@@ -69,7 +69,7 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self:
             :param version: """
         with_ = CodeLine("with:")
-        with_.add_node(f"python-version: {version}")
+        with_.add_node(f"python-version: '{version}'")
         return self._get_step(f"Set up python version {version}", f"uses: {self._action_setup_python}", with_)
 
     def _step_install_necessities(self):
@@ -141,7 +141,7 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self: """
         strategy = CodeLine("strategy:")
         matrix = strategy.add_node("matrix:")
-        matrix.add_node(f"python-version: {list(self.python)}".replace("'", ""))
+        matrix.add_node(f"python-version: {list(self.python)}")
         matrix.add_node(f"os: {[f'{os}-latest' for os in self.os]}".replace("'", ""))
         return strategy
 
