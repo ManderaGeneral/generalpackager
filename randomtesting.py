@@ -5,7 +5,6 @@ from generalpackager import Packager
 
 
 
-
 Log("generalpackager").configure_stream()
 
 genlib = Packager("genlibrary")
