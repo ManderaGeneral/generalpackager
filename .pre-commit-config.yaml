@@ -5,4 +5,4 @@ repos:
         name: script_I_want_to_run
         entry: python generate.py
         language: system
-        types: [python]
+        always_run: true
