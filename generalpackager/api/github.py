@@ -21,6 +21,10 @@ class GitHub(_SharedAPI, _SharedOwner, _SharedName):
     def url(self):
         return f"https://github.com/{self.owner}/{self.name}"
 
+    @property
+    def ssh_url(self):
+        return f"https://Mandera:{PACKAGER_GITHUB_API}@github.com/{self.owner}/{self.name}.git"
+
     def api_url(self, endpoint=None):
         """ Get URL from owner, name and endpoint. """
         return "/".join(("https://api.github.com", "repos", self.owner, self.name) + ((endpoint, ) if endpoint else ()))

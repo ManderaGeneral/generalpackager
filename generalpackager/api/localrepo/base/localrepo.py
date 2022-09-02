@@ -56,6 +56,9 @@ class LocalRepo(_SharedAPI, _SharedName, _SharedPath, _LocalRepo_Paths, _LocalRe
         """ Return whether this API's target exists. """
         return self.repo_exists(path=self.path)
 
+    def get_repo(self):
+        return Repo(str(self.path))
+
     @classmethod
     def repo_exists(cls, path):
         if path is None or path.is_file() or not path.exists():
@@ -87,8 +90,7 @@ class LocalRepo(_SharedAPI, _SharedName, _SharedPath, _LocalRepo_Paths, _LocalRe
 
     def git_changed_files(self):
         """ Get a list of changed files using local .git folder. """
-        repo = Repo(str(self.path))
-        return [Path(file) for file in re.findall("diff --git a/(.*) " + "b/", repo.git.diff())]
+        return [Path(file) for file in re.findall("diff --git a/(.*) " + "b/", self.get_repo().git.diff())]
 
     @deco_require(metadata_exists)
     def bump_version(self):
