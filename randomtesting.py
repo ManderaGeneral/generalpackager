@@ -6,7 +6,6 @@ from generalpackager import Packager
 # #!/bin/sh
 # c:/python/venvs/dev/scripts/python.exe -c 'from generalpackager import Packager; Packager("generalfile").generate_localfiles(aesthetic=False, error_on_change=True)'
 
-
 packager = Packager()
 
 packager.file_by_relative_path(".git/hooks/pre-commit").generate()
