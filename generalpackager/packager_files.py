@@ -365,9 +365,10 @@ class _PackagerFiles:
 
             :param generalpackager.Packager self: """
         top = CodeLine()
-        # c:/python/venvs/dev/scripts/python.exe
-        top.add_node(CodeLine("#!/bin/sh"))
-        top.add_node(CodeLine(f"{self.localrepo.get_python_exe_path().forward_slash()} -c 'from generalpackager import Packager; Packager(\"{self.name}\").generate_localfiles(aesthetic=False, error_on_change=True)'"))
+
+        top.add_node(CodeLine("#!/usr/bin/env python"))
+        top.add_node(CodeLine(f"from generalpackager import Packager", space_before=1))
+        top.add_node(CodeLine(f"Packager(\"{self.name}\").generate_localfiles(aesthetic=False, error_on_change=True)", space_before=1))
 
         return top
 
