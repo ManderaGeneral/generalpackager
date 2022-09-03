@@ -27,7 +27,7 @@ class _PackagerGitHub:
             :param generalpackager.Packager self:
             :param message:
             :param tag: """
-        repo = self.localrepo.get_repo()
+        repo = self.localrepo.gitpython_repo
         repo.git.add(A=True)
         repo.index.commit(message=str(message) or "Automatic commit.")
         remote = repo.remote()
@@ -50,7 +50,7 @@ class _PackagerGitHub:
 
     def create_master_branch(self):
         """ :param generalpackager.Packager self: """
-        repo = self.localrepo.get_repo()
+        repo = self.localrepo.gitpython_repo
         print(repo.remote().push("head"))
 
     def create_github_repo(self):

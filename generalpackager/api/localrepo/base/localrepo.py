@@ -56,7 +56,9 @@ class LocalRepo(_SharedAPI, _SharedName, _SharedPath, _LocalRepo_Paths, _LocalRe
         """ Return whether this API's target exists. """
         return self.repo_exists(path=self.path)
 
-    def get_repo(self):
+    @property
+    @deco_cache()
+    def gitpython_repo(self):
         return Repo(str(self.path))
 
     @classmethod
@@ -90,7 +92,7 @@ class LocalRepo(_SharedAPI, _SharedName, _SharedPath, _LocalRepo_Paths, _LocalRe
 
     def git_changed_files(self):
         """ Get a list of relative paths changed files using local .git folder. """
-        return [Path(file) for file in re.findall("diff --git a/(.*) " + "b/", self.get_repo().git.diff())]
+        return [Path(file) for file in re.findall("diff --git a/(.*) " + "b/", self.gitpython_repo.git.diff())]
 
     @deco_require(metadata_exists)
     def bump_version(self):
