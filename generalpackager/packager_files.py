@@ -4,8 +4,6 @@ import json
 from generalfile import Path
 from generallibrary import CodeLine, Markdown, Date, deco_cache, Timer, Log
 
-from generalpackager.api.localrepo.base.localrepo_paths import _LocalRepo_Paths
-
 
 class GenerateFile:
     """ Handle generation of files. """
@@ -32,17 +30,13 @@ class GenerateFile:
         return f"<GenerateFile: {self.packager.name} - {self.relative_path}>"
 
 
-class _PackagerFiles(_LocalRepo_Paths):
+class _PackagerFiles:
     """ Generates setup, license and gitexclude.
         Only changed non-aesthetic files can trigger a version bump and publish. """
     extra_aesthetic = "randomtesting.py",  # "licenses"
     extra_non_aesthetic = tuple()
 
     _todo_header = "Todo"
-
-    def get_pre_commit_hook_path(self):
-        """ :param generalpackager.Packager self: """
-        return GenerateFile(self.localrepo.get_pre_commit_hook_path(), self.generate_pre_commit, self, aesthetic=True),
 
     @property
     @deco_cache()
