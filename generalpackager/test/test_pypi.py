@@ -1,12 +1,12 @@
 
 from generalpackager.api.pypi import PyPI
-from generalfile.test.setup_workdir import setup_workdir
+from generalfile.test.test_path import PathTest
 from generallibrary import Date
 
 import unittest
 
 
-class TestPyPI(unittest.TestCase):
+class TestPyPI(PathTest):
     def test_exists(self):
         self.assertEqual(True, PyPI("generalpackager").exists())
         self.assertEqual(False, PyPI("random-package_that,cant.exist").exists())
@@ -17,8 +17,6 @@ class TestPyPI(unittest.TestCase):
         self.assertEqual(True, pypi.name in pypi.get_tarball_url(version="1.0.0"))
 
     def test_download(self):
-        setup_workdir()
-
         path = PyPI("generalpackager").download(path="repo")
         self.assertEqual(True, "generalpackager" in path.get_child())
 
