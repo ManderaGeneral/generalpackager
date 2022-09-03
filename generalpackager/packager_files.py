@@ -4,6 +4,8 @@ import json
 from generalfile import Path
 from generallibrary import CodeLine, Markdown, Date, deco_cache, Timer, Log
 
+from generalpackager.api.localrepo.base.localrepo_paths import _LocalRepo_Paths
+
 
 class GenerateFile:
     """ Handle generation of files. """
@@ -30,13 +32,17 @@ class GenerateFile:
         return f"<GenerateFile: {self.packager.name} - {self.relative_path}>"
 
 
-class _PackagerFiles:
+class _PackagerFiles(_LocalRepo_Paths):
     """ Generates setup, license and gitexclude.
         Only changed non-aesthetic files can trigger a version bump and publish. """
     extra_aesthetic = "randomtesting.py",  # "licenses"
     extra_non_aesthetic = tuple()
 
     _todo_header = "Todo"
+
+    def get_pre_commit_hook_path(self):
+        """ :param generalpackager.Packager self: """
+        return GenerateFile(self.localrepo.get_pre_commit_hook_path(), self.generate_pre_commit, self, aesthetic=True),
 
     @property
     @deco_cache()
@@ -446,18 +452,23 @@ class _PackagerFiles:
         # Not in files because it writes with json not text, it's also a bit unique
         self.localrepo.metadata.write_config()
 
-        for generate in self.files:
-            if aesthetic or not generate.aesthetic:
-                if print_out:
-                    print(f"Generating {generate}")
-                generate.generate()
+        files = [file for file in self.files if aesthetic or not file.aesthetic]
+
+        for file in files:
+            if print_out:
+                print(f"Generating {file}")
+            file.generate()
         if print_out:
             timer.print()
 
         if error_on_change:
-            changed_files = self.localrepo.git_changed_files()
-            if changed_files:
-                raise EnvironmentError(f"Files changed: {changed_files}")
+            file_paths = {file.path for file in files}
+            changed_files = {path.absolute() for path in self.localrepo.git_changed_files()}
+
+            changed_generated_files = file_paths.intersection(changed_files)
+            if changed_generated_files:
+                raise EnvironmentError(f"Files changed: {changed_generated_files}")
+
 
 
 

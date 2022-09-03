@@ -89,7 +89,7 @@ class LocalRepo(_SharedAPI, _SharedName, _SharedPath, _LocalRepo_Paths, _LocalRe
                 yield path
 
     def git_changed_files(self):
-        """ Get a list of changed files using local .git folder. """
+        """ Get a list of relative paths changed files using local .git folder. """
         return [Path(file) for file in re.findall("diff --git a/(.*) " + "b/", self.get_repo().git.diff())]
 
     @deco_require(metadata_exists)

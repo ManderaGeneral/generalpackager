@@ -9,6 +9,11 @@ packager = Packager()
 packager.file_by_relative_path(".git/hooks/pre-commit").generate()
 
 
+# packager.file(packager.localrepo.get_pre_commit_hook_path()).generate()
+# packager.get_pre_commit_hook_path().generate()
+
+
+
 # Log("generalpackager").configure_stream()
 
 # genlib = Packager("genlibrary")
