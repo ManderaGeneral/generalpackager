@@ -1,3 +1,5 @@
+import sys
+
 from coverage import Coverage
 from generalfile import Path
 from generallibrary import terminal, EnvVar, deco_require, Log, RedirectStdout
@@ -11,6 +13,7 @@ class LocalRepo_Python(LocalRepo):
     _cls_metadata = Metadata_Python
     coverage = "-"
 
+    # Put in generalfile?
     @staticmethod
     def get_venv_path():
         """ Return an absolute path to the current VENV or None. """
@@ -18,6 +21,13 @@ class LocalRepo_Python(LocalRepo):
             return Path(EnvVar("VIRTUAL_ENV").value)
         except KeyError:
             return None
+
+    # Put in generalfile?
+    @staticmethod
+    def get_python_exe_path():
+        """ Return an absolute path to the current python exe filee. """
+        return Path(sys.executable)
+
 
     def unittest(self):
         """ Run unittests for this repository.

@@ -3,11 +3,18 @@ from generallibrary import Log
 
 from generalpackager import Packager
 
+# #!/bin/sh
+# c:/python/venvs/dev/scripts/python.exe -c 'from generalpackager import Packager; Packager("generalfile").generate_localfiles(aesthetic=False, error_on_change=True)'
 
 
-Log("generalpackager").configure_stream()
+packager = Packager()
 
-genlib = Packager("genlibrary")
+packager.file_by_relative_path(".git/hooks/pre-commit").generate()
+
+
+# Log("generalpackager").configure_stream()
+
+# genlib = Packager("genlibrary")
 
 # genlib.enable_vcs_operations()
 # genlib.create_github_repo()

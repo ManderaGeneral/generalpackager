@@ -22,7 +22,9 @@ class GenerateFile:
     def generate(self):
         """ Generate actual file. """
         if self.overwrite or not self.path.exists():
-            self.path.text.write(f"{self.text_func()}\n", overwrite=self.overwrite)
+            text = self.text_func()
+            assert text is not None
+            self.path.text.write(f"{text}\n", overwrite=self.overwrite)
 
     def __str__(self):
         return f"<GenerateFile: {self.packager.name} - {self.relative_path}>"
@@ -47,6 +49,7 @@ class _PackagerFiles:
             GenerateFile(self.localrepo.get_workflow_path(), self.generate_workflow, self, aesthetic=True),
             GenerateFile(self.localrepo.get_readme_path(), self.generate_readme, self, aesthetic=True),
             GenerateFile(self.localrepo.get_generate_path(), self.generate_generate, self, aesthetic=True),
+            GenerateFile(self.localrepo.get_pre_commit_hook_path(), self.generate_pre_commit, self, aesthetic=True),
         ]
 
         if self.is_python():
@@ -357,6 +360,17 @@ class _PackagerFiles:
 
         return top
 
+    def generate_pre_commit(self):
+        """ Generate test template.
+
+            :param generalpackager.Packager self: """
+        top = CodeLine()
+        # c:/python/venvs/dev/scripts/python.exe
+        top.add_node(CodeLine("#!/bin/sh"))
+        top.add_node(CodeLine(f"{self.localrepo.get_python_exe_path().forward_slash()} -c 'from generalpackager import Packager; Packager(\"{self.name}\").generate_localfiles(aesthetic=False, error_on_change=True)'"))
+
+        return top
+
     def generate_test_python(self):
         """ Generate test template.
 
@@ -418,12 +432,14 @@ class _PackagerFiles:
         }
         return json.dumps(info, indent=4)
 
-    def generate_localfiles(self, aesthetic=True, print_out=False):
+    def generate_localfiles(self, aesthetic=True, print_out=False, error_on_change=False):
         """ Generate all local files.
+            Returns True if any file is changed.
 
             :param aesthetic:
             :param generalpackager.Packager self:
-            :param print_out: """
+            :param print_out:
+            :param error_on_change: """
         timer = Timer()
 
         # Not in files because it writes with json not text, it's also a bit unique
@@ -437,7 +453,10 @@ class _PackagerFiles:
         if print_out:
             timer.print()
 
-
+        if error_on_change:
+            changed_files = self.localrepo.git_changed_files()
+            if changed_files:
+                raise EnvironmentError(f"Files changed: {changed_files}")
 
 
 

@@ -3,7 +3,7 @@
 from generalpackager import Packager
 
 
-Packager("generalpackager").generate_localfiles(aesthetic=False, print_out=True)
+Packager("generalpackager").generate_localfiles(aesthetic=True, print_out=True)
 
 
 
