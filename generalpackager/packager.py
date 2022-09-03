@@ -27,9 +27,9 @@ class Packager(NetworkDiagram,
     # python = "3.8", "3.9", "3.10"  # Only supports basic definition with tuple of major.minor
     os = "windows", "ubuntu"  # , "macos"
 
-    git_exclude_lines = npm_ignore_lines = ".idea", "dist", ".git", "**test/tests/", "test/tests", ".coverage"
-    git_exclude_lines += "build", "*.egg-info/", "__pycache__", "PKG-INFO", "setup.cfg"
-    npm_ignore_lines += "node_modules", ".parcel-cache"
+    git_exclude_lines = npm_ignore_lines = ".idea/", "dist/", ".git/", "**test/tests/", ".coverage"
+    git_exclude_lines += "build/", "*.egg-info/", "__pycache__/", "PKG-INFO/", "setup.cfg"
+    npm_ignore_lines += "node_modules/", ".parcel-cache/"
 
     Packages = Packages
 
