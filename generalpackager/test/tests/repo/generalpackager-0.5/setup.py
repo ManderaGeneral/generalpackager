@@ -21,7 +21,6 @@ setup(
         'generalfile',
         'pandas',
         'gitpython',
-        'pygithub',
         'requests',
         'pyinstaller',
         'coverage',
