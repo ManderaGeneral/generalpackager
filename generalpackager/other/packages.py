@@ -10,6 +10,7 @@ class Packages(Targets):
     """ Purpose is to easily see if name is general and what target it has.
         Todo: Generate Python file in generalpackager containing general packages. """
     python = [
+        "generalimport",
         "generallibrary",
         "generalfile",
         "generalvector",
