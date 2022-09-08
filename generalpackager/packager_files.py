@@ -288,14 +288,17 @@ class _PackagerFiles:
         # Description
         markdown = self.get_description_markdown()
 
-        # Information
-        self.get_information_markdown().set_parent(parent=markdown)
-
         # Table of contents
         contents = Markdown(header="Contents", parent=markdown)
 
+        # Examples
+        self.get_examples_markdown().set_parent(parent=markdown)
+
         # Installation
         self.get_installation_markdown().set_parent(parent=markdown)
+
+        # Information
+        self.get_information_markdown().set_parent(parent=markdown)
 
         # Attributes
         self.get_attributes_markdown().set_parent(parent=markdown)
@@ -317,7 +320,6 @@ class _PackagerFiles:
             :param generalpackager.Packager self: """
         # ordered_packagers = type(self)().get_ordered_packagers()
         ordered_packagers = self.get_ordered_packagers(include_private=False)
-
 
         # Description
         markdown = Markdown(header="ManderaGeneral").add_list_lines(

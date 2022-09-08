@@ -88,7 +88,8 @@ class _PackagerMarkdown:
         """ :param generalpackager.Packager self: """
         part_of = f"This package and {len(self.get_all()) - 1} other make up {Markdown.link(text='ManderaGeneral', url='https://github.com/ManderaGeneral')}."
 
-        return Markdown(self.localrepo.metadata.description, "\n", part_of, header=self.name)
+        return Markdown(self.localrepo.metadata.description, header=self.name)
+        # return Markdown(self.localrepo.metadata.description, "\n", part_of, header=self.name)
 
     def get_information_markdown(self, *packagers):
         """ Get information table.
@@ -144,13 +145,17 @@ class _PackagerMarkdown:
 
         return markdown
 
+    @staticmethod
+    def _filt(markdown):
+        return markdown.header and markdown.lines
+
     def _configure_contents_markdown(self, markdown):
         """ Configure table of contents lines from markdown.
 
             :param generalpackager.Packager self:
             :param markdown: """
         parent_markdown = markdown.get_parent(-1, -1)
-        markdown.add_pre_lines(parent_markdown.view(custom_repr=lambda md: md.link(md.header, href=True), print_out=False))
+        markdown.add_pre_lines(parent_markdown.view(custom_repr=lambda md: md.link(md.header, href=True), print_out=False, filt=self._filt))
         return markdown
 
     def github_link(self, text, suffix):
@@ -219,4 +224,50 @@ class _PackagerMarkdown:
             line += f" for commit {self.github_link(text=self.commit_sha, suffix=f'commit/{self.commit_sha}')}."
 
         return Markdown(line).wrap_with_tags("sup")
+
+    @staticmethod
+    def _docstring_markdown(docstrings, index, parent):
+        if len(docstrings) > index:
+            docstring = docstrings[index]
+            docstring = docstring.replace('"""', "").strip()
+            docstring_lines = docstring.splitlines(keepends=True)
+            docstring_markdown = Markdown(parent=parent)
+            docstring_markdown.add_lines(*docstring_lines)
+            return docstring_markdown
+
+    def get_examples_markdown(self):
+        """ Read examples folder and convert to markdown.
+            Might wanna sort by alphabetical or something.
+
+            :param generalpackager.Packager self: """
+        markdown = Markdown(header="Examples")
+        for path in self.localrepo.get_examples_path().get_children():  # type: Path
+            example = Markdown(header=path.name(), parent=markdown)
+
+            lines = path.text.read()
+            docstrings = re.findall(r'""".*?"""', lines, flags=re.S)
+
+            self._docstring_markdown(docstrings=docstrings, index=0, parent=example)
+
+            code = re.sub(r'""".*?"""', "", lines, flags=re.S)
+            code_lines = code.strip().splitlines(keepends=True)
+            code_markdown = Markdown(parent=example)
+            code_markdown.add_code_lines(*code_lines)
+
+            self._docstring_markdown(docstrings=docstrings, index=1, parent=example)
+        return markdown
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

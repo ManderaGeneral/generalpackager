@@ -4,9 +4,11 @@ from generallibrary import Log
 from generalpackager import Packager
 
 
-stacktester = Packager.create_blank_locally_python("../other/stacktester", install=False)
+# stacktester = Packager.create_blank_locally_python("../other/stacktester", install=False)
+# print(stacktester)
 
-print(stacktester)
+
+Packager().get_examples_markdown()
 
 # packager = Packager()
 
