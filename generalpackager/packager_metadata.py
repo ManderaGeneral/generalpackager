@@ -39,7 +39,7 @@ class _PackagerMetadata:
 
         version = self.pypi.get_version()
         if version is None:
-            return None
+            return True
         else:
             return self.localrepo.metadata.version > version
 

@@ -8,7 +8,7 @@ from generalpackager import Packager
 # print(stacktester)
 
 
-print(Packager("generalimport").generate_readme())
+print(Packager("generalimport").is_bumped())
 
 # packager = Packager()
 
