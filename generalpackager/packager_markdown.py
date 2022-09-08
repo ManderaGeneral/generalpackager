@@ -80,8 +80,6 @@ class _PackagerMarkdown:
         markdown = Markdown(header=self._todo_header)
         if todos:
             markdown.add_table_lines(*todos)
-        else:
-            markdown.add_node("No todos!")
         return markdown
 
     def get_description_markdown(self):
@@ -262,7 +260,7 @@ class _PackagerMarkdown:
             code_lines = code.strip().splitlines(keepends=True)
             if code_lines:
                 code_markdown = Markdown(parent=example)
-                code_markdown.add_code_lines(*code_lines)
+                code_markdown.add_code_lines(*code_lines, lang="python")
 
             self._docstring_markdown(docstrings=docstrings, index=1, parent=example)
         return markdown
