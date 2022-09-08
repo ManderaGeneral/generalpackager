@@ -8,7 +8,7 @@ from generalpackager import Packager
 # print(stacktester)
 
 
-Packager().get_examples_markdown()
+print(Packager("generalimport").generate_readme())
 
 # packager = Packager()
 

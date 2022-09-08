@@ -147,13 +147,13 @@ class _PackagerMarkdown:
 
     @staticmethod
     def _filt(markdown):
-        return markdown.header and markdown.lines
+        return markdown.header
 
     def _configure_contents_markdown(self, markdown):
         """ Configure table of contents lines from markdown.
 
             :param generalpackager.Packager self:
-            :param markdown: """
+            :param Markdown markdown: """
         parent_markdown = markdown.get_parent(-1, -1)
         markdown.add_pre_lines(parent_markdown.view(custom_repr=lambda md: md.link(md.header, href=True), print_out=False, filt=self._filt))
         return markdown
