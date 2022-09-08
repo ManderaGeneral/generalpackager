@@ -11,7 +11,7 @@ setup(
     name="generalpackager",
     author='Rickard "Mandera" Abraham',
     author_email="rickard.abraham@gmail.com",
-    version="0.5.1",
+    version="0.5.2",
     description="Tools to interface GitHub, PyPI, NPM and local modules / repos. Used for generating files to keep projects dry and synced. Tailored for my general packages.",
     long_description=long_description,
     long_description_content_type="text/markdown",

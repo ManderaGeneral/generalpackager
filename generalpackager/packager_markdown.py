@@ -145,7 +145,7 @@ class _PackagerMarkdown:
 
     @staticmethod
     def _filt(markdown):
-        return markdown.header
+        return markdown.header and (markdown.lines or markdown.get_children())
 
     def _configure_contents_markdown(self, markdown):
         """ Configure table of contents lines from markdown.
