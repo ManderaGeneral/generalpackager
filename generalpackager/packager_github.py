@@ -29,6 +29,7 @@ class _PackagerGitHub:
             :param tag: """
         repo = self.localrepo.gitpython_repo
         repo.git.add(A=True)
+        # Todo: commit-hook failed for auto commit "not a valid Win32 application"
         repo.index.commit(message=str(message) or "Automatic commit.")
         remote = repo.remote()
         remote.set_url(f"https://Mandera:{PACKAGER_GITHUB_API}@github.com/{self.github.owner}/{self.name}.git")
@@ -48,10 +49,11 @@ class _PackagerGitHub:
             pass
         return self.commit_sha
 
-    def create_master_branch(self):
+    def enable_vcs_operations(self):
         """ :param generalpackager.Packager self: """
-        repo = self.localrepo.gitpython_repo
-        print(repo.remote().push("head"))
+        Git(str(self.path)).init()
+        # self.localrepo.get_repo().git.add(A=True)
+        # repo = self.localrepo.get_repo()
 
     def create_github_repo(self):
         """ :param generalpackager.Packager self: """
@@ -63,18 +65,18 @@ class _PackagerGitHub:
             name=self.name,
             private=self.localrepo.metadata.private,
         )
-        # repo = manderageneral.get_repo(self.name)
+        repo = manderageneral.get_repo(self.name)
         # repo.create_git_ref()
         # print(repo.master_branch)
         # print(list(repo.get_branches()))
 
-    def enable_vcs_operations(self):
+    def create_master_branch(self):
         """ :param generalpackager.Packager self: """
-        Git(str(self.path)).init()
-        # self.localrepo.get_repo().git.add(A=True)
-        # repo = self.localrepo.get_repo()
+        repo = self.localrepo.gitpython_repo
+        # Create remote somehow first
+        print(repo.remote().push("head"))
 
-
+    # Todo: Setup env vars for project.
 
 
 

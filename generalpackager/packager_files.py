@@ -112,6 +112,7 @@ class _PackagerFiles:
     @classmethod
     def create_blank_locally_python(cls, path, install=True):
         """ Create a new general package locally only.
+            Todo: Fix create_blank, it overwrites current projects pip install.
 
             :param generalpackager.Packager or Any cls:
             :param Path or str path:
@@ -126,8 +127,10 @@ class _PackagerFiles:
         if install:
             packager.localrepo.pip_install_editable()
 
-        new_self = packager.get_new_packager()  # Reset caches to get updated files
-        new_self.generate_localfiles()
+        # new_self = packager.get_new_packager()  # Reset caches to get updated files
+        # new_self.generate_localfiles()
+
+        return packager
 
     def relative_path_is_aesthetic(self, relative_path):
         """ Relative to package path. False if not defined as a GenerateFile instance.
@@ -444,7 +447,8 @@ class _PackagerFiles:
         timer = Timer()
 
         # Not in files because it writes with json not text, it's also a bit unique
-        self.localrepo.metadata.write_config()
+        self.localrepo.metadata.name = self.name
+        # self.localrepo.metadata.write_config()
 
         files = [file for file in self.files if aesthetic or not file.aesthetic]
 

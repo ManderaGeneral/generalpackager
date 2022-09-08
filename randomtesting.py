@@ -4,9 +4,13 @@ from generallibrary import Log
 from generalpackager import Packager
 
 
-packager = Packager()
+stacktester = Packager.create_blank_locally_python("../other/stacktester", install=False)
 
-packager.file_by_relative_path(".git/hooks/pre-commit").generate()
+print(stacktester)
+
+# packager = Packager()
+
+# packager.file_by_relative_path(".git/hooks/pre-commit").generate()
 
 
 # packager.file(packager.localrepo.get_pre_commit_hook_path()).generate()

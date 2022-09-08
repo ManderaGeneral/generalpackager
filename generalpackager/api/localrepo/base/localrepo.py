@@ -20,7 +20,7 @@ class LocalRepo(_SharedAPI, _SharedName, _SharedPath, _LocalRepo_Paths, _LocalRe
 
     _BASE_CLS_NAME = "LocalRepo"
 
-    # _deco_require_metadata = deco_require(lambda self: self.metadata.exists(), lambda func: f"{func.__name__} requires metadata.")
+    # _deco_require_metadata = deco_require(lambda self: self.metadata.exists(), message=lambda func: f"{func.__name__} requires metadata.")
 
     def __init__(self, name=None, path=None):
         pass
@@ -31,7 +31,8 @@ class LocalRepo(_SharedAPI, _SharedName, _SharedPath, _LocalRepo_Paths, _LocalRe
         if self.path is None:
             return None
         else:
-            return self._cls_metadata(path=self.get_metadata_path())
+            metadata = self._cls_metadata(path=self.get_metadata_path())
+            return metadata
 
     @property
     def target(self):

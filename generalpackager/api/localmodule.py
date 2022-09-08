@@ -8,7 +8,7 @@ from generalpackager.api.shared import _SharedAPI, _SharedName
 class LocalModule(_SharedAPI, _SharedName):
     """ Tools to interface a Local Python Module. """
 
-    # _deco_require_module = deco_require(lambda self: self.exists(), lambda func: f"{func.__name__} requires module.")
+    # _deco_require_module = deco_require(lambda self: self.exists(), message=lambda func: f"{func.__name__} requires module.")
 
     def __init__(self, name=None):
         self._module = None
