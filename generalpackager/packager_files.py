@@ -202,7 +202,7 @@ class _PackagerFiles:
             "install_requires": self.localrepo.metadata.install_requires,
             "url": f'"{self.github.url}"',
             "license": f'"{self.license}"',
-            "python_requires": f'">={self.python[0]}, <{last_version_bumped_micro}"',
+            # "python_requires": f'">={self.python[0]}, <{last_version_bumped_micro}"',
             "packages": 'find_namespace_packages(exclude=("build*", "dist*"))',
             "extras_require": self.localrepo.metadata.extras_require,
             "classifiers": self.get_classifiers(),
