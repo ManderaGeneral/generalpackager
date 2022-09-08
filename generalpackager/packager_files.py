@@ -303,6 +303,9 @@ class _PackagerFiles:
         # Attributes
         self.get_attributes_markdown().set_parent(parent=markdown)
 
+        # Contributions
+        self.get_contributions_markdown().set_parent(parent=markdown)
+
         # Todos
         self.get_todos_markdown(self, drop_package_col=True).set_parent(parent=markdown)
 

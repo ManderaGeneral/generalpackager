@@ -229,11 +229,18 @@ class _PackagerMarkdown:
     def _docstring_markdown(docstrings, index, parent):
         if len(docstrings) > index:
             docstring = docstrings[index]
-            docstring = docstring.replace('"""', "").strip()
-            docstring_lines = docstring.splitlines(keepends=True)
+            docstring = docstring.replace('"""', "")
+            docstring_lines = [line.strip() for line in docstring.splitlines(keepends=True)]
             docstring_markdown = Markdown(parent=parent)
             docstring_markdown.add_lines(*docstring_lines)
             return docstring_markdown
+
+    def _header_from_path(self, path):
+        stem = path.stem()
+        if stem[0].isdigit():
+            stem = stem[1:]
+        header = stem.replace("_", " ").title()
+        return header
 
     def get_examples_markdown(self):
         """ Read examples folder and convert to markdown.
@@ -241,8 +248,10 @@ class _PackagerMarkdown:
 
             :param generalpackager.Packager self: """
         markdown = Markdown(header="Examples")
-        for path in self.localrepo.get_examples_path().get_children():  # type: Path
-            example = Markdown(header=path.name(), parent=markdown)
+        paths = self.localrepo.get_examples_path().get_children()
+        sorted_paths = sorted(paths, key=lambda path: path.name())
+        for path in sorted_paths:  # type: Path
+            example = Markdown(header=self._header_from_path(path=path), parent=markdown)
 
             lines = path.text.read()
             docstrings = re.findall(r'""".*?"""', lines, flags=re.S)
@@ -251,13 +260,21 @@ class _PackagerMarkdown:
 
             code = re.sub(r'""".*?"""', "", lines, flags=re.S)
             code_lines = code.strip().splitlines(keepends=True)
-            code_markdown = Markdown(parent=example)
-            code_markdown.add_code_lines(*code_lines)
+            if code_lines:
+                code_markdown = Markdown(parent=example)
+                code_markdown.add_code_lines(*code_lines)
 
             self._docstring_markdown(docstrings=docstrings, index=1, parent=example)
         return markdown
 
-
+    def get_contributions_markdown(self):
+        markdown = Markdown(header="Contributions")
+        markdown.add_lines(
+            "Issue-creation and discussion is most welcome!",
+            "",
+            "Pull requests are **not wanted**, please discuss with me before investing any time."
+        )
+        return markdown
 
 
 
