@@ -19,6 +19,7 @@ setup(
         'generallibrary',
         'generalfile',
         'pandas',
+        'tabulate',
         'gitpython',
         'pygithub',
         'requests',
