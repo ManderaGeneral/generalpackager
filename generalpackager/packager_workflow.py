@@ -111,7 +111,7 @@ class _PackagerWorkflow:
 
         for packager in packagers:
             if packager.target == packager.Targets.python:
-                run.add_node(f"pip install -e {packager.name}")
+                run.add_node(f"pip install -e {packager.name}[full]")
         return step
 
     def _get_env(self):
