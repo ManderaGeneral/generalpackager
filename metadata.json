@@ -1,6 +1,6 @@
 {
     "install_requires": [
-        "generallibrary",
+        "generallibrary[full]",
         "generalfile",
         "pandas",
         "tabulate",
