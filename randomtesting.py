@@ -4,14 +4,7 @@ from generallibrary import Log
 from generalpackager import Packager
 
 
-# stacktester = Packager.create_blank_locally_python("../other/stacktester", install=False)
-# print(stacktester)
-
-
-print(Packager("generalimport").is_bumped())
-
 # packager = Packager()
-
 # packager.file_by_relative_path(".git/hooks/pre-commit").generate()
 
 

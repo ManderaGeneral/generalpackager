@@ -133,10 +133,15 @@ class _PackagerMarkdown:
 
         list_of_dicts = []
 
-        for command, packages in options.items():
-            row = {"Command": f"`pip install {command}`"}
-            for dependency in dependencies_required + dependencies_optional:
-                row[Markdown.link(dependency, url=f"https://pypi.org/project/{dependency}", href=True)] = "Yes" if dependency in packages else "No"
+        all_deps = dependencies_required + dependencies_optional
+
+        for dependency in all_deps:
+            dep_string = Markdown.link(dependency, url=f"https://pypi.org/project/{dependency}", href=True)
+            row = {"Command": dep_string}
+            for command, packages in options.items():
+                pip_install = f"`pip install {command}`"
+                dep_included = "Yes" if dependency in packages else "No"
+                row[pip_install] = dep_included
             list_of_dicts.append(row)
 
         markdown.add_table_lines(*list_of_dicts)
@@ -268,9 +273,9 @@ class _PackagerMarkdown:
     def get_contributions_markdown(self):
         markdown = Markdown(header="Contributions")
         markdown.add_lines(
-            "Issue-creation and discussion is most welcome!",
+            "Issue-creation and discussions are most welcome!",
             "",
-            "Pull requests are **not wanted**, please discuss with me before investing any time."
+            "Pull requests are not wanted, please discuss with me before investing any time"
         )
         return markdown
 

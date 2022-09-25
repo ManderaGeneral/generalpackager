@@ -45,9 +45,9 @@ class LocalRepo_Python(LocalRepo):
     @deco_require(LocalRepo.exists)
     def pip_install_editable(self):
         """ Install this repository with pip and -e flag. """
-        with self.path.as_working_dir():
+        with self.path.get_parent().as_working_dir():
             Log().debug(f"Pip install for {self}")
-            terminal("pip", "install", "-e", ".")
+            terminal("pip", "install", "-e", self.name)
 
     @deco_require(LocalRepo.exists)
     def pip_uninstall(self):
