@@ -87,6 +87,7 @@ class Packager(NetworkDiagram,
                 self.set_parent(parent=packager)
 
     def __repr__(self):
+        """ :param generalpackager.Packager self: """
         info = [self.target]
         if self.path is None:
             info.append("No Path")

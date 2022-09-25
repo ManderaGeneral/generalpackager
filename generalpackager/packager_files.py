@@ -291,6 +291,9 @@ class _PackagerFiles:
         # Table of contents
         contents = Markdown(header="Contents", parent=markdown)
 
+        # Mermaid
+        self.get_mermaid_markdown().set_parent(parent=markdown)
+
         # Examples
         self.get_examples_markdown().set_parent(parent=markdown)
 

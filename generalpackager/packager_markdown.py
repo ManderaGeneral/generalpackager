@@ -271,6 +271,7 @@ class _PackagerMarkdown:
         return markdown
 
     def get_contributions_markdown(self):
+        """ :param generalpackager.Packager self: """
         markdown = Markdown(header="Contributions")
         markdown.add_lines(
             "Issue-creation and discussions are most welcome!",
@@ -279,7 +280,14 @@ class _PackagerMarkdown:
         )
         return markdown
 
-
+    def get_mermaid_markdown(self):
+        """ :param generalpackager.Packager self: """
+        repr_func = lambda pkg: pkg.simple_name
+        url_func = lambda pkg: pkg.github.url
+        highlight_self = True
+        markdown = self.mermaid(repr_func=repr_func, url_func=url_func, highlight_self=highlight_self)
+        markdown.header = "Dependency Tree"
+        return markdown
 
 
 

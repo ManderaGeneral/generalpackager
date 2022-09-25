@@ -3,8 +3,9 @@ from generallibrary import Log
 
 from generalpackager import Packager
 
+packager = Packager()
+Path("hi.md").text.write(packager.mermaid(), overwrite=True)
 
-# packager = Packager()
 # packager.file_by_relative_path(".git/hooks/pre-commit").generate()
 
 
