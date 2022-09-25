@@ -25,7 +25,6 @@ class TestLocalModule(unittest.TestCase):
         self.assertNotIn(LocalModule("doesntexist"), LocalModule().get_all_local_modules())
 
     def test_get_dependencies(self):
-        self.assertIn(LocalModule("generallibrary"), LocalModule().get_dependencies())
         self.assertIn(LocalModule("generalfile"), LocalModule().get_dependencies())
         self.assertNotIn(LocalModule("doesntexist"), LocalModule().get_dependencies())
 
