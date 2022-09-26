@@ -1,14 +1,32 @@
+import re
+
 from generalfile import Path
-from generallibrary import Log
+from generallibrary import Log, Timer
 
 from generalpackager import Packager
 
+import pstats
+import cProfile
+
 packager = Packager()
-# print(packager.get_parents())
+
+# pr = cProfile.Profile()
+# pr.enable()
+# pr.runcall(packager.get_parents, depth=1)
+# pr.disable()
+#
+# p = pstats.Stats(pr)
+# p.print_callers('_traverse')
+
+with Timer():
+    # packager.get_parents(depth=1)
+    # print(packager.get_parents(depth=-1))
+    # print(packager.get_dependencies())
+    print(packager.get_all())
+
 
 # Path("hi.md").text.write(packager.get_mermaid_markdown(), overwrite=True)
 
-print(packager.get_dependencies())
 
 # packager.file_by_relative_path(".git/hooks/pre-commit").generate()
 

@@ -2,7 +2,7 @@
 import re
 
 from generalfile import Path
-from generallibrary import deco_cache, deco_require
+from generallibrary import deco_cache, deco_require, Timer
 from git import Repo
 from setuptools import find_namespace_packages
 

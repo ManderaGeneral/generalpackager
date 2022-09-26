@@ -1,7 +1,7 @@
 import re
 
 from generalfile import Path
-from generallibrary import Recycle, AutoInitBases, Log
+from generallibrary import Recycle, AutoInitBases, Log, Timer, deco_cache
 
 from generalpackager.other.packages import Packages
 
@@ -39,12 +39,13 @@ class _SharedName:
         self.name = self._scrub_name(name=name, path=path)
 
     @classmethod
+    @deco_cache()
     def _trim_partial(cls, name):
-        if name and "[" in name:
-            return name.split("[")[0]
-        return name
+        if name:
+            return re.match("(\w|-)+", name).group()
 
     @classmethod
+    @deco_cache()
     def _scrub_name(cls, name, path):
         name = cls._trim_partial(name=name)
 
@@ -84,6 +85,7 @@ class _SharedPath:
         self.path = self._scrub_path(name=name, path=path)
 
     @classmethod
+    @deco_cache()
     def _resolve_path_localmodule(cls, name):
         """ :param generalpackager.Packager cls:
             :rtype: Path or None """
@@ -95,6 +97,7 @@ class _SharedPath:
             return path
 
     @classmethod
+    @deco_cache()
     def _resolve_path_workingdir_traverse_parents(cls, name):
         """ :param generalpackager.Packager cls:
             :rtype: Path or None """
@@ -103,6 +106,7 @@ class _SharedPath:
             return repo_parent_path / name
 
     @classmethod
+    @deco_cache()
     def _resolve_path(cls, name):
         """ :param generalpackager.Packager cls:
             :rtype: Path or None """
@@ -113,6 +117,7 @@ class _SharedPath:
                 return path
 
     @classmethod
+    @deco_cache()
     def _scrub_path(cls, name, path):
         """ :param generalpackager.Packager cls:
             :rtype: Path or None """
