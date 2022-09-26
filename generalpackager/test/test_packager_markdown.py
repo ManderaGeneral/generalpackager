@@ -21,7 +21,7 @@ class TestPackager(PathTest):
         self.assertIn("generalpackager", Packager().get_information_markdown())
 
     def test_get_installation_markdown(self):
-        self.assertIn("pip install generalpackager", Packager().get_installation_markdown())
+        self.assertIn("pip install", Packager().get_installation_markdown())
 
     def test_github_link(self):
         self.assertIn("generalpackager", Packager().github_link("foo", "bar"))
