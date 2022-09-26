@@ -321,7 +321,7 @@ class _PackagerFiles:
         return markdown
 
     def generate_personal_readme(self):
-        """ Generate personal readme markdown and overwrite README.md in local repo.
+        """ Generate personal readme markdown.
 
             :param generalpackager.Packager self: """
         # ordered_packagers = type(self)().get_ordered_packagers()
