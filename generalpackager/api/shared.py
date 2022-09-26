@@ -1,3 +1,4 @@
+import re
 
 from generalfile import Path
 from generallibrary import Recycle, AutoInitBases, Log
@@ -38,7 +39,15 @@ class _SharedName:
         self.name = self._scrub_name(name=name, path=path)
 
     @classmethod
+    def _trim_partial(cls, name):
+        if name and "[" in name:
+            return name.split("[")[0]
+        return name
+
+    @classmethod
     def _scrub_name(cls, name, path):
+        name = cls._trim_partial(name=name)
+
         if path and hasattr(cls, "_scrub_path"):
             path = Path(path)
             if name and not path.endswith(name):

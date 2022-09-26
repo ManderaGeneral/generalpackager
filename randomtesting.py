@@ -4,7 +4,11 @@ from generallibrary import Log
 from generalpackager import Packager
 
 packager = Packager()
-Path("hi.md").text.write(packager.mermaid(), overwrite=True)
+# print(packager.get_parents())
+
+# Path("hi.md").text.write(packager.get_mermaid_markdown(), overwrite=True)
+
+print(packager.get_dependencies())
 
 # packager.file_by_relative_path(".git/hooks/pre-commit").generate()
 

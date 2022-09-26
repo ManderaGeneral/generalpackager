@@ -294,11 +294,11 @@ class _PackagerFiles:
         # Mermaid
         self.get_mermaid_markdown().set_parent(parent=markdown)
 
-        # Examples
-        self.get_examples_markdown().set_parent(parent=markdown)
-
         # Installation
         self.get_installation_markdown().set_parent(parent=markdown)
+
+        # Examples
+        self.get_examples_markdown().set_parent(parent=markdown)
 
         # Information
         self.get_information_markdown().set_parent(parent=markdown)

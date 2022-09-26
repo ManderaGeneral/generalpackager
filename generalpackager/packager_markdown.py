@@ -137,10 +137,10 @@ class _PackagerMarkdown:
 
         for dependency in all_deps:
             dep_string = Markdown.link(dependency, url=f"https://pypi.org/project/{dependency}", href=True)
-            row = {"Command": dep_string}
+            row = {"`pip install` ...": dep_string}
             for command, packages in options.items():
-                pip_install = f"`pip install {command}`"
-                dep_included = "Yes" if dependency in packages else "No"
+                pip_install = f"`{command}`"
+                dep_included = "✓" if dependency in packages else "❌"
                 row[pip_install] = dep_included
             list_of_dicts.append(row)
 
