@@ -6,13 +6,15 @@ from generallibrary import Log, Timer
 from generalpackager import Packager
 
 packager = Packager()
+print(packager.summary_packagers()[1])
 
-with Timer():
-    # packager.get_parents(depth=1)
-    # print(packager.get_parents(depth=-1))
-    # print(packager.get_dependencies())
-    # print(packager.get_all())
-    Path("hi.md").text.write(packager.get_mermaid_markdown(), overwrite=True)
+
+
+# packager.get_parents(depth=1)
+# print(packager.get_parents(depth=-1))
+# print(packager.get_dependencies())
+# print(packager.get_all())
+# Path("hi.md").text.write(packager.get_mermaid_markdown(), overwrite=True)
 
 
 

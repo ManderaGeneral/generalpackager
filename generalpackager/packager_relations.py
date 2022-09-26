@@ -37,6 +37,7 @@ class _PackagerRelations:
         """ :param generalpackager.Packager self: """
         return self.is_general() and self.localrepo.metadata and self.localrepo.metadata.enabled
 
+    @deco_cache()
     def get_ordered_packagers(self, include_private=True, include_summary_packagers=False):
         """ Get a list of enabled ordered packagers from the dependency chain, sorted by name in each lvl.
 
@@ -69,14 +70,14 @@ class _PackagerRelations:
         """ Return a set of general packagers that have been bumped.
 
             :param generalpackager.Packager self: """
-        return {packager for packager in self.get_all() if packager.is_bumped()}
+        return {packager for packager in self.get_ordered_packagers() if packager.is_bumped()}
 
     def general_changed_dict(self, aesthetic=None):
         """ Return a dict of general packagers with changed files comparing to github.
 
             :param generalpackager.Packager self:
             :param aesthetic: """
-        return {packager: files for packager in self.get_all() if (files := packager.compare_local_to_github(aesthetic=aesthetic))}
+        return {packager: files for packager in self.get_ordered_packagers() if (files := packager.compare_local_to_github(aesthetic=aesthetic))}
 
     @deco_cache()
     def get_untested_objInfo_dict(self):
