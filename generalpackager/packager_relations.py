@@ -1,5 +1,5 @@
 
-from generallibrary import remove_duplicates, deco_cache, Log, Timer
+from generallibrary import remove_duplicates, deco_cache, Log, Timer, flatten
 
 from itertools import chain
 
@@ -33,24 +33,27 @@ class _PackagerRelations:
         packagers = {type(self)(localmodule.name) for localmodule in self.localmodule.get_dependants() if not only_general or self.name_is_general(localmodule.name)}
         return list(packagers)
 
-    @classmethod
-    def get_ordered_packagers(cls, include_private=True, include_summary_packagers=False):
+    def is_enabled(self):
+        """ :param generalpackager.Packager self: """
+        return self.is_general() and self.localrepo.metadata and self.localrepo.metadata.enabled
+
+    def get_ordered_packagers(self, include_private=True, include_summary_packagers=False):
         """ Get a list of enabled ordered packagers from the dependency chain, sorted by name in each lvl.
 
-            :param generalpackager.Packager or Any cls:
+            :param generalpackager.Packager or Any self:
             :param include_private:
             :param include_summary_packagers:
             :rtype: list[generalpackager.Packager] """
-        packager = cls()
-        packagers = [packager for packager_set in packager.get_ordered(flat=False) for packager in sorted(packager_set, key=lambda x: x.name)]
-
-        packagers = remove_duplicates(packagers)
+        # packagers = [packager for packager_set in packager.get_ordered(flat=False) for packager in sorted(packager_set, key=lambda x: x.name)]
+        packagers_by_layer = self.get_ordered(flat=False, filt=type(self).is_enabled)
+        sorted_layers = [sorted(layer, key=lambda pkg: pkg.name) for layer in packagers_by_layer]
+        packagers = flatten(sorted_layers)
 
         if not include_private:
             packagers = [packager for packager in packagers if not packager.localrepo.metadata.private]
 
         if include_summary_packagers:
-            packagers.extend(cls.summary_packagers())
+            packagers.extend(self.summary_packagers())
 
         Log().debug("Ordered packagers:", packagers)
 

@@ -282,10 +282,12 @@ class _PackagerMarkdown:
 
     def get_mermaid_markdown(self):
         """ :param generalpackager.Packager self: """
+        nodes = self.get_ordered_packagers(include_private=False)
+        # nodes = self.get_parents(depth=-1, include_self=True)
         repr_func = lambda pkg: pkg.simple_name
         url_func = lambda pkg: pkg.github.url
         highlight_self = True
-        markdown = self.mermaid(repr_func=repr_func, url_func=url_func, highlight_self=highlight_self)
+        markdown = self.mermaid(nodes=nodes, repr_func=repr_func, url_func=url_func, highlight_self=highlight_self)
         markdown.header = "Dependency Tree"
         return markdown
 
