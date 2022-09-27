@@ -15,7 +15,10 @@ class TestPackager(PathTest):
         Packager().get_todos_markdown()
 
     def test_get_description_markdown(self):
-        self.assertIn("generalpackager", Packager().get_description_markdown())
+        self.assertEqual(True, len(str(Packager().get_description_markdown())) > 3)
+
+    def test_get_org_description_markdown(self):
+        self.assertEqual(True, len(str(Packager().get_org_description_markdown())) > 3)
 
     def test_get_information_markdown(self):
         self.assertIn("generalpackager", Packager().get_information_markdown())

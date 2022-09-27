@@ -84,10 +84,7 @@ class _PackagerMarkdown:
 
     def get_description_markdown(self):
         """ :param generalpackager.Packager self: """
-        part_of = f"This package and {len(self.get_all()) - 1} other make up {Markdown.link(text='ManderaGeneral', url='https://github.com/ManderaGeneral')}."
-
         return Markdown(self.localrepo.metadata.description, header=self.name)
-        # return Markdown(self.localrepo.metadata.description, "\n", part_of, header=self.name)
 
     def get_information_markdown(self, *packagers):
         """ Get information table.
@@ -101,14 +98,14 @@ class _PackagerMarkdown:
 
         list_of_dicts = []
         for packager in packagers:
-            package = Markdown.link(text=packager.name, url=packager.github.url),
-            ver = Markdown.link(text=packager.localrepo.metadata.version, url=packager.pypi.url),
-            latest_release = packager.get_latest_release(),
-            python = ", ".join([Markdown.link(text=ver, url=f"{python_url}{str(ver).replace('.', '')}0/") for ver in packager.python]),
-            platform = ", ".join(map(str.capitalize, packager.os)),
-            lvl = packager.get_ordered_index(),
-            todo = Markdown.link(text=len(packager.get_todos()), url=f"{packager.github.url}#{self._todo_header}"),
-            cover = f"{getattr(packager.localrepo, 'coverage', self.LocalRepo_Python.coverage)} %",
+            package = Markdown.link(text=packager.name, url=packager.github.url)
+            ver = Markdown.link(text=packager.localrepo.metadata.version, url=packager.pypi.url)
+            latest_release = packager.get_latest_release()
+            python = ", ".join([Markdown.link(text=ver, url=f"{python_url}{str(ver).replace('.', '')}0/") for ver in packager.python])
+            platform = ", ".join(map(str.capitalize, packager.os))
+            lvl = packager.get_ordered_index()
+            todo = Markdown.link(text=len(packager.get_todos()), url=f"{packager.github.url}#{self._todo_header}")
+            cover = f"{getattr(packager.localrepo, 'coverage', self.LocalRepo_Python.coverage)} %"
 
             list_of_dicts.append({
                 "Package": package,
@@ -296,7 +293,13 @@ class _PackagerMarkdown:
         markdown.header = "Dependency Tree"
         return markdown
 
-
+    def get_org_description_markdown(self):
+        """ :param generalpackager.Packager self: """
+        return Markdown(header="ManderaGeneral").add_list_lines(
+            "A collection of connected packages.",
+            "Violently updated with little regard for backwards compatability.",
+            "Automatic workflows to unittest, sync and publish.",
+        )
 
 
 

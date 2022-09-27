@@ -297,11 +297,11 @@ class _PackagerFiles:
         # Installation
         self.get_installation_markdown().set_parent(parent=markdown)
 
-        # Examples
-        self.get_examples_markdown().set_parent(parent=markdown)
-
         # Information
         self.get_information_markdown().set_parent(parent=markdown)
+
+        # Examples
+        self.get_examples_markdown().set_parent(parent=markdown)
 
         # Attributes
         self.get_attributes_markdown().set_parent(parent=markdown)
@@ -324,21 +324,19 @@ class _PackagerFiles:
         """ Generate personal readme markdown.
 
             :param generalpackager.Packager self: """
-        # ordered_packagers = type(self)().get_ordered_packagers()
         ordered_packagers = self.get_ordered_packagers(include_private=False)
 
         # Description
-        markdown = Markdown(header="ManderaGeneral").add_list_lines(
-            "A collection of connected packages.",
-            "Violently updated with little regard for backwards compatability.",
-            "Automatic workflows to unittest, sync and publish.",
-        )
+        markdown = self.get_org_description_markdown()
+
+        # Mermaid
+        self.get_mermaid_markdown().set_parent(parent=markdown)
 
         # Package information
         self.get_information_markdown(*ordered_packagers).set_parent(parent=markdown)
 
-        # Todos
-        self.get_todos_markdown(*ordered_packagers).set_parent(parent=markdown)
+        # Contributions
+        self.get_contributions_markdown().set_parent(parent=markdown)
 
         # Generation timestamp
         self.get_footnote_markdown(commit=False).set_parent(parent=markdown)
