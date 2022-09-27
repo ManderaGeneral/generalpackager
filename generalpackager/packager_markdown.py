@@ -108,8 +108,7 @@ class _PackagerMarkdown:
             platform = ", ".join(map(str.capitalize, packager.os))
             lvl = packager.get_ordered_index()
             todo = Markdown.link(text=len(packager.get_todos()), url=f"{packager.github.url}#{self._todo_header}")
-            _coverage = getattr(packager.localrepo, 'coverage')
-            cover = self.CROSS if _coverage is None else f"{_coverage} %"
+            cover = self.CROSS if packager.localrepo.coverage is None else f"{packager.localrepo.coverage} %"
 
             list_of_dicts.append({
                 "Package": package,
