@@ -20,6 +20,7 @@ class LocalRepo(_SharedAPI, _SharedName, _SharedPath, _LocalRepo_Paths, _LocalRe
         Todo: Search for imports to list dependencies. """
 
     _BASE_CLS_NAME = "LocalRepo"
+    coverage = None
 
     # _deco_require_metadata = deco_require(lambda self: self.metadata.exists(), message=lambda func: f"{func.__name__} requires metadata.")
 

@@ -6,6 +6,9 @@ import re
 
 
 class _PackagerMarkdown:
+    CROSS = "❌"
+    CHECK = "✔️"
+
     """ Contains methods to generate readme sections from arguments. """
     def get_badges_dict(self):
         """ Get badges as a dict.
@@ -105,7 +108,8 @@ class _PackagerMarkdown:
             platform = ", ".join(map(str.capitalize, packager.os))
             lvl = packager.get_ordered_index()
             todo = Markdown.link(text=len(packager.get_todos()), url=f"{packager.github.url}#{self._todo_header}")
-            cover = f"{getattr(packager.localrepo, 'coverage', self.LocalRepo_Python.coverage)} %"
+            _coverage = getattr(packager.localrepo, 'coverage')
+            cover = self.CROSS if _coverage is None else f"{_coverage} %"
 
             list_of_dicts.append({
                 "Package": package,
@@ -142,7 +146,7 @@ class _PackagerMarkdown:
             row = {"`pip install`": dep_string}
             for command, packages in options.items():
                 pip_install = f"`{command}`"
-                dep_included = "✔️" if dependency in packages else "❌"
+                dep_included = self.CHECK if dependency in packages else self.CROSS
                 row[pip_install] = dep_included
             list_of_dicts.append(row)
 
