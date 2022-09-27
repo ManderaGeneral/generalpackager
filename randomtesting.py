@@ -6,8 +6,10 @@ from generallibrary import Log, Timer
 from generalpackager import Packager
 
 packager = Packager()
-print(packager.summary_packagers()[1])
 
+
+
+# print(packager.get_ordered_packagers(include_private=False))
 
 
 # packager.get_parents(depth=1)

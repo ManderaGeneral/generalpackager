@@ -11,6 +11,7 @@ from generalpackager.api.localrepo.python.metadata_python import Metadata_Python
 class LocalRepo_Python(LocalRepo):
     _cls_target = LocalRepo.Targets.python
     _cls_metadata = Metadata_Python
+    coverage = "-"
 
     # Put in generalfile?
     @staticmethod

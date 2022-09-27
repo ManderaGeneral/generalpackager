@@ -33,20 +33,16 @@ class _PackagerRelations:
         packagers = {type(self)(localmodule.name) for localmodule in self.localmodule.get_dependants() if not only_general or self.name_is_general(localmodule.name)}
         return list(packagers)
 
-    def is_enabled(self):
-        """ :param generalpackager.Packager self: """
-        return self.is_general() and self.localrepo.metadata and self.localrepo.metadata.enabled
-
+    @classmethod
     @deco_cache()
-    def get_ordered_packagers(self, include_private=True, include_summary_packagers=False):
+    def get_ordered_packagers(cls, include_private=True, include_summary_packagers=False):
         """ Get a list of enabled ordered packagers from the dependency chain, sorted by name in each lvl.
 
-            :param generalpackager.Packager or Any self:
+            :param generalpackager.Packager or Any cls:
             :param include_private:
             :param include_summary_packagers:
             :rtype: list[generalpackager.Packager] """
-        # packagers = [packager for packager_set in packager.get_ordered(flat=False) for packager in sorted(packager_set, key=lambda x: x.name)]
-        packagers_by_layer = self.get_ordered(flat=False, filt=type(self).is_enabled)
+        packagers_by_layer = cls().get_ordered(flat=False)
         sorted_layers = [sorted(layer, key=lambda pkg: pkg.name) for layer in packagers_by_layer]
         packagers = flatten(sorted_layers)
 
@@ -54,7 +50,7 @@ class _PackagerRelations:
             packagers = [packager for packager in packagers if not packager.localrepo.metadata.private]
 
         if include_summary_packagers:
-            packagers.extend(self.summary_packagers())
+            packagers.extend(cls.summary_packagers())
 
         Log().debug("Ordered packagers:", packagers)
 

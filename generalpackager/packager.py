@@ -1,5 +1,5 @@
 from generalfile import Path
-from generallibrary import NetworkDiagram, Log
+from generallibrary import NetworkDiagram, Log, deco_cache
 
 from generalpackager.api.localrepo.base.localrepo_target import _SharedTarget
 from generalpackager.api.shared import _SharedAPI, _SharedName, _SharedPath
@@ -69,6 +69,7 @@ class Packager(NetworkDiagram,
                 packager.github.download()
 
     @staticmethod
+    @deco_cache()
     def summary_packagers():
         """ Packagers to hold summary of environment. """
         return [
@@ -78,16 +79,12 @@ class Packager(NetworkDiagram,
 
     def spawn_children(self):
         """ :param generalpackager.Packager self: """
-        # for packager in self.get_dependants():
-        #     packager.set_parent(parent=self)
         for packager in self.get_dependants(only_general=True):
             if packager.localrepo.metadata.enabled:
                 packager.set_parent(parent=self)
 
     def spawn_parents(self):
         """ :param generalpackager.Packager self: """
-        # for packager in self.get_dependencies():
-        #     self.set_parent(parent=packager)
         for packager in self.get_dependencies(only_general=True):
             if packager.localrepo.metadata.enabled:
                 self.set_parent(parent=packager)

@@ -101,19 +101,24 @@ class _PackagerMarkdown:
 
         list_of_dicts = []
         for packager in packagers:
-            # attrs = packager._get_attributes_view().count("\n")
-            # untested_attrs = len(packager.get_untested_objInfo_dict())
-            # test_percentage = floor((attrs - untested_attrs) / attrs * 100, 1) if attrs else 100
+            package = Markdown.link(text=packager.name, url=packager.github.url),
+            ver = Markdown.link(text=packager.localrepo.metadata.version, url=packager.pypi.url),
+            latest_release = packager.get_latest_release(),
+            python = ", ".join([Markdown.link(text=ver, url=f"{python_url}{str(ver).replace('.', '')}0/") for ver in packager.python]),
+            platform = ", ".join(map(str.capitalize, packager.os)),
+            lvl = packager.get_ordered_index(),
+            todo = Markdown.link(text=len(packager.get_todos()), url=f"{packager.github.url}#{self._todo_header}"),
+            cover = f"{getattr(packager.localrepo, 'coverage', self.LocalRepo_Python.coverage)} %",
 
             list_of_dicts.append({
-                "Package": Markdown.link(text=packager.name, url=packager.github.url),
-                "Ver": Markdown.link(text=packager.localrepo.metadata.version, url=packager.pypi.url),
-                "Latest Release": packager.get_latest_release(),
-                "Python": ", ".join([Markdown.link(text=ver, url=f"{python_url}{str(ver).replace('.', '')}0/") for ver in packager.python]),
-                "Platform": ", ".join(map(str.capitalize, packager.os)),
-                "Lvl": packager.get_ordered_index(),
-                "Todo": Markdown.link(text=len(packager.get_todos()), url=f"{packager.github.url}#{self._todo_header}"),
-                "Cover": f"{packager.localrepo.coverage} %",
+                "Package": package,
+                "Ver": ver,
+                "Latest Release": latest_release,
+                "Python": python,
+                "Platform": platform,
+                "Lvl": lvl,
+                "Todo": todo,
+                "Cover": cover,
             })
         markdown.add_table_lines(*list_of_dicts, sort_by=["Lvl", "Package"])
         return markdown
@@ -137,10 +142,10 @@ class _PackagerMarkdown:
 
         for dependency in all_deps:
             dep_string = Markdown.link(dependency, url=f"https://pypi.org/project/{dependency}", href=True)
-            row = {"`pip install` ...": dep_string}
+            row = {"`pip install`": dep_string}
             for command, packages in options.items():
                 pip_install = f"`{command}`"
-                dep_included = "✓" if dependency in packages else "❌"
+                dep_included = "✔️" if dependency in packages else "❌"
                 row[pip_install] = dep_included
             list_of_dicts.append(row)
 
