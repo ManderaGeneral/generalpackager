@@ -127,7 +127,7 @@ class _PackagerMarkdown:
         """ Get install markdown.
 
             :param generalpackager.Packager self: """
-        markdown = Markdown(header="Installation")
+        markdown = Markdown(header="Installation showing dependencies")
 
         dependencies_required = self.localrepo.metadata.install_requires.copy()
         dependencies_optional = list(set().union(*self.localrepo.metadata.extras_require.values()))
@@ -293,7 +293,7 @@ class _PackagerMarkdown:
         url_func = lambda pkg: pkg.github.url
         highlight_self = True
         markdown = self.mermaid(nodes=nodes, repr_func=repr_func, url_func=url_func, highlight_self=highlight_self)
-        markdown.header = "Dependency Tree"
+        markdown.header = "Dependency Diagram"
         return markdown
 
     def get_org_description_markdown(self):
