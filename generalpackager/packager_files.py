@@ -365,7 +365,8 @@ class _PackagerFiles:
             :param generalpackager.Packager self: """
         top = CodeLine()
         top.add_node(CodeLine(f"from generalpackager import Packager", space_before=1, space_after=1))
-        top.add_node(CodeLine(f"""Packager("{self.name}").generate_localfiles(print_out=True)""", space_after=50))
+        main = top.add_node(CodeLine(f'if __name__ == "__main__":'))
+        main.add_node(CodeLine(f"""Packager("{self.name}").generate_localfiles(print_out=True)""", space_after=50))
 
         return top
 
