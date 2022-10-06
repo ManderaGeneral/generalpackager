@@ -8,6 +8,7 @@ import re
 class _PackagerMarkdown:
     CROSS = "❌"
     CHECK = "✔️"
+    NO_DEP = "*No dependencies*"
 
     """ Contains methods to generate readme sections from arguments. """
     def get_badges_dict(self):
@@ -123,6 +124,20 @@ class _PackagerMarkdown:
         markdown.add_table_lines(*list_of_dicts, sort_by=["Lvl", "Package"])
         return markdown
 
+    def _get_package_string(self, name):
+        if name == self.NO_DEP:
+            return self.NO_DEP
+        else:
+            return Markdown.link(name, url=f"https://pypi.org/project/{name}", href=True)
+
+    def _checked(self, packages, dependency):
+        if dependency in packages:
+            return self.CHECK
+        elif dependency == self.NO_DEP:
+            return self.CHECK
+        else:
+            return self.CROSS
+
     def get_installation_markdown(self):
         """ Get install markdown.
 
@@ -139,14 +154,14 @@ class _PackagerMarkdown:
         list_of_dicts = []
 
         all_deps = dependencies_required + dependencies_optional
+        if not all_deps:
+            all_deps = [self.NO_DEP]
 
         for dependency in all_deps:
-            dep_string = Markdown.link(dependency, url=f"https://pypi.org/project/{dependency}", href=True)
-            row = {"`pip install`": dep_string}
+            row = {"`pip install`": self._get_package_string(name=dependency)}
             for command, packages in options.items():
                 pip_install = f"`{command}`"
-                dep_included = self.CHECK if dependency in packages else self.CROSS
-                row[pip_install] = dep_included
+                row[pip_install] = self._checked(packages=packages, dependency=dependency)
             list_of_dicts.append(row)
 
         markdown.add_table_lines(*list_of_dicts)
