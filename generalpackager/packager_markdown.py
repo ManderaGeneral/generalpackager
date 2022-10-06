@@ -107,8 +107,6 @@ class _PackagerMarkdown:
             latest_release = packager.get_latest_release()
             python = ", ".join([Markdown.link(text=ver, url=f"{python_url}{str(ver).replace('.', '')}0/") for ver in packager.python])
             platform = ", ".join(map(str.capitalize, packager.os))
-            lvl = packager.get_ordered_index()
-            todo = Markdown.link(text=len(packager.get_todos()), url=f"{packager.github.url}#{self._todo_header}")
             cover = self.CROSS if packager.localrepo.coverage is None else f"{packager.localrepo.coverage} %"
 
             list_of_dicts.append({
@@ -117,8 +115,6 @@ class _PackagerMarkdown:
                 "Latest Release": latest_release,
                 "Python": python,
                 "Platform": platform,
-                "Lvl": lvl,
-                "Todo": todo,
                 "Cover": cover,
             })
         markdown.add_table_lines(*list_of_dicts, sort_by=["Lvl", "Package"])
