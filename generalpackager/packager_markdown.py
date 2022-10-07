@@ -117,7 +117,7 @@ class _PackagerMarkdown:
                 "Platform": platform,
                 "Cover": cover,
             })
-        markdown.add_table_lines(*list_of_dicts, sort_by=["Lvl", "Package"])
+        markdown.add_table_lines(*list_of_dicts, sort_by=["Package"])
         return markdown
 
     def _get_package_string(self, name):
