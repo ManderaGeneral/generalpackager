@@ -304,7 +304,7 @@ class _PackagerMarkdown:
         url_func = lambda pkg: pkg.github.url
         highlight_self = True
         markdown = self.mermaid(nodes=nodes, repr_func=repr_func, url_func=url_func, highlight_self=highlight_self)
-        markdown.header = "Dependency Diagram"
+        markdown.header = "ManderaGeneral Dependency Diagram"
         return markdown
 
     def get_org_description_markdown(self):
