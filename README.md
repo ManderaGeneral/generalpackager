@@ -1,26 +1,29 @@
 # generalpackager
 Tools to interface GitHub, PyPI, NPM and local modules / repos. Used for generating files to keep projects dry and synced. Tailored for my general packages.
 
-## Contents
-<pre>
-<a href='#generalpackager'>generalpackager</a>
-├─ <a href='#ManderaGeneral-Dependency-Diagram'>ManderaGeneral Dependency Diagram</a>
-├─ <a href='#Installation-showing-dependencies'>Installation showing dependencies</a>
-├─ <a href='#Information'>Information</a>
-├─ <a href='#Attributes'>Attributes</a>
-├─ <a href='#Contributions'>Contributions</a>
-└─ <a href='#Todo'>Todo</a>
-</pre>
+<details>
+<summary><h2>Contents</h2></summary>
 
-## ManderaGeneral Dependency Diagram
+<pre>
+<a href="#generalpackager">generalpackager</a>
+├─ <a href="#Dependency-Diagram-for-ManderaGeneral">Dependency Diagram for ManderaGeneral</a>
+├─ <a href="#Installation-showing-dependencies">Installation showing dependencies</a>
+├─ <a href="#Information">Information</a>
+├─ <a href="#Attributes">Attributes</a>
+├─ <a href="#Contributions">Contributions</a>
+└─ <a href="#Todo">Todo</a>
+</pre>
+</details>
+
+## Dependency Diagram for ManderaGeneral
 ```mermaid
 flowchart LR
-1([library]) --> 2([file])
-1([library]) --> 4([packager])
-0([import]) --> 2([file])
 1([library]) --> 3([vector])
+0([import]) --> 2([file])
 2([file]) --> 4([packager])
 0([import]) --> 1([library])
+1([library]) --> 4([packager])
+1([library]) --> 2([file])
 click 0 "https://github.com/ManderaGeneral/generalimport"
 click 1 "https://github.com/ManderaGeneral/generallibrary"
 click 2 "https://github.com/ManderaGeneral/generalfile"
@@ -32,22 +35,22 @@ style 4 fill:#482
 ## Installation showing dependencies
 | `pip install`                                                                      | `generalpackager`   |
 |:-----------------------------------------------------------------------------------|:--------------------|
-| <a href='https://pypi.org/project/generallibrary[table]'>generallibrary[table]</a> | ✔️                  |
-| <a href='https://pypi.org/project/generalfile'>generalfile</a>                     | ✔️                  |
-| <a href='https://pypi.org/project/gitpython'>gitpython</a>                         | ✔️                  |
-| <a href='https://pypi.org/project/pygithub'>pygithub</a>                           | ✔️                  |
-| <a href='https://pypi.org/project/requests'>requests</a>                           | ✔️                  |
-| <a href='https://pypi.org/project/pyinstaller'>pyinstaller</a>                     | ✔️                  |
-| <a href='https://pypi.org/project/coverage'>coverage</a>                           | ✔️                  |
+| <a href='https://pypi.org/project/generallibrary[table]'>generallibrary[table]</a> | ✔️                   |
+| <a href='https://pypi.org/project/generalfile'>generalfile</a>                     | ✔️                   |
+| <a href='https://pypi.org/project/gitpython'>gitpython</a>                         | ✔️                   |
+| <a href='https://pypi.org/project/pygithub'>pygithub</a>                           | ✔️                   |
+| <a href='https://pypi.org/project/requests'>requests</a>                           | ✔️                   |
+| <a href='https://pypi.org/project/pyinstaller'>pyinstaller</a>                     | ✔️                   |
+| <a href='https://pypi.org/project/coverage'>coverage</a>                           | ✔️                   |
 
 ## Information
 | Package                                                              | Ver                                                | Latest Release        | Python                                                                                                                                                                                  | Platform        | Cover   |
 |:---------------------------------------------------------------------|:---------------------------------------------------|:----------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------|:--------|
-| [generalpackager](https://github.com/ManderaGeneral/generalpackager) | [0.5.4](https://pypi.org/project/generalpackager/) | 2022-10-07 16:07 CEST | [3.8](https://www.python.org/downloads/release/python-380/), [3.9](https://www.python.org/downloads/release/python-390/), [3.10](https://www.python.org/downloads/release/python-3100/) | Windows, Ubuntu | 67.1 %  |
+| [generalpackager](https://github.com/ManderaGeneral/generalpackager) | [0.5.4](https://pypi.org/project/generalpackager/) | 2022-10-07 16:07 CEST | [3.8](https://www.python.org/downloads/release/python-380/), [3.9](https://www.python.org/downloads/release/python-390/), [3.10](https://www.python.org/downloads/release/python-3100/) | Windows, Ubuntu | ❌      |
 
 
-## Attributes
 <pre>
+## Attributes
 <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/__init__.py#L1'>Module: generalpackager</a>
 ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/github.py#L12'>Class: GitHub</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/github.py#L12'>Class: GitHub</a>
@@ -248,23 +251,23 @@ Pull requests are not wanted, please discuss with me before investing any time
 ## Todo
 | Module                                                                                                                                                      | Message                                                                                                                                                                                                          |
 |:------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_workflow.py#L1'>packager_workflow.py</a>                    | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_workflow.py#L195'>Add single job to make sure workflow is up to date.</a>                                        |
-| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_github.py#L1'>packager_github.py</a>                        | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_github.py#L32'>commit-hook failed for auto commit "not a valid Win32 application</a>                             |
-| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_github.py#L1'>packager_github.py</a>                        | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_github.py#L41'>Fetch commit sha locally before pushing, possibly generate sha before commit.</a>                 |
-| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_github.py#L1'>packager_github.py</a>                        | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_github.py#L79'>Setup env vars for project.</a>                                                                   |
 | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L1'>packager_files.py</a>                          | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L44'>Watermark generated files to prevent mistake of thinking you can modify them directly.</a>         |
 | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L1'>packager_files.py</a>                          | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L102'>Generalize get_new_packager which calls recycle_clear on all attributes.</a>                      |
 | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L1'>packager_files.py</a>                          | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L115'>Fix create_blank, it overwrites current projects pip install.</a>                                 |
-| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/pypi.py#L1'>pypi.py</a>                                          | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/pypi.py#L12'>Move download to it's own package.</a>                                                                   |
-| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/pypi.py#L1'>pypi.py</a>                                          | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/pypi.py#L66'>Find a faster fetch for latest PyPI version and datetime.</a>                                            |
-| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/localrepo/python/metadata_python.py#L1'>metadata_python.py</a>   | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/localrepo/python/metadata_python.py#L4'>Dynamic values in DataClass to remove LocalRepos and Metadatas.</a>           |
+| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/github.py#L1'>github.py</a>                                      | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/github.py#L14'>Get and Set GitHub repo private.</a>                                                                   |
+| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/localrepo/base/localrepo.py#L1'>localrepo.py</a>                 | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/localrepo/base/localrepo.py#L20'>Search for imports to list dependencies.</a>                                         |
 | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/localrepo/python/localrepo_python.py#L1'>localrepo_python.py</a> | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/localrepo/python/localrepo_python.py#L64'>Make sure twine is installed when trying to upload to pypi.</a>             |
 | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/localrepo/python/localrepo_python.py#L1'>localrepo_python.py</a> | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/localrepo/python/localrepo_python.py#L65'>Look into private PyPI server where we could also do dry runs for test.</a> |
-| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/localrepo/base/localrepo.py#L1'>localrepo.py</a>                 | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/localrepo/base/localrepo.py#L20'>Search for imports to list dependencies.</a>                                         |
-| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/github.py#L1'>github.py</a>                                      | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/github.py#L14'>Get and Set GitHub repo private.</a>                                                                   |
+| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/localrepo/python/metadata_python.py#L1'>metadata_python.py</a>   | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/localrepo/python/metadata_python.py#L4'>Dynamic values in DataClass to remove LocalRepos and Metadatas.</a>           |
+| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/pypi.py#L1'>pypi.py</a>                                          | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/pypi.py#L12'>Move download to it's own package.</a>                                                                   |
+| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/pypi.py#L1'>pypi.py</a>                                          | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/pypi.py#L66'>Find a faster fetch for latest PyPI version and datetime.</a>                                            |
+| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_github.py#L1'>packager_github.py</a>                        | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_github.py#L32'>commit-hook failed for auto commit "not a valid Win32 application</a>                             |
+| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_github.py#L1'>packager_github.py</a>                        | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_github.py#L41'>Fetch commit sha locally before pushing, possibly generate sha before commit.</a>                 |
+| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_github.py#L1'>packager_github.py</a>                        | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_github.py#L79'>Setup env vars for project.</a>                                                                   |
 | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/other/packages.py#L1'>packages.py</a>                                | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/other/packages.py#L11'>Generate Python file in generalpackager containing general packages.</a>                           |
+| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_workflow.py#L1'>packager_workflow.py</a>                    | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_workflow.py#L195'>Add single job to make sure workflow is up to date.</a>                                        |
 | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_markdown.py#L1'>packager_markdown.py</a>                    | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_markdown.py#L74'>Sort todos by name to decrease automatic commit changes.</a>                                    |
 
 <sup>
-Generated 2022-10-15 09:34 CEST for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
+Generated 2022-10-17 15:33 CEST for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
 </sup>
