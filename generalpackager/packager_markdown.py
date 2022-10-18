@@ -81,7 +81,7 @@ class _PackagerMarkdown:
         if drop_package_col:
             todos = [exclusive(todo, "Package") for todo in todos]
 
-        markdown = Markdown(header=self._todo_header)
+        markdown = Markdown(header=self._todo_header, collapsible=True)
         if todos:
             markdown.add_table_lines(*todos)
         return markdown
@@ -231,7 +231,7 @@ class _PackagerMarkdown:
         """ Get a recursive view of attributes markdown.
 
             :param generalpackager.Packager self: """
-        return Markdown(header="Attributes").add_pre_lines(self._get_attributes_view())
+        return Markdown(header="Attributes", collapsible=True).add_pre_lines(self._get_attributes_view())
 
     def get_footnote_markdown(self, commit=True):
         """ Get a markdown for footnote containing date, time and commit link.
@@ -270,7 +270,7 @@ class _PackagerMarkdown:
         paths = self.localrepo.get_examples_path().get_children()
         sorted_paths = sorted(paths, key=lambda path: path.name())
         for path in sorted_paths:  # type: Path
-            example = Markdown(header=self._header_from_path(path=path), parent=markdown)
+            example = Markdown(header=self._header_from_path(path=path), parent=markdown, collapsible=True)
 
             lines = path.text.read()
             docstrings = re.findall(r'""".*?"""', lines, flags=re.S)

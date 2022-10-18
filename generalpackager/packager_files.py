@@ -281,6 +281,12 @@ class _PackagerFiles:
 
         return workflow.text()
 
+    @staticmethod
+    def set_collapsible(markdown):
+        for child in markdown.get_children(include_self=True):
+            if child.collapsible is None and child.header:
+                child.collapsible = False
+
     def generate_readme(self):
         """ Generate readme markdown and overwrite README.md in local repo.
 
@@ -317,6 +323,8 @@ class _PackagerFiles:
 
         # Generation timestamp
         self.get_footnote_markdown().set_parent(parent=markdown)
+
+        self.set_collapsible(markdown)
 
         return markdown
 
