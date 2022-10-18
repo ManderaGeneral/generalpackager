@@ -242,7 +242,7 @@ class _PackagerMarkdown:
         if commit:
             line += f" for commit {self.github_link(text=self.commit_sha, suffix=f'commit/{self.commit_sha}')}."
 
-        return Markdown(line).wrap_with_tags("sup")
+        return Markdown(line).wrap_with_tags("<sup>", "</sup>")
 
     @staticmethod
     def _docstring_markdown(docstrings, index, parent):
@@ -304,7 +304,7 @@ class _PackagerMarkdown:
         url_func = lambda pkg: pkg.github.url
         highlight_self = True
         markdown = self.mermaid(nodes=nodes, repr_func=repr_func, url_func=url_func, highlight_self=highlight_self)
-        markdown.header = "ManderaGeneral Dependency Diagram"
+        markdown.header = "Dependency Diagram for ManderaGeneral"
         return markdown
 
     def get_org_description_markdown(self):

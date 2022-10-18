@@ -295,7 +295,7 @@ class _PackagerFiles:
         markdown = self.get_description_markdown()
 
         # Table of contents
-        contents = Markdown(header="Contents", parent=markdown)
+        contents = Markdown(header="Table of Contents", parent=markdown, collapsible=True)
 
         # Mermaid
         self.get_mermaid_markdown().set_parent(parent=markdown)
