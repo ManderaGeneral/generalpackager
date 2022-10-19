@@ -463,7 +463,7 @@ class _PackagerFiles:
 
         # Not in files because it writes with json not text, it's also a bit unique
         self.localrepo.metadata.name = self.name
-        # self.localrepo.metadata.write_config()
+        self.localrepo.metadata.write_config()
 
         files = [file for file in self.files if aesthetic or not file.aesthetic]
 
