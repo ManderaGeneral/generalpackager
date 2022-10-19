@@ -269,8 +269,9 @@ class _PackagerMarkdown:
         markdown = Markdown(header="Examples")
         paths = self.localrepo.get_examples_path().get_children()
         sorted_paths = sorted(paths, key=lambda path: path.name())
-        for path in sorted_paths:  # type: Path
-            example = Markdown(header=self._header_from_path(path=path), parent=markdown, collapsible=True)
+        for i, path in enumerate(sorted_paths):
+            collapsible = i > 0
+            example = Markdown(header=self._header_from_path(path=path), parent=markdown, collapsible=collapsible)
 
             lines = path.text.read()
             docstrings = re.findall(r'""".*?"""', lines, flags=re.S)
