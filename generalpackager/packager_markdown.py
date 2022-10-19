@@ -1,5 +1,5 @@
 
-from generallibrary import Markdown, floor, Date, deco_cache, ObjInfo, flatten, exclusive
+from generallibrary import Markdown, floor, Date, deco_cache, ObjInfo, flatten, exclusive, comma_and_and
 from generalfile import Path
 
 import re
@@ -289,11 +289,14 @@ class _PackagerMarkdown:
     def get_contributions_markdown(self):
         """ :param generalpackager.Packager self: """
         markdown = Markdown(header="Contributions")
-        markdown.add_lines(
-            "Issue-creation and discussions are most welcome!",
-            "",
-            "Pull requests are not wanted, please discuss with me before investing any time"
-        )
+        welcome = ["Issue-creation", "discussions"]
+        contribute = self.localrepo.metadata.contribute
+
+        if contribute:
+            welcome.append("pull requests")
+        markdown.add_lines(f"{comma_and_and(*welcome, period=False)} are most welcome!",)
+        if not contribute:
+            markdown.add_lines("", "Pull requests are not wanted, please discuss with me before investing any time")
         return markdown
 
     def get_mermaid_markdown(self):
