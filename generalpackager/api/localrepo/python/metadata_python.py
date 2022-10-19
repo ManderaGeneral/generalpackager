@@ -12,3 +12,8 @@ class Metadata_Python(Metadata):
             keys = [key for key in extras_require.values() if key != "full"]
             extras_require["full"] = list(set().union(*keys))
             extras_require["full"].sort()
+
+    def write_hook_pre(self, dict_):
+        super().write_hook_pre(dict_=dict_)
+        dict_.get("extras_require", {}).pop("full", None)
+
