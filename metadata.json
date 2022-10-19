@@ -20,5 +20,6 @@
     ],
     "manifest": [
         "generalpackager/licenses/*"
-    ]
+    ],
+    "contribute": false
 }
