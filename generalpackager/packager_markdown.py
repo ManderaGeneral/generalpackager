@@ -263,7 +263,7 @@ class _PackagerMarkdown:
 
     def get_examples_markdown(self):
         """ Read examples folder and convert to markdown.
-            Might wanna sort by alphabetical or something.
+            Might want to sort by alphabetical or something.
 
             :param generalpackager.Packager self: """
         markdown = Markdown(header="Examples")
@@ -314,8 +314,7 @@ class _PackagerMarkdown:
     def get_org_description_markdown(self):
         """ :param generalpackager.Packager self: """
         return Markdown(header="ManderaGeneral").add_list_lines(
-            "A collection of connected packages.",
-            "Violently updated with little regard for backwards compatability.",
+            "Modularized platform for managing future products.",
             "Automatic workflows to unittest, sync and publish.",
         )
 
