@@ -205,13 +205,7 @@ class _PackagerMarkdown:
         path = objInfo.file(relative=True)
 
         line = objInfo.get_definition_line()
-
-        string = self.github_link_path_line(text=text, path=path, line=line)
-
-        if objInfo.name in self.get_untested_objInfo_dict():
-            string = f"{string} <b>(Untested)</b>"
-
-        return string
+        return self.github_link_path_line(text=text, path=path, line=line)
 
     def _get_attributes_view(self):
         """ :param generalpackager.Packager self: """
