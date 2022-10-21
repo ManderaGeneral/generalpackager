@@ -16,7 +16,7 @@ class GenerateFile:
 
         Log().debug(f"Creating {text_func.__name__} handler for {packager.name} with path {packager.path}")
 
-        self.relative_path = path.relative(base=packager.path)
+        self.relative_path = packager.relative_path(path=path)
         self.path = packager.path / self.relative_path  # HERE ** This doesn't work if Packager's path is None
 
     def generate(self):
@@ -33,9 +33,6 @@ class GenerateFile:
 class _PackagerFiles:
     """ Generates setup, license and gitexclude.
         Only changed non-aesthetic files can trigger a version bump and publish. """
-    extra_aesthetic = "randomtesting.py",  # "licenses"
-    extra_non_aesthetic = tuple()
-
     _todo_header = "Todo"
 
     @property
@@ -76,15 +73,18 @@ class _PackagerFiles:
         """ :param generalpackager.Packager self: """
         return {file.relative_path: file for file in self.files}
 
-    def file_by_relative_path(self, path):
+    def relative_path(self, path):
+        """ :param generalpackager.Packager self:
+            :param Path or str path: """
+        path = Path(path)
+        return path.relative(base=self.path)
+
+    def file_by_path(self, path):
         """ :param generalpackager.Packager self:
             :param Path or str path:
             :rtype: GenerateFile """
-        path = Path(path)
-        try:
-            return self.all_files_by_relative_path()[path.relative(base=self.path)]
-        except KeyError:
-            return None
+        relative_path = self.relative_path(path=path)
+        return self.all_files_by_relative_path().get(relative_path)
 
     @property
     @deco_cache()
@@ -132,21 +132,13 @@ class _PackagerFiles:
 
         return packager
 
-    def relative_path_is_aesthetic(self, relative_path):
-        """ Relative to package path. False if not defined as a GenerateFile instance.
+    def path_is_aesthetic(self, path):
+        """ None if not defined as a GenerateFile instance.
 
             :param generalpackager.Packager self:
-            :param Path or str relative_path: """
-        relative_path = Path(relative_path).relative(self.path)
-        aesthetic_attr = getattr(self.all_files_by_relative_path().get(relative_path, None), "aesthetic", None)
-        if aesthetic_attr is None:
-            if relative_path.match(*self.extra_aesthetic):
-                return True
-            # elif relative_path.match(*self.extra_non_aesthetic):
-            #     return False
-            else:
-                return False
-        return aesthetic_attr
+            :param Path or str path: """
+        file = self.file_by_path(path=path)
+        return file.aesthetic if file else None
 
     def filter_relative_filenames(self, *filenames, aesthetic):
         """ If aesthetic is None then it doesn't filter any.
@@ -155,7 +147,7 @@ class _PackagerFiles:
 
             :param generalpackager.Packager self:
             :param bool or None aesthetic: """
-        return [path for path in filenames if aesthetic is None or aesthetic is self.relative_path_is_aesthetic(path)]
+        return [path for path in filenames if aesthetic is None or aesthetic is self.path_is_aesthetic(path=path)]
 
     @deco_cache()
     def _compare_local(self, platform, aesthetic):

@@ -10,9 +10,9 @@ class TestPackager(PathTest):
 
     def test_relative_path_is_aesthetic(self):
         packager = Packager()
-        self.assertEqual(False, packager.relative_path_is_aesthetic("setup.py"))
-        self.assertEqual(True, packager.relative_path_is_aesthetic("README.md"))
-        self.assertEqual(True, packager.relative_path_is_aesthetic(packager.localrepo.get_readme_path()))
+        self.assertEqual(False, packager.path_is_aesthetic("setup.py"))
+        self.assertEqual(True, packager.path_is_aesthetic("README.md"))
+        self.assertEqual(True, packager.path_is_aesthetic(packager.localrepo.get_readme_path()))
 
     def test_filter_relative_filenames(self):
         packager = Packager()
@@ -102,8 +102,8 @@ class TestPackager(PathTest):
         self.assertEqual(True, Path("newblank/newblank").exists())
 
     def test_file_by_relative_path(self):
-        self.assertIs(Packager(), Packager().file_by_relative_path("README.md").packager)
-        self.assertIs(None, Packager().file_by_relative_path("doesntexist"))
+        self.assertIs(Packager(), Packager().file_by_path("README.md").packager)
+        self.assertIs(None, Packager().file_by_path("doesntexist"))
 
     def test_file_secret_readme(self):
         self.assertIs(Packager(), Packager().file_secret_readme.packager)

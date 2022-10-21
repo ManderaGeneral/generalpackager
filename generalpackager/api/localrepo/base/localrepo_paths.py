@@ -85,6 +85,10 @@ class _LocalRepo_Paths:
         """ :param generalpackager.LocalRepo_Python or generalpackager.LocalRepo_Node self: """
         return self.path / ".git/hooks/pre-commit"
 
+    def get_pre_push_hook_path(self):
+        """ :param generalpackager.LocalRepo_Python or generalpackager.LocalRepo_Node self: """
+        return self.path / ".git/hooks/pre-push"
+
     def get_examples_path(self):
         """ :param generalpackager.LocalRepo_Python or generalpackager.LocalRepo_Node self: """
         return self.path / "examples"
