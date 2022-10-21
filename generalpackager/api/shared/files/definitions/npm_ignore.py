@@ -2,8 +2,8 @@
 from generalpackager.api.shared.files.file import File
 
 
-class ReadmeFile(File):
-    _relative_path = "README.md"
+class NpmIgnoreFile(File):
+    _relative_path = ".npmignore"
     aesthetic = True
 
     def generate(self):

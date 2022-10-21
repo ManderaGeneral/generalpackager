@@ -1,14 +1,9 @@
 
 from generallibrary import DataClass
 
+import generalpackager.api.localrepo.base.targets
 from generalpackager.api.localrepo.base.metadata import Metadata
-
-
-class Targets(DataClass):
-    python = "python"
-    node = "node"
-    django = "django"
-    exe = "exe"
+from generalpackager.api.localrepo.base.targets import Targets
 
 
 class _SharedTarget:
@@ -46,7 +41,7 @@ class _LocalRepo_Target(_SharedTarget):
         super().__init_subclass__(**kwargs)
 
         if cls.__name__ != cls._BASE_CLS_NAME:
-            assert cls._cls_target in cls.Targets.field_values_defaults()
+            assert cls._cls_target in generalpackager.api.localrepo.base.targets.Targets.field_values_defaults()
             assert cls._cls_metadata is not Metadata
 
         cls._cls_target_classes[cls._cls_target] = cls

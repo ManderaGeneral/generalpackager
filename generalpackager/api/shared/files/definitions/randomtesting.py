@@ -2,9 +2,10 @@
 from generalpackager.api.shared.files.file import File
 
 
-class ReadmeFile(File):
-    _relative_path = "README.md"
+class RandomtestingFile(File):
+    _relative_path = "randomtesting.py"
     aesthetic = True
+    overwrite = False
 
     def generate(self):
         pass

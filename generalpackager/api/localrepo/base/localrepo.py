@@ -9,7 +9,7 @@ from setuptools import find_namespace_packages
 from generalpackager.api.localrepo.base.localrepo_git import _LocalRepo_Git
 from generalpackager.api.localrepo.base.localrepo_paths import _LocalRepo_Paths
 from generalpackager.api.localrepo.base.localrepo_target import _LocalRepo_Target
-from generalpackager.api.shared.files.base import _Files
+from generalpackager.api.shared.files.shared_file import _Files
 from generalpackager.api.shared.path import _SharedPath
 from generalpackager.api.shared.name import _SharedName, _SharedAPI
 

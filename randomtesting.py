@@ -3,6 +3,58 @@ import re
 from generalfile import Path
 from generallibrary import Log, Timer
 
+from generalpackager import Packager
+
+paths = (
+"readme",
+"org_readme",
+"metadata",
+"git_exclude",
+"setup",
+"manifest",
+"license",
+"workflow",
+"test",
+"test_template",
+"init",
+"randomtesting",
+"generate",
+"exetarget",
+"exeproduct",
+"git_ignore",
+"npm_ignore",
+"index_js",
+"test_js",
+"package_json",
+"pre_commit_hook",
+"pre_push_hook",
+"examples",
+)
+
+base = Path("generalpackager/api/shared/files/definitions")
+
+code = """
+from generalpackager.api.shared.files.file import File
+
+
+class ReadmeFile(File):
+    _relative_path = "README.md"
+    type = File.types.folder
+
+    def generate(self):
+        pass
+
+"""
+
+
+for name in paths:
+    relative_path = f"{name}.py"
+    path = base / relative_path
+    class_name = "".join([part.capitalize() for part in name.split("_")]) + "File"
+
+    path.text.write(code.replace("ReadmeFile", class_name).replace("README.md", relative_path), overwrite=True)
+
+
 
 
 # from generalpackager import Packager

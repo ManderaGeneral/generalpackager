@@ -3,7 +3,7 @@ from itertools import chain
 
 from generallibrary import deco_cache, flatten
 
-from generalpackager.api.localrepo.base.localrepo_target import Targets
+from generalpackager.api.localrepo.base.targets import Targets
 
 
 class Packages(Targets):

@@ -2,9 +2,9 @@
 from generalpackager.api.shared.files.file import File
 
 
-class ReadmeFile(File):
-    _relative_path = "README.md"
-    aesthetic = True
+class ManifestFile(File):
+    _relative_path = "MANIFEST.in"
+    aesthetic = False
 
     def generate(self):
         pass

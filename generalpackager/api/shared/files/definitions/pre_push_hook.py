@@ -2,8 +2,8 @@
 from generalpackager.api.shared.files.file import File
 
 
-class ReadmeFile(File):
-    _relative_path = "README.md"
+class PrePushHookFile(File):
+    _relative_path = ".git/hooks/pre-push"
     aesthetic = True
 
     def generate(self):
