@@ -1,5 +1,5 @@
-
-from generalpackager.api.shared import _SharedAPI, _SharedOwner, _SharedName
+from generalpackager.api.shared.owner import _SharedOwner
+from generalpackager.api.shared.name import _SharedName, _SharedAPI
 
 from generallibrary import Ver, Date, get
 from generalfile import Path

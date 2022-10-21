@@ -9,10 +9,12 @@ from setuptools import find_namespace_packages
 from generalpackager.api.localrepo.base.localrepo_git import _LocalRepo_Git
 from generalpackager.api.localrepo.base.localrepo_paths import _LocalRepo_Paths
 from generalpackager.api.localrepo.base.localrepo_target import _LocalRepo_Target
-from generalpackager.api.shared import _SharedAPI, _SharedPath, _SharedName
+from generalpackager.api.shared.files.base import _Files
+from generalpackager.api.shared.path import _SharedPath
+from generalpackager.api.shared.name import _SharedName, _SharedAPI
 
 
-class LocalRepo(_SharedAPI, _SharedName, _SharedPath, _LocalRepo_Paths, _LocalRepo_Target, _LocalRepo_Git):
+class LocalRepo(_Files, _SharedAPI, _SharedName, _SharedPath, _LocalRepo_Paths, _LocalRepo_Target, _LocalRepo_Git):
     """ Tools to help Path interface a Local Repository.
         Base functionality.
         Inherited by classes in targets folder for extended functionality.

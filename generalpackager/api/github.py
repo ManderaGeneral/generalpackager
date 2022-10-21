@@ -1,5 +1,5 @@
-
-from generalpackager.api.shared import _SharedAPI, _SharedOwner, _SharedName
+from generalpackager.api.shared.owner import _SharedOwner
+from generalpackager.api.shared.name import _SharedName, _SharedAPI
 from generalpackager import PACKAGER_GITHUB_API
 from generallibrary import Log
 from generalfile import Path

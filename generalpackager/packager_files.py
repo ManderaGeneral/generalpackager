@@ -34,6 +34,7 @@ class _PackagerFiles:
     """ Generates setup, license and gitexclude.
         Only changed non-aesthetic files can trigger a version bump and publish. """
     _todo_header = "Todo"
+    # _remove_paths = # HERE **
 
     @property
     @deco_cache()

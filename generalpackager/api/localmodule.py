@@ -2,7 +2,7 @@
 import pkg_resources
 from generalfile import Path
 from generallibrary import ObjInfo, deco_cache, EnvVar, get, import_module, deco_require, Log
-from generalpackager.api.shared import _SharedAPI, _SharedName
+from generalpackager.api.shared.name import _SharedName, _SharedAPI
 
 
 class LocalModule(_SharedAPI, _SharedName):
