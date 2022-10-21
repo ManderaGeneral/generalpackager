@@ -18,8 +18,5 @@
     "topics": [
         "tool"
     ],
-    "manifest": [
-        "generalpackager/licenses/*"
-    ],
     "contribute": false
 }
