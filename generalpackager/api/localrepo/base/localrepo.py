@@ -32,7 +32,7 @@ class LocalRepo(_Files, _SharedAPI, _SharedName, _SharedPath, _LocalRepo_Paths, 
     @property
     @deco_cache()
     def metadata(self):
-        """ :rtype: generalpackager.api.localrepo.python.metadata_python.Metadata_Python or generalpackager.api.localrepo.base.metadata.Metadata """
+        """ :rtype: generalpackager.api.localrepo.python.metadata_python.Metadata_Python or generalpackager.api.localrepo.node.metadata_node.Metadata_Node or generalpackager.api.localrepo.base.metadata.Metadata """
         if self.path is None:
             return None
         else:

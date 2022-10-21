@@ -6,9 +6,6 @@ import re
 
 
 class _PackagerMarkdown:
-    CROSS = "❌"
-    CHECK = "✔️"
-    NO_DEP = "*No dependencies*"
 
     """ Contains methods to generate readme sections from arguments. """
     def get_badges_dict(self):
@@ -51,16 +48,6 @@ class _PackagerMarkdown:
                 if result:
                     text = re.sub('[" ]*$', "", result[0])
                     todos.append(self._create_todo_dict(text=text, path=relative_path, line=i + 1))
-        return todos
-
-    def _get_untested_todos(self):
-        """ :param generalpackager.Packager self: """
-        todos = []
-        for name, objInfo in self.get_untested_objInfo_dict().items():  # type: ObjInfo
-            text = f"[UnitTest] for {repr(objInfo)}"
-            path = objInfo.file(relative=True)
-            line = objInfo.get_definition_line()
-            todos.append(self._create_todo_dict(text=text, path=path, line=line))
         return todos
 
     @deco_cache()
@@ -304,13 +291,6 @@ class _PackagerMarkdown:
         markdown = self.mermaid(nodes=nodes, repr_func=repr_func, url_func=url_func, highlight_self=highlight_self)
         markdown.header = "Dependency Diagram for ManderaGeneral"
         return markdown
-
-    def get_org_description_markdown(self):
-        """ :param generalpackager.Packager self: """
-        return Markdown(header="ManderaGeneral").add_list_lines(
-            "Modularized platform for managing future products.",
-            "Automatic workflows to unittest, sync and publish.",
-        )
 
 
 

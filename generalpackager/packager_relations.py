@@ -74,14 +74,3 @@ class _PackagerRelations:
             :param generalpackager.Packager self:
             :param aesthetic: """
         return {packager: files for packager in self.get_ordered_packagers() if (files := packager.compare_local_to_github(aesthetic=aesthetic))}
-
-    @deco_cache()
-    def get_untested_objInfo_dict(self):
-        """ :param generalpackager.Packager self:
-            :rtype: dict[generallibrary.ObjInfo] """
-        if not self.localmodule.objInfo:
-            return {}
-
-        filt = lambda objInfo: not self.localrepo.text_in_tests(text=objInfo.name)
-        all_objInfo = self.localmodule.objInfo.get_all(filt=filt, traverse_excluded=True)
-        return {objInfo.name: objInfo for objInfo in all_objInfo}

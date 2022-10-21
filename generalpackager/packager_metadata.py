@@ -1,6 +1,17 @@
 
 
 class _PackagerMetadata:
+    def get_topics(self):
+        """ Get a complete list of topics by using package specific as well as hardcoded magic values.
+
+            :param generalpackager.Packager self: """
+        topics = self.localrepo.metadata.topics.copy()
+        if self.is_python():
+            topics.extend([f"python{ver.replace('.', '')}" for ver in self.python])
+        topics.append(f"{self.license}-license")
+        topics.extend(self.os)
+        return topics
+
     def _topics_to_classifiers(self, *topics):
         """ :param generalpackager.Packager self: """
         classifiers = []
@@ -12,17 +23,6 @@ class _PackagerMetadata:
             else:
                 classifiers.append(self._lib[topic])
         return classifiers
-
-    def get_topics(self):
-        """ Get a complete list of topics by using package specific as well as hardcoded magic values.
-
-            :param generalpackager.Packager self: """
-        topics = self.localrepo.metadata.topics.copy()
-        if self.is_python():
-            topics.extend([f"python{ver.replace('.', '')}" for ver in self.python])
-        topics.append(f"{self.license}-license")
-        topics.extend(self.os)
-        return topics
 
     def get_classifiers(self):
         """ Get a complete list of classifiers generated from topics and other metadata.

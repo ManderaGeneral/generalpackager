@@ -7,5 +7,9 @@ class ManifestFile(File):
     aesthetic = False
 
     def generate(self):
-        pass
+        default_manifest = [
+            self.packager.metadata_file.relative_path
+        ]
+        paths = self.packager.localrepo.metadata.manifest + default_manifest
+        return "\n".join([f"include {path}" for path in paths])
 

@@ -1,3 +1,4 @@
+from generallibrary import CodeLine
 
 from generalpackager.api.shared.files.file import File
 
@@ -11,5 +12,8 @@ class TestTemplateFile(File):
     is_file = False
 
     def generate(self):
-        pass
+        top = CodeLine()
+        top.add_node(CodeLine("from unittest import TestCase", space_after=2))
+        top.add_node("class Test(TestCase):").add_node("def test(self):").add_node("pass")
+        return top
 

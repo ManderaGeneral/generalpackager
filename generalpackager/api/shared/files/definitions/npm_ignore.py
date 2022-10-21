@@ -7,5 +7,5 @@ class NpmIgnoreFile(File):
     aesthetic = True
 
     def generate(self):
-        pass
+        return "\n".join(self.packager.npm_ignore_lines)
 
