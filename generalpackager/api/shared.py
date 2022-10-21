@@ -1,36 +1,13 @@
 import re
 
 from generalfile import Path
-from generallibrary import Recycle, AutoInitBases, Log, Timer, deco_cache
+from generallibrary import Recycle, AutoInitBases, Log, deco_cache
 
 from generalpackager.other.packages import Packages
 
 
-class _SharedAPI(Recycle, metaclass=AutoInitBases):
-    """ Shared by all (Packager and APIs). """
-    @staticmethod
-    def name_is_general(name):
-        return name in Packages.all_packages()
-
-    def is_general(self):
-        """ :param generalpackager.Packager self: """
-        return self.name_is_general(name=self.name)
-
-    @property
-    def simple_name(self):
-        """ :param generalpackager.Packager self: """
-        if self.name.startswith("general"):
-            return self.name.replace("general", "")
-        elif self.name.startswith("gen"):
-            return self.name.replace("gen", "")
-        else:
-            return self.name
-
-
 class _SharedName:
-    """ Shared by Packager, LocalModule, GitHub and PyPI.
-        GitHub and PyPI wont use the path parameter.
-        Path takes presedence. """
+    """ Inherited by _SharedAPI which is shared by all (Packager and APIs) """
     DEFAULT_NAME = "generalpackager"
 
     _recycle_keys = {"name": lambda name, path: _SharedName._scrub_name(name=name, path=path)}
@@ -56,6 +33,28 @@ class _SharedName:
 
             return path.stem()
         return name or cls.DEFAULT_NAME
+
+    @staticmethod
+    def name_is_general(name):
+        return name in Packages.all_packages()
+
+    def is_general(self):
+        """ :param generalpackager.Packager self: """
+        return self.name_is_general(name=self.name)
+
+    @property
+    def simple_name(self):
+        """ :param generalpackager.Packager self: """
+        if self.name.startswith("general"):
+            return self.name.replace("general", "")
+        elif self.name.startswith("gen"):
+            return self.name.replace("gen", "")
+        else:
+            return self.name
+
+
+class _SharedAPI(_SharedName, Recycle, metaclass=AutoInitBases):
+    """ Shared by all (Packager and APIs). """
 
 
 class _SharedOwner:
