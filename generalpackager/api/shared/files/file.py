@@ -38,7 +38,7 @@ class File:
         return self.packager.path / self._relative_path
 
     def can_write(self):
-        return self.generate is not File.generate and self.type != self.types.folder
+        return self.generate is not File.generate and self.is_file
 
     def write(self):
         if self.can_write():

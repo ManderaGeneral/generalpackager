@@ -1,3 +1,5 @@
+
+
 class FileClsOrInst:
     """ Descriptor to return instance of a File if instance owner is Packager.
         Otherwise, return class of File.
@@ -20,5 +22,5 @@ class FileClsOrInst:
                 setattr(instance, self.protected_name, new_file)
                 return new_file
         else:
-            assert self.cls.requires_instance(), f"Can only access {self.cls} through an instance of Packager."
+            assert not self.cls.requires_instance(), f"Can only access {self.cls} through an instance of Packager."
             return self.cls

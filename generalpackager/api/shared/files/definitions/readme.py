@@ -11,7 +11,6 @@ class ReadmeFile(File):
     aesthetic = True
 
 
-
     CROSS = "❌"
     CHECK = "✔️"
     NO_DEP = "*No dependencies*"
