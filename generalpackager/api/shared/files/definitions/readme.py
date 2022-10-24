@@ -1,7 +1,7 @@
 import re
 
 from generalfile import Path
-from generallibrary import Markdown, deco_cache, flatten, exclusive, Date
+from generallibrary import Markdown, deco_cache, flatten, exclusive, Date, comma_and_and
 
 from generalpackager.api.shared.files.file import File
 
@@ -212,14 +212,52 @@ class ReadmeFile(File):
         return Markdown.link(text=text, url=url, href=True)
 
     def get_mermaid_markdown(self):
-        """ :param generalpackager.Packager self: """
-        nodes = self.get_ordered_packagers(include_private=False)
+        nodes = self.packager.get_ordered_packagers(include_private=False)
         # nodes = self.get_parents(depth=-1, include_self=True)
         repr_func = lambda pkg: pkg.simple_name
         url_func = lambda pkg: pkg.github.url
         highlight_self = True
-        markdown = self.mermaid(nodes=nodes, repr_func=repr_func, url_func=url_func, highlight_self=highlight_self)
+        markdown = self.packager.mermaid(nodes=nodes, repr_func=repr_func, url_func=url_func, highlight_self=highlight_self)
         markdown.header = "Dependency Diagram for ManderaGeneral"
+        return markdown
+
+    def get_information_markdown(self, *packagers):
+        if not packagers:
+            packagers = (self, )
+
+        markdown = Markdown(header="Information")
+        python_url = "https://www.python.org/downloads/release/python-"
+
+        list_of_dicts = []
+        for packager in packagers:
+            package = Markdown.link(text=packager.name, url=packager.github.url)
+            ver = Markdown.link(text=packager.localrepo.metadata.version, url=packager.pypi.url)
+            latest_release = packager.get_latest_release()
+            python = ", ".join([Markdown.link(text=ver, url=f"{python_url}{str(ver).replace('.', '')}0/") for ver in packager.python])
+            platform = ", ".join(map(str.capitalize, packager.os))
+            cover = self.CROSS if packager.localrepo.coverage is None else f"{packager.localrepo.coverage} %"
+
+            list_of_dicts.append({
+                "Package": package,
+                "Ver": ver,
+                "Latest Release": latest_release,
+                "Python": python,
+                "Platform": platform,
+                "Cover": cover,
+            })
+        markdown.add_table_lines(*list_of_dicts, sort_by=["Package"])
+        return markdown
+
+    def get_contributions_markdown(self):
+        markdown = Markdown(header="Contributions")
+        welcome = ["Issue-creation", "discussions"]
+        contribute = self.packager.localrepo.metadata.contribute
+
+        if contribute:
+            welcome.append("pull requests")
+        markdown.add_lines(f"{comma_and_and(*welcome, period=False)} are most welcome!",)
+        if not contribute:
+            markdown.add_lines("", "Pull requests are not wanted, please discuss with me before investing any time")
         return markdown
 
     def _generate(self):

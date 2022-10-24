@@ -27,16 +27,16 @@ class OrgReadmeFile(File):
         markdown = self.get_org_description_markdown()
 
         # Mermaid
-        self.packager.get_mermaid_markdown().set_parent(parent=markdown)
+        self.packager.readme_file.get_mermaid_markdown().set_parent(parent=markdown)
 
         # Package information
-        self.packager.get_information_markdown(*ordered_packagers).set_parent(parent=markdown)
+        self.packager.readme_file.get_information_markdown(*ordered_packagers).set_parent(parent=markdown)
 
         # Contributions
-        self.packager.get_contributions_markdown().set_parent(parent=markdown)
+        self.packager.readme_file.get_contributions_markdown().set_parent(parent=markdown)
 
         # Generation timestamp
-        self.packager.get_footnote_markdown(commit=False).set_parent(parent=markdown)
+        self.packager.readme_file.get_footnote_markdown(commit=False).set_parent(parent=markdown)
 
         return markdown
 
