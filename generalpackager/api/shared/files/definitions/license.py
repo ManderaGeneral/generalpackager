@@ -1,5 +1,6 @@
 
 from generalpackager.api.shared.files.file import File
+from generalpackager.other.licenses import License
 
 
 class LicenseFile(File):
@@ -7,5 +8,6 @@ class LicenseFile(File):
     aesthetic = True
 
     def generate(self):
-        pass
+        """ Generate LICENSE by using Packager.license. """
+        return License(self.packager).mit()
 

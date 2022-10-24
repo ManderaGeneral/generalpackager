@@ -1,3 +1,4 @@
+from generallibrary import CodeLine
 
 from generalpackager.api.shared.files.file import File
 
@@ -8,5 +9,7 @@ class IndexJsFile(File):
     target = File.targets.node
 
     def generate(self):
-        pass
+        top = CodeLine()
+        top.add_node(CodeLine('exports.Vec2 = require("./vec2");', space_before=1, space_after=1))
+        return top
 
