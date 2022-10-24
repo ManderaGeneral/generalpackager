@@ -12,6 +12,6 @@ class PrePushHookFile(File):
 
         top.add_node(CodeLine("#!/usr/bin/env python"))
         top.add_node(CodeLine(f"from generalpackager import Packager", space_before=1))
-        top.add_node(CodeLine(f"Packager(\"{self.packager.name}\").generate_localfiles(aesthetic=False, error_on_change=True)", space_before=1))
+        top.add_node(CodeLine(f"Packager(\"{self.packager.name}\").generate_localfiles(include_aesthetic=False, error_on_change=True)", space_before=1))
 
         return top
