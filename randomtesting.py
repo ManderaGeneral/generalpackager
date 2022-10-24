@@ -5,19 +5,7 @@ from generallibrary import Log, Timer
 
 from generalpackager import Packager
 
-# print(Packager().readme_file.aesthetic)
-# print(Packager("generalfile").readme_file.aesthetic)
-
-
-class Z:
-    def __init__(self):
-        print("init")
-
-    def __set_name__(self, owner, name):
-        print(owner, name)
-
-class X:
-    y = Z()
+print(Packager.org_readme_file.relative_path)
 
 
 

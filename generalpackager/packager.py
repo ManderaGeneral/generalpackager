@@ -2,7 +2,7 @@ from generalfile import Path
 from generallibrary import NetworkDiagram, Log, deco_cache
 
 from generalpackager.api.localrepo.base.localrepo_target import _SharedTarget
-from generalpackager.api.shared.files.shared_file import _Files
+from generalpackager.api.shared.files.shared_files import _Files
 from generalpackager.api.shared.path import _SharedPath
 from generalpackager.api.shared.name import _SharedName, _SharedAPI
 from generalpackager.other.packages import Packages
