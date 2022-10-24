@@ -5,111 +5,7 @@ from generalfile import Path
 from generallibrary import CodeLine, Markdown, Date, deco_cache, Timer, Log
 
 
-class GenerateFile:
-    """ Handle generation of files. """
-    def __init__(self, path, text_func, packager, aesthetic, overwrite=True):
-        """ :param generalpackager.Packager packager: """
-        self.text_func = text_func
-        self.packager = packager
-        self.aesthetic = aesthetic
-        self.overwrite = overwrite
-
-        Log().debug(f"Creating {text_func.__name__} handler for {packager.name} with path {packager.path}")
-
-        self.relative_path = packager.relative_path(path=path)
-        self.path = packager.path / self.relative_path  # HERE ** This doesn't work if Packager's path is None
-
-    def generate(self):
-        """ Generate actual file. """
-        if self.overwrite or not self.path.exists():
-            text = self.text_func()
-            assert text is not None
-            self.path.text.write(f"{text}\n", overwrite=self.overwrite)
-
-    def __str__(self):
-        return f"<GenerateFile: {self.packager.name} - {self.relative_path}>"
-
-
 class _PackagerFiles:
-    """ Generates setup, license and gitexclude.
-        Only changed non-aesthetic files can trigger a version bump and publish. """
-    _todo_header = "Todo"
-    # _remove_paths = # HERE **
-
-    @property
-    @deco_cache()
-    def files(self):
-        """ Todo: Watermark generated files to prevent mistake of thinking you can modify them directly.
-            :param generalpackager.Packager self: """
-        files = [
-            GenerateFile(self.localrepo.get_git_exclude_path(), self.generate_git_exclude, self, aesthetic=True),
-            GenerateFile(self.localrepo.get_license_path(), self.generate_license, self, aesthetic=True),
-            GenerateFile(self.localrepo.get_workflow_path(), self.generate_workflow, self, aesthetic=True),
-            GenerateFile(self.localrepo.get_readme_path(), self.generate_readme, self, aesthetic=True),
-            GenerateFile(self.localrepo.get_generate_path(), self.generate_generate, self, aesthetic=True),
-            GenerateFile(self.localrepo.get_pre_commit_hook_path(), self.generate_pre_commit, self, aesthetic=True),
-        ]
-
-        if self.is_python():
-            files.extend([
-                GenerateFile(self.localrepo.get_setup_path(), self.generate_setup, self, aesthetic=False),
-                GenerateFile(self.localrepo.get_manifest_path(), self.generate_manifest, self, aesthetic=False),
-                GenerateFile(self.localrepo.get_init_path(), self.generate_init, self, aesthetic=False, overwrite=False),
-                GenerateFile(self.localrepo.get_randomtesting_path(), self.generate_randomtesting, self, aesthetic=True, overwrite=False),
-                GenerateFile(self.localrepo.get_test_template_path(), self.generate_test_python, self, aesthetic=False, overwrite=False),
-            ])
-
-        elif self.is_node():
-            files.extend([
-                GenerateFile(self.localrepo.get_npm_ignore_path(), self.generate_npm_ignore, self, aesthetic=True),
-                GenerateFile(self.localrepo.get_index_js_path(), self.generate_index_js, self, aesthetic=False, overwrite=False),
-                GenerateFile(self.localrepo.get_test_js_path(), self.generate_test_node, self, aesthetic=False, overwrite=False),
-                GenerateFile(self.localrepo.get_package_json_path(), self.generate_package_json, self, aesthetic=False),
-            ])
-
-        return files
-
-    @deco_cache()
-    def all_files_by_relative_path(self):
-        """ :param generalpackager.Packager self: """
-        return {file.relative_path: file for file in self.files}
-
-    def relative_path(self, path):
-        """ :param generalpackager.Packager self:
-            :param Path or str path: """
-        path = Path(path)
-        return path.relative(base=self.path)
-
-    def file_by_path(self, path):
-        """ :param generalpackager.Packager self:
-            :param Path or str path:
-            :rtype: GenerateFile """
-        relative_path = self.relative_path(path=path)
-        return self.all_files_by_relative_path().get(relative_path)
-
-    @property
-    @deco_cache()
-    def file_secret_readme(self):
-        """ :param generalpackager.Packager self: """
-        # Organization secret name is .github, user secret name is user
-        if self.name == ".github":
-            secret_readme_path = self.localrepo.get_org_readme_path()
-        else:
-            secret_readme_path = self.localrepo.get_readme_path()
-
-        return GenerateFile(secret_readme_path, self.generate_personal_readme, self, aesthetic=True)
-
-    def get_new_packager(self):
-        """ Todo: Generalize get_new_packager which calls recycle_clear on all attributes.
-
-            :param generalpackager.Packager self: """
-        self.recycle_clear()
-        self.localrepo.recycle_clear()
-        self.localmodule.recycle_clear()
-        self.github.recycle_clear()
-        self.pypi.recycle_clear()
-        return type(self)(self.name)
-
     @classmethod
     def create_blank_locally_python(cls, path, install=True):
         """ Create a new general package locally only.
@@ -133,34 +29,22 @@ class _PackagerFiles:
 
         return packager
 
-    def path_is_aesthetic(self, path):
-        """ None if not defined as a GenerateFile instance.
-
-            :param generalpackager.Packager self:
-            :param Path or str path: """
-        file = self.file_by_path(path=path)
-        return file.aesthetic if file else None
-
-    def filter_relative_filenames(self, *filenames, aesthetic):
-        """ If aesthetic is None then it doesn't filter any.
-            True will return only aesthetic.
-            False will return only non-aesthetic.
-
-            :param generalpackager.Packager self:
-            :param bool or None aesthetic: """
-        return [path for path in filenames if aesthetic is None or aesthetic is self.path_is_aesthetic(path=path)]
 
     @deco_cache()
     def _compare_local(self, platform, aesthetic):
         """ :param generalpackager.Packager self: """
+        def filt(path):
+            if path.match(*self.git_exclude_lines):
+                return False
+            if aesthetic is not None:
+                file = self.get_file_from_path(path=path)
+                return file.aesthetic == aesthetic
+            return True
+
         unpack_target = Path.get_cache_dir() / "Python"
         package_path = platform.download(path=unpack_target, overwrite=True)
+        return self.path.get_differing_files(target=package_path, filt=filt)
 
-        filt = lambda path: not path.match(*self.git_exclude_lines)
-
-        differing_files = self.path.get_differing_files(target=package_path, filt=filt)
-
-        return self.filter_relative_filenames(*differing_files, aesthetic=aesthetic)
 
     def compare_local_to_github(self, aesthetic=None):
         """ Get a list of changed files compared to remote with optional aesthetic files.
@@ -279,70 +163,6 @@ class _PackagerFiles:
         for child in markdown.get_children(include_self=True):
             if child.collapsible is None and child.header:
                 child.collapsible = False
-
-    def generate_readme(self):
-        """ Generate readme markdown and overwrite README.md in local repo.
-
-            :param generalpackager.Packager self: """
-        # Description
-        markdown = self.get_description_markdown()
-
-        # Table of contents
-        contents = Markdown(header="Table of Contents", parent=markdown, collapsible=True)
-
-        # Mermaid
-        self.get_mermaid_markdown().set_parent(parent=markdown)
-
-        # Installation
-        self.get_installation_markdown().set_parent(parent=markdown)
-
-        # Information
-        self.get_information_markdown().set_parent(parent=markdown)
-
-        # Examples
-        self.get_examples_markdown().set_parent(parent=markdown)
-
-        # Attributes
-        self.get_attributes_markdown().set_parent(parent=markdown)
-
-        # Contributions
-        self.get_contributions_markdown().set_parent(parent=markdown)
-
-        # Todos
-        self.get_todos_markdown(self, drop_package_col=True).set_parent(parent=markdown)
-
-        # Table of contents - Configuration
-        self._configure_contents_markdown(markdown=contents)
-
-        # Generation timestamp
-        self.get_footnote_markdown().set_parent(parent=markdown)
-
-        self.set_collapsible(markdown)
-
-        return markdown
-
-    def generate_personal_readme(self):
-        """ Generate personal readme markdown.
-
-            :param generalpackager.Packager self: """
-        ordered_packagers = self.get_ordered_packagers(include_private=False)
-
-        # Description
-        markdown = self.get_org_description_markdown()
-
-        # Mermaid
-        self.get_mermaid_markdown().set_parent(parent=markdown)
-
-        # Package information
-        self.get_information_markdown(*ordered_packagers).set_parent(parent=markdown)
-
-        # Contributions
-        self.get_contributions_markdown().set_parent(parent=markdown)
-
-        # Generation timestamp
-        self.get_footnote_markdown(commit=False).set_parent(parent=markdown)
-
-        return markdown
 
     def generate_init(self):
         """ Generate __init__.py.

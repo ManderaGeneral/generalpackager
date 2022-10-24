@@ -1,9 +1,35 @@
+from generalfile import Path
+from generallibrary import deco_cache
+
 from generalpackager.api.shared.files.file_fetcher import FileFetcher
 
 
 class _Files:
     """ LocalRepo and Packager inherits this.
         Only an instance of Packager will return file instances. """
+    @deco_cache()
+    @classmethod
+    def get_filenames(cls):
+        """ :param generalpackager.Packager or generalpackager.LocalRepo cls: """
+        return [filename for filename in dir(_Files) if filename.endswith("_file")]
+
+    @deco_cache()
+    def get_files(self):
+        """ :param generalpackager.Packager or generalpackager.LocalRepo self: """
+        return [getattr(self, filename) for filename in self.get_filenames()]
+
+    @deco_cache()
+    def get_files_by_relative_path(self):
+        """ :param generalpackager.Packager or generalpackager.LocalRepo self: """
+        return {file.relative_path: file for file in self.get_files()}
+
+    @deco_cache()
+    def get_file_from_path(self, path):
+        """ :param generalpackager.Packager or generalpackager.LocalRepo self: """
+        path = Path(path).relative(self.path)
+        return self.get_files_by_relative_path().get(path)
+
+
     randomtesting_file = FileFetcher()
     pre_push_hook_file = FileFetcher()
     exetarget_file = FileFetcher()

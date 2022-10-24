@@ -1,11 +1,20 @@
 
 from generalfile import Path
-from generallibrary import deco_cache, classproperty
+from generallibrary import deco_cache
 
 from generalpackager.api.localrepo.base.targets import Targets
 
 
+class DynamicRelativePath:
+    def __get__(self, instance, owner):
+        if instance:
+            return Path(instance._relative_path)
+        else:
+            return Path(owner._relative_path)  # No need to check for requires_instance() again
+
+
 class File:
+    """ Instantiated if its Packager is. """
     targets = Targets
 
     _relative_path = ...
@@ -23,14 +32,11 @@ class File:
         """ :param generalpackager.Packager packager: """
         self.packager = packager
 
+    relative_path = DynamicRelativePath()
+
     @classmethod
     def requires_instance(cls):
         return hasattr(cls._relative_path, "fget")
-
-    @classproperty
-    @deco_cache()
-    def relative_path(cls):
-        return Path(cls._relative_path)
 
     @property
     @deco_cache()

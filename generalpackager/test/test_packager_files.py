@@ -85,13 +85,6 @@ class TestPackager(PathTest):
         text = str(packager.generate_test_python())
         self.assertIn("unittest", text)
 
-    def test_get_new_packager(self):
-        a = Packager()
-        b = a.get_new_packager()
-        self.assertEqual(a.name, b.name)
-        self.assertIsNot(a, b)
-        self.assertIs(b, Packager())
-
     def test_all_files_by_relative_path(self):
         self.assertIn(Path("README.md"), Packager().all_files_by_relative_path())
         self.assertIn(Path("setup.py"), Packager().all_files_by_relative_path())

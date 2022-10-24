@@ -5,11 +5,7 @@ from generallibrary import Log, Timer
 
 from generalpackager import Packager
 
-print(Packager.org_readme_file.relative_path)
-
-
-
-
+print(Packager().get_filenames())
 
 
 # Log("generalpackager").configure_stream()
