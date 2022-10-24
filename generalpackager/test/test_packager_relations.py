@@ -19,5 +19,3 @@ class TestPackager(unittest.TestCase):
     def test_general_changed_dict(self):
         Packager().general_changed_dict()
 
-    def test_get_untested_objInfo_dict(self):
-        self.assertIsInstance(Packager().get_untested_objInfo_dict(), dict)

@@ -3,8 +3,6 @@ from generalpackager.api.pypi import PyPI
 from generalfile.test.test_path import PathTest
 from generallibrary import Date
 
-import unittest
-
 
 class TestPyPI(PathTest):
     def test_exists(self):

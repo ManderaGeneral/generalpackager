@@ -10,15 +10,8 @@ class TestPackager(PathTest):
 
     def test_relative_path_is_aesthetic(self):
         packager = Packager()
-        self.assertEqual(False, packager.path_is_aesthetic("setup.py"))
-        self.assertEqual(True, packager.path_is_aesthetic("README.md"))
-        self.assertEqual(True, packager.path_is_aesthetic(packager.localrepo.get_readme_path()))
-
-    def test_filter_relative_filenames(self):
-        packager = Packager()
-        self.assertEqual(["setup.py"], packager.filter_relative_filenames("setup.py", aesthetic=None))
-        self.assertEqual(["setup.py"], packager.filter_relative_filenames("setup.py", aesthetic=False))
-        self.assertEqual([], packager.filter_relative_filenames("setup.py", aesthetic=True))
+        self.assertEqual(False, packager.setup_file.aesthetic)
+        self.assertEqual(True, packager.readme_file.aesthetic)
 
     def test_compare_local_to_github(self):
         packager = Packager()
@@ -30,64 +23,64 @@ class TestPackager(PathTest):
 
     def test_generate_setup(self):
         packager = Packager()
-        text = packager.generate_setup()
+        text = packager.setup_file._generate()
         self.assertIn(str(packager.localrepo.metadata.version), text)
         self.assertIn(str(packager.localrepo.name), text)
 
     def test_generate_manifest(self):
         packager = Packager()
-        text = packager.generate_manifest()
+        text = packager.manifest_file._generate()
         self.assertIn("include metadata.json", text)
 
     def test_generate_git_exclude(self):
         packager = Packager()
-        text = packager.generate_git_exclude()
+        text = packager.git_exclude_file._generate()
         self.assertIn(".idea", text)
 
     def test_generate_license(self):
         packager = Packager()
-        text = packager.generate_license()
+        text = packager.license_file._generate()
         self.assertIn("Mandera", text)
 
     def test_generate_workflow(self):
         packager = Packager()
-        text = packager.generate_workflow()
+        text = packager.workflow_file._generate()
         self.assertIn("runs-on", text)
 
     def test_generate_readme(self):
         packager = Packager()
-        text = str(packager.generate_readme())
+        text = str(packager.readme_file._generate())
         self.assertIn("pip install", text)
 
     def test_generate_personal_readme(self):
         packager = Packager()
         self.assertIsNotNone(packager.path)
-        text = str(packager.generate_personal_readme())
+        text = str(packager.org_readme_file._generate())
         self.assertIn("generallibrary", text)
 
     def test_generate_generate(self):
         packager = Packager()
-        text = str(packager.generate_generate())
+        text = str(packager.generate_file._generate())
         self.assertIn("Packager", text)
 
     def test_generate_init(self):
         packager = Packager()
-        text = str(packager.generate_init())
+        text = str(packager.init_file._generate())
         self.assertEqual(True, len(text) > 2)
 
     def test_generate_randomtesting(self):
         packager = Packager()
-        text = str(packager.generate_randomtesting())
+        text = str(packager.randomtesting_file._generate())
         self.assertIn("generalpackager", text)
 
     def test_generate_test_python(self):
         packager = Packager()
-        text = str(packager.generate_test_python())
+        text = str(packager.test_file._generate())
         self.assertIn("unittest", text)
 
     def test_all_files_by_relative_path(self):
-        self.assertIn(Path("README.md"), Packager().all_files_by_relative_path())
-        self.assertIn(Path("setup.py"), Packager().all_files_by_relative_path())
+        self.assertIn(Path("README.md"), Packager().get_files_by_relative_path())
+        self.assertIn(Path("setup.py"), Packager().get_files_by_relative_path())
 
     def test_create_blank_locally_python(self):
         Packager.create_blank_locally_python("newblank", install=False)
@@ -95,10 +88,18 @@ class TestPackager(PathTest):
         self.assertEqual(True, Path("newblank/newblank").exists())
 
     def test_file_by_relative_path(self):
-        self.assertIs(Packager(), Packager().file_by_path("README.md").packager)
-        self.assertIs(None, Packager().file_by_path("doesntexist"))
+        self.assertIs(Packager().readme_file, Packager().get_file_from_path("README.md"))
+        self.assertIs(None, Packager().get_file_from_path("doesntexist"))
 
     def test_file_secret_readme(self):
-        self.assertIs(Packager(), Packager().file_secret_readme.packager)
+        self.assertIs(Packager(), Packager().org_readme_file.packager)
+
+    def test_run_ordered_methods(self):
+        x = []
+        def a(_): x.append(1)
+        def b(_): x.append(2)
+        Packager().run_ordered_methods(a, b)
+        length = len(Packager().get_all())
+        self.assertEqual([1] * length + [2] * length, x)
 
 
