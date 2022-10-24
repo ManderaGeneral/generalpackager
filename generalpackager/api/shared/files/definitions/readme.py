@@ -223,7 +223,7 @@ class ReadmeFile(File):
 
     def get_information_markdown(self, *packagers):
         if not packagers:
-            packagers = (self, )
+            packagers = (self.packager, )
 
         markdown = Markdown(header="Information")
         python_url = "https://www.python.org/downloads/release/python-"

@@ -5,7 +5,6 @@ from generallibrary import Log, Timer
 
 from generalpackager import Packager
 
-print(Packager().get_filenames())
 
 
 # Log("generalpackager").configure_stream()

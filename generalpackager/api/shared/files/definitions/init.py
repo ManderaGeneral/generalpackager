@@ -4,7 +4,10 @@ from generalpackager.api.shared.files.file import File
 
 
 class InitFile(File):
-    _relative_path = "__init__.py"
+    @property
+    def _relative_path(self):
+        return f"{self.packager.name}/__init__.py"
+
     aesthetic = False
     overwrite = False
 

@@ -10,7 +10,8 @@ class DynamicRelativePath:
         if instance:
             return Path(instance._relative_path)
         else:
-            return Path(owner._relative_path)  # No need to check for requires_instance() again
+            assert not instance.requires_instance(), f"Only an instantialized Packager can access '{owner.__name__}'."
+            return Path(owner._relative_path)
 
 
 class File:
@@ -23,7 +24,7 @@ class File:
     remove = False
     overwrite = True
     is_file = True
-    target = Targets.python
+    target = Targets.python  # Should probably default to None, and then I put python on most files
 
     def _generate(self):
         return ""
@@ -44,11 +45,13 @@ class File:
         return self.packager.path / self._relative_path
 
     def can_write(self):
-        return self._generate is not File._generate and self.is_file
+        return type(self)._generate is not File._generate and self.is_file and self.target == self.packager.target
 
     def generate(self):
         if self.can_write():
-            return self.path.text.write(text=f"{self._generate()}\n", overwrite=self.overwrite)
+            if self.overwrite is False and self.path.exists():
+                return False
+            return self.path.text.write(text=f"{self._generate()}\n", overwrite=True)
 
     def __str__(self):
         return f"<File: {self.packager.name} - {self.relative_path}>"

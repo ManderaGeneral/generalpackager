@@ -43,5 +43,4 @@ class FileFetcher:
         if instance and type(instance).__name__ == "Packager":
             return self.cache_file(instance=instance)
         else:
-            assert not self.cls.requires_instance(), f"Only an instantialized Packager can access '{self.name}'."
             return self.cls
