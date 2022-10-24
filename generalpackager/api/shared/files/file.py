@@ -25,7 +25,7 @@ class File:
     is_file = True
     target = Targets.python
 
-    def generate(self):
+    def _generate(self):
         return ""
 
     def __init__(self, packager):
@@ -44,11 +44,11 @@ class File:
         return self.packager.path / self._relative_path
 
     def can_write(self):
-        return self.generate is not File.generate and self.is_file
+        return self._generate is not File._generate and self.is_file
 
-    def write(self):
+    def generate(self):
         if self.can_write():
-            self.path.text.write(text=f"{self.generate()}\n", overwrite=self.overwrite)
+            return self.path.text.write(text=f"{self._generate()}\n", overwrite=self.overwrite)
 
     def __str__(self):
         return f"<File: {self.packager.name} - {self.relative_path}>"

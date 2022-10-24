@@ -20,7 +20,7 @@ class OrgReadmeFile(File):
             "Automatic workflows to unittest, sync and publish.",
         )
 
-    def generate(self):
+    def _generate(self):
         ordered_packagers = self.packager.get_ordered_packagers(include_private=False)
 
         # Description

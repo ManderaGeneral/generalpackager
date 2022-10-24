@@ -7,7 +7,7 @@ class GenerateFile(File):
     _relative_path = "generate.py"
     aesthetic = True
 
-    def generate(self):
+    def _generate(self):
         """ Generate randomtesting.py. """
         top = CodeLine()
         top.add_node(CodeLine(f"from generalpackager import Packager", space_before=1, space_after=1))

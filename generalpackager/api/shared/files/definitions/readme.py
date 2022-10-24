@@ -1,7 +1,7 @@
 import re
 
 from generalfile import Path
-from generallibrary import Markdown, deco_cache, flatten, exclusive
+from generallibrary import Markdown, deco_cache, flatten, exclusive, Date
 
 from generalpackager.api.shared.files.file import File
 
@@ -14,6 +14,16 @@ class ReadmeFile(File):
     CROSS = "❌"
     CHECK = "✔️"
     NO_DEP = "*No dependencies*"
+
+    def get_badges_dict(self):
+        """ Get badges as a dict. """
+        return {
+            "UnitTests": f"[![workflow Actions Status](https://github.com/ManderaGeneral/{self.packager.name}/workflows/workflow/badge.svg)](https://github.com/ManderaGeneral/{self.packager.name}/actions)",
+            "Commit": f"![GitHub last commit](https://img.shields.io/github/last-commit/ManderaGeneral/{self.packager.name})",
+            "Release": f"[![PyPI version shields.io](https://img.shields.io/pypi/v/{self.packager.name}.svg)](https://pypi.org/project/{self.packager.name}/)",
+            "Python": f"[![PyPI pyversions](https://img.shields.io/pypi/pyversions/{self.packager.name}.svg)](https://pypi.python.org/pypi/{self.packager.name}/)",
+            "Operating System": f"[![Generic badge](https://img.shields.io/badge/platforms-{'%20%7C%20'.join(self.packager.os)}-blue.svg)](https://shields.io/)",
+        }
 
     def get_description_markdown(self):
         return Markdown(self.packager.localrepo.metadata.description, header=self.packager.name)
@@ -134,7 +144,7 @@ class ReadmeFile(File):
         if line is None:
             line = 1
         path = Path(path)
-        return self.packager.github_link(text=text, suffix=f"blob/{self.packager.commit_sha}/{path.encode()}#L{line}")
+        return self.github_link(text=text, suffix=f"blob/{self.packager.commit_sha}/{path.encode()}#L{line}")
 
     def _get_codeline_todos(self):
         todos = []
@@ -188,7 +198,31 @@ class ReadmeFile(File):
             if child.collapsible is None and child.header:
                 child.collapsible = False
 
-    def generate(self):
+    def get_footnote_markdown(self, commit=True):
+        """ Get a markdown for footnote containing date, time and commit link. """
+        line = f"Generated {Date.now()}"
+        if commit:
+            line += f" for commit {self.github_link(text=self.packager.commit_sha, suffix=f'commit/{self.packager.commit_sha}')}."
+
+        return Markdown(line).wrap_with_tags("<sup>", "</sup>")
+
+    def github_link(self, text, suffix):
+        """ Get an HREF link to this repo's github. """
+        url = f"{self.packager.github.url}/{suffix}"
+        return Markdown.link(text=text, url=url, href=True)
+
+    def get_mermaid_markdown(self):
+        """ :param generalpackager.Packager self: """
+        nodes = self.get_ordered_packagers(include_private=False)
+        # nodes = self.get_parents(depth=-1, include_self=True)
+        repr_func = lambda pkg: pkg.simple_name
+        url_func = lambda pkg: pkg.github.url
+        highlight_self = True
+        markdown = self.mermaid(nodes=nodes, repr_func=repr_func, url_func=url_func, highlight_self=highlight_self)
+        markdown.header = "Dependency Diagram for ManderaGeneral"
+        return markdown
+
+    def _generate(self):
         # Description
         markdown = self.get_description_markdown()
 
@@ -196,13 +230,13 @@ class ReadmeFile(File):
         contents = Markdown(header="Table of Contents", parent=markdown, collapsible=True)
 
         # Mermaid
-        self.packager.get_mermaid_markdown().set_parent(parent=markdown)
+        self.get_mermaid_markdown().set_parent(parent=markdown)
 
         # Installation
         self.get_installation_markdown().set_parent(parent=markdown)
 
         # Information
-        self.packager.get_information_markdown().set_parent(parent=markdown)
+        self.get_information_markdown().set_parent(parent=markdown)
 
         # Examples
         self.get_examples_markdown().set_parent(parent=markdown)
@@ -211,7 +245,7 @@ class ReadmeFile(File):
         self.get_attributes_markdown().set_parent(parent=markdown)
 
         # Contributions
-        self.packager.get_contributions_markdown().set_parent(parent=markdown)
+        self.get_contributions_markdown().set_parent(parent=markdown)
 
         # Todos
         self.get_todos_markdown(self, drop_package_col=True).set_parent(parent=markdown)
@@ -220,7 +254,7 @@ class ReadmeFile(File):
         self._configure_contents_markdown(markdown=contents)
 
         # Generation timestamp
-        self.packager.get_footnote_markdown().set_parent(parent=markdown)
+        self.get_footnote_markdown().set_parent(parent=markdown)
 
         self.set_collapsible(markdown)
 

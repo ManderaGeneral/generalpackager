@@ -8,7 +8,7 @@ class IndexJsFile(File):
     overwrite = False
     target = File.targets.node
 
-    def generate(self):
+    def _generate(self):
         top = CodeLine()
         top.add_node(CodeLine('exports.Vec2 = require("./vec2");', space_before=1, space_after=1))
         return top

@@ -11,7 +11,7 @@ class TestTemplateFile(File):
     overwrite = False
     is_file = False
 
-    def generate(self):
+    def _generate(self):
         top = CodeLine()
         top.add_node(CodeLine("from unittest import TestCase", space_after=2))
         top.add_node("class Test(TestCase):").add_node("def test(self):").add_node("pass")

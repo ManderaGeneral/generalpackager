@@ -7,7 +7,7 @@ class LicenseFile(File):
     _relative_path = "LICENSE"
     aesthetic = True
 
-    def generate(self):
+    def _generate(self):
         """ Generate LICENSE by using Packager.license. """
         return License(self.packager).mit()
 

@@ -6,7 +6,7 @@ class ManifestFile(File):
     _relative_path = "MANIFEST.in"
     aesthetic = False
 
-    def generate(self):
+    def _generate(self):
         default_manifest = [
             self.packager.metadata_file.relative_path
         ]

@@ -7,7 +7,7 @@ class PrePushHookFile(File):
     _relative_path = ".git/hooks/pre-push"
     aesthetic = True
 
-    def generate(self):
+    def _generate(self):
         top = CodeLine()
 
         top.add_node(CodeLine("#!/usr/bin/env python"))

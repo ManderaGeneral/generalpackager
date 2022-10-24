@@ -8,7 +8,7 @@ class InitFile(File):
     aesthetic = False
     overwrite = False
 
-    def generate(self):
+    def _generate(self):
         codeline = CodeLine(f"", space_before=1, space_after=50)
         return codeline
 

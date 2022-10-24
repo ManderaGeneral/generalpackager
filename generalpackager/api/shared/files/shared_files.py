@@ -7,8 +7,8 @@ from generalpackager.api.shared.files.file_fetcher import FileFetcher
 class _Files:
     """ LocalRepo and Packager inherits this.
         Only an instance of Packager will return file instances. """
-    @deco_cache()
     @classmethod
+    @deco_cache()
     def get_filenames(cls):
         """ :param generalpackager.Packager or generalpackager.LocalRepo cls: """
         return [filename for filename in dir(_Files) if filename.endswith("_file")]

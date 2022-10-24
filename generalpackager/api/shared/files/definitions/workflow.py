@@ -7,7 +7,7 @@ class WorkflowFile(File):
     _relative_path = ".github/workflows/workflow.yml"
     aesthetic = True
 
-    def generate(self):
+    def _generate(self):
         workflow = CodeLine()
         workflow.indent_str = " " * 2
 
@@ -27,6 +27,13 @@ class WorkflowFile(File):
         "twine",
     )
 
+    _commit_msg = "github.event.head_commit.message"
+    _action_checkout = "actions/checkout@v2"
+    _action_setup_python = "actions/setup-python@v2"
+    _action_setup_ssh = "webfactory/ssh-agent@v0.5.3"
+    _matrix_os = "matrix.os"
+    _matrix_python_version = "matrix.python-version"
+
     @staticmethod
     def _var(string):
         return f"${{{{ {string} }}}}"
@@ -35,13 +42,6 @@ class WorkflowFile(File):
     def _commit_msg_if(**conditions):
         checks = [f"contains(github.event.head_commit.message, '[CI {key}]') == {str(value).lower()}" for key, value in conditions.items()]
         return f"if: {' && '.join(checks)}"
-
-    _commit_msg = "github.event.head_commit.message"
-    _action_checkout = "actions/checkout@v2"
-    _action_setup_python = "actions/setup-python@v2"
-    _action_setup_ssh = "webfactory/ssh-agent@v0.5.3"
-    _matrix_os = "matrix.os"
-    _matrix_python_version = "matrix.python-version"
 
     def _get_name(self):
         name = CodeLine("name: workflow")

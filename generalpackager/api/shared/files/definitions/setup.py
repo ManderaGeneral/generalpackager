@@ -22,7 +22,7 @@ class SetupFile(File):
         """ Get a complete list of classifiers generated from topics and other metadata. """
         return self._topics_to_classifiers(*self.packager.get_topics())
 
-    def generate(self):
+    def _generate(self):
         setup_kwargs = {
             "name": f'"{self.packager.localrepo.name}"',
             "author": f"'{self.packager.author}'",

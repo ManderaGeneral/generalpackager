@@ -8,7 +8,7 @@ class PackageJsonFile(File):
     aesthetic = False
     target = File.targets.node
 
-    def generate(self):
+    def _generate(self):
         info = {
             "name": self.packager.localrepo.name,
             "version": str(self.packager.localrepo.metadata.version),

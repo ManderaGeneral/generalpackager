@@ -9,7 +9,7 @@ class TestJsFile(File):
     overwrite = False
     target = File.targets.node
 
-    def generate(self):
+    def _generate(self):
         top = CodeLine()
         top.add_node("/**")
         top.add_node(" * @jest-environment jsdom")
