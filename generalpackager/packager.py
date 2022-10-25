@@ -24,7 +24,7 @@ class Packager(NetworkDiagram,
     author = 'Rickard "Mandera" Abraham'
     email = "rickard.abraham@gmail.com"
     license = "mit"
-    python = "3.8", "3.9", "3.10"  # Only supports basic definition with tuple of major.minor
+    python = "3.8", "3.9", "3.10", "3.11"  # Only supports basic definition with tuple of major.minor
     os = "windows", "ubuntu"  # , "macos"
 
     git_exclude_lines = npm_ignore_lines = ".idea/", "dist/", ".git/", "**test/tests/", ".coverage", "htmlcov/"
