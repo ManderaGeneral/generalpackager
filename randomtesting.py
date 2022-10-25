@@ -1,13 +1,11 @@
 
 from generalfile import Path
 from generallibrary import Log
-from generalpackager import Packager
+from generalpackager import Packager, LocalRepo
 
 
-
-
-
-
+print(Packager().commit_editmsg_file)
+print(LocalRepo().commit_editmsg_file)  # HERE ** This should be able to resolve with LocalRepo's path, when fixed go to next bookmark
 
 
 

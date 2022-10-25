@@ -1,4 +1,7 @@
 
 
 class _LocalRepo_Git:
-    pass
+    def get_commit_message(self):
+        """ :param generalpackager.Packager self: """
+        return self.commit_editmsg_file.path.text.read()
+

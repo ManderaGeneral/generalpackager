@@ -32,6 +32,7 @@ class _Files:
         return self.get_files_by_relative_path().get(path)
 
 
+    commit_editmsg_file = FileFetcher()
     examples_folder = FileFetcher()
     exeproduct_folder = FileFetcher()
     exetarget_file = FileFetcher()
