@@ -60,6 +60,7 @@ class _PackagerFiles:
         changed_files = {path.absolute() for path in self.localrepo.git_changed_files()}
 
         changed_generated_files = file_paths.intersection(changed_files)
+        raise ValueError("hi")
         if changed_generated_files:
             raise EnvironmentError(f"Files changed: {changed_generated_files}")
 
