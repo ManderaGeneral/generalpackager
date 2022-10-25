@@ -45,7 +45,7 @@ class GitHub(_SharedAPI, _SharedOwner, _SharedName):
         """ Clone a GitHub repo into a path, defaults to working_dir / name.
             Creates a folder with Package's name first. """
         if not self.exists():
-            Log(__name__).info(f"Cannot download {self.name}, couldn't find on GitHub.")
+            Log().info(f"Cannot download {self.name}, couldn't find on GitHub.")
             return
 
         path = Path(path) / self.name

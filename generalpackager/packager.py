@@ -66,7 +66,7 @@ class Packager(NetworkDiagram,
             packagers = cls.packagers_from_packages()
 
             for packager in packagers:
-                Log(__name__).info(f"Downloading {packager.name} from GitHub.")
+                Log().info(f"Downloading {packager.name} from GitHub.")
                 packager.github.download()
 
     @staticmethod

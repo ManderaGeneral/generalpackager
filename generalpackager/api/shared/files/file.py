@@ -1,3 +1,4 @@
+from logging import getLogger
 
 from generalfile import Path
 from generallibrary import deco_cache
@@ -45,13 +46,22 @@ class File:
         return self.packager.path / self._relative_path
 
     def can_write(self):
-        return type(self)._generate is not File._generate and self.is_file and self.target == self.packager.target
+        return (
+            self.is_file and
+            not self.remove and
+            type(self)._generate is not File._generate and
+            self.target == self.packager.target and
+            (self.overwrite is True or not self.path.exists())
+        )
 
     def generate(self):
+        logger = getLogger(__name__)
         if self.can_write():
-            if self.overwrite is False and self.path.exists():
-                return False
-            return self.path.text.write(text=f"{self._generate()}\n", overwrite=True)
+            logger.info(f"Writing to '{self.relative_path}' for '{self.packager.name}'")
+            return self.path.text.write(text=f"{self._generate()}\n", overwrite=self.overwrite)
+        elif self.remove:
+            logger.info(f"Deleting '{self.relative_path}' for '{self.packager.name}'")
+            self.path.delete()
 
     def __str__(self):
         return f"<File: {self.packager.name} - {self.relative_path}>"

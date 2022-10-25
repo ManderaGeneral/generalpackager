@@ -54,36 +54,32 @@ class _PackagerFiles:
             :param aesthetic: """
         return self._compare_local(platform=self.pypi, aesthetic=aesthetic)
 
+    def _error_on_change(self, files):
+        """ :param generalpackager.Packager self: """
+        file_paths = {file.path for file in files}
+        changed_files = {path.absolute() for path in self.localrepo.git_changed_files()}
+
+        changed_generated_files = file_paths.intersection(changed_files)
+        if changed_generated_files:
+            raise EnvironmentError(f"Files changed: {changed_generated_files}")
+
     def generate_localfiles(self, include_aesthetic=True, print_out=False, error_on_change=False):
         """ Generate all local files.
             Returns True if any file is changed.
 
-            :param include_aesthetic:
-            :param generalpackager.Packager self:
-            :param print_out:
-            :param error_on_change: """
-        timer = Timer()
+            :param generalpackager.Packager self: """
+        with Timer(print_out=print_out):
+            # Not in files because it writes with json not text, it's also a bit unique
+            self.localrepo.metadata.name = self.name
+            self.localrepo.metadata.write_config()
 
-        # Not in files because it writes with json not text, it's also a bit unique
-        self.localrepo.metadata.name = self.name
-        self.localrepo.metadata.write_config()
+            files = [file for file in self.get_files() if include_aesthetic or not file.aesthetic]
 
-        files = [file for file in self.get_files() if include_aesthetic or not file.aesthetic]
-
-        for file in files:
-            if print_out:
-                print(f"Generating {file}")
-            file.generate()
-        if print_out:
-            timer.print()
+            for file in files:
+                file.generate()
 
         if error_on_change:
-            file_paths = {file.path for file in files}
-            changed_files = {path.absolute() for path in self.localrepo.git_changed_files()}
-
-            changed_generated_files = file_paths.intersection(changed_files)
-            if changed_generated_files:
-                raise EnvironmentError(f"Files changed: {changed_generated_files}")
+            self._error_on_change(files=files)
 
 
 
