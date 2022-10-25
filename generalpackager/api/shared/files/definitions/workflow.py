@@ -39,8 +39,9 @@ class WorkflowFile(File):
         return f"${{{{ {string} }}}}"
 
     @staticmethod
-    def _commit_msg_if(**conditions):
+    def _commit_msg_if(*literals, **conditions):
         checks = [f"contains(github.event.head_commit.message, '[CI {key}]') == {str(value).lower()}" for key, value in conditions.items()]
+        checks += list(literals)
         return f"if: {' && '.join(checks)}"
 
     def _get_name(self):
@@ -143,7 +144,7 @@ class WorkflowFile(File):
 
     def _get_unittest_job(self):
         job = CodeLine("unittest:")
-        job.add_node(self._commit_msg_if(SKIP=False, AUTO=False))
+        job.add_node(self._commit_msg_if("github.ref == 'refs/heads/master'", SKIP=False, AUTO=False))
         job.add_node(f"runs-on: {self._var(self._matrix_os)}")
         job.add_node(self._get_strategy())
 
@@ -155,7 +156,6 @@ class WorkflowFile(File):
     def _get_sync_job(self):
         job = CodeLine("sync:")
         job.add_node("needs: unittest")
-        job.add_node("if: github.ref == 'refs/heads/master'")
         job.add_node(f"runs-on: ubuntu-latest")
         steps = job.add_node(self._steps_setup(python_version=self.packager.python[0]))
         steps.add_node(self._step_run_packager_method("workflow_sync"))
