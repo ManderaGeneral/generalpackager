@@ -9,7 +9,7 @@ class TestTemplateFile(File):
         return f"{self.packager.name}/test/test_{self.packager.name}.py"
 
     overwrite = False
-    is_file = False
+    is_file = True
 
     def _generate(self):
         top = CodeLine()

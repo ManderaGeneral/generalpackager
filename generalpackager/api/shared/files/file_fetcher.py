@@ -12,7 +12,10 @@ class FileFetcher:
         self.name = None
 
     def __set_name__(self, owner, name):
-        self.name = name.split("_file")[0]
+        if "_file" in name:
+            self.name = name.split("_file")[0]
+        else:
+            self.name = name.split("_folder")[0]
 
     @property
     @deco_cache()

@@ -12,7 +12,7 @@ def download(url, path):
     """ Todo: Move download to it's own package. """
     data = requests.get(url)
     if data.status_code != 200:
-        raise AttributeError(f"Request for url {url} did not yield a status code of 200.'")
+        raise AttributeError(f"Request for url {url} did not yield a status code of 200, it's {data.status_code}.'")
 
     path = Path(path)
 

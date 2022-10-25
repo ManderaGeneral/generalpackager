@@ -1,3 +1,5 @@
+import importlib
+
 from generalfile import Path
 from generallibrary import deco_cache
 
@@ -30,35 +32,43 @@ class _Files:
         return self.get_files_by_relative_path().get(path)
 
 
-    randomtesting_file = FileFetcher()
-    pre_push_hook_file = FileFetcher()
+    examples_folder = FileFetcher()
+    exeproduct_folder = FileFetcher()
     exetarget_file = FileFetcher()
-    org_readme_file = FileFetcher()
-    readme_file = FileFetcher()
-    test_file = FileFetcher()
     generate_file = FileFetcher()
-    pre_commit_hook_file = FileFetcher()
-    init_file = FileFetcher()
-    setup_file = FileFetcher()
-    test_template_file = FileFetcher()
-    exeproduct_file = FileFetcher()
-    metadata_file = FileFetcher()
-    index_js_file = FileFetcher()
-    test_js_file = FileFetcher()
-    package_json_file = FileFetcher()
-    license_file = FileFetcher()
-    workflow_file = FileFetcher()
     git_exclude_file = FileFetcher()
-    npm_ignore_file = FileFetcher()
-    examples_file = FileFetcher()
+    index_js_file = FileFetcher()
+    init_file = FileFetcher()
+    license_file = FileFetcher()
     manifest_file = FileFetcher()
+    metadata_file = FileFetcher()
+    npm_ignore_file = FileFetcher()
+    org_readme_file = FileFetcher()
+    package_json_file = FileFetcher()
+    pre_commit_hook_file = FileFetcher()
+    pre_push_hook_file = FileFetcher()
+    randomtesting_file = FileFetcher()
+    readme_file = FileFetcher()
+    setup_file = FileFetcher()
+    test_folder = FileFetcher()
+    test_js_file = FileFetcher()
+    test_template_file = FileFetcher()
+    workflow_file = FileFetcher()
 
 
-# if __name__ == "__main__":
-#     from generalfile import Path
-#     for definition in Path("./definitions").get_children():
-#         file = definition.stem()
-#         if file.startswith("_"):
-#             continue
-#         print(f"{file}_file = FileFetcher()")
+if __name__ == "__main__":
+    from generalfile import Path
+    definitions = Path("./definitions").get_children()
+    definitions = sorted(definitions, key=lambda path: path.name())
+    for definition in definitions:
+        stem = definition.stem()
+        if stem.startswith("_"):
+            continue
+
+        filefetcher = FileFetcher()
+        filefetcher.name = stem
+        file = filefetcher.cls
+
+        suffix = "file" if file.is_file else "folder"
+        print(f"    {stem}_{suffix} = FileFetcher()")
 

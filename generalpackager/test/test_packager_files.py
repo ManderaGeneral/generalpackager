@@ -75,7 +75,7 @@ class TestPackager(PathTest):
 
     def test_generate_test_python(self):
         packager = Packager()
-        text = str(packager.test_file._generate())
+        text = str(packager.test_template_file._generate())
         self.assertIn("unittest", text)
 
     def test_all_files_by_relative_path(self):
