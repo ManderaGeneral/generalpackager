@@ -5,15 +5,9 @@ from generallibrary import Log, Timer
 
 from generalpackager import Packager
 
+import sys
 
-Log().configure_stream()
-
-print(__name__)
-Log().info("hi")
-
-
-
-# HERE ** Make remove work so that pre-commit gets removed
+print(sys.argv)
 
 
 # Log("generalpackager").configure_stream()
