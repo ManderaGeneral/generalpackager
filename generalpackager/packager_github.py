@@ -1,3 +1,4 @@
+from generallibrary import deco_cache
 from git import Git
 
 from github import Github
@@ -18,36 +19,36 @@ class _PackagerGitHub:
         assert self.github.set_description(self.localrepo.metadata.description).ok
         assert self.github.set_topics(*self.get_topics()).ok
 
-    # These methods below should maybe be in LocalRepo
+    @property
+    @deco_cache()
+    def remote(self):
+        """ :param generalpackager.Packager self: """
+        remote = self.localrepo.repo.remote().push
+        remote.set_url(f"https://Mandera:{PACKAGER_GITHUB_API}@github.com/{self.github.owner}/{self.name}.git")
+        return remote
+
+    def push(self, tag=None):
+        """ Might want to catch OSError - # Just suppressing weird invalid handle error
+
+            :param generalpackager.Packager self: """
+        if tag:
+            tag = self.localrepo.repo.create_tag(f"v{self.localrepo.metadata.version}", force=True)
+
+        push = self.remote.push(refspec=tag)
+        self.commit_sha = push[0].summary.split("..")[1].rstrip()
 
     def commit_and_push(self, message=None, tag=False):
         """ Commit and push this local repo to GitHub.
             Return short sha1 of pushed commit.
 
+            Todo: commit-hook failed for auto commit "not a valid Win32 application"
+
             :param generalpackager.Packager self:
             :param message:
             :param tag: """
-        repo = self.localrepo.gitpython_repo
-        repo.git.add(A=True)
-        # Todo: commit-hook failed for auto commit "not a valid Win32 application"
-        repo.index.commit(message=str(message) or "Automatic commit.")
-        remote = repo.remote()
-        remote.set_url(f"https://Mandera:{PACKAGER_GITHUB_API}@github.com/{self.github.owner}/{self.name}.git")
-
-        if tag:
-            tag_ref = repo.create_tag(f"v{self.localrepo.metadata.version}", force=True)
-            remote.push(refspec=tag_ref)
-        try:
-            """ Todo: Fetch commit sha locally before pushing, possibly generate sha before commit.
-                
-                import git
-                repo = git.Repo(search_parent_directories=True)
-                sha = repo.head.object.hexsha """
-            self.commit_sha = remote.push()[0].summary.split("..")[1].rstrip()
-            # self.commit_sha = remote.push("head")[0].summary.split("..")[1].rstrip()
-        except OSError:  # Just suppressing weird invalid handle error
-            pass
-        return self.commit_sha
+        self.localrepo.add_all()
+        self.localrepo.commit(message=message)
+        self.push(tag=tag)
 
     def enable_vcs_operations(self):
         """ :param generalpackager.Packager self: """
@@ -72,7 +73,7 @@ class _PackagerGitHub:
 
     def create_master_branch(self):
         """ :param generalpackager.Packager self: """
-        repo = self.localrepo.gitpython_repo
+        repo = self.localrepo.repo
         # Create remote somehow first
         print(repo.remote().push("head"))
 

@@ -64,8 +64,14 @@ class LocalRepo(_Files, _SharedAPI, _SharedName, _SharedPath, _LocalRepo_Paths, 
 
     @property
     @deco_cache()
-    def gitpython_repo(self):
+    def repo(self):
         return Repo(str(self.path))
+
+    def add_all(self):
+        self.repo.git.add(A=True)
+
+    def commit(self, message=None):
+        self.repo.index.commit(message=str(message) if message else "No commit message.")
 
     @classmethod
     def repo_exists(cls, path):
@@ -80,14 +86,6 @@ class LocalRepo(_Files, _SharedAPI, _SharedName, _SharedPath, _LocalRepo_Paths, 
             :rtype: list[Path] """
         return self.get_test_path().get_children(depth=-1, filt=lambda path: path.endswith(".py") and not path.match("/tests/"), traverse_excluded=True)
 
-    @deco_cache()
-    def text_in_tests(self, text):
-        """ Return whether text exists in one of the test files. """
-        for path in self.get_test_paths():
-            if path.contains(text=str(text)):
-                return True
-        return False
-
     def get_package_paths_gen(self):
         """ Yield Paths pointing to each folder containing a Python file in this local repo, aka `namespace package`.
             Doesn't include self.path """
@@ -98,7 +96,7 @@ class LocalRepo(_Files, _SharedAPI, _SharedName, _SharedPath, _LocalRepo_Paths, 
 
     def git_changed_files(self):
         """ Get a list of relative paths changed files using local .git folder. """
-        return [Path(file) for file in re.findall("diff --git a/(.*) " + "b/", self.gitpython_repo.git.diff())]
+        return [Path(file) for file in re.findall("diff --git a/(.*) " + "b/", self.repo.git.diff())]
 
     @deco_require(metadata_exists)
     def bump_version(self):

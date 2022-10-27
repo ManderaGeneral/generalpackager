@@ -31,10 +31,6 @@ class TestLocalRepo(PathTest):
         self.assertLess(2, len(list(LocalRepo().get_test_paths())))
         self.assertIn(LocalRepo().get_test_path() / "test_local_repo.py", LocalRepo().get_test_paths())
 
-    def test_text_in_tests(self):
-        self.assertEqual(True, LocalRepo().text_in_tests("stringthatexists"))
-        self.assertEqual(False, LocalRepo().text_in_tests("stringthat" + "doesntexist"))
-
     def test_get_package_paths(self):
         package_paths = list(LocalRepo().get_package_paths_gen())
         self.assertIn(LocalRepo().get_test_path(), package_paths)

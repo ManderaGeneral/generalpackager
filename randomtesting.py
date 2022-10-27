@@ -4,7 +4,8 @@ from generallibrary import Log
 from generalpackager import Packager, LocalRepo
 
 
-Packager().commit_and_push("Auto commit")
+
+Packager().commit_and_push("Cleaned up PackagerGitHub, #18 done")
 
 
 # Log("generalpackager").configure_stream()
