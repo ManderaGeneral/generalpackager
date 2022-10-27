@@ -8,9 +8,6 @@ from generalpackager import PACKAGER_GITHUB_API
 
 class _PackagerGitHub:
     """ Sync metadata. """
-    def __init__(self):
-        self.commit_sha = "master"
-
     def sync_github_metadata(self):
         """ Sync GitHub with local metadata.
 
@@ -38,7 +35,6 @@ class _PackagerGitHub:
         summary = push[0].summary
         if ".." not in summary:
             raise ValueError(f"Push failed: {summary}")
-        self.commit_sha = summary.split("..")[1].rstrip()
 
     def commit_and_push(self, message=None, tag=None):
         """ Commit and push this local repo to GitHub.

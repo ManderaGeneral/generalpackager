@@ -62,8 +62,16 @@ class LocalRepo(_Files, _SharedAPI, _SharedName, _SharedPath, _LocalRepo_Paths, 
     def repo(self):
         return Repo(str(self.path))
 
+    @property
+    def commit_sha(self):
+        return self.repo.head.object.hexsha
+
+    @property
+    def commit_sha_short(self):
+        return self.commit_sha[0:8]
+
     def add_all(self):
-        print(self.repo.git.add(A=True))
+        self.repo.git.add(A=True)
 
     def commit(self, message=None):
         self.repo.index.commit(message=str(message) if message else "No commit message.")
