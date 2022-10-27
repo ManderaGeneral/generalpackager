@@ -21,8 +21,7 @@ class _PackagerWorkflow:
         )
 
     def workflow_sync(self):
-        """ Runs in workflow once Packagers have created each LocalRepo from latest master commit.
-            Todo: Add single job to make sure workflow is up to date.
+        """ Runs in workflow once Packagers have created each LocalRepo from the latest master commit.
             It can generate new workflow, compare, and then stop workflow after commiting and pushing.
 
             :param generalpackager.Packager self: """
@@ -30,10 +29,10 @@ class _PackagerWorkflow:
         msg1 = f"[CI AUTO] For commit sha reference"
         msg2 = f"[CI AUTO] Sync triggered by {trigger_repo}"
 
-        # Log().configure_stream()
+        any_bumped = any(self.general_bumped_set())
 
         self.run_ordered_methods(
-            lambda packager: packager.if_publish_bump(),
+            lambda packager: packager.if_publish_bump(any_bumped=any_bumped),
             lambda packager: packager.generate_localfiles(include_aesthetic=False),
             lambda packager: packager.localrepo.unittest(),  # Will set coverage percentage
             lambda packager, msg=msg1: packager.localrepo.commit(message=msg),  # Will update commit_sha
@@ -43,19 +42,19 @@ class _PackagerWorkflow:
             lambda packager: packager.sync_github_metadata(),
         )
 
-        for packager in self.summary_packagers():
-            packager.upload_package_summary(msg=msg1)
+        for summary_packager in self.summary_packagers():
+            summary_packager.upload_package_summary(msg=msg1)
 
     def upload_package_summary(self, msg):
         """ :param generalpackager.Packager self: """
         self.org_readme_file.generate()
         self.commit_and_push(message=msg)
 
-    def if_publish_bump(self):
+    def if_publish_bump(self, any_bumped):
         """ Bump if updated and any other Packager is bumped.
 
             :param generalpackager.Packager self: """
-        if self.general_bumped_set() and not self.is_bumped() and self.compare_local_to_pypi(aesthetic=False):
+        if any_bumped and not self.is_bumped() and self.compare_local_to_pypi(aesthetic=False):
             self.localrepo.bump_version()
 
     def if_publish_upload(self):

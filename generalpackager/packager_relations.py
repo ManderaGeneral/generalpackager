@@ -63,13 +63,15 @@ class _PackagerRelations:
         return self.pypi.get_owners_packages().intersection(self.github.get_owners_packages())
 
     def general_bumped_set(self):
-        """ Return a set of general packagers that have been bumped.
+        """ Yield general packagers that have been bumped.
 
             :param generalpackager.Packager self: """
-        return {packager for packager in self.get_ordered_packagers() if packager.is_bumped()}
+        for packager in self.get_ordered_packagers():
+            if packager.is_bumped():
+                yield packager
 
     def general_changed_dict(self, aesthetic=None):
-        """ Return a dict of general packagers with changed files comparing to github.
+        """ Return a dict of general packagers with changed files comparing to GitHub.
 
             :param generalpackager.Packager self:
             :param aesthetic: """
