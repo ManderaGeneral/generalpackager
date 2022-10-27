@@ -5,7 +5,11 @@ from generalpackager import Packager, LocalRepo
 
 
 
-packager = Packager()
+# localrepo = LocalRepo(path="hi")
+# localrepo.init_repo()
+# print(localrepo.commit_sha_short)
+
+# packager = Packager()
 
 # packager.localrepo.commit()
 

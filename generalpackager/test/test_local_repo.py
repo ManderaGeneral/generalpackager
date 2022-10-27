@@ -115,13 +115,18 @@ class TestLocalRepo(PathTest):
         self.assertEqual(False, LocalRepo().is_node())
         self.assertEqual(False, LocalRepo().is_django())
 
+    def test_repo_init(self):
+        localrepo = LocalRepo(path="hi")
+        self.assertIs(False, localrepo.exists())
+        self.assertIsNotNone(localrepo.repo)
+        self.assertIs(True, localrepo.exists())
+
 
 
 class TestLocalRepoPython(PathTest):
     def test_get_venv_path(self):
         venv = LocalRepo_Python().get_venv_path()
         self.assertEqual(True, venv is None or venv.is_venv())
-
 
 
 
