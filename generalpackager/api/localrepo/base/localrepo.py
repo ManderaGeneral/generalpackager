@@ -2,8 +2,7 @@
 import re
 
 from generalfile import Path
-from generallibrary import deco_cache, deco_require, Timer
-from git import Repo
+from generallibrary import deco_cache, deco_require
 from setuptools import find_namespace_packages
 
 from generalpackager.api.localrepo.base.localrepo_git import _LocalRepo_Git
@@ -57,25 +56,6 @@ class LocalRepo(_Files, _SharedAPI, _SharedName, _SharedPath, _LocalRepo_Paths, 
         """ Return whether this API's target exists. """
         return self.repo_exists(path=self.path)
 
-    @property
-    @deco_cache()
-    def repo(self):
-        return Repo(str(self.path))
-
-    @property
-    def commit_sha(self):
-        return self.repo.head.object.hexsha
-
-    @property
-    def commit_sha_short(self):
-        return self.commit_sha[0:8]
-
-    def add_all(self):
-        self.repo.git.add(A=True)
-
-    def commit(self, message=None):
-        self.repo.index.commit(message=str(message) if message else "No commit message.")
-
     @classmethod
     def repo_exists(cls, path):
         if path is None or path.is_file() or not path.exists():
@@ -96,10 +76,6 @@ class LocalRepo(_Files, _SharedAPI, _SharedName, _SharedPath, _LocalRepo_Paths, 
             path = self.path / package.replace(".", "/")
             if not path.match("/dist", "/build"):
                 yield path
-
-    def git_changed_files(self):
-        """ Get a list of relative paths changed files using local .git folder. """
-        return [Path(file) for file in re.findall("diff --git a/(.*) " + "b/", self.repo.git.diff())]
 
     @deco_require(metadata_exists)
     def bump_version(self):

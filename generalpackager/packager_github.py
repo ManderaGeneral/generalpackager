@@ -30,6 +30,8 @@ class _PackagerGitHub:
             :param generalpackager.Packager self: """
         if tag:
             tag = self.localrepo.repo.create_tag(f"v{self.localrepo.metadata.version}", force=True)
+        else:
+            tag = None
 
         push = self.remote.push(refspec=tag)
         summary = push[0].summary
