@@ -37,7 +37,7 @@ class _PackagerGitHub:
         push = self.remote.push(refspec=tag)
         self.commit_sha = push[0].summary.split("..")[1].rstrip()
 
-    def commit_and_push(self, message=None, tag=False):
+    def commit_and_push(self, message=None, tag=None):
         """ Commit and push this local repo to GitHub.
             Return short sha1 of pushed commit.
 
