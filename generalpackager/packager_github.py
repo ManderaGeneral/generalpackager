@@ -23,7 +23,7 @@ class _PackagerGitHub:
     @deco_cache()
     def remote(self):
         """ :param generalpackager.Packager self: """
-        remote = self.localrepo.repo.remote().push
+        remote = self.localrepo.repo.remote()
         remote.set_url(f"https://Mandera:{PACKAGER_GITHUB_API}@github.com/{self.github.owner}/{self.name}.git")
         return remote
 
