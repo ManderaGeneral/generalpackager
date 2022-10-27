@@ -78,8 +78,6 @@ class _PackagerFiles:
             for file in files:
                 file.generate()
 
-        raise ValueError(self.localrepo.get_commit_message())  # HERE **
-
         if error_on_change and "[CI SKIP]" not in self.localrepo.get_commit_message():
             self._error_on_change(files=files)
 

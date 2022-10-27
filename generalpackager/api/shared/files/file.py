@@ -16,7 +16,7 @@ class DynamicRelativePath:
 
 
 class File:
-    """ Instantiated if its Packager is. """
+    """ Instantiated if its owner is. """
     targets = Targets
 
     _relative_path = ...
@@ -30,9 +30,11 @@ class File:
     def _generate(self):
         return ""
 
-    def __init__(self, packager):
-        """ :param generalpackager.Packager packager: """
-        self.packager = packager
+    def __init__(self, owner):
+        """ :param generalpackager.Packager or generalpackager.LocalRepo owner: """
+        self.owner = owner
+        self.packager = owner if type(owner).__name__ == "Packager" else None
+        self.local_repo = owner if type(owner).__name__ == "LocalRepo" else None
 
     relative_path = DynamicRelativePath()
 
@@ -43,25 +45,25 @@ class File:
     @property
     @deco_cache()
     def path(self):
-        return self.packager.path / self._relative_path
+        return self.owner.path / self._relative_path
 
     def can_write(self):
         return (
             self.is_file and
             not self.remove and
             type(self)._generate is not File._generate and
-            self.target == self.packager.target and
+            self.target == self.owner.target and
             (self.overwrite is True or not self.path.exists())
         )
 
     def generate(self):
         logger = getLogger(__name__)
         if self.can_write():
-            logger.info(f"Writing to '{self.relative_path}' for '{self.packager.name}'")
+            logger.info(f"Writing to '{self.relative_path}' for '{self.owner.name}'")
             return self.path.text.write(text=f"{self._generate()}\n", overwrite=self.overwrite)
         elif self.remove:
-            logger.info(f"Deleting '{self.relative_path}' for '{self.packager.name}'")
+            logger.info(f"Deleting '{self.relative_path}' for '{self.owner.name}'")
             self.path.delete()
 
     def __str__(self):
-        return f"<File: {self.packager.name} - {self.relative_path}>"
+        return f"<File: {self.owner.name} - {self.relative_path}>"

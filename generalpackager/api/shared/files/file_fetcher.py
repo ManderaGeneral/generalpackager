@@ -37,13 +37,13 @@ class FileFetcher:
         if cached_file:
             return cached_file
         else:
-            new_file = self.cls(packager=instance)
+            new_file = self.cls(owner=instance)
             setattr(instance, self.protected_cls_name, new_file)
             return new_file
 
     def __get__(self, instance, owner):
         """ :rtype: generalpackager.api.shared.files.file.File or Any """
-        if instance and type(instance).__name__ == "Packager":
+        if instance:
             return self.cache_file(instance=instance)
         else:
             return self.cls
