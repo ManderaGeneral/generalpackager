@@ -118,15 +118,10 @@ class ReadmeFile(File):
         line = objInfo.get_definition_line()
         return self.github_link_path_line(text=text, path=path, line=line)
 
-    @deco_cache()
-    def _cache_get_attributes_view(self, commit_sha):
-        """ Additional method here to store seperate cache for different commit_shas """
-        return self.packager.localmodule.objInfo.view(custom_repr=self._attr_repr, print_out=False)
-
     def _get_attributes_view(self):
         if self.packager.localmodule.module is None:
             return "No module to get attributes"
-        return self._cache_get_attributes_view(self.packager.commit_sha)
+        return self.packager.localmodule.objInfo.view(custom_repr=self._attr_repr, print_out=False)
 
     def get_attributes_markdown(self):
         """ Get a recursive view of attributes markdown. """
@@ -144,7 +139,7 @@ class ReadmeFile(File):
         if line is None:
             line = 1
         path = Path(path)
-        return self.github_link(text=text, suffix=f"blob/{self.packager.commit_sha}/{path.encode()}#L{line}")
+        return self.github_link(text=text, suffix=f"blob/{self.packager.localrepo.commit_sha_short}/{path.encode()}#L{line}")
 
     def _get_codeline_todos(self):
         todos = []
@@ -202,7 +197,8 @@ class ReadmeFile(File):
         """ Get a markdown for footnote containing date, time and commit link. """
         line = f"Generated {Date.now()}"
         if commit:
-            line += f" for commit {self.github_link(text=self.packager.commit_sha, suffix=f'commit/{self.packager.commit_sha}')}."
+            sha = self.localrepo.commit_sha_short
+            line += f" for commit {self.github_link(text=sha, suffix=f'commit/{sha}')}."
 
         return Markdown(line).wrap_with_tags("<sup>", "</sup>")
 

@@ -34,7 +34,7 @@ class File:
         """ :param generalpackager.Packager or generalpackager.LocalRepo owner: """
         self.owner = owner
         self.packager = owner if type(owner).__name__ == "Packager" else None
-        self.local_repo = owner if type(owner).__name__ == "LocalRepo" else None
+        self.localrepo = self.packager.localrepo if self.packager else owner
 
     relative_path = DynamicRelativePath()
 
