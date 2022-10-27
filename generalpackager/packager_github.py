@@ -35,7 +35,10 @@ class _PackagerGitHub:
             tag = self.localrepo.repo.create_tag(f"v{self.localrepo.metadata.version}", force=True)
 
         push = self.remote.push(refspec=tag)
-        self.commit_sha = push[0].summary.split("..")[1].rstrip()
+        summary = push[0].summary
+        if ".." not in summary:
+            raise ValueError(f"Push failed: {summary}")
+        self.commit_sha = summary.split("..")[1].rstrip()
 
     def commit_and_push(self, message=None, tag=None):
         """ Commit and push this local repo to GitHub.

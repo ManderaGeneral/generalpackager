@@ -50,11 +50,6 @@ class LocalRepo(_Files, _SharedAPI, _SharedName, _SharedPath, _LocalRepo_Paths, 
         """ Needed to make deco_require be able to use this. """
         return bool(self.metadata and self.metadata.exists())
 
-    # @property
-    # def name(self):
-    #     """ Only getter for name to make _SharedAPI work. """
-    #     return self.metadata.name if self.metadata_exists() else self.path.stem()
-
     def __repr__(self):
         return f"<{type(self).__name__} for '{self.path}'>"
 
@@ -68,7 +63,7 @@ class LocalRepo(_Files, _SharedAPI, _SharedName, _SharedPath, _LocalRepo_Paths, 
         return Repo(str(self.path))
 
     def add_all(self):
-        self.repo.git.add(A=True)
+        print(self.repo.git.add(A=True))
 
     def commit(self, message=None):
         self.repo.index.commit(message=str(message) if message else "No commit message.")
