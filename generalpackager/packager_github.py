@@ -42,10 +42,11 @@ class _PackagerGitHub:
 
             Todo: commit-hook failed for auto commit "not a valid Win32 application"
 
-            :param generalpackager.Packager self:
-            :param message:
-            :param tag: """
-        self.localrepo.add_all()
+            :param generalpackager.Packager self: """
+        # Bad hard-coded quick fix
+        if "Sync" in message and tag:
+            message = message.replace("Sync", "Publish")
+
         self.localrepo.commit(message=message)
         self.push(tag=tag)
 
