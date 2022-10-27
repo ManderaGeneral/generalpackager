@@ -29,11 +29,14 @@ class _PackagerFiles:
     def _compare_local(self, platform, aesthetic):
         """ :param generalpackager.Packager self: """
         def filt(path):
+            """ Filter to return True for files we want to compare. """
             if path.match(*self.git_exclude_lines):
                 return False
             if aesthetic is not None:
                 file = self.get_file_from_path(path=path)
-                return file.aesthetic == aesthetic
+                if file is None:
+                    return True  # Probably a python file
+                return file.aesthetic is aesthetic
             return True
 
         unpack_target = Path.get_cache_dir() / "Python"
