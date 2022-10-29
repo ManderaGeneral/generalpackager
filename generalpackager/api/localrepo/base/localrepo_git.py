@@ -1,5 +1,5 @@
 
-from generallibrary import deco_cache
+from generallibrary import deco_cache, terminal
 from generalfile import Path
 from git import Repo, InvalidGitRepositoryError, NoSuchPathError
 import re
@@ -12,18 +12,8 @@ class _LocalRepo_Git:
 
     def init_repo(self):
         """ :param generalpackager.LocalRepo self: """
-        return Repo.init(str(self.path))
-
-    @property
-    @deco_cache()
-    def repo(self):
-        """ Return existing or new repo.
-
-            :param generalpackager.LocalRepo self: """
-        try:
-            return Repo(str(self.path))
-        except (InvalidGitRepositoryError, NoSuchPathError):
-            return self.init_repo()
+        with self.path.as_working_dir():
+            terminal("git", "init")
 
     def commit(self, message=None):
         """ :param generalpackager.LocalRepo self: """

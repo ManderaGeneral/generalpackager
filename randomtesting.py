@@ -3,6 +3,28 @@ from generalfile import Path
 from generallibrary import Log
 from generalpackager import Packager, LocalRepo
 
+import git
+import github
+
+# packager = Packager()
+# print(type(packager.localrepo.repo))
+
+
+# repo = packager.localrepo.repo
+# head = repo.head
+# commit = head.commit
+#
+# print(commit)
+#
+# repo.commit()
+#
+# print(packager.localrepo.repo.head.commit)
+
+
+# print(packager.remote)
+
+
+LocalRepo(path="hi").init_repo()
 
 
 # localrepo = LocalRepo(path="hi")
