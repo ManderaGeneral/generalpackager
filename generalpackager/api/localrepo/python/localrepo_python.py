@@ -72,12 +72,11 @@ class LocalRepo_Python(LocalRepo):
             terminal("-m", "twine", "upload", "dist/*", python=True)
 
     @deco_require(LocalRepo.exists)
-    def generate_exe(self, file_path=None, suppress=False):
+    def generate_exe(self, file_path=None):
         """ Generate an exe file for target file_path python file. """
         if file_path is None:
             file_path = self.get_exetarget_path()
         assert file_path.exists()
 
         with self.path.as_working_dir():
-            terminal("-m", "PyInstaller", file_path, "--onefile", "--windowed", python=True, suppress=suppress)
-            # terminal("-m", "PyInstaller", file_path, "--onefile", "--windowed", "--name", self.name, python=True, suppress=suppress)  # Failed for some reason
+            terminal("-m", "PyInstaller", file_path, "--onefile", "--windowed", python=True)

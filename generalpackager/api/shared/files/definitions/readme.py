@@ -139,7 +139,7 @@ class ReadmeFile(File):
         if line is None:
             line = 1
         path = Path(path)
-        return self.github_link(text=text, suffix=f"blob/{self.packager.localrepo.commit_sha_short}/{path.encode()}#L{line}")
+        return self.github_link(text=text, suffix=f"blob/{self.packager.localrepo.commit_sha_short()}/{path.encode()}#L{line}")
 
     def _get_codeline_todos(self):
         todos = []
@@ -197,7 +197,7 @@ class ReadmeFile(File):
         """ Get a markdown for footnote containing date, time and commit link. """
         line = f"Generated {Date.now()}"
         if commit:
-            sha = self.localrepo.commit_sha_short
+            sha = self.localrepo.commit_sha_short()
             line += f" for commit {self.github_link(text=sha, suffix=f'commit/{sha}')}."
 
         return Markdown(line).wrap_with_tags("<sup>", "</sup>")

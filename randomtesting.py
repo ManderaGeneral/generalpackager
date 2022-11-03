@@ -1,39 +1,17 @@
+import sys
 
 from generalfile import Path
-from generallibrary import Log
+from generallibrary import Log, terminal
 from generalpackager import Packager, LocalRepo
 
 import git
 import github
 
 # packager = Packager()
-# print(type(packager.localrepo.repo))
+
+# print(packager.localrepo.changed_files())
 
 
-# repo = packager.localrepo.repo
-# head = repo.head
-# commit = head.commit
-#
-# print(commit)
-#
-# repo.commit()
-#
-# print(packager.localrepo.repo.head.commit)
-
-
-# print(packager.remote)
-
-
-LocalRepo(path="hi").init_repo()
-
-
-# localrepo = LocalRepo(path="hi")
-# localrepo.init_repo()
-# print(localrepo.commit_sha_short)
-
-# packager = Packager()
-
-# packager.localrepo.commit()
 
 
 # Log("generalpackager").configure_stream()

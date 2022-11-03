@@ -1,47 +1,57 @@
-
-from generallibrary import deco_cache, terminal
+from generallibrary import terminal
 from generalfile import Path
-from git import Repo, InvalidGitRepositoryError, NoSuchPathError
-import re
+
+from generalpackager.api.shared.decos import deco_path_as_working_dir
 
 
 class _LocalRepo_Git:
-    def get_commit_message(self):
+    def commit_message(self):
         """ :param generalpackager.LocalRepo self: """
         return self.commit_editmsg_file.path.text.read()
 
-    def init_repo(self):
+    @deco_path_as_working_dir
+    def init(self):
         """ :param generalpackager.LocalRepo self: """
-        with self.path.as_working_dir():
-            terminal("git", "init")
+        terminal("git", "init")
 
+    @deco_path_as_working_dir
     def commit(self, message=None):
         """ :param generalpackager.LocalRepo self: """
-        self.repo.git.add(A=True)
-        self.repo.index.commit(message=str(message) if message else "No commit message.")
+        if message is None:
+            message = "No commit message"
+        terminal("git", "commit", "-a", "-m", message)
 
-    @property
+    @deco_path_as_working_dir
+    def push(self, url, tag=None):
+        if tag is not None:
+            terminal("git", "tag", tag)
+            tag = ("tag", tag)
+
+        terminal("git", "remote", "add", "origin", url)
+        terminal("git", "push", "-u", "origin", "master", *tag)
+
+    @deco_path_as_working_dir
+    def clone(self, url):
+        terminal("git", "clone", url)
+
+    @deco_path_as_working_dir
     def commit_sha(self):
         """ Defaults to 'master' if missing.
 
             :param generalpackager.LocalRepo self: """
-        try:
-            return self.repo.head.object.hexsha
-        except ValueError:
-            return "master"
+        return terminal("git", "rev-parse", "--verify", "HEAD", default="master")
 
     @property
     def commit_sha_short(self):
         """ Defaults to 'master' if missing.
 
             :param generalpackager.LocalRepo self: """
-        return self.commit_sha[0:8]
+        return self.commit_sha()[0:8]
 
-    def git_changed_files(self):
-        """ Get a list of relative paths changed files using local .git folder.
-
-            :param generalpackager.LocalRepo self: """
-        return [Path(file) for file in re.findall("diff --git a/(.*) " + "b/", self.repo.git.diff())]
+    def changed_files(self):
+        """ :param generalpackager.LocalRepo self: """
+        ls_files = terminal("git", "ls-files", "--modified")
+        return [Path(file) for file in ls_files.splitlines()]
 
 
 

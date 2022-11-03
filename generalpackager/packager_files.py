@@ -60,7 +60,7 @@ class _PackagerFiles:
     def _error_on_change(self, files):
         """ :param generalpackager.Packager self: """
         file_paths = {file.path for file in files}
-        changed_files = {path.absolute() for path in self.localrepo.git_changed_files()}
+        changed_files = {path.absolute() for path in self.localrepo.changed_files()}
 
         changed_generated_files = file_paths.intersection(changed_files)
         if changed_generated_files:
@@ -81,7 +81,7 @@ class _PackagerFiles:
             for file in files:
                 file.generate()
 
-        if error_on_change and "[CI SKIP]" not in self.localrepo.get_commit_message():
+        if error_on_change and "[CI SKIP]" not in self.localrepo.commit_message():
             self._error_on_change(files=files)
 
 

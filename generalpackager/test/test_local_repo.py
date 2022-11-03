@@ -43,7 +43,7 @@ class TestLocalRepo(PathTest):
 
         local_repo.bump_version()
         self.assertNotEqual(local_repo.metadata.version, version)
-        self.assertIn("metadata.json", local_repo.git_changed_files())
+        self.assertIn("metadata.json", local_repo.changed_files())
 
         local_repo.metadata.version = version
         self.assertEqual(local_repo.metadata.version, version)

@@ -1,12 +1,11 @@
 from generalpackager.api.shared.owner import _SharedOwner
 from generalpackager.api.shared.name import _SharedName, _SharedAPI
 from generalpackager import PACKAGER_GITHUB_API
-from generallibrary import Log
+from generallibrary import Log, terminal
 from generalfile import Path
 
 import requests
 import json
-from git import Repo
 
 
 class GitHub(_SharedAPI, _SharedOwner, _SharedName):
@@ -45,20 +44,18 @@ class GitHub(_SharedAPI, _SharedOwner, _SharedName):
         """ Clone a GitHub repo into a path, defaults to working_dir / name.
             Creates a folder with Package's name first. """
         if not self.exists():
-            Log().info(f"Cannot download {self.name}, couldn't find on GitHub.")
-            return
+            return Log().info(f"Cannot download {self.name}, couldn't find on GitHub.")
 
         path = Path(path) / self.name
-
         if path.exists():
             if overwrite:
                 path.delete()
             else:
                 raise AttributeError(f"Clone target exists and overwrite is False.")
 
-        # Not quiet sure how this somehow gets auth for private repos
-        # Tried changing token in env and .git/config
-        Repo.clone_from(url=self.url, to_path=path)
+        with path.as_working_dir():
+            terminal("git", "clone", self.url)
+
         return path
 
     def get_owners_packages(self):
