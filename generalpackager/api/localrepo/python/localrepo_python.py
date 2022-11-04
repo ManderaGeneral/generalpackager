@@ -32,7 +32,7 @@ class LocalRepo_Python(LocalRepo):
             Sets self.coverage to total percentage with one decimal. """
 
         with self.get_test_path().as_working_dir():
-            terminal("coverage", "run", "-m", "unittest", "discover")
+            terminal("coverage", "run", "-m", "unittest", "discover", capture_output=False)
             coverage = Coverage()
             coverage.load()
             with RedirectStdout():

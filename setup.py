@@ -18,8 +18,6 @@ setup(
     install_requires=[
         'generallibrary[table]',
         'generalfile',
-        'gitpython',
-        'pygithub',
         'requests',
         'pyinstaller',
         'coverage',
