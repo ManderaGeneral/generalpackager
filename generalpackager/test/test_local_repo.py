@@ -118,7 +118,7 @@ class TestLocalRepo(PathTest):
     def test_repo_init(self):
         localrepo = LocalRepo(path="hi")
         self.assertIs(False, localrepo.exists())
-        self.assertIsNotNone(localrepo.repo)
+        localrepo.init()
         self.assertIs(True, localrepo.exists())
 
 

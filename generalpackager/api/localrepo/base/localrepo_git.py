@@ -41,13 +41,13 @@ class _LocalRepo_Git:
             :param generalpackager.LocalRepo self: """
         return terminal("git", "rev-parse", "--verify", "HEAD", default="master")
 
-    @property
     def commit_sha_short(self):
         """ Defaults to 'master' if missing.
 
             :param generalpackager.LocalRepo self: """
         return self.commit_sha()[0:8]
 
+    @deco_path_as_working_dir
     def changed_files(self):
         """ :param generalpackager.LocalRepo self: """
         ls_files = terminal("git", "ls-files", "--modified")

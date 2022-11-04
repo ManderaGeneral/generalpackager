@@ -7,9 +7,11 @@ from generalpackager import Packager, LocalRepo
 import git
 import github
 
-# packager = Packager()
 
-# print(packager.localrepo.changed_files())
+
+packager = Packager()
+packager.localrepo.bump_version()
+print(packager.localrepo.changed_files())
 
 
 
