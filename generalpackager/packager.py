@@ -69,6 +69,8 @@ class Packager(NetworkDiagram,
                 Log().info(f"Downloading {packager.name} from GitHub.")
                 packager.github.download()
 
+            # HERE ** Create venv
+
     @staticmethod
     @deco_cache()
     def summary_packagers():
