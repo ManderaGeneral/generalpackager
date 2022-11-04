@@ -30,8 +30,8 @@ class _PackagerGitHub:
         self.localrepo.commit(message=message)
         self.push(tag=tag)
 
-    def gh_auth(self):
-        """ :param generalpackager.Packager self: """
+    @staticmethod
+    def gh_auth():
         terminal("gh", "auth", "login", "--with-token", PACKAGER_GITHUB_API)
 
     def create_github_repo(self):
