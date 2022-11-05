@@ -5,7 +5,7 @@ from generalpackager.api.shared.files.file import File
 
 class WorkflowFile(File):
     _relative_path = ".github/workflows/workflow.yml"
-    aesthetic = True
+    aesthetic = False
 
     def _generate(self):
         workflow = CodeLine()
