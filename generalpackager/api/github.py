@@ -1,6 +1,6 @@
 from generalpackager.api.shared.owner import _SharedOwner
 from generalpackager.api.shared.name import _SharedName, _SharedAPI
-from generalpackager import PACKAGER_GITHUB_API
+from generalpackager import GH_TOKEN
 from generallibrary import Log, terminal
 from generalfile import Path
 
@@ -22,7 +22,7 @@ class GitHub(_SharedAPI, _SharedOwner, _SharedName):
 
     @property
     def ssh_url(self):
-        return f"https://Mandera:{PACKAGER_GITHUB_API}@github.com/{self.owner}/{self.name}.git"
+        return f"https://Mandera:{GH_TOKEN}@github.com/{self.owner}/{self.name}.git"
 
     def api_url(self, endpoint=None):
         """ Get URL from owner, name and endpoint. """
@@ -106,16 +106,16 @@ class GitHub(_SharedAPI, _SharedOwner, _SharedName):
         # return {
         #     "headers": {
         #         "Accept": "application/vnd.github.mercy-preview+json",
-        #         "Authorization": f"token {PACKAGER_GITHUB_API.value}"
+        #         "Authorization": f"token {GH_TOKEN.value}"
         #     },
         # }
         return {
             # "headers": {"Accept": "application/vnd.github.mercy-preview+json"},
             "headers": {
-                # "Authorization": f"token {PACKAGER_GITHUB_API}",
+                # "Authorization": f"token {GH_TOKEN}",
                 "Accept": "application/vnd.github.v3+json",
             },
-            "auth": (self.owner, PACKAGER_GITHUB_API.value),
+            "auth": (self.owner, GH_TOKEN.value),
         }
 
     def _request(self, method="get", url=None, endpoint=None, **data):

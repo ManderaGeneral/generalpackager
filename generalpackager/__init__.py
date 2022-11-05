@@ -1,6 +1,6 @@
 from generallibrary import interconnect
 
-from generalpackager.other.envvars import PACKAGER_GITHUB_API, TWINE_USERNAME, TWINE_PASSWORD
+from generalpackager.other.envvars import GH_TOKEN, TWINE_USERNAME, TWINE_PASSWORD
 
 from generalpackager.packager import Packager
 

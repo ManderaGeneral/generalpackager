@@ -49,7 +49,7 @@ jobs:
         run: |
           python -c "from generalpackager import Packager; Packager().workflow_unittest()"
         env:
-          PACKAGER_GITHUB_API: ${{ secrets.PACKAGER_GITHUB_API }}
+          GH_TOKEN: ${{ secrets.PACKAGER_GITHUB_API }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
   sync:
@@ -91,6 +91,6 @@ jobs:
         run: |
           python -c "from generalpackager import Packager; Packager().workflow_sync()"
         env:
-          PACKAGER_GITHUB_API: ${{ secrets.PACKAGER_GITHUB_API }}
+          GH_TOKEN: ${{ secrets.PACKAGER_GITHUB_API }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
