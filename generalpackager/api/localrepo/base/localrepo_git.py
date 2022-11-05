@@ -18,12 +18,28 @@ class _LocalRepo_Git:
         """ :param generalpackager.LocalRepo self: """
         terminal("git", "init")
 
-    @deco_path_as_working_dir
-    def commit(self, message=None):
+    @staticmethod
+    def git_missing_credentials(exception):
+        return "Please tell me who you are." in str(exception)
+
+    def git_config(self):
         """ :param generalpackager.LocalRepo self: """
-        if message is None:
-            message = "No commit message"
-        terminal("git", "commit", "-a", "-m", message, "--author", f"{self.RUNNER_NAME} {self.RUNNER_EMAIL}")
+        terminal("git", "config", "--global", "user.name", self.RUNNER_NAME)
+        terminal("git", "config", "--global", "user.email", self.RUNNER_EMAIL)
+
+    @deco_path_as_working_dir
+    def commit(self, message=None, _recurse=True):
+        """ Tries to commit. If credentials are missing then it sets them and tries once more.
+
+            :param generalpackager.LocalRepo self: """
+        try:
+            terminal("git", "commit", "-a", "-m", message or "No commit message")
+        except ChildProcessError as exception:
+            if _recurse and self.git_missing_credentials(exception=exception):
+                self.git_config()
+                self.commit(message=message, _recurse=False)
+            else:
+                raise
 
     @deco_path_as_working_dir
     def push(self, url, tag=None):

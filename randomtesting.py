@@ -4,9 +4,11 @@ from generallibrary import Log, terminal
 from generalpackager import Packager, LocalRepo
 
 
-Log("root").configure_stream()
+# Log("root").configure_stream()
 
-Packager.new_clean_environment(Path(".../general"))
+Packager().localrepo.commit()
+
+# Packager.new_clean_environment(Path(".../general"))
 
 
 
