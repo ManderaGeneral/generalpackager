@@ -22,6 +22,10 @@ class _LocalRepo_Git:
     def git_missing_credentials(exception):
         return "Please tell me who you are." in str(exception)
 
+    @staticmethod
+    def git_nothing_to_commit(exception):
+        return "Your branch is up to date with" in str(exception)
+
     def git_config(self):
         """ :param generalpackager.LocalRepo self: """
         terminal("git", "config", "--global", "user.name", self.RUNNER_NAME)
@@ -35,11 +39,14 @@ class _LocalRepo_Git:
         try:
             terminal("git", "commit", "-a", "-m", message or "No commit message")
         except ChildProcessError as exception:
-            if _recurse and self.git_missing_credentials(exception=exception):
+            if self.git_nothing_to_commit(exception=exception):
+                return False
+            elif _recurse and self.git_missing_credentials(exception=exception):
                 self.git_config()
-                self.commit(message=message, _recurse=False)
+                return self.commit(message=message, _recurse=False)
             else:
                 raise
+        return True
 
     @deco_path_as_working_dir
     def push(self, url, tag=None):
