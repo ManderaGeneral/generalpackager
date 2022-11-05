@@ -5,6 +5,10 @@ from generalpackager.api.shared.decos import deco_path_as_working_dir
 
 
 class _LocalRepo_Git:
+    # https://github.com/actions/checkout/issues/13#issuecomment-724415212
+    RUNNER_NAME = "github-actions[bot]"
+    RUNNER_EMAIL = "<41898282+github-actions[bot]@users.noreply.github.com>"
+
     def commit_message(self):
         """ :param generalpackager.LocalRepo self: """
         return self.commit_editmsg_file.path.text.read()
@@ -19,7 +23,7 @@ class _LocalRepo_Git:
         """ :param generalpackager.LocalRepo self: """
         if message is None:
             message = "No commit message"
-        terminal("git", "commit", "-a", "-m", message)
+        terminal("git", "commit", "-a", "-m", message, "--author", f"{self.RUNNER_NAME} {self.RUNNER_EMAIL}")
 
     @deco_path_as_working_dir
     def push(self, url, tag=None):
