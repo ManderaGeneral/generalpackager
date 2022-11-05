@@ -1,5 +1,4 @@
 from generallibrary import terminal
-from generalpackager import PACKAGER_GITHUB_API
 
 
 class _PackagerGitHub:
@@ -29,10 +28,6 @@ class _PackagerGitHub:
 
         self.localrepo.commit(message=message)
         self.push(tag=tag)
-
-    @staticmethod
-    def gh_auth():
-        terminal("gh", "auth", "login", "--with-token", PACKAGER_GITHUB_API)
 
     def create_github_repo(self):
         """ :param generalpackager.Packager self: """

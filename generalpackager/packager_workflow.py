@@ -31,8 +31,6 @@ class _PackagerWorkflow:
 
         any_bumped = any(self.general_bumped_set())
 
-        self.gh_auth()
-
         self.run_ordered_methods(
             lambda packager: packager.if_publish_bump(any_bumped=any_bumped),
             lambda packager: packager.generate_localfiles(include_aesthetic=False),
