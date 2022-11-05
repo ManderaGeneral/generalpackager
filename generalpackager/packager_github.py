@@ -26,8 +26,8 @@ class _PackagerGitHub:
         if "Sync" in message and tag:
             message = message.replace("Sync", "Publish")
 
-        self.localrepo.commit(message=message)
-        self.push(tag=tag)
+        if self.localrepo.commit(message=message):
+            self.push(tag=tag)
 
     def create_github_repo(self):
         """ :param generalpackager.Packager self: """
