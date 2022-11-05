@@ -253,7 +253,7 @@ class ReadmeFile(File):
             welcome.append("pull requests")
         markdown.add_lines(f"{comma_and_and(*welcome, period=False)} are most welcome!",)
         if not contribute:
-            markdown.add_lines("", "Pull requests are not wanted, please discuss with me before investing any time")
+            markdown.add_lines("", "Pull requests are currently not wanted, please discuss with me before investing any time")
         return markdown
 
     def _generate(self):
