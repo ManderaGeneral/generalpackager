@@ -29,21 +29,19 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install setuptools wheel twine
-      - name: Clone 7 repos
+      - name: Clone 6 repos
         run: |
           git clone ssh://git@github.com/ManderaGeneral/generalimport.git
           git clone ssh://git@github.com/ManderaGeneral/generallibrary.git
           git clone ssh://git@github.com/ManderaGeneral/generalfile.git
-          git clone ssh://git@github.com/ManderaGeneral/generalvector.git
           git clone ssh://git@github.com/ManderaGeneral/generalpackager.git
           git clone ssh://git@github.com/Mandera/Mandera.git
           git clone ssh://git@github.com/ManderaGeneral/.github.git
-      - name: Install 5 repos
+      - name: Install 4 repos
         run: |
           pip install -e generalimport[full]
           pip install -e generallibrary[full]
           pip install -e generalfile[full]
-          pip install -e generalvector[full]
           pip install -e generalpackager[full]
       - name: Run Packager method 'workflow_unittest'
         run: |
@@ -63,29 +61,27 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.GIT_SSH }}
-      - name: Set up python version 3.8
+      - name: Set up python version 3.11
         uses: actions/setup-python@v2
         with:
-          python-version: '3.8'
+          python-version: '3.11'
       - name: Install necessities pip, setuptools, wheel, twine
         run: |
           python -m pip install --upgrade pip
           pip install setuptools wheel twine
-      - name: Clone 7 repos
+      - name: Clone 6 repos
         run: |
           git clone ssh://git@github.com/ManderaGeneral/generalimport.git
           git clone ssh://git@github.com/ManderaGeneral/generallibrary.git
           git clone ssh://git@github.com/ManderaGeneral/generalfile.git
-          git clone ssh://git@github.com/ManderaGeneral/generalvector.git
           git clone ssh://git@github.com/ManderaGeneral/generalpackager.git
           git clone ssh://git@github.com/Mandera/Mandera.git
           git clone ssh://git@github.com/ManderaGeneral/.github.git
-      - name: Install 5 repos
+      - name: Install 4 repos
         run: |
           pip install -e generalimport[full]
           pip install -e generallibrary[full]
           pip install -e generalfile[full]
-          pip install -e generalvector[full]
           pip install -e generalpackager[full]
       - name: Run Packager method 'workflow_sync'
         run: |
