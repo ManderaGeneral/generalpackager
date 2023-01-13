@@ -157,7 +157,7 @@ class WorkflowFile(File):
         job = CodeLine("sync:")
         job.add_node("needs: unittest")
         job.add_node(f"runs-on: ubuntu-latest")
-        steps = job.add_node(self._steps_setup(python_version=self.packager.python[0]))
+        steps = job.add_node(self._steps_setup(python_version=self.packager.python[-1]))
         steps.add_node(self._step_run_packager_method("workflow_sync"))
         return job
 
