@@ -1,4 +1,4 @@
-from generallibrary import terminal
+from generallibrary import Terminal
 from generalfile import Path
 
 from generalpackager.api.shared.decos import deco_path_as_working_dir
@@ -16,57 +16,56 @@ class _LocalRepo_Git:
     @deco_path_as_working_dir
     def init(self):
         """ :param generalpackager.LocalRepo self: """
-        terminal("git", "init")
+        Terminal("git", "init")
 
     @staticmethod
-    def git_missing_credentials(exception):
-        return "Please tell me who you are." in str(exception)
+    def git_missing_credentials(terminal):
+        return terminal.fail and "Please tell me who you are." in terminal.error_result
 
     @staticmethod
-    def git_nothing_to_commit(exception):
-        return "Your branch is up to date with" in str(exception)
+    def git_nothing_to_commit(terminal):
+        return terminal.fail and "Your branch is up to date with" in terminal.error_result
 
     def git_config(self):
         """ :param generalpackager.LocalRepo self: """
-        terminal("git", "config", "--global", "user.name", self.RUNNER_NAME)
-        terminal("git", "config", "--global", "user.email", self.RUNNER_EMAIL)
+        Terminal("git", "config", "--global", "user.name", self.RUNNER_NAME)
+        Terminal("git", "config", "--global", "user.email", self.RUNNER_EMAIL)
 
     @deco_path_as_working_dir
     def commit(self, message=None, _recurse=True):
         """ Tries to commit. If credentials are missing then it sets them and tries once more.
 
             :param generalpackager.LocalRepo self: """
-        try:
-            terminal("git", "commit", "-a", "-m", message or "No commit message")
-        except ChildProcessError as exception:
-            if self.git_nothing_to_commit(exception=exception):
-                return False
-            elif _recurse and self.git_missing_credentials(exception=exception):
-                self.git_config()
-                return self.commit(message=message, _recurse=False)
-            else:
-                raise
-        return True
+        terminal = Terminal("git", "commit", "-a", "-m", message or "No commit message", error=False)
+        if terminal.success:
+            return True
+        elif self.git_nothing_to_commit(terminal=terminal):
+            return False
+        elif _recurse and self.git_missing_credentials(terminal=terminal):
+            self.git_config()
+            return self.commit(message=message, _recurse=False)
+        else:
+            raise terminal.error_result
 
     @deco_path_as_working_dir
     def push(self, url, tag=None):
         if tag is not None:
-            terminal("git", "tag", tag)
+            Terminal("git", "tag", tag)
             tag = ("tag", tag)
 
-        terminal("git", "remote", "add", "origin", url)
-        terminal("git", "push", "-u", "origin", "master", *tag)
+        Terminal("git", "remote", "add", "origin", url, error=False)
+        Terminal("git", "push", "-u", "origin", "master", *tag)
 
     @deco_path_as_working_dir
     def clone(self, url):
-        terminal("git", "clone", url)
+        Terminal("git", "clone", url)
 
     @deco_path_as_working_dir
     def commit_sha(self):
         """ Defaults to 'master' if missing.
 
             :param generalpackager.LocalRepo self: """
-        return terminal("git", "rev-parse", "--verify", "HEAD", default="master")
+        return Terminal("git", "rev-parse", "--verify", "HEAD", default="master").string_result
 
     def commit_sha_short(self):
         """ Defaults to 'master' if missing.
@@ -77,8 +76,9 @@ class _LocalRepo_Git:
     @deco_path_as_working_dir
     def changed_files(self):
         """ :param generalpackager.LocalRepo self: """
-        ls_files = terminal("git", "ls-files", "--modified")
+        ls_files = Terminal("git", "ls-files", "--modified").string_result
         return [Path(file) for file in ls_files.splitlines()]
+
 
 
 

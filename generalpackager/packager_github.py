@@ -31,7 +31,7 @@ class _PackagerGitHub:
 
     def create_github_repo(self):
         """ :param generalpackager.Packager self: """
-        terminal("gh", "repo", "create", f"{self.github.owner}/{self.name}")
+        Terminal("gh", "repo", "create", f"{self.github.owner}/{self.name}")
 
     def create_master_branch(self):
         """ :param generalpackager.Packager self: """

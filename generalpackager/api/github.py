@@ -1,7 +1,7 @@
 from generalpackager.api.shared.owner import _SharedOwner
 from generalpackager.api.shared.name import _SharedName, _SharedAPI
 from generalpackager import GH_TOKEN
-from generallibrary import Log, terminal
+from generallibrary import Log, Terminal
 from generalfile import Path
 
 import requests
@@ -54,7 +54,7 @@ class GitHub(_SharedAPI, _SharedOwner, _SharedName):
                 raise AttributeError(f"Clone target exists and overwrite is False.")
 
         with path.as_working_dir():
-            terminal("git", "clone", self.url)
+            Terminal("git", "clone", self.url)
 
         return path
 

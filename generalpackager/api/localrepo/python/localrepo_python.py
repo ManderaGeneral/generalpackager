@@ -2,7 +2,7 @@ import sys
 
 from coverage import Coverage
 from generalfile import Path
-from generallibrary import terminal, EnvVar, deco_require, Log, RedirectStdout
+from generallibrary import Terminal, EnvVar, deco_require, Log, RedirectStdout
 
 from generalpackager.api.localrepo.base.localrepo import LocalRepo
 from generalpackager.api.localrepo.python.metadata_python import Metadata_Python
@@ -32,31 +32,31 @@ class LocalRepo_Python(LocalRepo):
             Sets self.coverage to total percentage with one decimal. """
 
         with self.get_test_path().as_working_dir():
-            terminal("coverage", "run", "-m", "unittest", "discover", capture_output=False)
+            Terminal("coverage", "run", "-m", "unittest", "discover", capture_output=False)
             coverage = Coverage()
             coverage.load()
             with RedirectStdout():
                 self.coverage = round(coverage.report(), 1)
 
-        # terminal("-m", "unittest", "discover", str(self.get_test_path()), python=True)
+        # Terminal("-m", "unittest", "discover", str(self.get_test_path()), python=True)
 
     @deco_require(LocalRepo.exists)
     def pip_install_editable(self):
         """ Install this repository with pip and -e flag. """
         with self.path.get_parent().as_working_dir():
             Log().debug(f"Pip install for {self}")
-            terminal("pip", "install", "-e", self.name)
+            Terminal("pip", "install", "-e", self.name)
 
     @deco_require(LocalRepo.exists)
     def pip_uninstall(self):
         """ Uninstall this repository with pip."""
-        terminal("-m", "pip", "uninstall", "-y", self.metadata.name, python=True)
+        Terminal("-m", "pip", "uninstall", "-y", self.metadata.name, python=True)
 
     @deco_require(LocalRepo.exists)
     def create_sdist(self):
         """ Create source distribution. """
         with self.path.as_working_dir():
-            terminal("setup.py", "sdist", "bdist_wheel", python=True)
+            Terminal("setup.py", "sdist", "bdist_wheel", python=True)
 
     @deco_require(LocalRepo.exists)
     def upload(self):
@@ -69,7 +69,7 @@ class LocalRepo_Python(LocalRepo):
 
         self.create_sdist()
         with self.path.as_working_dir():
-            terminal("-m", "twine", "upload", "dist/*", python=True)
+            Terminal("-m", "twine", "upload", "dist/*", python=True)
 
     @deco_require(LocalRepo.exists)
     def generate_exe(self, file_path=None):
@@ -79,4 +79,4 @@ class LocalRepo_Python(LocalRepo):
         assert file_path.exists()
 
         with self.path.as_working_dir():
-            terminal("-m", "PyInstaller", file_path, "--onefile", "--windowed", python=True)
+            Terminal("-m", "PyInstaller", file_path, "--onefile", "--windowed", python=True)
