@@ -1,6 +1,17 @@
 
 from generalfile import Path
-from generallibrary import EnvVar, Log
+from generallibrary import EnvVar, Log, Terminal
+
+
+
+def workflow(func):
+    def _wrapper(self):
+        Log().debug("Working dir:", Path().absolute())
+        Terminal.capture_output = False
+        result = func(self)
+        Terminal.capture_output = True
+        return result
+    return _wrapper
 
 
 class _PackagerWorkflow:
@@ -11,15 +22,15 @@ class _PackagerWorkflow:
             for packager in order:
                 func(packager)
 
+    @workflow
     def workflow_unittest(self):
         """ :param generalpackager.Packager self: """
-        Log().debug("Working dir for workflow_unittest:", Path().absolute())
-
         self.run_ordered_methods(
             lambda packager: packager.generate_localfiles(include_aesthetic=False),
             lambda packager: packager.localrepo.unittest(),
         )
 
+    @workflow
     def workflow_sync(self):
         """ Runs in workflow once Packagers have created each LocalRepo from the latest master commit.
             It can generate new workflow, compare, and then stop workflow after commiting and pushing.
