@@ -123,13 +123,6 @@ class TestLocalRepo(PathTest):
 
 
 
-class TestLocalRepoPython(PathTest):
-    def test_get_venv_path(self):
-        venv = LocalRepo_Python().get_venv_path()
-        self.assertEqual(True, venv is None or venv.is_venv())
-
-
-
 
 
 

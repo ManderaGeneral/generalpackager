@@ -14,15 +14,6 @@ class LocalRepo_Python(LocalRepo):
 
     # Put in generalfile?
     @staticmethod
-    def get_venv_path():
-        """ Return an absolute path to the current VENV or None. """
-        try:
-            return Path(EnvVar("VIRTUAL_ENV").value)
-        except KeyError:
-            return None
-
-    # Put in generalfile?
-    @staticmethod
     def get_python_exe_path():
         """ Return an absolute path to the current python exe filee. """
         return Path(sys.executable)
