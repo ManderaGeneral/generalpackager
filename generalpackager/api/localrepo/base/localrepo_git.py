@@ -49,9 +49,11 @@ class _LocalRepo_Git:
 
     @deco_path_as_working_dir
     def push(self, url, tag=None):
-        if tag is not None:
+        if tag:
             Terminal("git", "tag", tag)
             tag = ("tag", tag)
+        else:
+            tag = ()
 
         Terminal("git", "remote", "add", "origin", url, error=False)
         Terminal("git", "push", "-u", "origin", "master", *tag)
