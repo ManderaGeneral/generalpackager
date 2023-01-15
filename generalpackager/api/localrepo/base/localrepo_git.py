@@ -20,11 +20,11 @@ class _LocalRepo_Git:
 
     @staticmethod
     def git_missing_credentials(terminal):
-        return terminal.fail and "Please tell me who you are." in terminal.error_result
+        return terminal.fail and "Please tell me who you are." in terminal.string_result
 
     @staticmethod
     def git_nothing_to_commit(terminal):
-        return terminal.fail and "Your branch is up to date with" in terminal.error_result
+        return terminal.fail and "Your branch is up to date with" in terminal.string_result
 
     def git_config(self):
         """ :param generalpackager.LocalRepo self: """
