@@ -54,13 +54,16 @@ class Packager(NetworkDiagram,
         return packagers
 
     @classmethod
-    def new_clean_environment(cls, path=None):
+    def new_clean_environment(cls, path=None, python_version=None):
         """ Creates a new clean environment for the packages.
-            Clones all into a (preferably empty) specified folder.
-            Create and activate new venv.
-            Install python packages as editable. """
+            - Create, upgrade, and activate venv
+            - Clone repos
+            - Editable repo installs in venv """
         path = Path(path)
         assert path.empty()
+
+        if python_version is None:
+            python_version = cls.python[-1]
 
         with path.as_working_dir():
             packagers = cls.packagers_from_packages()
@@ -68,8 +71,6 @@ class Packager(NetworkDiagram,
             for packager in packagers:
                 Log().info(f"Downloading {packager.name} from GitHub.")
                 packager.github.download()
-
-            # HERE ** Create venv
 
     @staticmethod
     @deco_cache()
