@@ -1,4 +1,4 @@
-from generallibrary import terminal
+from generallibrary import Terminal
 
 
 class _PackagerGitHub:
