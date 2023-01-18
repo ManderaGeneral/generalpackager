@@ -47,14 +47,29 @@ class File:
     def path(self):
         return self.owner.path / self._relative_path
 
+    def _cant_write(self, msg):
+        logger = getLogger(__name__)
+        logger.info(f"Can't write '{self.relative_path}' - {msg}")
+        return False
+
     def can_write(self):
-        return (
-            self.is_file and
-            not self.remove and
-            type(self)._generate is not File._generate and
-            self.target == self.owner.target and
-            (self.overwrite is True or not self.path.exists())
-        )
+        if not self.is_file:
+            return self._cant_write(".is_file is False")
+
+        elif self.remove:
+            return self._cant_write(".remove is True")
+
+        elif type(self)._generate is File._generate:
+            return self._cant_write("._generate is undefined")
+
+        elif self.target != self.owner.target:
+            return self._cant_write(f".target {self.target} doesn't match it owner's {self.owner}")
+
+        elif self.overwrite is False and self.path.exists():
+            return self._cant_write(f".overwrite is False and path {self.path} exists")
+
+        else:
+            return True
 
     def generate(self):
         logger = getLogger(__name__)
@@ -64,6 +79,8 @@ class File:
         elif self.remove:
             logger.info(f"Deleting '{self.relative_path}' for '{self.owner.name}'")
             self.path.delete()
+        else:
+            logger.warning(f"Generate for '{self.relative_path}' could neither write nor remove.")
 
     def __str__(self):
         return f"<File: {self.owner.name} - {self.relative_path}>"

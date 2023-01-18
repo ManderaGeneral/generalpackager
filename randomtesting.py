@@ -1,3 +1,4 @@
+import sys
 
 from generalfile import Path
 from generallibrary import Log, Terminal
@@ -11,11 +12,16 @@ from generalpackager.api.venv import Venv
 
 # print(Venv("C:\Python\Venvs\dev11").python_path())
 
-# print(Terminal("-c", "print(5)", python=True, error=False, capture_output=False).success())
+# print(Terminal("-c", "assert 5 == 4", python=True, error=False, capture_output=False).string_result)
 
 
-print(Packager().get_ordered_packagers())
+# print(Packager().get_ordered_packagers())
+
+# print(Packager.summary_packagers()[0].org_readme_file.path)
 
 
+Log("root").configure_stream()
+
+print(Packager.summary_packagers()[0].org_readme_file.can_write())
 
 
