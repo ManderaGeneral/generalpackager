@@ -4,6 +4,8 @@ from generalpackager.api.shared.files.file import File
 
 
 class OrgReadmeFile(File):
+    target = None
+
     @property
     def _relative_path(self):
         if self.packager.name == ".github":
