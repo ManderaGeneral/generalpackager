@@ -22,7 +22,9 @@ from generalpackager.api.venv import Venv
 # Log("root").configure_stream()
 
 path = Path(".../general")
-venv_path = Path("C:\Python\Venvs\dev11")
+
+venv_path = Path(r"C:\Python\Venvs\test2")
+# venv_path = Path(r"C:\Python\Venvs\dev11")
 
 # path.open_folder()
 # venv_path.open_folder()
@@ -30,5 +32,48 @@ venv_path = Path("C:\Python\Venvs\dev11")
 # print(Packager().get_ordered_packagers())
 # Packager.new_clean_environment(path)
 
-pprint(Venv(venv_path).python_version())
+
+venv = Venv(venv_path)
+
+# print(venv.python_version())
+# print(venv.virtualenv_version())
+print(Path.get_active_venv())
+# venv.create_venv()
+
+
 # pprint(Venv("C:\Python\Venvs\dev11").python_version())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

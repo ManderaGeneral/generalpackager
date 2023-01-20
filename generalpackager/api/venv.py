@@ -1,10 +1,17 @@
 from generalfile import Path
-from generallibrary import deco_cache, Ver
+from generallibrary import deco_cache, Ver, Terminal
 
 
 class Venv:
     def __init__(self, path):
         self.path = Path(path)
+
+    def exists(self):
+        return self.path.is_venv()
+
+    def create_venv(self):
+        assert not self.exists()
+        Terminal("-m", "venv", self.path, python=True)
 
     def pyvenv_cfg_path(self):
         return self.path / "pyvenv.cfg"
