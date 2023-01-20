@@ -56,7 +56,7 @@ class _LocalRepo_Git:
             tag = ()
 
         Terminal("git", "remote", "add", "origin", url, error=False)
-        Terminal("git", "push", "-u", "origin", "HEAD", *tag)  # this failed
+        Terminal("git", "push", "-u", "origin", "HEAD", *tag)
 
     @deco_path_as_working_dir
     def clone(self, url):

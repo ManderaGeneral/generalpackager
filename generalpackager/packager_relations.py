@@ -1,9 +1,25 @@
 
-from generallibrary import remove_duplicates, deco_cache, Log, Timer, flatten
+from generallibrary import deco_cache, Log, flatten
 
-from itertools import chain
+from generalpackager.other.packages import Packages
+
 
 class _PackagerRelations:
+    Packages = Packages
+
+    @classmethod
+    def packagers_from_packages(cls):
+        """ Get all packagers defined in Packages even if they don't exist.
+            Paths are set to working_dir / name.
+
+            :param generalpackager.Packager or any cls: """
+        packagers = []
+        for target, names in cls.Packages.field_dict_defaults().items():
+            for name in names:
+                packager = cls(name=name, path=name, target=target)
+                packagers.append(packager)
+        return packagers
+
     def get_dependencies(self, only_general=False):
         """ Get a list of dependencies as Packagers.
             Combines localmodules dependencies with localrepos install_requires.
@@ -18,10 +34,6 @@ class _PackagerRelations:
             names.update(self.localrepo.metadata.install_requires)
 
         return {type(self)(name) for name in names if not only_general or self.name_is_general(name)}
-
-        # packagers = {type(self)(localmodule.name) for localmodule in self.localmodule.get_dependencies() if not only_general or self.name_is_general(localmodule.name)}
-        # packagers.update({type(self)(name) for name in self.localrepo.metadata.install_requires if not only_general or self.name_is_general(name)})
-        # return list(packagers)
 
     def get_dependants(self, only_general=False):
         """ Get a list of dependants as Packagers.

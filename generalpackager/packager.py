@@ -5,8 +5,8 @@ from generalpackager.api.localrepo.base.localrepo_target import _SharedTarget
 from generalpackager.api.shared.files.shared_files import _Files
 from generalpackager.api.shared.path import _SharedPath
 from generalpackager.api.shared.name import _SharedName, _SharedAPI
-from generalpackager.other.packages import Packages
 from generalpackager.packager_api import _PackagerAPIs
+from generalpackager.packager_environment import _PackagerEnvironment
 from generalpackager.packager_files import _PackagerFiles
 from generalpackager.packager_github import _PackagerGitHub
 from generalpackager.packager_metadata import _PackagerMetadata
@@ -17,7 +17,7 @@ from generalpackager.packager_workflow import _PackagerWorkflow
 
 class Packager(NetworkDiagram,
                _Files, _SharedAPI, _SharedName, _SharedTarget, _SharedPath,
-               _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations, _PackagerAPIs):
+               _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations, _PackagerAPIs, _PackagerEnvironment):
     """ Uses APIs to manage 'general' package.
         Contains methods that require more than one API as well as methods specific for ManderaGeneral. """
 
@@ -31,8 +31,6 @@ class Packager(NetworkDiagram,
     git_exclude_lines += "build/", "*.egg-info/", "__pycache__/", "PKG-INFO/", "setup.cfg"
     npm_ignore_lines += "node_modules/", ".parcel-cache/"
 
-    Packages = Packages
-
     Packager = ...
 
     def __init__(self, name=None, path=None, target=..., github_owner=None, pypi_owner=None):
@@ -40,37 +38,6 @@ class Packager(NetworkDiagram,
         self._target = target
         self._github_owner = github_owner
         self._pypi_owner = pypi_owner
-
-
-    @classmethod
-    def packagers_from_packages(cls):
-        """ Get all packagers defined in Packages even if they don't exist.
-            Paths are set to working_dir / name. """
-        packagers = []
-        for target, names in cls.Packages.field_dict_defaults().items():
-            for name in names:
-                packager = Packager(name=name, path=name, target=target)
-                packagers.append(packager)
-        return packagers
-
-    @classmethod
-    def new_clean_environment(cls, path=None, python_version=None):
-        """ Creates a new clean environment for the packages.
-            - Create, upgrade, and activate venv
-            - Clone repos
-            - Editable repo installs in venv """
-        path = Path(path)
-        assert path.empty()
-
-        if python_version is None:
-            python_version = cls.python[-1]
-
-        with path.as_working_dir():
-            packagers = cls.packagers_from_packages()
-
-            for packager in packagers:
-                Log().info(f"Downloading {packager.name} from GitHub.")
-                packager.github.download()
 
     @staticmethod
     @deco_cache()
