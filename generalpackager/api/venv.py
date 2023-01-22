@@ -8,7 +8,9 @@ class Venv:
     PATH = EnvVar("PATH")
     VIRTUAL_ENV = EnvVar("VIRTUAL_ENV", default=None)
 
-    def __init__(self, path):
+    def __init__(self, path=None):
+        if path is None:
+            path = Path.get_active_venv_path()
         self.path = Path(path)
 
     def pyvenv_cfg_path(self):  return self.path / "pyvenv.cfg"
