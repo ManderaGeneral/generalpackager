@@ -16,6 +16,7 @@ class Venv:
     def pyvenv_cfg_path(self):  return self.path / "pyvenv.cfg"
     def scripts_path(self):     return self.path / "Scripts"
     def python_exe_path(self):  return self.path / "Scripts/python.exe"
+    def site_packages_path(self):  return self.path / "Lib/site-packages"
     def python_home_path(self): return Path(self.cfg()["home"])
 
     def exists(self):
