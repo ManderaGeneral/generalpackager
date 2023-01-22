@@ -1,7 +1,7 @@
 import sys
 
 from generalfile import Path
-from generallibrary import deco_cache, Ver, Terminal, debug, EnvVar
+from generallibrary import deco_cache, Ver, Terminal, debug, EnvVar, remove
 
 
 class Venv:
@@ -26,13 +26,16 @@ class Venv:
         assert self.path.empty()
         Terminal("-m", "venv", self.path, python=True)
 
-    def remove_venv_from_path(self):
-        if self.VIRTUAL_ENV.value and self.PATH.value.startswith(self.VIRTUAL_ENV.value):
-            self.PATH.value = ";".join(self.PATH.value.split(";")[1:])
+    def remove_venv_from_paths(self):
+        active_venv = Venv()
+        self.PATH.value = ";".join([path for path in self.PATH.value.split(";") if active_venv.scripts_path() != Path(path)])
+        remove(sys.path, str(active_venv.scripts_path()))
+        remove(sys.path, str(active_venv.site_packages_path()))
 
     def activate(self):
-        self.remove_venv_from_path()
+        self.remove_venv_from_paths()
 
+        sys.path = [str(self.path), str(self.site_packages_path())] + sys.path
         self.PATH.value = f"{self.scripts_path()};{self.PATH}"
         self.VIRTUAL_ENV.value = self.path
         sys.prefix = self.path
