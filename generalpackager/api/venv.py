@@ -54,6 +54,14 @@ class Venv:
     def python_version(self):
         return Ver(self.cfg().get("version") or self.cfg().get("version_info"))
 
+    @classmethod
+    def list_venv_paths(cls, path=None):
+        active_venv_path = Path.get_active_venv_path()
+        if path is None and active_venv_path:
+            path = active_venv_path.get_parent()
+        else:
+            path = Path(path)
+        return path.get_children(filt=lambda p: p.is_venv())
 
     @classmethod
     def debug(cls):

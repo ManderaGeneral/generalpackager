@@ -11,10 +11,9 @@ from generalpackager.api.venv import Venv
 venv_path = Path(r"C:\Python\Venvs\test2")
 
 Venv.debug()
-
 Venv(venv_path).activate()
-
 Venv.debug()
+
 
 
 
