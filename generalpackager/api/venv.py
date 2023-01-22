@@ -1,41 +1,64 @@
+import sys
+
 from generalfile import Path
-from generallibrary import deco_cache, Ver, Terminal
+from generallibrary import deco_cache, Ver, Terminal, debug, EnvVar
 
 
 class Venv:
+    PATH = EnvVar("PATH")
+    VIRTUAL_ENV = EnvVar("VIRTUAL_ENV", default=None)
+
     def __init__(self, path):
         self.path = Path(path)
+
+    def pyvenv_cfg_path(self):  return self.path / "pyvenv.cfg"
+    def scripts_path(self):     return self.path / "Scripts"
+    def python_exe_path(self):  return self.path / "Scripts/python.exe"
+    def python_home_path(self): return Path(self.cfg()["home"])
 
     def exists(self):
         return self.path.is_venv()
 
     def create_venv(self):
-        assert not self.exists()
+        assert self.path.empty()
         Terminal("-m", "venv", self.path, python=True)
 
-    def pyvenv_cfg_path(self):
-        return self.path / "pyvenv.cfg"
+    def remove_venv_from_path(self):
+        if self.VIRTUAL_ENV.value and self.PATH.value.startswith(self.VIRTUAL_ENV.value):
+            self.PATH.value = ";".join(self.PATH.value.split(";")[1:])
+
+    def activate(self):
+        self.remove_venv_from_path()
+
+        self.PATH.value = f"{self.scripts_path()};{self.PATH}"
+        self.VIRTUAL_ENV.value = self.path
+        sys.prefix = self.path
+        sys.executable = self.python_exe_path()
 
     @deco_cache()
     def cfg(self):
-        """ Example:
-            {'base-exec-prefix': 'C:\\Users\\ricka\\AppData\\Local\\Programs\\Python\\Python311',
-            'base-executable': 'C:\\Users\\ricka\\AppData\\Local\\Programs\\Python\\Python311\\python.exe',
-            'base-prefix': 'C:\\Users\\ricka\\AppData\\Local\\Programs\\Python\\Python311',
-            'home': 'C:\\Users\\ricka\\AppData\\Local\\Programs\\Python\\Python311',
-            'implementation': 'CPython',
-            'include-system-site-packages': False,
-            'version_info': '3.11.0.final.0',
-            'virtualenv': '20.16.4'} """
+        r""" Example:
+            home = C:\Users\ricka\AppData\Local\Programs\Python\Python311
+            include-system-site-packages = false
+            version = 3.11.0
+            executable = C:\Python\Venvs\dev11\Scripts\python.exe
+            command = C:\Python\Venvs\dev11\Scripts\python.exe -m venv C:\Python\Venvs\test2 """
         return self.pyvenv_cfg_path().cfg.read()
 
-    def python_path(self):
-        return self.cfg()["home"]
-
     def python_version(self):
-        return Ver(self.cfg()["version_info"])
+        return Ver(self.cfg().get("version") or self.cfg().get("version_info"))
 
-    def virtualenv_version(self):
-        return Ver(self.cfg()["virtualenv"])
 
+    @classmethod
+    def debug(cls):
+        import os
+        import sys
+
+        debug(locals(),
+              "os.environ['PATH']",
+              "os.environ['VIRTUAL_ENV']",
+              "sys.prefix",
+              "sys.path",
+              "sys.executable",
+              )
 
