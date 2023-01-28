@@ -7,15 +7,14 @@ from generallibrary import Log, Terminal, EnvVar
 from generalpackager import Packager, LocalRepo
 from generalpackager.api.venv import Venv
 
+# - Upgrade pip
+# - List installed Python versions if possible (Might end up just using python alias)
 
-venv_path = Path(r"C:\Python\Venvs\test2")
+venv_path = Path(r"C:\Python\Venvs\test4")
+venv = Venv(venv_path)
 
-Venv.debug()
-Venv(venv_path).activate()
-Venv.debug()
-
-
-
+venv.activate()
+# print(venv.upgrade())
 
 
 
