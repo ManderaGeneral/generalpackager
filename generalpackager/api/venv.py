@@ -106,8 +106,8 @@ class Venv(DecoContext):
         info_string = Terminal("py", "--list-paths").string_result
         versions = {}
         for line in info_string.splitlines():
-            version, path = line.split()
-            version = version.split(":")[-1]  # Examples: '-V:3.11' and '*' (For active venv I think)
+            version, *_, path = line.split()  # Example: '-V:3.11 *        C:\Users\ricka\AppData\Local\Programs\Python\Python311\python.exe'
+            version = version.split(":")[-1]  # Example: '-V:3.11'
             path = Path(path=path)
             versions[version] = path
         return versions
