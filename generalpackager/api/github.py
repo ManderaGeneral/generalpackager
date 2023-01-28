@@ -44,22 +44,23 @@ class GitHub(_SharedAPI, _SharedOwner, _SharedName):
         """ Clone a GitHub repo into a path, defaults to working_dir / name.
             Creates a folder with Package's name first. """
         if not self.exists():
-            return Log().info(f"Cannot download {self.name}, couldn't find on GitHub.")
+            return Log(__name__).warning(f"Cannot download {self.name}, couldn't find on GitHub.")
 
-        path = Path(path) / self.name
+        path = Path(path)
         if path.exists():
             if overwrite:
                 path.delete()
             else:
                 raise AttributeError(f"Clone target exists and overwrite is False.")
 
+        Log(__name__).info(f"Downloading {self.name} from GitHub.")
         with path.as_working_dir():
             Terminal("git", "clone", self.url)
 
         return path
 
     def get_owners_packages(self):
-        """ Get a set of a owner's packages' names on GitHub. """
+        """ Get a set of an owner's packages' names on GitHub. """
         # repos = requests.get(f"https://api.github.com/users/{self.owner}/repos", **self.request_kwargs()).json()  # This only gave public
 
         repos = requests.get(f"https://api.github.com/search/repositories?q=user:{self.owner}", **self.request_kwargs()).json()["items"]
