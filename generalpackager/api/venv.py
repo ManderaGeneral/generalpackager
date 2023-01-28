@@ -1,12 +1,13 @@
 import sys
 
 from generalfile import Path
-from generallibrary import deco_cache, Ver, Terminal, debug, EnvVar, remove, DecoContext, deco_require
-
+from generallibrary import deco_cache, Ver, Terminal, debug, EnvVar, remove, DecoContext, deco_require, VerInfo
 
 
 class Venv(DecoContext):
-    """ Todo: Ensure handling of no active venv. """
+    """ Standalone API, unlike the other APIs this one is not included in Packager.
+
+        Todo: Ensure handling of no active venv. """
     PATH = EnvVar("PATH")
     VIRTUAL_ENV = EnvVar("VIRTUAL_ENV", default=None)
 
@@ -46,9 +47,10 @@ class Venv(DecoContext):
 
         Terminal("-m", "venv", self.path, python=python)
 
-    def remove_active_venv(self):
+    @classmethod
+    def remove_active_venv(cls):
         active_venv = Venv()
-        self.PATH.value = ";".join([path for path in self.PATH.value.split(";") if active_venv.scripts_path() != Path(path)])
+        cls.PATH.value = ";".join([path for path in cls.PATH.value.split(";") if active_venv.scripts_path() != Path(path)])
         remove(sys.path, str(active_venv.scripts_path()))
         remove(sys.path, str(active_venv.site_packages_path()))
 
@@ -89,17 +91,38 @@ class Venv(DecoContext):
             path = Path(path)
         return path.get_children(filt=lambda p: p.is_venv())
 
+    @classmethod
+    def list_python_versions(cls):
+        """ Examples here: https://github.com/ManderaGeneral/generalpackager/issues/58 """
+        if VerInfo().windows:
+            pythons = cls._list_python_versions_windows()
+        else:
+            pythons = cls._list_python_versions_linux()
+
+        return {version: path for version, path in pythons.items() if path.is_file() and not path.get_parent_venv()}
+
     @staticmethod
-    def list_python_versions():
+    def _list_python_versions_windows():
         info_string = Terminal("py", "--list-paths").string_result
         versions = {}
         for line in info_string.splitlines():
             version, path = line.split()
             version = version.split(":")[-1]  # Examples: '-V:3.11' and '*' (For active venv I think)
             path = Path(path=path)
-            if path.is_file():
-                versions[version] = path
+            versions[version] = path
         return versions
+
+    @staticmethod
+    def _list_python_versions_linux():
+        info_string = Terminal("ls", "-1", "/usr/bin/python*", "|", "grep", "-P", "'.*\d\.\d+$'").string_result
+        versions = {}
+        for path in info_string.splitlines():
+            version = path.split("python")[-1]  # Example: '/usr/bin/python3.7'
+            path = Path(path=path)
+            versions[version] = path
+        return versions
+
+
 
     @staticmethod
     def debug():
