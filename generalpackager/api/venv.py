@@ -34,9 +34,17 @@ class Venv(DecoContext):
     def active(self):
         return Path.get_active_venv_path() is self.path
 
-    def create_venv(self):
+    def create_venv(self, python_path=None, ver=None):
         assert self.path.empty()
-        Terminal("-m", "venv", self.path, python=True)
+
+        if python_path:
+            python = python_path
+        elif ver:
+            python = self.list_python_versions()[ver]
+        else:
+            python = True
+
+        Terminal("-m", "venv", self.path, python=python)
 
     def remove_active_venv(self):
         active_venv = Venv()
@@ -71,14 +79,27 @@ class Venv(DecoContext):
     def python_version(self):
         return Ver(self.cfg().get("version") or self.cfg().get("version_info"))
 
-    @classmethod
-    def list_venv_paths(cls, path=None):
+    @staticmethod
+    def list_venv_paths(path=None):
+        """ Search parent folder of active venv path for venvs. """
         active_venv_path = Path.get_active_venv_path()
         if path is None and active_venv_path:
             path = active_venv_path.get_parent()
         else:
             path = Path(path)
         return path.get_children(filt=lambda p: p.is_venv())
+
+    @staticmethod
+    def list_python_versions():
+        info_string = Terminal("py", "--list-paths").string_result
+        versions = {}
+        for line in info_string.splitlines():
+            version, path = line.split()
+            version = version.split(":")[-1]  # Examples: '-V:3.11' and '*' (For active venv I think)
+            path = Path(path=path)
+            if path.is_file():
+                versions[version] = path
+        return versions
 
     @staticmethod
     def debug():
