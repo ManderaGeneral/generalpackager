@@ -114,9 +114,9 @@ class Venv(DecoContext):
             versions[version] = path
         return versions
 
-    @staticmethod
-    def _list_python_versions_linux():
-        PATH = "/usr/bin/python"
+    @classmethod
+    def _list_python_versions_linux(cls):
+        PATH = cls.global_python_folder()
         info_string = Terminal("ls", f"{PATH}*").string_result
         versions = {}
         for path in info_string.split():
@@ -127,6 +127,16 @@ class Venv(DecoContext):
                 versions[version] = path
         return versions
 
+    @staticmethod
+    def global_python_folder():
+        """ Firstly look at sys.executable, if it's a venv then return it's python source parent path
+            If it's not then return it's parent path """
+        executable = Path(sys.executable)
+        venv_path = executable.get_parent_venv()
+        if not venv_path:
+            return executable.get_parent()
+        else:
+            return Venv(path=venv_path).python_exe_path().get_parent()
 
 
     @staticmethod
