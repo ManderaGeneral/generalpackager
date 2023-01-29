@@ -114,7 +114,7 @@ class Venv(DecoContext):
 
     @staticmethod
     def _list_python_versions_linux():
-        info_string = Terminal("ls", "-1", "/usr/bin/python*", "|", "grep", "-P", "'.*\d\.\d+$'").string_result
+        info_string = Terminal("ls", "-1", "/usr/bin/python*", "|", "grep", "'.*[[:digit:]]\.[[:digit:]][[:digit:]]*$'").string_result
         versions = {}
         for path in info_string.splitlines():
             version = path.split("python")[-1]  # Example: '/usr/bin/python3.7'
