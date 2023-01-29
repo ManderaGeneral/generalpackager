@@ -118,7 +118,7 @@ class Venv(DecoContext):
     def _list_python_versions_linux(cls):
         versions = {}
         info_string = Terminal("whereis", "python").string_result
-
+        Log(__name__).warning("whereis!", info_string)
         for path_str in info_string.split()[1:]:
             path = Path(path=path_str)
             if path.is_file():
