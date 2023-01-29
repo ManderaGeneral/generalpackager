@@ -47,7 +47,7 @@ class Venv(DecoContext):
         else:
             python = True
 
-        Terminal("-m", "venv", self.path, python=python, capture_output=False)
+        print(Terminal("-m", "venv", self.path, python=python).string_result)
 
     @classmethod
     def remove_active_venv(cls):
@@ -116,15 +116,13 @@ class Venv(DecoContext):
 
     @classmethod
     def _list_python_versions_linux(cls):
-        PATH = cls.global_python_folder()
-        info_string = Terminal("ls", f"{PATH}*").string_result
         versions = {}
-        for path in info_string.split():
-            match = re.match(f"{PATH}(\d\.\d+)$", path)
-            if match:
-                version = match.group(1)
-                path = Path(path=path)
-                versions[version] = path
+        for path in cls.global_python_folder().get_children():
+            if path.is_file():
+                match = path.match("python(\d\.\d+)$")
+                if match:
+                    version = match.group(1)
+                    versions[version] = path
         return versions
 
     @staticmethod
@@ -136,7 +134,7 @@ class Venv(DecoContext):
         if not venv_path:
             return executable.get_parent()
         else:
-            return Venv(path=venv_path).python_exe_path().get_parent()
+            return Venv(path=venv_path).python_home_path().get_parent()
 
 
     @staticmethod
