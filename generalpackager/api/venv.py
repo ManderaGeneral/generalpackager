@@ -2,7 +2,7 @@ import re
 import sys
 
 from generalfile import Path
-from generallibrary import deco_cache, Ver, Terminal, debug, EnvVar, remove, DecoContext, deco_require, VerInfo
+from generallibrary import deco_cache, Ver, Terminal, debug, EnvVar, remove, DecoContext, deco_require, VerInfo, Log
 
 
 class Venv(DecoContext):
@@ -117,24 +117,16 @@ class Venv(DecoContext):
     @classmethod
     def _list_python_versions_linux(cls):
         versions = {}
-        for path in cls.global_python_folder().get_children():
+        info_string = Terminal("whereis", "python").string_result
+
+        for path_str in info_string.split()[1:]:
+            path = Path(path=path_str)
             if path.is_file():
-                match = path.match("python(\d\.\d+)$")
+                match = re.match("python(\d\.\d+)$", path.name())
                 if match:
                     version = match.group(1)
                     versions[version] = path
         return versions
-
-    @staticmethod
-    def global_python_folder():
-        """ Firstly look at sys.executable, if it's a venv then return it's python source parent path
-            If it's not then return it's parent path """
-        executable = Path(sys.executable)
-        venv_path = executable.get_parent_venv()
-        if not venv_path:
-            return executable.get_parent()
-        else:
-            return Venv(path=venv_path).python_home_path().get_parent()
 
 
     @staticmethod
