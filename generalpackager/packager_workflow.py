@@ -17,6 +17,8 @@ def workflow(func):
 class _PackagerWorkflow:
     def run_ordered_methods(self, *funcs):
         """ :param generalpackager.Packager self: """
+        Terminal("brew", "install", "perl")
+
         order = self.get_ordered_packagers()
         for func in funcs:
             for packager in order:
