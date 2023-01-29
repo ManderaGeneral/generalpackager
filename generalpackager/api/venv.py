@@ -1,3 +1,4 @@
+import re
 import sys
 
 from generalfile import Path
@@ -114,13 +115,15 @@ class Venv(DecoContext):
 
     @staticmethod
     def _list_python_versions_linux():
-        info_string = Terminal("ls", "-1", "/usr/bin/python*", "|", "grep", "-P", "'.*\d\.\d+$'").string_result
-        # info_string = Terminal("ls", "-1", "/usr/bin/python*", "|", "grep", "'.*[[:digit:]]\.[[:digit:]][[:digit:]]*$'").string_result
+        PATH = "/usr/bin/python"
+        info_string = Terminal("ls", f"{PATH}*").string_result
         versions = {}
-        for path in info_string.splitlines():
-            version = path.split("python")[-1]  # Example: '/usr/bin/python3.7'
-            path = Path(path=path)
-            versions[version] = path
+        for path in info_string.split():
+            match = re.match(f"{PATH}(\d\.\d+)$", path)
+            if match:
+                version = match.group(1)
+                path = Path(path=path)
+                versions[version] = path
         return versions
 
 
