@@ -15,6 +15,7 @@ class Venv(DecoContext):
     def __init__(self, path=None):
         if path is None:
             path = Path.get_active_venv_path()
+            assert path
         self.path = Path(path)
         self.previous_venv = None
 
