@@ -120,7 +120,7 @@ class Venv(DecoContext):
         info_string = Terminal("whereis", "python").string_result
         for path_str in info_string.split()[1:]:
             path = Path(path=path_str)
-            if not path.is_file() or not re.match("python(\d\.\d+)?$"):
+            if not path.is_file() or not re.match("python(\d\.\d+)?$", path_str):
                 continue
             terminal = Terminal(path, "--version", error=False)
             if terminal.fail:
