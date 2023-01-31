@@ -47,7 +47,7 @@ class Venv(DecoContext):
         else:
             python = True
 
-        print(Terminal("-m", "venv", self.path, python=python).string_result)
+        return Terminal("-m", "venv", self.path, python=python).string_result
 
     @classmethod
     def remove_active_venv(cls):
