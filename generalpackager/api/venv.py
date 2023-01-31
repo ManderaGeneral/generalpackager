@@ -118,14 +118,15 @@ class Venv(DecoContext):
     def _list_python_versions_linux(cls):
         versions = {}
         info_string = Terminal("whereis", "python").string_result
-        Log(__name__).warning("whereis!", info_string)
         for path_str in info_string.split()[1:]:
             path = Path(path=path_str)
-            if path.is_file():
-                match = re.match("python(\d\.\d+)$", path.name())
-                if match:
-                    version = match.group(1)
-                    versions[version] = path
+            if not path.is_file():
+                continue
+            terminal = Terminal(path, "--version", error=False)
+            if terminal.fail:
+                continue
+            version = terminal.string_result
+            versions[version] = path
         return versions
 
 
