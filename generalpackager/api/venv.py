@@ -26,6 +26,8 @@ class Venv(DecoContext):
     def after(self, *args, **kwargs):
         if self.previous_venv:
             self.previous_venv.activate()
+        else:
+            self.remove_active_venv()
 
     def pyvenv_cfg_path(self):  return self.path / "pyvenv.cfg"
     def scripts_path(self):     return self.path / "Scripts"
@@ -120,14 +122,18 @@ class Venv(DecoContext):
         versions = {}
         info_string = Terminal("whereis", "python").string_result
         for path_str in info_string.split()[1:]:
+            Log(__name__).info("PYTHONZ", "found path", path_str)
             path = Path(path=path_str)
             if not path.is_file() or not re.match("python(\d\.\d+)?$", path_str):
+                Log(__name__).info("PYTHONZ", "failed regex")
                 continue
             terminal = Terminal(path, "--version", error=False)
             if terminal.fail:
+                Log(__name__).info("PYTHONZ", "failed terminal", terminal.string_result, terminal.error_result)
                 continue
             version = ".".join(terminal.string_result.split(" ")[1].split(".")[:2])  # Example: "Python 3.11.0"
             versions[version] = path
+            Log(__name__).info("PYTHONZ", "yielded", versions)
         return versions
 
 

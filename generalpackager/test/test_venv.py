@@ -1,3 +1,4 @@
+from generallibrary import Log
 
 from generalpackager.api.venv import Venv
 from generalfile.test.test_path import PathTest
@@ -20,6 +21,7 @@ class TestPyPI(PathTest):
         venv.python_version()
 
     def test_list_python_versions(self):
+        Log("root").configure_stream()  # HERE ** Would be nice to configure artifact for github actions
         self.assertGreaterEqual(len(Venv.list_python_versions()), 1)
 
 
