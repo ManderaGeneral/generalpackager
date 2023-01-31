@@ -19,7 +19,6 @@ class TestPyPI(PathTest):
         venv.upgrade()
         venv.python_version()
 
-
     def test_list_python_versions(self):
         self.assertGreaterEqual(len(Venv.list_python_versions()), 1)
 

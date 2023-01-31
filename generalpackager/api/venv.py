@@ -6,24 +6,26 @@ from generallibrary import deco_cache, Ver, Terminal, debug, EnvVar, remove, Dec
 
 
 class Venv(DecoContext):
-    """ Standalone API, unlike the other APIs this one is not included in Packager.
-
-        Todo: Ensure handling of no active venv. """
+    """ Standalone API, unlike the other APIs this one is not included in Packager. """
     PATH = EnvVar("PATH")
     VIRTUAL_ENV = EnvVar("VIRTUAL_ENV", default=None)
 
     def __init__(self, path=None):
-        if path is None:
-            path = Path.get_active_venv_path()
-            assert path
         self.path = Path(path)
         self.previous_venv = None
+
+    @classmethod
+    def get_active_venv(cls):
+        active_venv_path = Path.get_active_venv_path()
+        if active_venv_path is not None:
+            return Venv(path=active_venv_path)
 
     def before(self, *args, **kwargs):
         self.previous_venv = self.activate()
 
     def after(self, *args, **kwargs):
-        self.previous_venv.activate()
+        if self.previous_venv:
+            self.previous_venv.activate()
 
     def pyvenv_cfg_path(self):  return self.path / "pyvenv.cfg"
     def scripts_path(self):     return self.path / "Scripts"
@@ -51,23 +53,22 @@ class Venv(DecoContext):
 
     @classmethod
     def remove_active_venv(cls):
-        active_venv = Venv()
-        cls.PATH.value = ";".join([path for path in cls.PATH.value.split(";") if active_venv.scripts_path() != Path(path)])
-        remove(sys.path, str(active_venv.scripts_path()))
-        remove(sys.path, str(active_venv.site_packages_path()))
+        active_venv = Venv.get_active_venv()
+        if active_venv:
+            cls.PATH.value = ";".join([path for path in cls.PATH.value.split(";") if active_venv.scripts_path() != Path(path)])
+            remove(sys.path, str(active_venv.scripts_path()))
+            remove(sys.path, str(active_venv.site_packages_path()))
+            return active_venv
 
     @deco_require(exists)
     def activate(self):
-        active_venv = Venv()
-        if active_venv.path is not self.path:
-            self.remove_active_venv()
-
-            sys.path = [str(self.path), str(self.site_packages_path())] + sys.path
-            self.PATH.value = f"{self.scripts_path()};{self.PATH}"
-            self.VIRTUAL_ENV.value = self.path
-            sys.prefix = self.path
-            sys.executable = self.python_exe_path()
-        return active_venv
+        previous_venv = self.remove_active_venv()
+        sys.path = [str(self.path), str(self.site_packages_path())] + sys.path
+        self.PATH.value = f"{self.scripts_path()};{self.PATH}"
+        self.VIRTUAL_ENV.value = self.path
+        sys.prefix = self.path
+        sys.executable = self.python_exe_path()
+        return previous_venv
 
     @deco_require(exists)
     def upgrade(self):
@@ -125,7 +126,7 @@ class Venv(DecoContext):
             terminal = Terminal(path, "--version", error=False)
             if terminal.fail:
                 continue
-            version = terminal.string_result
+            version = ".".join(terminal.string_result.split(" ")[1].split(".")[:2])  # Example: "Python 3.11.0"
             versions[version] = path
         return versions
 
