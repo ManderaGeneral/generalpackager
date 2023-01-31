@@ -127,7 +127,7 @@ class Venv(DecoContext):
             if not path.is_file():
                 Log(__name__).info("PYTHONZ", "not a file")
                 continue
-            if not re.match("python(\d\.\d+)?$", path_str):
+            if not re.search("python(\d\.\d+)?$", path_str):
                 Log(__name__).info("PYTHONZ", "failed regex")
                 continue
             terminal = Terminal(path, "--version", error=False)
