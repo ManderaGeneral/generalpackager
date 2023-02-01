@@ -25,13 +25,11 @@ class _PackagerEnvironment:
         venv.create_venv(ver=python_version)
         venv.upgrade()
 
-        for packager in cls.packagers_from_packages():
+        for packager in cls.packagers_from_packages():  # This will get all packages
             packager.github.download(path=repo_path)
 
-        # HERE ** How do I install the packages in correct order?
-        # Will they already be installed so that I can get_ordered_packagers?
-        #   Well yeah they'll have to be otherwise I wouldn't be able to use this method
-
+        for packager in cls.get_ordered_packagers():  # This will only get python packages
+            packager.localrepo.pip_install_editable()
 
 
 
