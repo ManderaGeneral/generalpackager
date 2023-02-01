@@ -31,8 +31,6 @@ class Packager(NetworkDiagram,
     git_exclude_lines += "build/", "*.egg-info/", "__pycache__/", "PKG-INFO/", "setup.cfg"
     npm_ignore_lines += "node_modules/", ".parcel-cache/"
 
-    Packager = ...
-
     def __init__(self, name=None, path=None, target=..., github_owner=None, pypi_owner=None):
         """ Storing pars as is. Name and target have some custom properties. """
         self._target = target
