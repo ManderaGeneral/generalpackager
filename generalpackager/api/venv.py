@@ -23,7 +23,7 @@ class Venv(DecoContext):
             return Venv(path=active_venv_path)
 
     def before(self, *args, **kwargs):
-        self.previous_venv = self.activate()
+        self.activate()
 
     def after(self, *args, **kwargs):
         if self.previous_venv:
@@ -78,13 +78,12 @@ class Venv(DecoContext):
 
     @deco_require(exists)
     def activate(self):
-        previous_venv = self.remove_active_venv()
+        self.previous_venv = self.remove_active_venv()
         sys.path = [str(self.path), str(self.site_packages_path())] + sys.path
         self._add_path_to_PATH(path_to_add=self.scripts_path())
         self.VIRTUAL_ENV.value = self.path
         sys.prefix = self.path
         sys.executable = self.python_exe_path()
-        return previous_venv
 
     @deco_require(exists)
     def upgrade(self):
