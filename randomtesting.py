@@ -13,7 +13,7 @@ from generalpackager.api.venv import Venv
 
 
 
-# Packager.new_clean_environment(path=".../general")
+Packager.new_clean_environment(path=".../general")
 
 
 

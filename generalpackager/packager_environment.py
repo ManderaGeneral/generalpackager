@@ -12,7 +12,7 @@ class _PackagerEnvironment:
             - Clone repos
             - Editable repo installs in venv
 
-            :param generalpackager.Packager cls: """
+            :param generalpackager.Packager or any cls: """
         path = Path(path=path)
         path.open_folder()
 
@@ -36,7 +36,8 @@ class _PackagerEnvironment:
             packager.github.download(path=repo_path)
 
         for packager in cls.get_ordered_packagers():  # This will only get python packages
-            packager.localrepo.pip_install_editable()
+            new_packager = cls(name=packager.name, path=repo_path / packager.name)
+            new_packager.localrepo.pip_install_editable()
 
 
 
