@@ -29,7 +29,7 @@ class Venv(DecoContext):
         if self.previous_venv:
             self.previous_venv.activate()
         else:
-            self.remove_active_venv()
+            self.deactivate()
 
     def pyvenv_cfg_path(self):  return self.path / "pyvenv.cfg"
     def scripts_path(self):     return self.path / self.ver_info.venv_script_path
@@ -68,7 +68,7 @@ class Venv(DecoContext):
         cls.PATH.value = f"{path_to_add}{cls.PATH_delimiter}{cls.PATH}"
 
     @classmethod
-    def remove_active_venv(cls):
+    def deactivate(cls):
         active_venv = Venv.get_active_venv()
         if active_venv:
             cls._remove_path_from_PATH(path_to_remove=active_venv.scripts_path())
@@ -79,10 +79,13 @@ class Venv(DecoContext):
 
     @deco_require(exists)
     def activate(self):
-        self.previous_venv = self.remove_active_venv()
-        sys.path = [str(self.path), str(self.site_packages_path())] + sys.path
+        self.previous_venv = self.deactivate()
         self._add_path_to_PATH(path_to_add=self.scripts_path())
+        sys.path = [str(self.path), str(self.site_packages_path())] + sys.path
         self.VIRTUAL_ENV.value = self.path
+
+        # Not sure these two do anything, doubt you can change interpreter during runtime
+        # https://github.com/ManderaGeneral/generalpackager/issues/60
         sys.prefix = self.path
         sys.executable = self.python_exe_path()
 
@@ -136,21 +139,16 @@ class Venv(DecoContext):
         versions = {}
         info_string = Terminal("whereis", "python").string_result
         for path_str in info_string.split()[1:]:
-            Log(__name__).info("PYTHONZ", "found path", path_str)
             path = Path(path=path_str)
             if not path.is_file():
-                Log(__name__).info("PYTHONZ", "not a file")
                 continue
             if not re.search("python(\d\.\d+)?$", path_str):
-                Log(__name__).info("PYTHONZ", "failed regex")
                 continue
             terminal = Terminal(path, "--version", error=False)
             if terminal.fail:
-                Log(__name__).info("PYTHONZ", "failed terminal", terminal.string_result, terminal.error_result)
                 continue
             version = ".".join(terminal.string_result.split(" ")[1].split(".")[:2])  # Example: "Python 3.11.0"
             versions[version] = path
-            Log(__name__).info("PYTHONZ", "yielded", versions)
         return versions
 
 
