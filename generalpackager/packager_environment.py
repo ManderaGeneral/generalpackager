@@ -30,6 +30,7 @@ class _PackagerEnvironment:
         venv = Venv(path / "venvs")
         venv.create_venv(ver=python_version)
         venv.upgrade()
+        venv.activate()
 
         for packager in cls.packagers_from_packages():  # This will get all packages
             packager.github.download(path=repo_path)
