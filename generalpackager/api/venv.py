@@ -74,6 +74,7 @@ class Venv(DecoContext):
             cls._remove_path_from_PATH(path_to_remove=active_venv.scripts_path())
             remove(sys.path, str(active_venv.scripts_path()))
             remove(sys.path, str(active_venv.site_packages_path()))
+            cls.VIRTUAL_ENV.remove()
             return active_venv
 
     @deco_require(exists)
