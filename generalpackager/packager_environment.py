@@ -15,10 +15,16 @@ class _PackagerEnvironment:
             :param generalpackager.Packager cls: """
         path = Path(path=path)
         path.open_folder()
-        assert path.empty()
-        if input("Proceed with creating a new clean environment in this folder? ").lower() != "y":  # This could be a general Path method
+
+        # This could be a general Path method
+        if not path.empty():
+            if input("Warning: Folder isn't empty, clear it? ").lower() != "y":
+                return
+            path.delete_folder_content()
+        elif input("Proceed with creating a new clean environment in this folder? ").lower() != "y":
             return
-        Log().configure_stream()
+
+        Log("root").configure_stream()
 
         repo_path = path / "repos"
         venv = Venv(path / "venvs")
