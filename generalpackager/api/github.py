@@ -47,11 +47,13 @@ class GitHub(_SharedAPI, _SharedOwner, _SharedName):
             return Log(__name__).warning(f"Cannot download {self.name}, couldn't find on GitHub.")
 
         path = Path(path)
-        if path.exists():
+        repo_path = path / self.name
+
+        if repo_path.exists():
             if overwrite:
-                path.delete()
+                repo_path.delete()
             else:
-                raise AttributeError(f"Clone target exists and overwrite is False.")
+                raise AttributeError(f"Clone target '{repo_path}' exists and overwrite is False.")
 
         Log(__name__).info(f"Downloading {self.name} from GitHub.")
         with path.as_working_dir():
