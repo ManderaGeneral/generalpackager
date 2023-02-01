@@ -57,7 +57,7 @@ class GitHub(_SharedAPI, _SharedOwner, _SharedName):
 
         Log(__name__).info(f"Downloading {self.name} from GitHub.")
         with path.as_working_dir():
-            Terminal("git", "clone", self.url)
+            Terminal("git", "clone", self.url, capture_output=False)
 
         return path
 

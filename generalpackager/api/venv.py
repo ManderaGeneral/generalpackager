@@ -91,8 +91,7 @@ class Venv(DecoContext):
 
     @deco_require(exists)
     def upgrade(self):
-        with self:
-            return Terminal("-m", "ensurepip", "--upgrade", python=True).string_result
+        return Terminal("-m", "ensurepip", "--upgrade", capture_output=False, python=self.python_exe_path()).string_result
 
     @deco_require(exists)
     @deco_cache()

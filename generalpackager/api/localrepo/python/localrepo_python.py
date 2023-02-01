@@ -36,7 +36,7 @@ class LocalRepo_Python(LocalRepo):
         """ Install this repository with pip and -e flag. """
         with self.path.get_parent().as_working_dir():
             Log().debug(f"Pip install for {self}")
-            Terminal("-m", "pip", "install", "-e", self.name, python=True)
+            Terminal("-m", "pip", "install", "-e", self.name, capture_output=False, python=True)
 
     @deco_require(LocalRepo.exists)
     def pip_uninstall(self):
