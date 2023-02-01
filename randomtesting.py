@@ -13,10 +13,10 @@ from generalpackager.api.venv import Venv
 
 
 
-Packager.new_clean_environment(path=".../general")
+# Packager.new_clean_environment(path=".../general")
 
 
-
+print(Venv.get_active_venv().python_home_path())
 
 
 

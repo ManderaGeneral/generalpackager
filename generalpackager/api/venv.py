@@ -150,6 +150,8 @@ class Venv(DecoContext):
             versions[version] = path
         return versions
 
+    def __str__(self):
+        return f"<Venv: {self.path}>"
 
     @staticmethod
     def debug():
