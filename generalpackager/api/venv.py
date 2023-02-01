@@ -2,13 +2,15 @@ import re
 import sys
 
 from generalfile import Path
-from generallibrary import deco_cache, Ver, Terminal, debug, EnvVar, remove, DecoContext, deco_require, VerInfo, Log
+from generallibrary import deco_cache, Ver, Terminal, debug, EnvVar, remove, DecoContext, deco_require, VerInfo, Log, \
+    join_with_str
 
 
 class Venv(DecoContext):
     """ Standalone API, unlike the other APIs this one is not included in Packager. """
     PATH = EnvVar("PATH")
     VIRTUAL_ENV = EnvVar("VIRTUAL_ENV", default=None)
+    ver_info = VerInfo()
 
     def __init__(self, path=None):
         self.path = Path(path)
@@ -53,11 +55,23 @@ class Venv(DecoContext):
 
         return Terminal("-m", "venv", self.path, python=python).string_result
 
+    PATH_delimiter = ver_info.env_var_path_delimiter
+
+    @classmethod
+    def _remove_path_from_PATH(cls, path_to_remove):
+        paths = [Path(path=path_str) for path_str in cls.PATH.value.split(cls.PATH_delimiter)]
+        paths.remove(path_to_remove)
+        cls.PATH.value = join_with_str(delimiter=cls.PATH_delimiter, obj=paths)
+
+    @classmethod
+    def _add_path_to_PATH(cls, path_to_add):
+        cls.PATH.value = f"{path_to_add}{cls.PATH_delimiter}{cls.PATH}"
+
     @classmethod
     def remove_active_venv(cls):
         active_venv = Venv.get_active_venv()
         if active_venv:
-            cls.PATH.value = ";".join([path for path in cls.PATH.value.split(";") if active_venv.scripts_path() != Path(path)])
+            cls._remove_path_from_PATH(path_to_remove=active_venv.scripts_path())
             remove(sys.path, str(active_venv.scripts_path()))
             remove(sys.path, str(active_venv.site_packages_path()))
             return active_venv
@@ -66,7 +80,7 @@ class Venv(DecoContext):
     def activate(self):
         previous_venv = self.remove_active_venv()
         sys.path = [str(self.path), str(self.site_packages_path())] + sys.path
-        self.PATH.value = f"{self.scripts_path()};{self.PATH}"
+        self._add_path_to_PATH(path_to_add=self.scripts_path())
         self.VIRTUAL_ENV.value = self.path
         sys.prefix = self.path
         sys.executable = self.python_exe_path()
@@ -99,7 +113,7 @@ class Venv(DecoContext):
     @classmethod
     def list_python_versions(cls):
         """ Examples here: https://github.com/ManderaGeneral/generalpackager/issues/58 """
-        if VerInfo().windows:
+        if cls.ver_info.windows:
             pythons = cls._list_python_versions_windows()
         else:
             pythons = cls._list_python_versions_linux()
