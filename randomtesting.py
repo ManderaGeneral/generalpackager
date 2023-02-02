@@ -12,15 +12,12 @@ from generalpackager.api.venv import Venv
 
 
 
-# Packager.new_clean_environment(path=".../general")
+# Log("root").configure_stream()
+
+# print(Packager("generaltool", "../generaltool").localrepo.pip_install_editable())
 
 
-print(Venv.get_active_venv().python_home_path())
-
-
-
-
-
+print(Packager.get_ordered_packagers())
 
 
 
