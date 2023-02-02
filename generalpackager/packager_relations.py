@@ -1,5 +1,5 @@
 
-from generallibrary import deco_cache, Log, flatten
+from generallibrary import deco_cache, Log, flatten, remove_duplicates
 
 from generalpackager.other.packages import Packages
 
@@ -56,7 +56,7 @@ class _PackagerRelations:
             :rtype: list[generalpackager.Packager] """
         packagers_by_layer = cls().get_ordered(flat=False)
         sorted_layers = [sorted(layer, key=lambda pkg: pkg.name) for layer in packagers_by_layer]
-        packagers = flatten(sorted_layers)
+        packagers = remove_duplicates(flatten(sorted_layers))
 
         if not include_private:
             packagers = [packager for packager in packagers if not packager.localrepo.metadata.private]
