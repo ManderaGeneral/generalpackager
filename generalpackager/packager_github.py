@@ -35,7 +35,6 @@ class _PackagerGitHub:
 
     def create_master_branch(self):
         """ :param generalpackager.Packager self: """
-        # HERE **
         # repo = self.localrepo.repo
         # Create remote somehow first
         # print(repo.remote().push("head"))
