@@ -12,4 +12,6 @@ from generalpackager.api.localmodule import LocalModule
 from generalpackager.api.github import GitHub
 from generalpackager.api.pypi import PyPI
 
+from generalpackager.api.venv import Venv
+
 interconnect(Packager, LocalRepo, LocalModule, GitHub, PyPI)

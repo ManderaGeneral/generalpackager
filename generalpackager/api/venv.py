@@ -2,14 +2,13 @@ import re
 import sys
 
 from generalfile import Path
-from generallibrary import deco_cache, Ver, Terminal, debug, EnvVar, remove, DecoContext, deco_require, VerInfo, Log, \
-    join_with_str
+from generallibrary import deco_cache, Ver, Terminal, debug, EnvVar, remove, DecoContext, deco_require, VerInfo, Log, join_with_str
+from generalpackager.api.venv_cruds import _Venv_Cruds
 
 
-class Venv(DecoContext):
+
+class Venv(DecoContext, _Venv_Cruds):
     """ Standalone API, unlike the other APIs this one is not included in Packager. """
-    PATH = EnvVar("PATH")
-    VIRTUAL_ENV = EnvVar("VIRTUAL_ENV", default=None)
     ver_info = VerInfo()
 
     def __init__(self, path=None):
@@ -55,34 +54,23 @@ class Venv(DecoContext):
 
         return Terminal("-m", "venv", self.path, python=python).string_result
 
-    PATH_delimiter = ver_info.env_var_path_delimiter
-
-    @classmethod
-    def _remove_path_from_PATH(cls, path_to_remove):
-        paths = [Path(path=path_str) for path_str in cls.PATH.value.split(cls.PATH_delimiter)]
-        paths.remove(path_to_remove)
-        cls.PATH.value = join_with_str(delimiter=cls.PATH_delimiter, obj=paths)
-
-    @classmethod
-    def _add_path_to_PATH(cls, path_to_add):
-        cls.PATH.value = f"{path_to_add}{cls.PATH_delimiter}{cls.PATH}"
-
     @classmethod
     def deactivate(cls):
         active_venv = Venv.get_active_venv()
         if active_venv:
-            cls._remove_path_from_PATH(path_to_remove=active_venv.scripts_path())
-            remove(sys.path, str(active_venv.scripts_path()))
-            remove(sys.path, str(active_venv.site_packages_path()))
-            cls.VIRTUAL_ENV.remove()
+            active_venv.cruds.EnvVar_PATH.unset()
+            active_venv.cruds.EnvVar_VENV.unset()
+            active_venv.cruds.sys_path_scripts.unset()
+            active_venv.cruds.sys_path_site.unset()
             return active_venv
 
     @deco_require(exists)
     def activate(self):
         self.previous_venv = self.deactivate()
-        self._add_path_to_PATH(path_to_add=self.scripts_path())
-        sys.path = [str(self.path), str(self.site_packages_path())] + sys.path
-        self.VIRTUAL_ENV.value = self.path
+        self.cruds.EnvVar_PATH.set()
+        self.cruds.EnvVar_VENV.set()
+        self.cruds.sys_path_scripts.set()
+        self.cruds.sys_path_site.set()
 
         # Not sure these two do anything, doubt you can change interpreter during runtime
         # https://github.com/ManderaGeneral/generalpackager/issues/60
