@@ -36,12 +36,17 @@ class LocalRepo_Python(LocalRepo):
         """ Install this repository with pip and -e flag. """
         with self.path.get_parent().as_working_dir():
             Log().debug(f"Pip install for {self}")
-            Terminal("-m", "pip", "install", "-e", self.name, capture_output=False, python=True)
+
+            with Venv.easy_install_path().rename_context("TEMP_easy_install"):  # HERE ** Create rename_context
+                Terminal("-m", "pip", "install", "-e", self.name, capture_output=False, python=True)
+
+            Venv.get_active_venv().cruds.Path_easy_install.set_value(value=self.path)
 
     @deco_require(LocalRepo.exists)
     def pip_uninstall(self):
         """ Uninstall this repository with pip."""
         Terminal("-m", "pip", "uninstall", "-y", self.metadata.name, python=True)
+        Venv.get_active_venv().cruds.Path_easy_install.unset_value(value=self.path)
 
     @deco_require(LocalRepo.exists)
     def create_sdist(self):
@@ -71,3 +76,7 @@ class LocalRepo_Python(LocalRepo):
 
         with self.path.as_working_dir():
             Terminal("-m", "PyInstaller", file_path, "--onefile", "--windowed", python=True)
+
+
+from generalpackager.api.venv import Venv
+

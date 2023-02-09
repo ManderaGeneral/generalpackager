@@ -34,6 +34,7 @@ class Venv(DecoContext, _Venv_Cruds):
     def scripts_path(self):     return self.path / self.ver_info.venv_script_path
     def python_exe_path(self):  return self.scripts_path() / ("python.exe" if self.ver_info.windows else "python")
     def site_packages_path(self):  return self.path / "Lib/site-packages"
+    def easy_install_path(self):  return self.site_packages_path() / "easy-install.pth"
     def python_home_path(self): return Path(self.cfg()["home"])
 
     def exists(self):
