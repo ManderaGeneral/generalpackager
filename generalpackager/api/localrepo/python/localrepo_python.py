@@ -37,10 +37,10 @@ class LocalRepo_Python(LocalRepo):
         with self.path.get_parent().as_working_dir():
             Log().debug(f"Pip install for {self}")
 
-            with Venv.easy_install_path().rename_context("TEMP_easy_install"):  # HERE ** Create rename_context
+            venv = Venv.get_active_venv()
+            with venv.easy_install_path().as_renamed("TEMP_easy_install", overwrite=True):
                 Terminal("-m", "pip", "install", "-e", self.name, capture_output=False, python=True)
-
-            Venv.get_active_venv().cruds.Path_easy_install.set_value(value=self.path)
+            venv.cruds.Path_easy_install.set_value(value=self.path)
 
     @deco_require(LocalRepo.exists)
     def pip_uninstall(self):
