@@ -27,7 +27,7 @@ class _PackagerWorkflow:
         """ :param generalpackager.Packager self: """
         self.run_ordered_methods(
             lambda packager: packager.generate_localfiles(include_aesthetic=False),
-            lambda packager: packager.localrepo.unittest(),
+            lambda packager: packager.localrepo.run_tests(),
         )
 
     @workflow
@@ -45,7 +45,7 @@ class _PackagerWorkflow:
         self.run_ordered_methods(
             lambda packager: packager.if_publish_bump(any_bumped=any_bumped),
             lambda packager: packager.generate_localfiles(include_aesthetic=False),
-            lambda packager: packager.localrepo.unittest(),  # Will set coverage percentage
+            lambda packager: packager.localrepo.run_tests(),  # Will set coverage percentage
             lambda packager, msg=msg1: packager.localrepo.commit(message=msg),  # Will update commit_sha
             lambda packager: packager.generate_localfiles(include_aesthetic=True),  # With coverage number and commit_sha
             lambda packager, msg=msg2: packager.commit_and_push(message=msg, tag=packager.is_bumped()),
@@ -75,7 +75,7 @@ class _PackagerWorkflow:
 
             :param generalpackager.Packager self: """
         if self.is_bumped() and not self.localrepo.metadata.private:
-            self.localrepo.upload()
+            self.localrepo.publish()
 
         # if self.localrepo.get_exetarget_path().exists():
         #     self.localrepo.generate_exe()

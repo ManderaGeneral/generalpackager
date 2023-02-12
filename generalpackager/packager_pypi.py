@@ -27,7 +27,7 @@ class _PackagerPypi:
             :param name: """
         path = Path.get_cache_dir() / "python/pypi_reserve/" / name
         packager = cls.create_blank_locally_python(path=path, install=False)
-        packager.localrepo.upload()
+        packager.localrepo.publish()
         path.delete()
 
 

@@ -8,6 +8,12 @@ from generalpackager.api.localrepo.base.localrepo import LocalRepo
 from generalpackager.api.localrepo.python.metadata_python import Metadata_Python
 
 
+""" Should create a protocol that LocalRepo Python and Node share. """
+
+
+
+
+
 class LocalRepo_Python(LocalRepo):
     _cls_target = LocalRepo.Targets.python
     _cls_metadata = Metadata_Python
@@ -18,7 +24,7 @@ class LocalRepo_Python(LocalRepo):
         """ Return an absolute path to the current python exe filee. """
         return Path(sys.executable)
 
-    def unittest(self):
+    def run_tests(self):
         """ Run unittests for this repository.
             Sets self.coverage to total percentage with one decimal. """
 
@@ -32,7 +38,7 @@ class LocalRepo_Python(LocalRepo):
         # Terminal("-m", "unittest", "discover", str(self.get_test_path()), python=True)
 
     @deco_require(LocalRepo.exists)
-    def pip_install_editable(self):
+    def install_editable(self):
         """ Install this repository with pip and -e flag. """
         with self.path.get_parent().as_working_dir():
             Log().debug(f"Pip install for {self}")
@@ -43,19 +49,19 @@ class LocalRepo_Python(LocalRepo):
             venv.cruds.Path_easy_install.set_value(value=self.path)
 
     @deco_require(LocalRepo.exists)
-    def pip_uninstall(self):
+    def uninstall(self):
         """ Uninstall this repository with pip."""
         Terminal("-m", "pip", "uninstall", "-y", self.metadata.name, python=True)
         Venv.get_active_venv().cruds.Path_easy_install.unset_value(value=self.path)
 
     @deco_require(LocalRepo.exists)
-    def create_sdist(self):
+    def _create_sdist(self):
         """ Create source distribution. """
         with self.path.as_working_dir():
             Terminal("setup.py", "sdist", "bdist_wheel", python=True)
 
     @deco_require(LocalRepo.exists)
-    def upload(self):
+    def publish(self):
         """ Upload local repo to PyPI.
             Todo: Make sure twine is installed when trying to upload to pypi.
             Todo: Look into private PyPI server where we could also do dry runs for test.
@@ -63,7 +69,7 @@ class LocalRepo_Python(LocalRepo):
         if self.metadata.private:
             raise AttributeError("Cannot upload private repo.")
 
-        self.create_sdist()
+        self._create_sdist()
         with self.path.as_working_dir():
             Terminal("-m", "twine", "upload", "dist/*", python=True)
 

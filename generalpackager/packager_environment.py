@@ -43,7 +43,7 @@ class _PackagerEnvironment:
 
         for packager in cls.get_ordered_packagers():  # This will only get python packages
             new_packager = cls(name=packager.name, path=repos_path / packager.name)
-            new_packager.localrepo.pip_install_editable()
+            new_packager.localrepo.install_editable()
 
 
 
