@@ -1,6 +1,4 @@
-from requests import Response
-
-from generalpackager.api.github import GitHub
+from generalpackager.api.package_hosts.github import GitHub
 
 import unittest
 

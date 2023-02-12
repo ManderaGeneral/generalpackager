@@ -4,16 +4,10 @@ from generallibrary import DataClass
 import generalpackager.api.localrepo.base.targets
 from generalpackager.api.localrepo.base.metadata import Metadata
 from generalpackager.api.localrepo.base.targets import Targets
+from generalpackager.api.shared.protocols import LocalRepoProtocol
 
 
-class Protocol:
-    def install(self, local=True, editable=False): ...
-    def uninstall(self, local=True, editable=False): ...
-    def run_tests(self): ...
-    def publish(self, public=True): ...
-
-
-class _SharedTarget(Protocol):
+class _SharedTarget(LocalRepoProtocol):
     def is_python(self):
         """ :param generalpackager.Packager or generalpackager.LocalRepo self: """
         return self.target == Targets.python

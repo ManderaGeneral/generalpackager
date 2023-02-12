@@ -1,9 +1,9 @@
 from generallibrary import deco_cache, Log
 
-from generalpackager.api.github import GitHub
+from generalpackager.api.package_hosts.github import GitHub
 from generalpackager.api.localmodule import LocalModule
 from generalpackager.api.localrepo.base.localrepo import LocalRepo
-from generalpackager.api.pypi import PyPI
+from generalpackager.api.package_hosts.pypi import PyPI
 
 
 class _PackagerAPIs:

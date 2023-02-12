@@ -9,8 +9,8 @@ from generalpackager.api.localrepo.python.localrepo_python import LocalRepo_Pyth
 from generalpackager.api.localrepo.node.localrepo_node import LocalRepo_Node
 
 from generalpackager.api.localmodule import LocalModule
-from generalpackager.api.github import GitHub
-from generalpackager.api.pypi import PyPI
+from generalpackager.api.package_hosts.github import GitHub
+from generalpackager.api.package_hosts.pypi import PyPI
 
 from generalpackager.api.venv import Venv
 

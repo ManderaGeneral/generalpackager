@@ -1,5 +1,5 @@
 
-from generalpackager.api.pypi import PyPI
+from generalpackager.api.package_hosts.pypi import PyPI
 from generalfile.test.test_path import PathTest
 from generallibrary import Date
 
@@ -11,8 +11,8 @@ class TestPyPI(PathTest):
 
     def test_get_tarball_url(self):
         pypi = PyPI("generalpackager")
-        self.assertEqual(True, pypi.name in pypi.get_tarball_url())
-        self.assertEqual(True, pypi.name in pypi.get_tarball_url(version="1.0.0"))
+        self.assertEqual(True, pypi.name in pypi._get_tarball_url())
+        self.assertEqual(True, pypi.name in pypi._get_tarball_url(version="1.0.0"))
 
     def test_download(self):
         path = PyPI("generalpackager").download(path="repo")
