@@ -20,7 +20,7 @@ class _PackagerFiles:
         packager.generate_localfiles()
 
         if install:
-            packager.localrepo.install_editable()
+            packager.localrepo.install(editable=True)
         # new_self = packager.get_new_packager()  # Reset caches to get updated files
         # new_self.generate_localfiles()
         return packager

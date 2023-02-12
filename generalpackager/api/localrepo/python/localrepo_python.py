@@ -37,22 +37,35 @@ class LocalRepo_Python(LocalRepo):
 
         # Terminal("-m", "unittest", "discover", str(self.get_test_path()), python=True)
 
+    @staticmethod
+    def _venv_and_python(local):
+        active_venv = Venv.get_active_venv()
+        python = active_venv.python_path(local=local)
+        return active_venv, python
+
     @deco_require(LocalRepo.exists)
-    def install_editable(self):
-        """ Install this repository with pip and -e flag. """
+    def install(self, local=True, editable=False):
+        """ Install this repository with pip. """
+        active_venv, python = self._venv_and_python(local=local)
+
+        args = [python, "-m", "pip", "install", "-e", self.name]
+        if not editable:
+            args.remove("-e")
+
         with self.path.get_parent().as_working_dir():
             Log().debug(f"Pip install for {self}")
 
-            venv = Venv.get_active_venv()
-            with venv.easy_install_path().as_renamed("TEMP_easy_install", overwrite=True):
-                Terminal("-m", "pip", "install", "-e", self.name, capture_output=False, python=True)
-            venv.cruds.Path_easy_install.set_value(value=self.path)
+            with active_venv.easy_install_path().as_renamed("TEMP_easy_install", overwrite=True):
+                Terminal(*args, capture_output=False)
+            active_venv.cruds.Path_easy_install.set_value(value=self.path)
 
     @deco_require(LocalRepo.exists)
-    def uninstall(self):
-        """ Uninstall this repository with pip."""
-        Terminal("-m", "pip", "uninstall", "-y", self.metadata.name, python=True)
-        Venv.get_active_venv().cruds.Path_easy_install.unset_value(value=self.path)
+    def uninstall(self, local=True):
+        """ Uninstall this repository with pip. """
+        active_venv, python = self._venv_and_python(local=local)
+
+        Terminal(python, "-m", "pip", "uninstall", "-y", self.metadata.name)
+        active_venv.cruds.Path_easy_install.unset_value(value=self.path)
 
     @deco_require(LocalRepo.exists)
     def _create_sdist(self):

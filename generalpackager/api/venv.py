@@ -37,6 +37,12 @@ class Venv(DecoContext, _Venv_Cruds):
     def easy_install_path(self):  return self.site_packages_path() / "easy-install.pth"
     def python_home_path(self): return Path(self.cfg()["home"])
 
+    def python_path(self, local):
+        if local:
+            return self.python_exe_path()
+        else:
+            return self.python_home_path()
+
     def exists(self):
         return self.path.is_venv()
 
