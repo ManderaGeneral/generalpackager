@@ -8,7 +8,7 @@ from generalpackager.api.venv_cruds import _Venv_Cruds
 
 
 class Venv(DecoContext, _Venv_Cruds):
-    """ Standalone API, unlike the other APIs this one is not included in Packager. """
+    """ Standalone API or Python venv, unlike the other APIs this one is not included in Packager. """
     ver_info = VerInfo()
 
     def __init__(self, path=None):
@@ -30,18 +30,21 @@ class Venv(DecoContext, _Venv_Cruds):
         else:
             self.deactivate()
 
+    def exe_name(self): return "python.exe" if self.ver_info.windows else "python"
+
     def pyvenv_cfg_path(self):  return self.path / "pyvenv.cfg"
     def scripts_path(self):     return self.path / self.ver_info.venv_script_path
-    def python_exe_path(self):  return self.scripts_path() / ("python.exe" if self.ver_info.windows else "python")
+    def python_exe_path(self):  return self.scripts_path() / self.exe_name()
     def site_packages_path(self):  return self.path / "Lib/site-packages"
     def easy_install_path(self):  return self.site_packages_path() / "easy-install.pth"
     def python_home_path(self): return Path(self.cfg()["home"])
+    def python_home_exe_path(self): return self.python_home_path() / self.exe_name()
 
     def python_path(self, local):
         if local:
             return self.python_exe_path()
         else:
-            return self.python_home_path()
+            return self.python_home_exe_path()
 
     def exists(self):
         return self.path.is_venv()

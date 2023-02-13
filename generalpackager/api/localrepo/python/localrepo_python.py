@@ -74,11 +74,14 @@ class LocalRepo_Python(LocalRepo):
             Terminal("setup.py", "sdist", "bdist_wheel", python=True)
 
     @deco_require(LocalRepo.exists)
-    def publish(self):
+    def publish(self, public=True):
         """ Upload local repo to PyPI.
             Todo: Make sure twine is installed when trying to upload to pypi.
             Todo: Look into private PyPI server where we could also do dry runs for test.
             https://github.com/pypa/twine/issues/207"""
+        if not public:
+            raise NotImplementedError
+
         if self.metadata.private:
             raise AttributeError("Cannot upload private repo.")
 

@@ -11,9 +11,9 @@ class LocalRepo_Node(LocalRepo):
         with self.path.as_working_dir():
             Terminal("jest", capture_output=False)
 
-    def _stall(self, local, editable, create, remove):
-        cmd = create if editable else remove
-        G = "-G"
+    def _stall(self, local, editable, normal_cmd, editable_cmd):
+        cmd = editable_cmd if editable else normal_cmd
+        G = "-g"
         args = ["npm", cmd, G, self.name]
         if local:
             args.remove(G)
@@ -24,10 +24,10 @@ class LocalRepo_Node(LocalRepo):
             Terminal(*args, capture_output=False)
 
     def install(self, local=True, editable=False):
-        self._stall(local=local, editable=editable, create="install", remove="uninstall")
+        self._stall(local=local, editable=editable, normal_cmd="install", editable_cmd="link")
 
     def uninstall(self, local=True, editable=False):
-        self._stall(local=local, editable=editable, create="link", remove="unlink")
+        self._stall(local=local, editable=editable, normal_cmd="uninstall", editable_cmd="unlink")
 
     def publish(self, public=True):
         Log(__name__).debug(f"Publish for {self.name}")
