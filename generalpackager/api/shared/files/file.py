@@ -78,8 +78,8 @@ class File:
         elif self.remove:
             logger.info(f"Deleting '{self.relative_path}' for '{self.owner.name}'")
             self.path.delete()
-        else:
-            logger.warning(f"Generate for '{self.path}' could neither write nor remove.")
+        # else:
+        #     logger.warning(f"Generate for '{self.path}' could neither write nor remove.")
 
     def __str__(self):
         return f"<File: {self.owner.name} - {self.relative_path}>"

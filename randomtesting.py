@@ -32,7 +32,10 @@ list global     ??              npm
 # print(Venv.get_active_venv().python_home_path().open_folder())
 
 
-
+# venv = Venv.get_active_venv()
+for packager in Packager.get_ordered_packagers():
+    # packager.localrepo.set_easy_install_value(venv=venv)
+    packager.generate_localfiles(include_aesthetic=False, print_out=True)
 
 
 

@@ -51,7 +51,10 @@ class LocalRepo_Python(LocalRepo):
 
             with active_venv.easy_install_path().as_renamed("TEMP_easy_install", overwrite=True):
                 Terminal(*args, capture_output=False)
-            active_venv.cruds.Path_easy_install.set_value(value=self.path)
+            self.set_easy_install_value()
+
+    def set_easy_install_value(self, venv):
+        venv.cruds.Path_easy_install.set_value(value=self.path)
 
     @deco_require(LocalRepo.exists)
     def uninstall(self, local=True):
