@@ -1,6 +1,6 @@
 """ Not using typing.Protocol because that's for type checking only.
     Not using abc because I don't want to define an extra metaclass.
-        The only thing that'd be nice is if """
+        The only thing that'd be nice is if it'd detect unchanged stubs. """
 from typing import List
 
 
