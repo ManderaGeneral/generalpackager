@@ -56,10 +56,7 @@ class PyPI(_SharedAPI, _SharedOwner, PackageHostProtocol):
         download(self._get_tarball_url(version=version), path=temp)
         temp.unpack(base=path, overwrite=overwrite)
         temp.delete(error=False)
-        new_path = path / f"{self.name}-{version}"
-        returned_path = Path(self.name)
-        new_path.rename(returned_path)
-        return returned_path
+        return (path / f"{self.name}-{version}").rename(self.name, overwrite=overwrite)
 
     def get_owners_packages(self):
         """ Get a set of a owner's packages' names on PyPI. """
