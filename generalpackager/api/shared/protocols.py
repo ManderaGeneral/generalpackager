@@ -1,6 +1,8 @@
 """ Not using typing.Protocol because that's for type checking only.
     Not using abc because I don't want to define an extra metaclass.
         The only thing that'd be nice is if """
+from typing import List
+
 
 class PackageHostProtocol:
     """ GitHub.com, PyPI.org, NPMjs.com"""
@@ -19,5 +21,5 @@ class LocalRepoProtocol:
     def run_tests(self): ...
     def publish(self, public=True): ...
 
-    def list_packages(self, local=True, editable=None) -> list[str]: ...
+    def list_packages(self, local=True, editable=None) -> List[str]: ...
 
