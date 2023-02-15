@@ -60,11 +60,7 @@ class GitHub(_SharedAPI, _SharedOwner, PackageHostProtocol):
         path = Path(path)
         repo_path = path / self.name
 
-        if repo_path.exists():
-            if overwrite:
-                repo_path.delete()
-            else:
-                raise AttributeError(f"Clone target '{repo_path}' exists and overwrite is False.")
+        repo_path.overwrite_check(overwrite=overwrite)
 
         Log(__name__).info(f"Downloading {self.name} from GitHub.")
         with path.as_working_dir():
