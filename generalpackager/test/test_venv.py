@@ -21,7 +21,7 @@ class TestPyPI(PathTest):
         venv.python_version()
 
     def test_list_python_versions(self):
-        Log("root").configure_stream()  # HERE ** Would be nice to configure artifact for github actions
+        Log("root").configure_stream()  # Would be nice to configure artifact for github actions https://github.com/ManderaGeneral/generallibrary/issues/25
         self.assertGreaterEqual(len(Venv.list_python_versions()), 1)
 
 
