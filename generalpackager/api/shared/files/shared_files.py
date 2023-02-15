@@ -1,6 +1,7 @@
 from generallibrary import deco_cache
 
 from generalpackager.api.shared.files.file_fetcher import FileFetcher
+from generalfile import Path
 
 
 class _Files:
@@ -54,8 +55,9 @@ class _Files:
     workflow_file = FileFetcher()
 
 
+
+# Helper function to generate Files
 if __name__ == "__main__":
-    from generalfile import Path
     definitions = Path("./definitions").get_children()
     definitions = sorted(definitions, key=lambda path: path.name())
     for definition in definitions:
