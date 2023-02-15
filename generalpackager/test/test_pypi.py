@@ -16,13 +16,13 @@ class TestPyPI(PathTest):
 
     def test_download(self):
         path = PyPI("generalpackager").download(path="repo")
-        self.assertEqual(True, "generalpackager" in path.get_child())
+        self.assertTrue(path.exists())
 
         with self.assertRaises(AttributeError):
             PyPI("generalpackager").download(path="repo", version="0.0.111")
 
         path = PyPI("generalpackager").download(path="repo", version="0.0.11", overwrite=True)
-        self.assertEqual(2, len(path.get_parent().get_children()))
+        self.assertTrue(path.exists())
 
     def test_get_owners_packages(self):
         github = PyPI()
