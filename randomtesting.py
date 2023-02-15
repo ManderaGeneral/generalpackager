@@ -4,7 +4,7 @@ import sys
 from pprint import pprint
 
 from generalfile import Path
-from generallibrary import Log, Terminal, EnvVar
+from generallibrary import Log, Terminal, EnvVar, AutoInitBases
 from generalpackager import Packager, LocalRepo
 from generalpackager.api.venv import Venv
 

@@ -20,7 +20,7 @@ from generalpackager.packager_workflow import _PackagerWorkflow
 _TARGETS = Literal["python", "node", "django", "exe"]  # This is coupled to generalpackager.api.localrepo.base.targets.Targets, not ideal
 
 class Packager(NetworkDiagram,
-               _Files, _SharedAPI, _SharedName, _SharedTarget, _SharedPath,
+               _Files, _SharedAPI, _SharedTarget, _SharedPath,
                _PackagerGitHub, _PackagerFiles, _PackagerMetadata, _PackagerPypi, _PackagerWorkflow, _PackagerRelations, _PackagerAPIs, _PackagerEnvironment):
     """ Uses APIs to manage 'general' package.
         Contains methods that require more than one API as well as methods specific for ManderaGeneral. """

@@ -1,8 +1,6 @@
-from generallibrary import Log
+import unittest
 
 from generalpackager.api.localmodule import LocalModule
-
-import unittest
 
 
 class TestLocalModule(unittest.TestCase):

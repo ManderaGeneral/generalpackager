@@ -1,17 +1,11 @@
 import sys
 
 from coverage import Coverage
+
 from generalfile import Path
 from generallibrary import Terminal, deco_require, Log, RedirectStdout
-
 from generalpackager.api.localrepo.base.localrepo import LocalRepo
 from generalpackager.api.localrepo.python.metadata_python import Metadata_Python
-
-
-""" Should create a protocol that LocalRepo Python and Node share. """
-
-
-
 
 
 class LocalRepo_Python(LocalRepo):

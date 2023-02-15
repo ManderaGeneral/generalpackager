@@ -2,9 +2,8 @@ import re
 import sys
 
 from generalfile import Path
-from generallibrary import deco_cache, Ver, Terminal, debug, EnvVar, remove, DecoContext, deco_require, VerInfo, Log, join_with_str
+from generallibrary import deco_cache, Ver, Terminal, debug, DecoContext, deco_require, VerInfo
 from generalpackager.api.venv_cruds import _Venv_Cruds
-
 
 
 class Venv(DecoContext, _Venv_Cruds):
@@ -153,8 +152,6 @@ class Venv(DecoContext, _Venv_Cruds):
 
     @staticmethod
     def debug():
-        import os
-        import sys
 
         debug(locals(),
               "os.environ['PATH']",

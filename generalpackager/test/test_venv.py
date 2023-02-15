@@ -1,7 +1,7 @@
-from generallibrary import Log
-
-from generalpackager.api.venv import Venv
 from generalfile.test.test_path import PathTest
+from generallibrary import Log
+from generalpackager.api.venv import Venv
+
 
 class TestPyPI(PathTest):
     def test_create_venv(self):

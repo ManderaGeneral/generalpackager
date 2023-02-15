@@ -2,7 +2,6 @@ from logging import getLogger
 
 from generalfile import Path
 from generallibrary import deco_cache
-
 from generalpackager.api.localrepo.base.targets import Targets
 
 

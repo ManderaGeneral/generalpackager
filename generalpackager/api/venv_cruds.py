@@ -1,7 +1,7 @@
 import sys
 
 from generalfile import Path
-from generallibrary import EnvVar, VerInfo, join_with_str, deco_cache, remove
+from generallibrary import EnvVar, VerInfo, join_with_str, deco_cache
 from generallibrary.values import Crud
 
 

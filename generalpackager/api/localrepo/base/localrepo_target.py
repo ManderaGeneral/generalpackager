@@ -1,13 +1,12 @@
 
-from generallibrary import DataClass
-
 import generalpackager.api.localrepo.base.targets
+from generallibrary import DataClass
 from generalpackager.api.localrepo.base.metadata import Metadata
 from generalpackager.api.localrepo.base.targets import Targets
-from generalpackager.api.shared.protocols import LocalRepoProtocol
 
 
-class _SharedTarget(LocalRepoProtocol):
+class _SharedTarget:
+    """ Used by LocalRepo and Packager """
     def is_python(self):
         """ :param generalpackager.Packager or generalpackager.LocalRepo self: """
         return self.target == Targets.python

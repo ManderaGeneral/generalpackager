@@ -1,6 +1,6 @@
-from generalpackager.api.package_hosts.github import GitHub
-
 import unittest
+
+from generalpackager.api.package_hosts.github import GitHub
 
 
 class TestGitHub(unittest.TestCase):

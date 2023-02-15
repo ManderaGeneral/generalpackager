@@ -1,11 +1,12 @@
 
 import pkg_resources
+
 from generalfile import Path
 from generallibrary import ObjInfo, deco_cache, EnvVar, get, import_module, deco_require, Log
-from generalpackager.api.shared.name import _SharedName, _SharedAPI
+from generalpackager.api.shared.name import _SharedAPI
 
 
-class LocalModule(_SharedAPI, _SharedName):
+class LocalModule(_SharedAPI):
     """ Tools to interface a Local Python Module. """
 
     # _deco_require_module = deco_require(lambda self: self.exists(), message=lambda func: f"{func.__name__} requires module.")

@@ -1,8 +1,8 @@
 
 
-from generalpackager import Packager
-
 import unittest
+
+from generalpackager import Packager
 
 
 class TestPackager(unittest.TestCase):

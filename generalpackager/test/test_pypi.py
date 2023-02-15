@@ -1,7 +1,7 @@
 
-from generalpackager.api.package_hosts.pypi import PyPI
 from generalfile.test.test_path import PathTest
 from generallibrary import Date
+from generalpackager.api.package_hosts.pypi import PyPI
 
 
 class TestPyPI(PathTest):

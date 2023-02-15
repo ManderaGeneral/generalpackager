@@ -1,8 +1,6 @@
-from generallibrary import Log
+import unittest
 
 from generalpackager import Packager
-
-import unittest
 
 
 class TestPackager(unittest.TestCase):

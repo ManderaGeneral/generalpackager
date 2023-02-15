@@ -1,6 +1,5 @@
-from generallibrary import Terminal
 from generalfile import Path
-
+from generallibrary import Terminal
 from generalpackager.api.shared.decos import deco_path_as_working_dir
 
 

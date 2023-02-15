@@ -1,12 +1,12 @@
-from generalpackager.api.shared.owner import _SharedOwner
-from generalpackager.api.shared.name import _SharedName, _SharedAPI
-from generalpackager.api.shared.protocols import PackageHostProtocol
-
-from generallibrary import Ver, Date, get
-from generalfile import Path
+import re
 
 import requests
-import re
+
+from generalfile import Path
+from generallibrary import Ver, Date, get
+from generalpackager.api.shared.name import _SharedAPI
+from generalpackager.api.shared.owner import _SharedOwner
+from generalpackager.api.shared.protocols import PackageHostProtocol
 
 
 def download(url, path):
@@ -24,7 +24,7 @@ def download(url, path):
     return path
 
 
-class PyPI(_SharedAPI, _SharedOwner, _SharedName, PackageHostProtocol):
+class PyPI(_SharedAPI, _SharedOwner, PackageHostProtocol):
     """ Tools to interface pypi.org """
     DEFAULT_OWNER = "Mandera"
 

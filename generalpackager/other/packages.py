@@ -1,6 +1,3 @@
-
-from itertools import chain
-
 from generallibrary import deco_cache, flatten
 
 from generalpackager.api.localrepo.base.targets import Targets

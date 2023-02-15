@@ -1,8 +1,8 @@
 from generalfile import Path
+from generalfile.test.test_path import PathTest
 from generallibrary import Ver
 from generalpackager.api.localrepo.base.localrepo import LocalRepo
 from generalpackager.api.localrepo.python.localrepo_python import LocalRepo_Python
-from generalfile.test.test_path import PathTest
 
 
 class TestLocalRepo(PathTest):

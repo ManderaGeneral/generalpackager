@@ -1,15 +1,16 @@
-from generalpackager.api.shared.owner import _SharedOwner
-from generalpackager.api.shared.name import _SharedName, _SharedAPI
-from generalpackager.api.shared.protocols import PackageHostProtocol
-from generalpackager import GH_TOKEN
-from generallibrary import Log, Terminal
-from generalfile import Path
-
-import requests
 import json
 
+import requests
 
-class GitHub(_SharedAPI, _SharedOwner, _SharedName, PackageHostProtocol):
+from generalfile import Path
+from generallibrary import Log, Terminal
+from generalpackager import GH_TOKEN
+from generalpackager.api.shared.name import _SharedAPI
+from generalpackager.api.shared.owner import _SharedOwner
+from generalpackager.api.shared.protocols import PackageHostProtocol
+
+
+class GitHub(_SharedAPI, _SharedOwner, PackageHostProtocol):
     """ Tools to interface a GitHub Repository.
         Todo: Get and Set GitHub repo private. """
     DEFAULT_OWNER = "ManderaGeneral"
