@@ -21,27 +21,20 @@ from generalpackager.api.venv import Venv
 # It's a mess now. Venv is only for local python.
 # Make a new api?
 # Make all go through LocalRepo? This seems reasonable, install and uninstall is already there
-"""
-name            python          node
-list local      venv            localrepo
-list global     ??              npm
-"""
+
+# import pip
+
 
 # print(Packager("genlibrary"))
-# C:\Users\ricka\AppData\Local\Programs\Python\Python311
-# print(Venv.get_active_venv().python_home_path().open_folder())
-
-
-# venv = Venv.get_active_venv()
-for packager in Packager.get_ordered_packagers():
-    # packager.localrepo.set_easy_install_value(venv=venv)
-    packager.generate_localfiles(include_aesthetic=False, print_out=True)
+# print(list(Packager().localrepo.list_packages(editable=False)))
 
 
 
 
 
+from pip._internal.cli.main import main
 
+print(main(["list"]))
 
 
 

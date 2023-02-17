@@ -1,4 +1,5 @@
 import sys
+from typing import List
 
 from coverage import Coverage
 
@@ -95,6 +96,19 @@ class LocalRepo_Python(LocalRepo):
 
         with self.path.as_working_dir():
             Terminal("-m", "PyInstaller", file_path, "--onefile", "--windowed", python=True)
+
+    def list_packages(self, local=True, editable=None) -> List[str]:
+        active_venv, python = self._venv_and_python(local=local)
+        pip_list_result = Terminal(python, "-m", "pip", "list").string_result
+        print(pip_list_result)
+        for line in pip_list_result.splitlines()[2:]:
+            split_line = line.split()
+            if len(split_line) not in (2, 3):
+                continue
+
+            name, version, *editable_path = split_line
+            if editable is None or editable is bool(editable_path):
+                yield name
 
 
 from generalpackager.api.venv import Venv
