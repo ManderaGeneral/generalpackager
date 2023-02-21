@@ -4,6 +4,5 @@ from generalpackager.api.localrepo.python.localrepo_python import LocalRepo_Pyth
 
 class TestLocalRepo_Python(PathTest):
     def test_list_packages_global(self):
-        # Curious that it yielded the editable, I wonder why
-        print(list(LocalRepo_Python().list_packages(local=False)))
+        list(LocalRepo_Python().list_packages(local=False))
 

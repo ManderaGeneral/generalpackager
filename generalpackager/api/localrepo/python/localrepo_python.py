@@ -35,7 +35,7 @@ class LocalRepo_Python(LocalRepo):
     @staticmethod
     def _venv_and_python(local):
         active_venv = Venv.get_active_venv()
-        python = active_venv.python_path(local=local)
+        python = Venv.get_active_python(local=local)
         return active_venv, python
 
     @deco_require(LocalRepo.exists)
@@ -100,7 +100,6 @@ class LocalRepo_Python(LocalRepo):
     def list_packages(self, local=True, editable=None) -> List[str]:
         active_venv, python = self._venv_and_python(local=local)
         pip_list_result = Terminal(python, "-m", "pip", "list").string_result
-        print(pip_list_result)
         for line in pip_list_result.splitlines()[2:]:
             split_line = line.split()
             if len(split_line) not in (2, 3):

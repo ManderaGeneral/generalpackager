@@ -2,7 +2,7 @@ import re
 import sys
 
 from generalfile import Path
-from generallibrary import deco_cache, Ver, Terminal, debug, DecoContext, deco_require, VerInfo
+from generallibrary import deco_cache, Ver, Terminal, debug, DecoContext, deco_require, VerInfo, Log
 from generalpackager.api.venv_cruds import _Venv_Cruds
 
 
@@ -20,6 +20,15 @@ class Venv(DecoContext, _Venv_Cruds):
         if active_venv_path is not None:
             return Venv(path=active_venv_path)
 
+    @classmethod
+    def get_active_python(cls, local):
+        active_venv = cls.get_active_venv()
+        if active_venv is None:
+            if local is True:
+                Log(__name__).warning("A local python path was requested by there's no active venv. Returning global instead.")
+            return cls.python_sys_executable_path()
+        return active_venv.python_path(local=local)
+
     def before(self, *args, **kwargs):
         self.activate()
 
@@ -36,8 +45,10 @@ class Venv(DecoContext, _Venv_Cruds):
     def python_exe_path(self):  return self.scripts_path() / self.exe_name()
     def site_packages_path(self):  return self.path / "Lib/site-packages"
     def easy_install_path(self):  return self.site_packages_path() / "easy-install.pth"
-    def python_home_path(self): return Path(self.cfg()["home"])
+    def python_home_path(self): return Path(path=self.cfg()["home"])
     def python_home_exe_path(self): return self.python_home_path() / self.exe_name()
+    @classmethod
+    def python_sys_executable_path(cls): return Path(path=sys.executable)
 
     def python_path(self, local):
         if local:
