@@ -7,7 +7,7 @@ from generalpackager.api.venv_cruds import _Venv_Cruds
 
 
 class Venv(DecoContext, _Venv_Cruds):
-    """ Standalone API or Python venv, unlike the other APIs this one is not included in Packager. """
+    """ Standalone API of Python venv, unlike the other APIs this one is not included in Packager. """
     ver_info = VerInfo()
 
     def __init__(self, path=None):
