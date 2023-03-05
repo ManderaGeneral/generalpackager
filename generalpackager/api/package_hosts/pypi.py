@@ -28,9 +28,6 @@ class PyPI(_SharedAPI, _SharedOwner, PackageHostProtocol):
     """ Tools to interface pypi.org """
     DEFAULT_OWNER = "Mandera"
 
-    def __init__(self, name=None, owner=None):
-        pass
-
     @property
     def url(self):
         return f"https://pypi.org/project/{self.name}/"

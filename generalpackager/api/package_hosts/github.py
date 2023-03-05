@@ -14,10 +14,6 @@ class GitHub(_SharedAPI, _SharedOwner, PackageHostProtocol):
     """ Tools to interface a GitHub Repository.
         Todo: Get and Set GitHub repo private. """
     DEFAULT_OWNER = "ManderaGeneral"
-
-    def __init__(self, name=None, owner=None):
-        pass
-
     def get_version(self):
         raise NotImplementedError
 
