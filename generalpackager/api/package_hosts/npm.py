@@ -3,7 +3,7 @@ from generalpackager.api.shared.owner import _SharedOwner
 from generalpackager.api.shared.protocols import PackageHostProtocol
 
 
-class NPM(_SharedAPI, _SharedOwner, PackageHostProtocol):
+class NPM(PackageHostProtocol, _SharedAPI, _SharedOwner):
     DEFAULT_OWNER = "mandera"
     def download(self, path=None, version=None, overwrite=False):
         pass

@@ -10,10 +10,11 @@ from generalpackager.api.shared.owner import _SharedOwner
 from generalpackager.api.shared.protocols import PackageHostProtocol
 
 
-class GitHub(_SharedAPI, _SharedOwner, PackageHostProtocol):
+class GitHub(PackageHostProtocol, _SharedAPI, _SharedOwner):
     """ Tools to interface a GitHub Repository.
         Todo: Get and Set GitHub repo private. """
     DEFAULT_OWNER = "ManderaGeneral"
+
     def get_version(self):
         raise NotImplementedError
 

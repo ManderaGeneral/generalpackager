@@ -6,6 +6,7 @@ from typing import List
 
 class PackageHostProtocol:
     """ GitHub.com, PyPI.org, NPMjs.com"""
+    DEFAULT_OWNER = ...
     def __init__(self, name=None, owner=None): pass
     def download(self, path=None, version=None, overwrite=False): raise NotImplementedError
     def url(self): raise NotImplementedError

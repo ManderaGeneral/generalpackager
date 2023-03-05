@@ -24,7 +24,7 @@ def download(url, path):
     return path
 
 
-class PyPI(_SharedAPI, _SharedOwner, PackageHostProtocol):
+class PyPI(PackageHostProtocol, _SharedAPI, _SharedOwner):
     """ Tools to interface pypi.org """
     DEFAULT_OWNER = "Mandera"
 
