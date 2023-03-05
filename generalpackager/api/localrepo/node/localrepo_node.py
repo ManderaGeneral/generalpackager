@@ -43,8 +43,16 @@ class LocalRepo_Node(LocalRepo):
             Terminal(self.NPM_cmd, "publish", capture_output=False)
 
     def list_packages(self, local=True, editable=None) -> List[str]:
-        pass
+        with self.path.as_working_dir():
+            args = [self.NPM_cmd, "list", "-g"]
+            if not local:
+                args.remove("-g")
 
+            string_result = Terminal(*args).string_result
+            for line in string_result.splitlines():
+                if "-- " in line:
+                    name, version = line.split()[1].split("@")
+                    yield name
 
 
 
