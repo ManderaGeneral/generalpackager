@@ -1,6 +1,6 @@
 from typing import List
 
-from generallibrary import Terminal, Log, VerInfo
+from generallibrary import Terminal, Log, VerInfo, deco_require
 from generalpackager.api.localrepo.base.localrepo import LocalRepo
 from generalpackager.api.localrepo.node.metadata_node import Metadata_Node
 
@@ -27,12 +27,15 @@ class LocalRepo_Node(LocalRepo):
         with self.path.as_working_dir():
             Terminal(*args, capture_output=False)
 
+    @deco_require(LocalRepo.exists)
     def install(self, local=True, editable=False):
         self._stall(local=local, editable=editable, normal_cmd="install", editable_cmd="link")
 
+    @deco_require(LocalRepo.exists)
     def uninstall(self, local=True, editable=False):
         self._stall(local=local, editable=editable, normal_cmd="uninstall", editable_cmd="unlink")
 
+    @deco_require(LocalRepo.exists)
     def publish(self, public=True):
         Log(__name__).debug(f"Publish for {self.name}")
 
