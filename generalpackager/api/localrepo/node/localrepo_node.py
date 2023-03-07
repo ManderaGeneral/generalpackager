@@ -51,8 +51,10 @@ class LocalRepo_Node(LocalRepo):
             string_result = Terminal(*args).string_result
             for line in string_result.splitlines():
                 if "-- " in line:
-                    name, version = line.split()[1].split("@")
-                    yield name
+                    base, *link = line.split(" -> ")
+                    if editable is None or editable is bool(link):
+                        name, version = base.split()[1].split("@")
+                        yield name
 
 
 
