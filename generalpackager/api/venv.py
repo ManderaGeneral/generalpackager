@@ -25,7 +25,8 @@ class Venv(DecoContext, _Venv_Cruds):
         active_venv = cls.get_active_venv()
         if active_venv is None:
             if local is True:
-                Log(__name__).warning("A local python path was requested by there's no active venv. Returning global instead.")
+                raise EnvironmentError("A local python path was requested but there's no active venv. Returning global instead.")
+                # Log(__name__).warning("A local python path was requested by there's no active venv. Returning global instead.")
             return cls.python_sys_executable_path()
         return active_venv.python_path(local=local)
 
