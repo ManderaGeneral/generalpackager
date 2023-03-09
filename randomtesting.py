@@ -12,11 +12,20 @@ from generalpackager.api.venv import Venv
 
 
 
+genvector = Packager("genvector")
 
-# genvector = Packager("genvector")
-# print(list(genvector.localrepo.list_packages(local=False)))
+Log("root").configure_stream()
 
+# print(genvector.localrepo._node_modules_path())
 
+# genvector.localrepo.install(local=True)
+# genvector.localrepo.uninstall(local=True)
+
+print(list(genvector.localrepo.list_packages(local=True)))
+print(list(genvector.localrepo.list_packages(local=False)))
+
+# print(genvector.localrepo.package_folder(local=False))
+# print(genvector.localrepo.package_folder(local=True))
 
 
 

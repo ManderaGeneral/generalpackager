@@ -109,6 +109,14 @@ class LocalRepo_Python(LocalRepo):
             if editable is None or editable is bool(editable_path):
                 yield name
 
+    def package_folder(self, local=True):
+        venv = Venv.get_active_venv()
+        if local:
+            return venv.path
+        elif venv:
+            return venv.python_home_path()
+        return Venv.python_sys_executable_path().get_parent()
+
 
 from generalpackager.api.venv import Venv
 

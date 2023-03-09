@@ -22,6 +22,6 @@ class LocalRepoProtocol:
     def uninstall(self, local=True, editable=False): raise NotImplementedError
     def run_tests(self): raise NotImplementedError
     def publish(self, public=True): raise NotImplementedError
-
     def list_packages(self, local=True, editable=None) -> List[str]: raise NotImplementedError
+    def package_folder(self, local=True): raise NotImplementedError
 
