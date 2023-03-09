@@ -16,7 +16,7 @@ class LocalRepo_Python(LocalRepo):
     # Put in generalfile?
     @staticmethod
     def get_python_exe_path():
-        """ Return an absolute path to the current python exe filee. """
+        """ Return an absolute path to the current python exe file. """
         return Path(sys.executable)
 
     def run_tests(self):
