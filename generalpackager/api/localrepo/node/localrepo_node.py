@@ -85,8 +85,8 @@ class LocalRepo_Node(LocalRepo):
             if "-- " in line and "@" in line:
                 base, *link = line.split(" -> ")
                 if editable is None or editable is bool(link):
-                    name, version = base.split()[1].split("@")
-                    yield name
+                    *scoped, name, version = base.split()[1].split("@")
+                    yield f"@{name}" if scoped else name
 
 
 
