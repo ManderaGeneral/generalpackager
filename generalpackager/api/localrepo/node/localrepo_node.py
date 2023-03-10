@@ -31,12 +31,20 @@ class LocalRepo_Node(LocalRepo):
         with self.path.as_working_dir():
             Terminal("jest", capture_output=False)
 
+    INSTALL = "install"
     UNINSTALL = "uninstall"
 
-    def _stall(self, local, editable, normal_cmd, editable_cmd):
-        cmd = editable_cmd if editable else normal_cmd
-        name = self.name if normal_cmd == self.UNINSTALL else self.path.absolute()
+    def _stall(self, local, editable, cmd):
+        if not editable:
+            raise NotImplementedError("NPM does not support non-editable installs with local source.")
+
+        if cmd == self.UNINSTALL:
+            name = self.name
+        else:
+            name = self.path.absolute()
+
         args = [self.NPM_cmd, cmd, G := "-g", name]
+
         if local:
             args.remove(G)
 
@@ -47,12 +55,12 @@ class LocalRepo_Node(LocalRepo):
             Terminal(*args, capture_output=False)
 
     @deco_require(LocalRepo.exists)
-    def install(self, local=True, editable=False):
-        self._stall(local=local, editable=editable, normal_cmd="install", editable_cmd="link")
+    def install(self, local=True, editable=True):
+        self._stall(local=local, editable=editable, cmd=self.INSTALL)
 
     @deco_require(LocalRepo.exists)
-    def uninstall(self, local=True, editable=False):
-        self._stall(local=local, editable=editable, normal_cmd=self.UNINSTALL, editable_cmd="unlink")
+    def uninstall(self, local=True, editable=True):
+        self._stall(local=local, editable=editable, cmd=self.UNINSTALL)
 
     @deco_require(LocalRepo.exists)
     def publish(self, public=True):
