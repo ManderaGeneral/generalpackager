@@ -52,7 +52,7 @@ class _PackagerMetadata:
             if self.localrepo.metadata_exists():
                 return self.localrepo.metadata.target
             else:
-                return None
+                return self.Targets.python
 
     _lib = {
         "planning": "Development Status :: 1 - Planning",
