@@ -33,8 +33,7 @@ class LocalRepo(LocalRepoProtocol, _Files, _SharedAPI, _SharedPath, _LocalRepo_P
     @deco_cache()
     def metadata(self):
         """ :rtype: generalpackager.api.localrepo.python.metadata_python.Metadata_Python or generalpackager.api.localrepo.node.metadata_node.Metadata_Node or generalpackager.api.localrepo.base.metadata.Metadata """
-        if self.exists():
-            return self._cls_metadata(path=self.get_metadata_path())
+        return self._cls_metadata(path=self.get_metadata_path())
 
     @property
     def target(self):
