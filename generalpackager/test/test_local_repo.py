@@ -99,7 +99,6 @@ class TestLocalRepo(PathTest):
         self.assertIn("generalpackager", LocalRepo().get_test_path())
         self.assertIn("generalpackager", LocalRepo().get_test_template_path())
         self.assertIn("generalpackager", LocalRepo().get_init_path())
-        self.assertIn("generalpackager", LocalRepo().get_randomtesting_path())
         self.assertIn("generalpackager", LocalRepo().get_generate_path())
         self.assertIn("generalpackager", LocalRepo().get_exetarget_path())
         self.assertIn("generalpackager", LocalRepo().get_exeproduct_path())

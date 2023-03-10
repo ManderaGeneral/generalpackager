@@ -46,7 +46,6 @@ class _Files:
     package_json_file = FileFetcher()
     pre_commit_hook_file = FileFetcher()
     pre_push_hook_file = FileFetcher()
-    randomtesting_file = FileFetcher()
     readme_file = FileFetcher()
     setup_file = FileFetcher()
     test_folder = FileFetcher()

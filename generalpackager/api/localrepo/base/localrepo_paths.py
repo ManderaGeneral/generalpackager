@@ -45,10 +45,6 @@ class _LocalRepo_Paths:
         """ :param generalpackager.LocalRepo_Python or generalpackager.LocalRepo_Node self: """
         return self.path / self.name / "__init__.py"
     
-    def get_randomtesting_path(self):
-        """ :param generalpackager.LocalRepo_Python or generalpackager.LocalRepo_Node self: """
-        return self.path / "randomtesting.py"
-    
     def get_generate_path(self):
         """ :param generalpackager.LocalRepo_Python or generalpackager.LocalRepo_Node self: """
         return self.path / "generate.py"

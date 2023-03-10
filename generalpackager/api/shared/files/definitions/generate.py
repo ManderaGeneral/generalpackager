@@ -8,7 +8,7 @@ class GenerateFile(File):
     aesthetic = True
 
     def _generate(self):
-        """ Generate randomtesting.py. """
+        """ Generate generate.py. """
         top = CodeLine(space_before=1)
         top.add_node(CodeLine(f"from generallibrary import Log"))
         top.add_node(CodeLine(f"from generalpackager import Packager", space_after=1))

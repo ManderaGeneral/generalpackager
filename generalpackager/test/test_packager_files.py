@@ -68,11 +68,6 @@ class TestPackager(PathTest):
         text = str(packager.init_file._generate())
         self.assertEqual(True, len(text) > 2)
 
-    def test_generate_randomtesting(self):
-        packager = Packager()
-        text = str(packager.randomtesting_file._generate())
-        self.assertIn("generalpackager", text)
-
     def test_generate_test_python(self):
         packager = Packager()
         text = str(packager.test_template_file._generate())
