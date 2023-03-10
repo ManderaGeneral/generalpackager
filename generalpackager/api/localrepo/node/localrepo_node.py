@@ -69,7 +69,7 @@ class LocalRepo_Node(LocalRepo):
         with self.path.as_working_dir():
             Terminal(self.NPM_cmd, "publish", capture_output=False)
 
-    def list_packages(self, local=True, editable=None) -> List[str]:
+    def _list_packages_gen(self, local=True, editable=None) -> List[str]:
         args = [self.NPM_cmd, "list", "-g"]
         if local:
             args.remove("-g")

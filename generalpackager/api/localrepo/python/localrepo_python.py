@@ -97,7 +97,7 @@ class LocalRepo_Python(LocalRepo):
         with self.path.as_working_dir():
             Terminal("-m", "PyInstaller", file_path, "--onefile", "--windowed", python=True)
 
-    def list_packages(self, local=True, editable=None) -> List[str]:
+    def _list_packages_gen(self, local=True, editable=None):
         active_venv, python = self._venv_and_python(local=local)
         pip_list_result = Terminal(python, "-m", "pip", "list").string_result
         for line in pip_list_result.splitlines()[2:]:
