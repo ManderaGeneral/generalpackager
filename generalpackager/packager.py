@@ -66,8 +66,6 @@ class Packager(NetworkDiagram,
     def __repr__(self):
         """ :param generalpackager.Packager self: """
         info = [self.target or "No Target"]
-        if self.path is None:
-            info.append("No Path")
         info = str(info).replace("'", "")
         return f"<Packager {info}: {self.name}>"
 

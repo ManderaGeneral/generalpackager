@@ -40,6 +40,7 @@ class _SharedPath:
             if path and path.endswith(name):
                 Log().debug(f"Resolved path with '{method.__name__}' for '{name}', got '{path}'.")
                 return path
+        return Path(name)
 
     @classmethod
     @deco_cache()
@@ -47,14 +48,10 @@ class _SharedPath:
         """ :param generalpackager.Packager cls:
             :rtype: Path or None """
         name = cls._scrub_name(name=name, path=path)
-
         if path is None:
-            path = cls._resolve_path(name=name)
-
-        if path is not None:
+            return cls._resolve_path(name=name)
+        else:
             path = Path(path).absolute()
-
             if not path.endswith(name):
                 raise AttributeError(f"Path '{path}' seems to be wrong for '{name}'. Workdir is '{Path().absolute()}'.")
-
-        return path
+            return path
