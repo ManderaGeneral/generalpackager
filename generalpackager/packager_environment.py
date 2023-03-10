@@ -33,6 +33,9 @@ class _PackagerEnvironment:
         venvs_path = path / "venvs"
         venv_path = venvs_path / f"python{python_version.replace('.', '')}"
 
+        node_modules_string = cls.localrepo._cls_target_classes[cls.Targets.node].NODE_MODULES
+        (path / node_modules_string).create_folder()
+
         venv = Venv(path=venv_path)
         venv.create_venv(ver=python_version)
         venv.upgrade()
