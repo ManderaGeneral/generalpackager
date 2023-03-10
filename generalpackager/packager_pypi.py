@@ -23,10 +23,11 @@ class _PackagerPypi:
     def reserve_name(cls, name):
         """ Reserve a name on PyPI with template files.
 
-            :param generalpackager.Packager cls:
+            :param generalpackager.Packager or any cls:
             :param name: """
         path = Path.get_cache_dir() / "python/pypi_reserve/" / name
-        packager = cls.create_blank_locally_python(path=path, install=False)
+        packager = cls(path=path, target=cls.Targets.python)
+        packager.create_blank_locally(install=False)
         packager.localrepo.publish()
         path.delete()
 

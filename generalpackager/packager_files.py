@@ -4,26 +4,16 @@ from generallibrary import deco_cache, Timer
 
 
 class _PackagerFiles:
-    @classmethod
-    def create_blank_locally_python(cls, path, install=True):
+    def create_blank_locally(self, install=True):
         """ Create a new general package locally only.
             Todo: Fix create_blank, it overwrites current projects pip install.
-
-            :param generalpackager.Packager or Any cls:
-            :param Path or str path:
+            :param generalpackager.Packager self:
             :param install: Whether to pip install. """
-        path = Path(path)
-        assert path.empty()
-        packager = cls(name=path.name(), path=path, target=cls.Targets.python)
-
-        packager.localrepo.metadata.write_config()
-        packager.generate_localfiles()
-
+        assert self.path.empty()
+        self.localrepo.metadata.write_config()
+        self.generate_localfiles()
         if install:
-            packager.localrepo.install(editable=True)
-        # new_self = packager.get_new_packager()  # Reset caches to get updated files
-        # new_self.generate_localfiles()
-        return packager
+            self.localrepo.install(editable=True)
 
     @deco_cache()
     def _compare_local(self, platform, aesthetic):

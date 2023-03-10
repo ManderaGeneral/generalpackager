@@ -83,7 +83,7 @@ class TestPackager(PathTest):
         self.assertIn(Path("setup.py"), Packager().get_files_by_relative_path())
 
     def test_create_blank_locally_python(self):
-        Packager.create_blank_locally_python("newblank", install=False)
+        Packager("newblank").create_blank_locally(install=False)
         self.assertEqual(True, Path("newblank/README.md").exists())
         self.assertEqual(True, Path("newblank/newblank").exists())
 
