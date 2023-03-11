@@ -73,7 +73,7 @@ class _PackagerAPIs:
         """ :param generalpackager.Packager self:
             :rtype: generalpackager.LocalRepo_Python or generalpackager.LocalRepo_Node """
         self.localrepo_available(error=True)
-        return LocalRepo._cls_target_classes[self.target](name=self.name, path=self.path)
+        return LocalRepo(name=self.name, path=self.path).targetted(target=self.target)
 
     @property
     @deco_cache()
