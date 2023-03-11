@@ -1,3 +1,5 @@
+from generallibrary import deco_cache
+from generalpackager.api.localrepo.base.metadata import _Metadata
 
 
 class _PackagerMetadata:
@@ -44,15 +46,12 @@ class _PackagerMetadata:
             return self.localrepo.metadata.version > version
 
     @property
+    @deco_cache()
     def target(self):
         """ :param generalpackager.Packager self: """
-        if self._target is not Ellipsis:
+        if self._target is not None:
             return self._target
-        else:
-            if self.localrepo.metadata_exists():
-                return self.localrepo.metadata.target
-            else:
-                return self.Targets.python
+        return _Metadata(path=self.metadata_file.path).target
 
     _lib = {
         "planning": "Development Status :: 1 - Planning",

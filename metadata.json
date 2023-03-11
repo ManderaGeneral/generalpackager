@@ -1,4 +1,5 @@
 {
+    "target": "python",
     "install_requires": [
         "generallibrary[table]",
         "generalfile",
@@ -10,7 +11,6 @@
     "enabled": true,
     "private": false,
     "name": "generalpackager",
-    "target": "python",
     "version": "0.5.7",
     "description": "Tools to interface GitHub, PyPI, NPM and local modules / repos. Used for generating files to keep projects dry and synced. Tailored for ManderaGeneral for now.",
     "topics": [

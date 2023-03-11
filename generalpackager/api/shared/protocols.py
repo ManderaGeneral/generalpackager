@@ -18,6 +18,7 @@ class PackageHostProtocol:
 
 class LocalRepoProtocol:
     """ Python and Node target. """
+    target = None
     def install(self, local=True, editable=False): raise NotImplementedError
     def uninstall(self, local=True, editable=False): raise NotImplementedError
     def run_tests(self): raise NotImplementedError

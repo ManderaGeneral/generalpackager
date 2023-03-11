@@ -1,6 +1,6 @@
 from generallibrary import deco_cache, flatten
 
-from generalpackager.api.localrepo.base.targets import Targets
+from generalpackager.api.shared.target import Targets
 
 
 class Packages(Targets):

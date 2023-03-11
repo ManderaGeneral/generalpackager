@@ -1,8 +1,10 @@
-from generalpackager.api.localrepo.base.metadata import Metadata
+from generalpackager.api.localrepo.base.metadata import _Metadata
+from generalpackager.api.shared.target import Targets
 
-class Metadata_Python(Metadata):
-    """ Todo: Dynamic values in DataClass to remove LocalRepos and Metadatas. """
 
+
+class Metadata_Python(_Metadata):
+    target = Targets.python
     install_requires = []
     extras_require = {}
 

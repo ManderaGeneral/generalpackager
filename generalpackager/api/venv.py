@@ -39,7 +39,7 @@ class Venv(DecoContext, _Venv_Cruds):
         else:
             self.deactivate()
 
-    def exe_name(self): return "python.exe" if self.ver_info.windows else "python"
+    def exe_name(self): return "python.exe" if self.ver_info.windows else "python"  # This is similar to Terminal requiring .cmd
 
     def pyvenv_cfg_path(self):  return self.path / "pyvenv.cfg"
     def scripts_path(self):     return self.path / self.ver_info.venv_script_path

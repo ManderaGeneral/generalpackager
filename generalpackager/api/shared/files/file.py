@@ -2,7 +2,7 @@ from logging import getLogger
 
 from generalfile import Path
 from generallibrary import deco_cache
-from generalpackager.api.localrepo.base.targets import Targets
+from generalpackager.api.shared.target import Targets
 
 
 class DynamicRelativePath:
@@ -32,8 +32,16 @@ class File:
     def __init__(self, owner):
         """ :param generalpackager.Packager or generalpackager.LocalRepo owner: """
         self.owner = owner
-        self.packager = owner if type(owner).__name__ == "Packager" else None
-        self.localrepo = self.packager.localrepo if self.packager else owner
+
+    @property
+    @deco_cache()
+    def packager(self):
+        return self.owner if type(self.owner).__name__ == "Packager" else None
+
+    @property
+    @deco_cache()
+    def localrepo(self):
+        return self.packager.localrepo if self.packager else self.owner
 
     relative_path = DynamicRelativePath()
 

@@ -39,6 +39,7 @@ class _PackagerAPIs:
         else:
             return True
 
+    # Todo: Check that every API has create an *_available method
     def localrepo_available(self, error=False):
         """ :param generalpackager.Packager self: """
         return self._available(
@@ -72,9 +73,7 @@ class _PackagerAPIs:
         """ :param generalpackager.Packager self:
             :rtype: generalpackager.LocalRepo_Python or generalpackager.LocalRepo_Node """
         self.localrepo_available(error=True)
-        localrepo = LocalRepo(name=self.name, path=self.path).targetted(target=self._target)
-        Log().debug(f"Packager {self.name} got localrepo with target {localrepo.target}")
-        return localrepo
+        return LocalRepo._cls_target_classes[self.target](name=self.name, path=self.path)
 
     @property
     @deco_cache()

@@ -1,3 +1,4 @@
+from generalpackager.api.shared.target import Targets
 from generallibrary import CodeLine, comma_and_and
 
 from generalpackager.api.shared.files.file import File
@@ -111,7 +112,7 @@ class WorkflowFile(File):
         run = step.add_node(f"run: |")
 
         for packager in packagers:
-            if packager.target == packager.Targets.python:
+            if packager.target == Targets.python:
                 run.add_node(f"pip install -e {packager.name}[full]")
         return step
 

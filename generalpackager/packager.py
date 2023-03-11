@@ -1,9 +1,7 @@
 
-from typing import Literal
-
 from generallibrary import NetworkDiagram, deco_cache
 
-from generalpackager.api.localrepo.base.localrepo_target import _SharedTarget
+from generalpackager.api.shared.target import _SharedTarget, _TARGETS_LITERAL
 from generalpackager.api.shared.files.shared_files import _Files
 from generalpackager.api.shared.path import _SharedPath
 from generalpackager.api.shared.name import _SharedName, _SharedAPI
@@ -15,9 +13,6 @@ from generalpackager.packager_metadata import _PackagerMetadata
 from generalpackager.packager_pypi import _PackagerPypi
 from generalpackager.packager_relations import _PackagerRelations
 from generalpackager.packager_workflow import _PackagerWorkflow
-
-
-_TARGETS = Literal["python", "node", "django", "exe"]  # This is coupled to generalpackager.api.localrepo.base.targets.Targets, not ideal
 
 class Packager(NetworkDiagram,
                _Files, _SharedAPI, _SharedTarget, _SharedPath,
@@ -36,7 +31,7 @@ class Packager(NetworkDiagram,
     npm_ignore_lines += "node_modules/", ".parcel-cache/"
 
 
-    def __init__(self, name=None, path=None, target: _TARGETS = ..., github_owner=None, pypi_owner=None):
+    def __init__(self, name=None, path=None, target: _TARGETS_LITERAL = None, github_owner=None, pypi_owner=None):
         """ Storing pars as is. Name and target have some custom properties. """
         self._target = target
         self._github_owner = github_owner

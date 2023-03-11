@@ -32,15 +32,8 @@ class LocalRepo(LocalRepoProtocol, _Files, _SharedAPI, _SharedPath, _LocalRepo_P
     @property
     @deco_cache()
     def metadata(self):
-        """ :rtype: generalpackager.api.localrepo.python.metadata_python.Metadata_Python or generalpackager.api.localrepo.node.metadata_node.Metadata_Node or generalpackager.api.localrepo.base.metadata.Metadata """
+        """ :rtype: generalpackager.api.localrepo.python.metadata_python.Metadata_Python or generalpackager.api.localrepo.node.metadata_node.Metadata_Node or generalpackager.api.localrepo.base.metadata._Metadata """
         return self._cls_metadata(path=self.get_metadata_path())
-
-    @property
-    def target(self):
-        if self.metadata and self.metadata.exists():
-            return self.metadata.target
-        else:
-            return None
 
     def metadata_exists(self):
         """ Needed to make deco_require be able to use this. """
