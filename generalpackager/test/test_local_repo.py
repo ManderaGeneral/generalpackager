@@ -19,8 +19,8 @@ class TestLocalRepo(PathTest):
         self.assertIsInstance(localrepo().metadata.topics, list)
         self.assertIsInstance(localrepo().metadata.manifest, list)
 
-        self.assertIsInstance(localrepo().targetted().metadata.install_requires, list)
-        self.assertIsInstance(localrepo().targetted().metadata.extras_require, dict)
+        self.assertIsInstance(localrepo().metadata.install_requires, list)
+        self.assertIsInstance(localrepo().metadata.extras_require, dict)
 
     def test_exists(self):
         self.assertEqual(True, localrepo().exists())
