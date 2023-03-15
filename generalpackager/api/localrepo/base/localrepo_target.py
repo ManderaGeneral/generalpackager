@@ -1,10 +1,10 @@
-
+from generalpackager.api.localrepo.base.metadata import _Metadata
 from generalpackager.api.shared.target import Targets, _SharedTarget, _TARGETS_LITERAL
 
 
 class _LocalRepo_Target(_SharedTarget):
     """ Target of None is only for packages without a metadata.json file. """
-    _cls_metadata = None
+    _cls_metadata = _Metadata
     _cls_target_classes = {}
 
     def __init_subclass__(cls, **kwargs):
@@ -18,4 +18,8 @@ class _LocalRepo_Target(_SharedTarget):
     def targetted(self, target: _TARGETS_LITERAL):
         """ :param generalpackager.LocalRepo self: """
         return self._cls_target_classes[target](name=self.name, path=self.path)
+
+
+
+
 
