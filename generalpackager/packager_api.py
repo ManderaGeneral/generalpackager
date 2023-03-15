@@ -1,4 +1,5 @@
-from generallibrary import deco_cache, Log
+from generallibrary import deco_cache
+from generalpackager.api.localrepo.top.target_helper import localrepo
 
 from generalpackager.api.package_hosts.github import GitHub
 from generalpackager.api.localmodule import LocalModule
@@ -73,7 +74,7 @@ class _PackagerAPIs:
         """ :param generalpackager.Packager self:
             :rtype: generalpackager.LocalRepo_Python or generalpackager.LocalRepo_Node """
         self.localrepo_available(error=True)
-        return LocalRepo(name=self.name, path=self.path).targetted(target=self.target)
+        return localrepo(name=self.name, path=self.path, target=self.target)
 
     @property
     @deco_cache()

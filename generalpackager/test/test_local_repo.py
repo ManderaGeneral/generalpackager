@@ -3,39 +3,40 @@ from generalfile.test.test_path import PathTest
 from generallibrary import Ver
 from generalpackager.api.localrepo.base.localrepo import LocalRepo
 from generalpackager.api.localrepo.python.localrepo_python import LocalRepo_Python
+from generalpackager.api.localrepo.top.target_helper import localrepo
 
 
 class TestLocalRepo(PathTest):
     def test_metadata_exists(self):
-        self.assertEqual(True, LocalRepo().metadata_exists())
-        self.assertEqual(False, LocalRepo("doesntexist").metadata_exists())
+        self.assertEqual(True, localrepo().metadata_exists())
+        self.assertEqual(False, localrepo("doesntexist").metadata_exists())
 
     def test_load_metadata(self):
-        self.assertEqual(True, LocalRepo().metadata.enabled)
-        self.assertEqual("generalpackager", LocalRepo().name)
-        self.assertIsInstance(LocalRepo().metadata.version, Ver)
-        self.assertIsInstance(LocalRepo().metadata.description, str)
-        self.assertIsInstance(LocalRepo().metadata.topics, list)
-        self.assertIsInstance(LocalRepo().metadata.manifest, list)
+        self.assertEqual(True, localrepo().metadata.enabled)
+        self.assertEqual("generalpackager", localrepo().name)
+        self.assertIsInstance(localrepo().metadata.version, Ver)
+        self.assertIsInstance(localrepo().metadata.description, str)
+        self.assertIsInstance(localrepo().metadata.topics, list)
+        self.assertIsInstance(localrepo().metadata.manifest, list)
 
-        self.assertIsInstance(LocalRepo().targetted().metadata.install_requires, list)
-        self.assertIsInstance(LocalRepo().targetted().metadata.extras_require, dict)
+        self.assertIsInstance(localrepo().targetted().metadata.install_requires, list)
+        self.assertIsInstance(localrepo().targetted().metadata.extras_require, dict)
 
     def test_exists(self):
-        self.assertEqual(True, LocalRepo().exists())
-        self.assertEqual(True, LocalRepo.repo_exists(LocalRepo().path))
+        self.assertEqual(True, localrepo().exists())
+        self.assertEqual(True, LocalRepo.repo_exists(localrepo().path))
 
-        self.assertEqual(False, LocalRepo("doesntexist").exists())
+        self.assertEqual(False, localrepo("doesntexist").exists())
 
     def test_get_test_paths(self):
-        self.assertLess(2, len(list(LocalRepo().get_test_paths())))
-        self.assertIn(LocalRepo().get_test_path() / "test_local_repo.py", LocalRepo().get_test_paths())
+        self.assertLess(2, len(list(localrepo().get_test_paths())))
+        self.assertIn(localrepo().get_test_path() / "test_local_repo.py", localrepo().get_test_paths())
 
     def test_get_package_paths(self):
-        package_paths = list(LocalRepo().get_package_paths_gen())
-        self.assertIn(LocalRepo().get_test_path(), package_paths)
-        self.assertIn(LocalRepo().path / LocalRepo().name, package_paths)
-        self.assertNotIn(LocalRepo().path, package_paths)
+        package_paths = list(localrepo().get_package_paths_gen())
+        self.assertIn(localrepo().get_test_path(), package_paths)
+        self.assertIn(localrepo().path / localrepo().name, package_paths)
+        self.assertNotIn(localrepo().path, package_paths)
 
     def test_get_changed_files(self):
         local_repo = LocalRepo_Python()
@@ -53,7 +54,7 @@ class TestLocalRepo(PathTest):
         self.assertRaises(AssertionError, local_repo.bump_version)
 
     def test_targets(self):
-        self.assertEqual(LocalRepo().metadata.target, LocalRepo.Targets.python)
+        self.assertEqual(localrepo().metadata.target, LocalRepo.Targets.python)
 
     def test_format_file_function(self):
         Path("foo").text.write(
@@ -109,16 +110,16 @@ class TestLocalRepo(PathTest):
         self.assertIn("generalpackager", LocalRepo().get_package_json_path())
 
     def test_is_target(self):
-        self.assertEqual(True, LocalRepo().is_python())
-        self.assertEqual(False, LocalRepo().is_exe())
-        self.assertEqual(False, LocalRepo().is_node())
-        self.assertEqual(False, LocalRepo().is_django())
+        self.assertEqual(True, localrepo().is_python())
+        self.assertEqual(False, localrepo().is_exe())
+        self.assertEqual(False, localrepo().is_node())
+        self.assertEqual(False, localrepo().is_django())
 
     def test_repo_init(self):
-        localrepo = LocalRepo(path="hi")
-        self.assertIs(False, localrepo.exists())
-        localrepo.init()
-        self.assertIs(True, localrepo.exists())
+        repo = localrepo(path="hi")
+        self.assertIs(False, repo.exists())
+        repo.init()
+        self.assertIs(True, repo.exists())
 
 
 
