@@ -85,7 +85,7 @@ class WorkflowFile(File):
         run = CodeLine("run: |")
         run.add_node("python -m pip install --upgrade pip")
         run.add_node(f"pip install {' '.join(self.PIP_NECESSARY_PACKAGES)}")
-        return self._get_step(f"Install necessities pip, setuptools, wheel, twine", run)
+        return self._get_step(f"Install necessities", run)
 
     def _step_install_package_pip(self, *packagers):
         """ Supply Packagers to create pip install steps for. """
