@@ -5,7 +5,10 @@
         "generalfile",
         "requests",
         "pyinstaller",
-        "coverage"
+        "coverage",
+        "setuptools",
+        "wheel",
+        "twine"
     ],
     "extras_require": {},
     "enabled": true,

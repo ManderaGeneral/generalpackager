@@ -131,7 +131,7 @@ class WorkflowFile(File):
         steps.add_node(self._step_make_workdir())
         steps.add_node(self._step_setup_ssh())
         steps.add_node(self._step_setup_python(version=python_version))
-        steps.add_node(self._step_install_necessities())
+        # steps.add_node(self._step_install_necessities())
         steps.add_node(self._step_clone_repos())
         steps.add_node(self._step_install_repos())
         return steps
