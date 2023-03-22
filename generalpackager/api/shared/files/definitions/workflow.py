@@ -22,12 +22,6 @@ class WorkflowFile(File):
 
         return workflow
 
-    PIP_NECESSARY_PACKAGES = (
-        "setuptools",
-        "wheel",
-        "twine",
-    )
-
     _commit_msg = "github.event.head_commit.message"
     _action_checkout = "actions/checkout@v2"
     _action_setup_python = "actions/setup-python@v2"
@@ -81,12 +75,6 @@ class WorkflowFile(File):
         with_.add_node(f"python-version: '{version}'")
         return self._get_step(f"Set up python version {version}", f"uses: {self._action_setup_python}", with_)
 
-    def _step_install_necessities(self):
-        run = CodeLine("run: |")
-        run.add_node("python -m pip install --upgrade pip")
-        run.add_node(f"pip install {' '.join(self.PIP_NECESSARY_PACKAGES)}")
-        return self._get_step(f"Install necessities", run)
-
     def _step_install_package_pip(self, *packagers):
         """ Supply Packagers to create pip install steps for. """
         names = [p.name for p in packagers]
@@ -131,7 +119,6 @@ class WorkflowFile(File):
         steps.add_node(self._step_make_workdir())
         steps.add_node(self._step_setup_ssh())
         steps.add_node(self._step_setup_python(version=python_version))
-        # steps.add_node(self._step_install_necessities())
         steps.add_node(self._step_clone_repos())
         steps.add_node(self._step_install_repos())
         return steps
