@@ -25,6 +25,8 @@ class _PackagerWorkflow:
     @workflow
     def workflow_unittest(self):
         """ :param generalpackager.Packager self: """
+        Log("root").configure_stream()
+
         self.run_ordered_methods(
             lambda packager: packager.generate_localfiles(include_aesthetic=False),
             lambda packager: packager.localrepo.run_tests(),
@@ -36,6 +38,8 @@ class _PackagerWorkflow:
             It can generate new workflow, compare, and then stop workflow after commiting and pushing.
 
             :param generalpackager.Packager self: """
+        Log("root").configure_stream()
+
         trigger_repo = str(EnvVar('GITHUB_REPOSITORY')).split('/')[1]
         msg1 = f"[CI AUTO] For commit sha reference"
         msg2 = f"[CI AUTO] Sync triggered by {trigger_repo}"
