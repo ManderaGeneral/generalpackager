@@ -10,6 +10,7 @@ class TestTemplateFile(File):
 
     overwrite = False
     is_file = True
+    target = File.targets.python
 
     def _generate(self):
         top = CodeLine()

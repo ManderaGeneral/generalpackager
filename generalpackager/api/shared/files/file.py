@@ -24,7 +24,7 @@ class File:
     remove = False
     overwrite = True
     is_file = True
-    target = Targets.python  # Should probably default to None, and then I put python on most files
+    target = None
 
     def _generate(self):
         return ""

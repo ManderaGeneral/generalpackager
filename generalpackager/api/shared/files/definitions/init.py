@@ -8,6 +8,7 @@ class InitFile(File):
     def _relative_path(self):
         return f"{self.packager.name}/__init__.py"
 
+    target = File.targets.python
     aesthetic = False
     overwrite = False
 

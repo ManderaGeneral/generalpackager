@@ -3,6 +3,7 @@ from generalpackager.api.shared.files.file import File
 
 
 class ManifestFile(File):
+    target = File.targets.python
     _relative_path = "MANIFEST.in"
     aesthetic = False
 
