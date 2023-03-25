@@ -1,7 +1,7 @@
 
 from generallibrary import deco_cache, Log, flatten, remove_duplicates
 
-from generalpackager.other.packages import Packages
+from generalpackager.api.shared.target import Packages
 
 
 class _PackagerRelations:
