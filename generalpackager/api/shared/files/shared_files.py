@@ -6,6 +6,7 @@ from generalfile import Path
 
 class _Files:
     """ LocalRepo and Packager inherits this.
+        Combines paths with generation instructions.
         Only an instance of Packager will return file instances. """
     @classmethod
     @deco_cache()
