@@ -62,7 +62,7 @@ class _PackagerWorkflow:
 
     def upload_package_summary(self, msg):
         """ :param generalpackager.Packager self: """
-        self.org_readme_file.generate()
+        assert self.org_readme_file.generate()
         self.commit_and_push(message=msg)
 
     def if_publish_bump(self, any_bumped):
