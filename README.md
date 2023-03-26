@@ -1,3 +1,5 @@
+https://github.com/ManderaGeneral/generalpackager/blob/5bd7052b5a133b81d0a3efe7246f00152c88b8c6/generate.py
+
 <details open>
 <summary><h1>generalpackager</h1></summary>
 
