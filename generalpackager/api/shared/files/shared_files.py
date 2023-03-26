@@ -26,6 +26,26 @@ class _Files:
         path = Path(path).relative(self.path)
         return self.get_files_by_relative_path().get(path)
 
+    def get_files_as_tsv(self):
+        """ :param generalpackager.Packager or generalpackager.LocalRepo self: """
+        columns = {
+            "name": lambda x: type(x).__name__,
+            "path": lambda x: x._relative_path,
+            "aesthetic": lambda x: x.aesthetic,
+            "remove": lambda x: x.remove,
+            "overwrite": lambda x: x.overwrite,
+            "is_file": lambda x: x.is_file,
+            "target": lambda x: x.target,
+        }
+
+        lines = ["\t".join(columns)]
+        for file in self.get_files():
+            lines.append(join_with_str("\t", [func(file) for func in columns.values()]))
+
+        csv = "\n".join(lines)
+        clipboard_copy(csv)
+        print(csv)
+
 
     commit_editmsg_file = FileFetcher()
     examples_folder = FileFetcher()
