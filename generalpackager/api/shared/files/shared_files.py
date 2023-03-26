@@ -1,4 +1,4 @@
-from generallibrary import deco_cache
+from generallibrary import deco_cache, clipboard_copy, join_with_str
 
 from generalpackager.api.shared.files.file_fetcher import FileFetcher
 from generalfile import Path
@@ -8,16 +8,12 @@ class _Files:
     """ LocalRepo and Packager inherits this.
         Combines paths with generation instructions.
         Only an instance of Packager will return file instances. """
-    @classmethod
-    @deco_cache()
-    def get_filenames(cls):
-        """ :param generalpackager.Packager or generalpackager.LocalRepo cls: """
-        return [filename for filename in dir(_Files) if filename.endswith("_file")]
+    file_definition_names = []
 
     @deco_cache()
     def get_files(self):
         """ :param generalpackager.Packager or generalpackager.LocalRepo self: """
-        return [getattr(self, filename) for filename in self.get_filenames()]
+        return [getattr(self, name) for name in self.file_definition_names]
 
     @deco_cache()
     def get_files_by_relative_path(self):

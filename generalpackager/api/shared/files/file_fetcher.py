@@ -12,6 +12,7 @@ class FileFetcher:
         self.name = None
 
     def __set_name__(self, owner, name):
+        owner.file_definition_names.append(name)
         if "_file" in name:
             self.name = name.split("_file")[0]
         else:
