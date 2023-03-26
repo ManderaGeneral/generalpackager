@@ -9,6 +9,7 @@ class _Files_Helpers:
         columns = {
             "name": lambda x: type(x).__name__,
             "path": lambda x: x._relative_path,
+            "generatable": lambda x: x.has_generate_instructions(),
             "aesthetic": lambda x: x.aesthetic,
             "remove": lambda x: x.remove,
             "overwrite": lambda x: x.overwrite,

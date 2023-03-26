@@ -19,7 +19,7 @@ class File:
     targets = Targets
 
     _relative_path = ...
-    aesthetic = ...
+    aesthetic = ...  # Does this file affect unittests or not?
 
     remove = False
     overwrite = True
@@ -54,6 +54,10 @@ class File:
     def path(self):
         return self.owner.path / self._relative_path
 
+    @classmethod
+    def has_generate_instructions(cls):
+        return cls._generate is not File._generate
+
     def _cant_write(self, msg):
         logger = getLogger(__name__)
         logger.info(f"Can't write '{self.relative_path}' - {msg}")
@@ -66,7 +70,7 @@ class File:
         elif self.remove:
             return self._cant_write(".remove is True")
 
-        elif type(self)._generate is File._generate:
+        elif not self.has_generate_instructions():
             return self._cant_write("._generate is undefined")
 
         elif self.target is not None and self.target != self.owner.target:
@@ -86,8 +90,6 @@ class File:
         elif self.remove:
             logger.info(f"Deleting '{self.relative_path}' for '{self.owner.name}'")
             self.path.delete()
-        # else:
-        #     logger.warning(f"Generate for '{self.path}' could neither write nor remove.")
 
     def __str__(self):
         return f"<File: {self.owner.name} - {self.relative_path}>"
