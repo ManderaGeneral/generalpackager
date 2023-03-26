@@ -5,6 +5,7 @@ from generalpackager.api.shared.files.file import File
 
 class OrgReadmeFile(File):
     target = File.targets.summary
+    aesthetic = True
 
     @property
     def _relative_path(self):
@@ -13,7 +14,6 @@ class OrgReadmeFile(File):
         else:
             return self.packager.readme_file.relative_path
 
-    aesthetic = True
 
     @staticmethod
     def get_org_description_markdown():

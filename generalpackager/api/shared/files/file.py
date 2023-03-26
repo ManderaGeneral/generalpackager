@@ -1,4 +1,5 @@
 from logging import getLogger
+from typing import Union
 
 from generalfile import Path
 from generallibrary import deco_cache
@@ -74,20 +75,19 @@ class File:
         if not self.is_file:
             return self._cant_write(".is_file is False")
 
-        elif self.remove:
+        if self.remove:
             return self._cant_write(".remove is True")
 
-        elif not self.has_generate_instructions():
+        if not self.has_generate_instructions():
             return self._cant_write("._generate is undefined")
 
         if not self.has_target(target=self.owner.target):
             return self._cant_write(f"Owner {self.owner}'s target is not in {self.target}")
 
-        elif self.overwrite is False and self.path.exists():
+        if self.overwrite is False and self.path.exists():
             return self._cant_write(f".overwrite is False and path {self.path} exists")
 
-        else:
-            return True
+        return True
 
     def generate(self):
         logger = getLogger(__name__)

@@ -14,15 +14,19 @@ class _Files_Helpers:
             "remove": lambda x: x.remove,
             "overwrite": lambda x: x.overwrite,
             "is_file": lambda x: x.is_file,
-            "target": lambda x: x.target,
         }
 
+        for target in self.target_names():
+            columns[target] = lambda x, t=target: x.has_generate_instructions() and x.has_target(target=t)
+
         lines = ["\t".join(columns)]
+
         for file in self.get_files():
-            lines.append(join_with_str("\t", [func(file) for func in columns.values()]))
+            # lines.append(join_with_str("\t", [("✅" if x else "") if type(x := func(file)) is bool else x for name, func in columns.items()]))
+            lines.append(join_with_str("\t", [(name if x else "") if type(x := func(file)) is bool else x for name, func in columns.items()]))
 
         csv = "\n".join(lines)
-        print(clipboard_copy(csv))
+        return clipboard_copy(csv)
 
     @staticmethod
     def _get_file_fetcher_definitions():
@@ -41,7 +45,7 @@ class _Files_Helpers:
             suffix = "file" if file.is_file else "folder"
             lines.append(f"{stem}_{suffix} = FileFetcher()")
         result = "\n".join([f"    {line}" for line in lines])
-        print(clipboard_copy(result))
+        return clipboard_copy(result)
 
 if __name__ == "__main__":
     from generalpackager import Packager

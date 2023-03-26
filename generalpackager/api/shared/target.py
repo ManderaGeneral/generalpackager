@@ -15,9 +15,14 @@ class Targets(DataClass):
 _DEFAULT_TARGET = Targets.python
 
 class _SharedTarget:
+    """ Used by LocalRepo and Packager """
     Targets = Targets
 
-    """ Used by LocalRepo and Packager """
+    @classmethod
+    def target_names(cls):
+        """ :param generalpackager.Packager or generalpackager.LocalRepo cls: """
+        return cls.Targets.field_values_defaults()
+
     def is_python(self):
         """ :param generalpackager.Packager or generalpackager.LocalRepo self: """
         return self.target == Targets.python
