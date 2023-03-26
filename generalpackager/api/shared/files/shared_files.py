@@ -1,10 +1,11 @@
-from generallibrary import deco_cache, clipboard_copy, join_with_str
+from generallibrary import deco_cache
 
 from generalpackager.api.shared.files.file_fetcher import FileFetcher
 from generalfile import Path
+from generalpackager.api.shared.files.helpers import _Files_Helpers
 
 
-class _Files:
+class _Files(_Files_Helpers):
     """ LocalRepo and Packager inherits this.
         Combines paths with generation instructions.
         Only an instance of Packager will return file instances. """
@@ -26,27 +27,7 @@ class _Files:
         path = Path(path).relative(self.path)
         return self.get_files_by_relative_path().get(path)
 
-    def get_files_as_tsv(self):
-        """ :param generalpackager.Packager or generalpackager.LocalRepo self: """
-        columns = {
-            "name": lambda x: type(x).__name__,
-            "path": lambda x: x._relative_path,
-            "aesthetic": lambda x: x.aesthetic,
-            "remove": lambda x: x.remove,
-            "overwrite": lambda x: x.overwrite,
-            "is_file": lambda x: x.is_file,
-            "target": lambda x: x.target,
-        }
-
-        lines = ["\t".join(columns)]
-        for file in self.get_files():
-            lines.append(join_with_str("\t", [func(file) for func in columns.values()]))
-
-        csv = "\n".join(lines)
-        clipboard_copy(csv)
-        print(csv)
-
-
+    # Generated with Packager._get_file_fetcher_definitions()
     commit_editmsg_file = FileFetcher()
     examples_folder = FileFetcher()
     exeproduct_folder = FileFetcher()
@@ -70,21 +51,4 @@ class _Files:
     test_template_file = FileFetcher()
     workflow_file = FileFetcher()
 
-
-
-# Helper function to generate Files
-if __name__ == "__main__":
-    definitions = Path("./definitions").get_children()
-    definitions = sorted(definitions, key=lambda path: path.name())
-    for definition in definitions:
-        stem = definition.stem()
-        if stem.startswith("_"):
-            continue
-
-        filefetcher = FileFetcher()
-        filefetcher.name = stem
-        file = filefetcher.cls
-
-        suffix = "file" if file.is_file else "folder"
-        print(f"    {stem}_{suffix} = FileFetcher()")
 
