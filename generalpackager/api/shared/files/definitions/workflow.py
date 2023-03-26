@@ -84,8 +84,7 @@ class WorkflowFile(File):
 
     def _step_clone_repos(self):
         """ Supply Packagers to create git install steps for. """
-        packagers = self.packager.get_ordered_packagers(include_private=False, include_summary_packagers=True)
-
+        packagers = self.packager.workflow_packagers
         step = CodeLine(f"- name: Clone {len(packagers)} repos")
         run = step.add_node(f"run: |")
 
@@ -95,7 +94,7 @@ class WorkflowFile(File):
 
     def _step_install_repos(self):
         """ Supply Packagers to create git install steps for. """
-        packagers = self.packager.get_ordered_packagers(include_private=False)
+        packagers = [packager for packager in self.packager.workflow_packagers if packager.target == Targets.python]
 
         step = CodeLine(f"- name: Install {len(packagers)} repos")
         run = step.add_node(f"run: |")

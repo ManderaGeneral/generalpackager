@@ -1,7 +1,6 @@
 
 from generalfile import Path
-from generallibrary import EnvVar, Log, Terminal
-
+from generallibrary import EnvVar, Log, Terminal, classproperty, deco_cache
 
 
 def workflow(func):
@@ -15,11 +14,16 @@ def workflow(func):
 
 
 class _PackagerWorkflow:
+    @classproperty
+    @deco_cache()
+    def workflow_packagers(cls):
+        """ :param generalpackager.Packager cls: """
+        return cls.get_ordered_packagers(include_private=False, include_summary_packagers=True)
+
     def run_ordered_methods(self, *funcs):
         """ :param generalpackager.Packager self: """
-        order = self.get_ordered_packagers()
         for func in funcs:
-            for packager in order:
+            for packager in self.workflow_packagers:
                 func(packager)
 
     @workflow

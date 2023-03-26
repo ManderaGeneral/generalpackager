@@ -45,7 +45,8 @@ class _SharedTarget:
 
 
 class Packages(Targets):
-    """ Purpose is to easily see if name is general and what target it has. """
+    """ Purpose is to easily see if name is general and what target it has.
+        Coupled to each metadata.json """
     python = [
         "generaltool",
         "generalimport",
