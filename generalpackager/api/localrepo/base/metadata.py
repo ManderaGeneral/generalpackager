@@ -1,13 +1,13 @@
 from generalfile import ConfigFile
 from generallibrary import Ver
-from generalpackager.api.shared.target import _TARGETS_LITERAL, _DEFAULT_TARGET
+from generalpackager.api.shared.target import _TARGETS_LITERAL
 
 
 class _Metadata(ConfigFile):
     enabled = True
     private = False
     name = None
-    target: _TARGETS_LITERAL = _DEFAULT_TARGET
+    target: _TARGETS_LITERAL = None
     version = Ver("0.0.1")
     description = "Missing description."
     topics = []

@@ -17,7 +17,10 @@ class _LocalRepo_Target(_SharedTarget):
 
     def targetted(self, target: _TARGETS_LITERAL):
         """ :param generalpackager.LocalRepo self: """
-        return self._cls_target_classes[target](name=self.name, path=self.path)
+        if target in self._cls_target_classes:
+            return self._cls_target_classes[target](name=self.name, path=self.path)
+        else:
+            return self
 
 
 
