@@ -37,13 +37,13 @@ class Packager(NetworkDiagram,
         self._github_owner = github_owner
         self._pypi_owner = pypi_owner
 
-    @staticmethod
+    @classmethod
     @deco_cache()
-    def summary_packagers():
+    def summary_packagers(cls):
         """ Packagers to hold summary of environment. """
         return [
-            Packager(name="Mandera", github_owner="Mandera"),
-            Packager(name=".github", github_owner="ManderaGeneral"),
+            Packager(name="Mandera", github_owner="Mandera", target=cls.Targets.summary),
+            Packager(name=".github", github_owner="ManderaGeneral", target=cls.Targets.summary),
         ]
 
     def spawn_children(self):
