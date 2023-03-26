@@ -6,8 +6,9 @@ from generalpackager.api.shared.files.file import File
 
 
 class ReadmeFile(File):
-    _relative_path = "README.md"
+    target = File.target - {File.targets.summary}
     aesthetic = True
+    _relative_path = "README.md"
 
 
     CROSS = "❌"
