@@ -69,8 +69,8 @@ class File:
         elif type(self)._generate is File._generate:
             return self._cant_write("._generate is undefined")
 
-        elif self.target != self.owner.target:
-            return self._cant_write(f".target {self.target} doesn't match it owner's {self.owner}")
+        elif self.target is not None and self.target != self.owner.target:
+            return self._cant_write(f".target {self.target} doesn't match its owner's {self.owner}")
 
         elif self.overwrite is False and self.path.exists():
             return self._cant_write(f".overwrite is False and path {self.path} exists")
