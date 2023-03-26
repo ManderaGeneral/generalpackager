@@ -24,7 +24,14 @@ class File:
     remove = False
     overwrite = True
     is_file = True
-    target = None
+    target = set(Targets.field_values_defaults())  # type: Union[str, set[str]]
+
+    @classmethod
+    def has_target(cls, target):
+        if type(cls.target) is set:
+            return target in cls.target
+        else:
+            return target == cls.target
 
     def _generate(self):
         return ""
@@ -73,8 +80,8 @@ class File:
         elif not self.has_generate_instructions():
             return self._cant_write("._generate is undefined")
 
-        elif self.target is not None and self.target != self.owner.target:
-            return self._cant_write(f".target {self.target} doesn't match its owner's {self.owner}")
+        if not self.has_target(target=self.owner.target):
+            return self._cant_write(f"Owner {self.owner}'s target is not in {self.target}")
 
         elif self.overwrite is False and self.path.exists():
             return self._cant_write(f".overwrite is False and path {self.path} exists")
