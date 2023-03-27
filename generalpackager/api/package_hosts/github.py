@@ -15,6 +15,14 @@ class GitHub(PackageHostProtocol, _SharedAPI, _SharedOwner):
         Todo: Get and Set GitHub repo private. """
     DEFAULT_OWNER = "ManderaGeneral"
 
+    @staticmethod
+    def format_version(version):
+        if version:
+            if version.startswith("v"):
+                return version
+            else:
+                return f"v{version}"
+
     def get_version(self):
         raise NotImplementedError
 
@@ -48,8 +56,11 @@ class GitHub(PackageHostProtocol, _SharedAPI, _SharedOwner):
     def download(self, path=None, version=None, overwrite=False):
         """ Clone a GitHub repo into a path, defaults to working_dir / name.
             Creates a folder with Package's name first. """
+        version = self.format_version(version=version)
+        commands = ["git", "clone", self.url]
+
         if version:
-            raise NotImplementedError
+            commands.extend(["--depth", "1", "--branch", version])
 
         if not self.exists():
             return Log(__name__).warning(f"Cannot download {self.name}, couldn't find on GitHub.")
@@ -61,7 +72,7 @@ class GitHub(PackageHostProtocol, _SharedAPI, _SharedOwner):
 
         Log(__name__).info(f"Downloading {self.name} from GitHub.")
         with path.as_working_dir():
-            Terminal("git", "clone", self.url, capture_output=False)
+            Terminal(*commands, capture_output=False)
 
         return path
 
