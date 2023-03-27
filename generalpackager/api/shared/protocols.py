@@ -13,6 +13,10 @@ class PackageHostProtocol:
     def exists(self): raise NotImplementedError
     def get_owners_packages(self): raise NotImplementedError
     def get_version(self): raise NotImplementedError
+
+    # Make it return List[Ver] eventually https://github.com/ManderaGeneral/generalpackager/issues/76
+    def get_all_versions(self) -> List[str]: raise NotImplementedError
+
     def get_date(self): raise NotImplementedError
 
 
