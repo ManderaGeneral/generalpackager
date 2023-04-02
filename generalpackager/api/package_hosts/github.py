@@ -16,15 +16,29 @@ class GitHub(PackageHostProtocol, _SharedAPI, _SharedOwner):
     DEFAULT_OWNER = "ManderaGeneral"
 
     @staticmethod
-    def format_version(version):
+    def tag_is_version(tag):
+        return tag.startswith("v")
+
+    @classmethod
+    def format_version(cls, version):
         if version:
-            if version.startswith("v"):
+            if cls.tag_is_version(tag=version):
                 return version
             else:
                 return f"v{version}"
 
     def get_version(self):
-        raise NotImplementedError
+        terminal = Terminal("gh", "api", "--header", 'Accept: application/vnd.github+json', "--method", "GET", f"/repos/{self.owner}/{self.name}/tags?per_page=1")
+        response = terminal.json()
+        if response:
+            version = response[0]["name"]
+            assert self.tag_is_version(tag=version)
+            return version
+
+    def get_all_versions(self):
+        terminal = Terminal("gh", "api", "--header", 'Accept: application/vnd.github+json', "--method", "GET", f"/repos/{self.owner}/{self.name}/tags", "--paginate")
+        all_tags = [obj["name"] for obj in terminal.json()]
+        return [tag for tag in all_tags if self.tag_is_version(tag=tag)]
 
     def get_date(self):
         raise NotImplementedError

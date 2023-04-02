@@ -80,7 +80,11 @@ class _LocalRepo_Git:
         ls_files = Terminal("git", "ls-files", "--modified").string_result
         return [Path(file) for file in ls_files.splitlines()]
 
-
+    def get_all_versions(self):
+        """ :param generalpackager.LocalRepo self: """
+        with self.path.as_working_dir():
+            terminal = Terminal("git", "tag", "-l", "--sort=-v:refname")
+        return terminal.string_result.splitlines()
 
 
 

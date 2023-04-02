@@ -20,6 +20,9 @@ class NPM(PackageHostProtocol, _SharedAPI, _SharedOwner):
     def get_version(self):
         pass
 
+    def get_all_versions(self):
+        pass
+
     def get_date(self):
         pass
 

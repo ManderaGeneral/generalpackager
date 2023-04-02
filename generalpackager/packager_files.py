@@ -16,8 +16,9 @@ class _PackagerFiles:
             self.localrepo.install(editable=True)
 
     @deco_cache()
-    def _compare_local(self, platform, aesthetic):
-        """ :param generalpackager.Packager self: """
+    def _compare_local(self, package_host, aesthetic):
+        """ :param generalpackager.Packager self:
+            :param generalpackager.api.shared.protocols.PackageHostProtocol package_host: """
         def filt(path):
             """ Filter to return True for files we want to compare. """
             if path.match(*self.git_exclude_lines):
@@ -30,7 +31,8 @@ class _PackagerFiles:
             return True
 
         unpack_target = Path.get_cache_dir() / "Python"
-        package_path = platform.download(path=unpack_target, overwrite=True)
+        version = package_host.get_version()
+        package_path = package_host.download(path=unpack_target, version=version, overwrite=True)
         return self.path.get_differing_files(target=package_path, filt=filt)
 
     def compare_local_to_github(self, aesthetic=None):
@@ -38,14 +40,14 @@ class _PackagerFiles:
 
             :param generalpackager.Packager self:
             :param aesthetic: """
-        return self._compare_local(platform=self.github, aesthetic=aesthetic)
+        return self._compare_local(package_host=self.github, aesthetic=aesthetic)
 
     def compare_local_to_pypi(self, aesthetic=None):
         """ Get a list of changed files compared to pypi with optional aesthetic files.
 
             :param generalpackager.Packager self:
             :param aesthetic: """
-        return self._compare_local(platform=self.pypi, aesthetic=aesthetic)
+        return self._compare_local(package_host=self.pypi, aesthetic=aesthetic)
 
     def _error_on_change(self, files):
         """ :param generalpackager.Packager self: """
