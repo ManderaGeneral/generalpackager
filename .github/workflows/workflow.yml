@@ -46,6 +46,9 @@ jobs:
           pip install -e generalpackager[full]
       - name: Run Packager method 'workflow_unittest'
         run: |
+          python -m pip list
+          ls
+          echo ${Path}
           python -c "from generalpackager import Packager; Packager().workflow_unittest()"
         env:
           GH_TOKEN: ${{ secrets.PACKAGER_GITHUB_API }}
