@@ -22,7 +22,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.GIT_SSH }}
       - name: Set up python version ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '${{ matrix.python-version }}'
       - name: Clone 8 repos
@@ -65,7 +65,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.GIT_SSH }}
       - name: Set up python version 3.11
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
       - name: Clone 8 repos

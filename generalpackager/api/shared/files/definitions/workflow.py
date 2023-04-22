@@ -26,8 +26,8 @@ class WorkflowFile(File):
         return workflow
 
     _commit_msg = "github.event.head_commit.message"
-    _action_checkout = "actions/checkout@v2"
-    _action_setup_python = "actions/setup-python@v2"
+    # _action_checkout = "actions/checkout@v2"
+    _action_setup_python = "actions/setup-python@v4"
     _action_setup_ssh = "webfactory/ssh-agent@v0.7.0"
     _matrix_os = "matrix.os"
     _matrix_python_version = "matrix.python-version"
