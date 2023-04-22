@@ -45,6 +45,7 @@ jobs:
           pip install -e generalpackager[full]
       - name: Run Packager method 'workflow_unittest'
         run: |
+          cd ..
           python -c "from generalpackager import Packager; Packager().workflow_unittest()"
         env:
           GH_TOKEN: ${{ secrets.PACKAGER_GITHUB_API }}
@@ -58,7 +59,7 @@ jobs:
         working-directory: ../../
         run: mkdir main
       - name: Set up Git SSH
-        uses: webfactory/ssh-agent@v0.8.0
+        uses: webfactory/ssh-agent@v0.7.0
         with:
           ssh-private-key: ${{ secrets.GIT_SSH }}
       - name: Set up python version 3.11
@@ -85,6 +86,7 @@ jobs:
           pip install -e generalpackager[full]
       - name: Run Packager method 'workflow_sync'
         run: |
+          cd ..
           python -c "from generalpackager import Packager; Packager().workflow_sync()"
         env:
           GH_TOKEN: ${{ secrets.PACKAGER_GITHUB_API }}
