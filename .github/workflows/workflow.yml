@@ -27,6 +27,8 @@ jobs:
           python-version: '${{ matrix.python-version }}'
       - name: Clone 8 repos
         run: |
+          mkdir repos
+          cd repos
           git clone ssh://git@github.com/ManderaGeneral/generalimport.git
           git clone ssh://git@github.com/ManderaGeneral/generaltool.git
           git clone ssh://git@github.com/ManderaGeneral/generallibrary.git
@@ -37,6 +39,9 @@ jobs:
           git clone ssh://git@github.com/ManderaGeneral/.github.git
       - name: Install 6 repos
         run: |
+          ls
+          cd repos
+          ls
           pip install --upgrade pip
           pip install -e generalimport[full]
           pip install -e generaltool[full]
@@ -48,7 +53,8 @@ jobs:
         run: |
           python -m pip list
           ls
-          echo ${Path}
+          echo "$Path"
+          echo "$PWD"
           python -c "from generalpackager import Packager; Packager().workflow_unittest()"
         env:
           GH_TOKEN: ${{ secrets.PACKAGER_GITHUB_API }}
