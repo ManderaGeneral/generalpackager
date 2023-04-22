@@ -25,6 +25,10 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '${{ matrix.python-version }}'
+      - name: Install necessities
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade setuptools wheel twine
       - name: Clone 8 repos
         run: |
           mkdir repos
@@ -68,6 +72,10 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+      - name: Install necessities
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade setuptools wheel twine
       - name: Clone 8 repos
         run: |
           mkdir repos

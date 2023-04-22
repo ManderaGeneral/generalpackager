@@ -32,6 +32,18 @@ class WorkflowFile(File):
     _matrix_os = "matrix.os"
     _matrix_python_version = "matrix.python-version"
 
+    PIP_NECESSARY_PACKAGES = (
+        "setuptools",
+        "wheel",
+        "twine",
+    )
+
+    def _step_install_necessities(self):
+        run = CodeLine("run: |")
+        run.add_node("python -m pip install --upgrade pip")
+        run.add_node(f"pip install --upgrade {' '.join(self.PIP_NECESSARY_PACKAGES)}")
+        return self._get_step(f"Install necessities", run)
+
     @staticmethod
     def _var(string):
         return f"${{{{ {string} }}}}"
@@ -124,6 +136,7 @@ class WorkflowFile(File):
         steps.add_node(self._step_make_workdir())
         steps.add_node(self._step_setup_ssh())
         steps.add_node(self._step_setup_python(version=python_version))
+        steps.add_node(self._step_install_necessities())
         steps.add_node(self._step_clone_repos())
         steps.add_node(self._step_install_repos())
         return steps
