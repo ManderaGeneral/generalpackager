@@ -12,17 +12,17 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.8', '3.9', '3.10', '3.11']
-        os: [ubuntu-latest]
+        os: [windows-latest, ubuntu-latest]
     steps:
       - name: Create folder
         working-directory: ../../
         run: mkdir main
       - name: Set up Git SSH
-        uses: webfactory/ssh-agent@v0.8.0
+        uses: webfactory/ssh-agent@v0.7.0
         with:
           ssh-private-key: ${{ secrets.GIT_SSH }}
       - name: Set up python version ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v2
         with:
           python-version: '${{ matrix.python-version }}'
       - name: Clone 8 repos
@@ -39,10 +39,7 @@ jobs:
           git clone ssh://git@github.com/ManderaGeneral/.github.git
       - name: Install 6 repos
         run: |
-          ls
           cd repos
-          ls
-          pip install --upgrade pip
           pip install -e generalimport[full]
           pip install -e generaltool[full]
           pip install -e generallibrary[full]
@@ -51,10 +48,6 @@ jobs:
           pip install -e generalpackager[full]
       - name: Run Packager method 'workflow_unittest'
         run: |
-          python -m pip list
-          ls
-          echo "$Path"
-          echo "$PWD"
           python -c "from generalpackager import Packager; Packager().workflow_unittest()"
         env:
           GH_TOKEN: ${{ secrets.PACKAGER_GITHUB_API }}
@@ -77,6 +70,8 @@ jobs:
           python-version: '3.11'
       - name: Clone 8 repos
         run: |
+          mkdir repos
+          cd repos
           git clone ssh://git@github.com/ManderaGeneral/generalimport.git
           git clone ssh://git@github.com/ManderaGeneral/generaltool.git
           git clone ssh://git@github.com/ManderaGeneral/generallibrary.git
@@ -87,6 +82,7 @@ jobs:
           git clone ssh://git@github.com/ManderaGeneral/.github.git
       - name: Install 6 repos
         run: |
+          cd repos
           pip install -e generalimport[full]
           pip install -e generaltool[full]
           pip install -e generallibrary[full]

@@ -9,6 +9,8 @@ class WorkflowFile(File):
     _relative_path = ".github/workflows/workflow.yml"
     aesthetic = False
 
+    REPOS_PATH = "repos"
+
     def _generate(self):
         workflow = CodeLine()
         workflow.indent_str = " " * 2
@@ -87,6 +89,8 @@ class WorkflowFile(File):
         packagers = self.packager.workflow_packagers
         step = CodeLine(f"- name: Clone {len(packagers)} repos")
         run = step.add_node(f"run: |")
+        run.add_node("mkdir repos")
+        run.add_node("cd repos")
 
         for packager in packagers:
             run.add_node(packager.github.git_clone_command)
@@ -98,6 +102,7 @@ class WorkflowFile(File):
 
         step = CodeLine(f"- name: Install {len(packagers)} repos")
         run = step.add_node(f"run: |")
+        run.add_node(f"cd {self.REPOS_PATH}")
 
         for packager in packagers:
             if packager.target == Targets.python:
