@@ -151,7 +151,6 @@ class WorkflowFile(File):
 
     def _step_run_packager_method(self, method):
         run = CodeLine(f'run: |')
-        run.add_node(f'cd ..')
         run.add_node(f'python -c "from generalpackager import Packager; Packager().{method}()"')
         return self._get_step(f"Run Packager method '{method}'", run, self._get_env())
 

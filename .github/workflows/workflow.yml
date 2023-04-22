@@ -37,6 +37,7 @@ jobs:
           git clone ssh://git@github.com/ManderaGeneral/.github.git
       - name: Install 6 repos
         run: |
+          pip install --upgrade pip
           pip install -e generalimport[full]
           pip install -e generaltool[full]
           pip install -e generallibrary[full]
@@ -45,7 +46,6 @@ jobs:
           pip install -e generalpackager[full]
       - name: Run Packager method 'workflow_unittest'
         run: |
-          cd ..
           python -c "from generalpackager import Packager; Packager().workflow_unittest()"
         env:
           GH_TOKEN: ${{ secrets.PACKAGER_GITHUB_API }}
@@ -86,7 +86,6 @@ jobs:
           pip install -e generalpackager[full]
       - name: Run Packager method 'workflow_sync'
         run: |
-          cd ..
           python -c "from generalpackager import Packager; Packager().workflow_sync()"
         env:
           GH_TOKEN: ${{ secrets.PACKAGER_GITHUB_API }}
