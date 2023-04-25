@@ -1,7 +1,6 @@
 
 from generalfile import Path
-from generallibrary import EnvVar, Log, Terminal
-
+from generallibrary import EnvVar, Log, Terminal, classproperty, deco_cache
 
 
 def workflow(func):
@@ -15,11 +14,16 @@ def workflow(func):
 
 
 class _PackagerWorkflow:
+    @classproperty
+    @deco_cache()
+    def workflow_packagers(cls):
+        """ :param generalpackager.Packager cls: """
+        return cls.get_ordered_packagers(include_private=False, include_summary_packagers=True)
+
     def run_ordered_methods(self, *funcs):
         """ :param generalpackager.Packager self: """
-        order = self.get_ordered_packagers()
         for func in funcs:
-            for packager in order:
+            for packager in self.workflow_packagers:
                 func(packager)
 
     @workflow
@@ -46,6 +50,8 @@ class _PackagerWorkflow:
 
         any_bumped = any(self.general_bumped_set())
 
+
+        # HERE **
         self.run_ordered_methods(
             lambda packager: packager.if_publish_bump(any_bumped=any_bumped),
             lambda packager: packager.generate_localfiles(include_aesthetic=False),
@@ -62,7 +68,7 @@ class _PackagerWorkflow:
 
     def upload_package_summary(self, msg):
         """ :param generalpackager.Packager self: """
-        self.org_readme_file.generate()
+        assert self.org_readme_file.generate()
         self.commit_and_push(message=msg)
 
     def if_publish_bump(self, any_bumped):

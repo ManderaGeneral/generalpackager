@@ -15,8 +15,30 @@ class GitHub(PackageHostProtocol, _SharedAPI, _SharedOwner):
         Todo: Get and Set GitHub repo private. """
     DEFAULT_OWNER = "ManderaGeneral"
 
+    @staticmethod
+    def tag_is_version(tag):
+        return tag.startswith("v")
+
+    @classmethod
+    def format_version(cls, version):
+        if version:
+            if cls.tag_is_version(tag=version):
+                return version
+            else:
+                return f"v{version}"
+
     def get_version(self):
-        raise NotImplementedError
+        terminal = Terminal("gh", "api", "--header", 'Accept: application/vnd.github+json', "--method", "GET", f"/repos/{self.owner}/{self.name}/tags?per_page=1")
+        response = terminal.json()
+        if response:
+            version = response[0]["name"]
+            assert self.tag_is_version(tag=version)
+            return version
+
+    def get_all_versions(self):
+        terminal = Terminal("gh", "api", "--header", 'Accept: application/vnd.github+json', "--method", "GET", f"/repos/{self.owner}/{self.name}/tags", "--paginate")
+        all_tags = [obj["name"] for obj in terminal.json()]
+        return [tag for tag in all_tags if self.tag_is_version(tag=tag)]
 
     def get_date(self):
         raise NotImplementedError
@@ -48,8 +70,11 @@ class GitHub(PackageHostProtocol, _SharedAPI, _SharedOwner):
     def download(self, path=None, version=None, overwrite=False):
         """ Clone a GitHub repo into a path, defaults to working_dir / name.
             Creates a folder with Package's name first. """
+        version = self.format_version(version=version)
+        commands = ["git", "clone", self.url]
+
         if version:
-            raise NotImplementedError
+            commands.extend(["--depth", "1", "--branch", version])
 
         if not self.exists():
             return Log(__name__).warning(f"Cannot download {self.name}, couldn't find on GitHub.")
@@ -61,7 +86,7 @@ class GitHub(PackageHostProtocol, _SharedAPI, _SharedOwner):
 
         Log(__name__).info(f"Downloading {self.name} from GitHub.")
         with path.as_working_dir():
-            Terminal("git", "clone", self.url, capture_output=False)
+            Terminal(*commands, capture_output=False)
 
         return path
 

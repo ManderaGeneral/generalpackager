@@ -11,23 +11,22 @@ class _PackagerGitHub:
         assert self.github.set_description(self.localrepo.metadata.description).ok
         assert self.github.set_topics(*self.get_topics()).ok
 
-    def push(self, tag=None):
+    def push(self, version=None):
         """ :param generalpackager.Packager self: """
-        if tag:
-            tag = f"v{self.localrepo.metadata.version}"
-        self.localrepo.push(url=self.github.ssh_url, tag=tag)
+        version = self.GitHub.format_version(version=version)
+        self.localrepo.push(url=self.github.ssh_url, tag=version)
 
-    def commit_and_push(self, message=None, tag=None):
+    def commit_and_push(self, message=None, version=None):
         """ Commit and push this local repo to GitHub.
             Return short sha1 of pushed commit.
 
             :param generalpackager.Packager self: """
         # Bad hard-coded quick fix
-        if "Sync" in message and tag:
+        if "Sync" in message and version:
             message = message.replace("Sync", "Publish")
 
         if self.localrepo.commit(message=message):
-            self.push(tag=tag)
+            self.push(version=version)
 
     def create_github_repo(self):
         """ :param generalpackager.Packager self: """

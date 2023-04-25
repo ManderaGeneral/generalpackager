@@ -5,8 +5,11 @@ from generalpackager.api.shared.files.file import File
 
 
 class WorkflowFile(File):
+    target = File.target - {File.targets.summary}
     _relative_path = ".github/workflows/workflow.yml"
     aesthetic = False
+
+    REPOS_PATH = "repos"
 
     def _generate(self):
         workflow = CodeLine()
@@ -23,11 +26,23 @@ class WorkflowFile(File):
         return workflow
 
     _commit_msg = "github.event.head_commit.message"
-    _action_checkout = "actions/checkout@v2"
-    _action_setup_python = "actions/setup-python@v2"
-    _action_setup_ssh = "webfactory/ssh-agent@v0.5.3"
+    # _action_checkout = "actions/checkout@v2"
+    _action_setup_python = "actions/setup-python@v4"
+    _action_setup_ssh = "webfactory/ssh-agent@v0.7.0"
     _matrix_os = "matrix.os"
     _matrix_python_version = "matrix.python-version"
+
+    PIP_NECESSARY_PACKAGES = (
+        "setuptools",
+        "wheel",
+        "twine",
+    )
+
+    def _step_install_necessities(self):
+        run = CodeLine("run: |")
+        run.add_node("python -m pip install --upgrade pip")
+        run.add_node(f"pip install --upgrade {' '.join(self.PIP_NECESSARY_PACKAGES)}")
+        return self._get_step(f"Install necessities", run)
 
     @staticmethod
     def _var(string):
@@ -83,10 +98,11 @@ class WorkflowFile(File):
 
     def _step_clone_repos(self):
         """ Supply Packagers to create git install steps for. """
-        packagers = self.packager.get_ordered_packagers(include_private=False, include_summary_packagers=True)
-
+        packagers = self.packager.workflow_packagers
         step = CodeLine(f"- name: Clone {len(packagers)} repos")
         run = step.add_node(f"run: |")
+        run.add_node("mkdir repos")
+        run.add_node("cd repos")
 
         for packager in packagers:
             run.add_node(packager.github.git_clone_command)
@@ -94,10 +110,11 @@ class WorkflowFile(File):
 
     def _step_install_repos(self):
         """ Supply Packagers to create git install steps for. """
-        packagers = self.packager.get_ordered_packagers(include_private=False)
+        packagers = [packager for packager in self.packager.workflow_packagers if packager.target == Targets.python]
 
         step = CodeLine(f"- name: Install {len(packagers)} repos")
         run = step.add_node(f"run: |")
+        run.add_node(f"cd {self.REPOS_PATH}")
 
         for packager in packagers:
             if packager.target == Targets.python:
@@ -119,6 +136,7 @@ class WorkflowFile(File):
         steps.add_node(self._step_make_workdir())
         steps.add_node(self._step_setup_ssh())
         steps.add_node(self._step_setup_python(version=python_version))
+        steps.add_node(self._step_install_necessities())
         steps.add_node(self._step_clone_repos())
         steps.add_node(self._step_install_repos())
         return steps

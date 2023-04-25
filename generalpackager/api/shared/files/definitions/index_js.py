@@ -6,6 +6,7 @@ from generalpackager.api.shared.files.file import File
 class IndexJsFile(File):
     _relative_path = "index.js"
     overwrite = False
+    aesthetic = True
     target = File.targets.node
 
     def _generate(self):

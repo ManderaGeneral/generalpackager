@@ -3,7 +3,7 @@ import re
 import requests
 
 from generalfile import Path
-from generallibrary import Ver, Date, get
+from generallibrary import Ver, Date, get, remove_duplicates, Log
 from generalpackager.api.shared.name import _SharedAPI
 from generalpackager.api.shared.owner import _SharedOwner
 from generalpackager.api.shared.protocols import PackageHostProtocol
@@ -31,6 +31,19 @@ class PyPI(PackageHostProtocol, _SharedAPI, _SharedOwner):
     @property
     def url(self):
         return f"https://pypi.org/project/{self.name}/"
+
+    @property
+    def json_endpoint(self, version=None):
+        if version:
+            version = f"/{version}"
+        else:
+            version = ""
+            Log(__name__).warning("The releases key is deprecated: https://warehouse.pypa.io/api-reference/json.html")
+
+        url = f"https://pypi.org/pypi/{self.name}{version}/json"
+        request = requests.get(url)
+        request.raise_for_status()
+        return requests.get(url).json()
 
     def exists(self):
         """ Return whether this API's target exists. """
@@ -65,6 +78,19 @@ class PyPI(PackageHostProtocol, _SharedAPI, _SharedOwner):
             Todo: Find a faster fetch for latest PyPI version and datetime. """
         version = get(re.findall(f"{self.name} ([.0-9]+)\n", requests.get(self.url).text), 0)
         return Ver(version) if version else None
+
+    def _json_metadata(self):
+        return requests.get(self.url_json).json()
+
+    def get_all_versions(self):
+        url = f"https://pypi.org/simple/{self.name}"
+        text = requests.get(url=url).text
+
+        find = re.findall(rf">{self.name}-(\d+(?:\.\d+){{0,2}})", text)
+        unique = remove_duplicates(find)
+        versions = [Ver(version) for version in unique]
+        versions.sort(reverse=True)
+        return versions
 
     def get_date(self):
         """ Get datetime of latest release. """
