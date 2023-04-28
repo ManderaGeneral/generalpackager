@@ -94,7 +94,7 @@ class TestPackager(PathTest):
         def a(_): x.append(1)
         def b(_): x.append(2)
         Packager().run_ordered_methods(a, b)
-        length = len(Packager().get_all())
+        length = len(Packager().workflow_packagers())
         self.assertEqual([1] * length + [2] * length, x)
 
 
