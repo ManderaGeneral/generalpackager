@@ -14,7 +14,6 @@ def workflow(func):
 
 
 class _PackagerWorkflow:
-    @classproperty
     @deco_cache()
     def workflow_packagers(cls):
         """ :param generalpackager.Packager cls: """
@@ -23,7 +22,7 @@ class _PackagerWorkflow:
     def run_ordered_methods(self, *funcs):
         """ :param generalpackager.Packager self: """
         for func in funcs:
-            for packager in self.workflow_packagers:
+            for packager in self.workflow_packagers():
                 func(packager)
 
     @workflow
