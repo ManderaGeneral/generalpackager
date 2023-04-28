@@ -5,7 +5,7 @@ from generalpackager.api.shared.files.file import File
 
 
 class WorkflowFile(File):
-    target = File.target - {File.targets.summary}
+    target = File.targets.python
     _relative_path = ".github/workflows/workflow.yml"
     aesthetic = False
 
