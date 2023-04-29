@@ -56,7 +56,7 @@ class File:
 
     def _cant_write(self, msg):
         logger = getLogger(__name__)
-        logger.info(f"Can't write '{self.relative_path}' - {msg}")
+        logger.info(f"Can't write '{type(self).__name__}' - {msg}")
         return False
 
     def can_write(self):
