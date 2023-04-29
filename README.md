@@ -23,12 +23,12 @@ Tools to interface GitHub, PyPI, NPM and local modules / repos. Used for generat
 
 ```mermaid
 flowchart LR
-2([library]) --> 4([vector])
-0([import]) --> 3([file])
 0([import]) --> 2([library])
+2([library]) --> 4([vector])
+2([library]) --> 5([packager])
 2([library]) --> 3([file])
 1([tool]) --> 2([library])
-2([library]) --> 5([packager])
+0([import]) --> 3([file])
 3([file]) --> 5([packager])
 click 0 "https://github.com/ManderaGeneral/generalimport"
 click 1 "https://github.com/ManderaGeneral/generaltool"
@@ -163,11 +163,12 @@ style 5 fill:#482
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/files/definitions/index_js.py#L6'>Class: index_js_file</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/decos.py#L4'>Method: init</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/files/definitions/init.py#L6'>Class: init_file</a>
-│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L28'>Method: is_django</a>
-│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L32'>Method: is_exe</a>
+│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L29'>Method: is_django</a>
+│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L33'>Method: is_exe</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/name.py#L40'>Method: is_general</a>
-│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L24'>Method: is_node</a>
-│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L20'>Method: is_python</a>
+│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L25'>Method: is_node</a>
+│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L21'>Method: is_python</a>
+│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L37'>Method: is_summary</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/files/definitions/license.py#L6'>Class: license_file</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/files/definitions/manifest.py#L5'>Class: manifest_file</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/localrepo/base/localrepo.py#L34'>Property: metadata</a>
@@ -214,8 +215,8 @@ style 5 fill:#482
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/localmodule.py#L9'>Class: LocalModule</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/localrepo/base/localrepo.py#L17'>Class: LocalRepo</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager.py#L17'>Class: Packager</a>
-│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L37'>Class: Packages</a>
-│  │  └─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L62'>Method: all_packages</a>
+│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L42'>Class: Packages</a>
+│  │  └─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L67'>Method: all_packages</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/package_hosts/pypi.py#L27'>Class: PyPI</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L8'>Class: Targets</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_github.py#L22'>Method: commit_and_push</a>
@@ -251,11 +252,12 @@ style 5 fill:#482
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/files/definitions/index_js.py#L6'>Class: index_js_file</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/files/definitions/init.py#L6'>Class: init_file</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_metadata.py#L35'>Method: is_bumped</a>
-│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L28'>Method: is_django</a>
-│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L32'>Method: is_exe</a>
+│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L29'>Method: is_django</a>
+│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L33'>Method: is_exe</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/name.py#L40'>Method: is_general</a>
-│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L24'>Method: is_node</a>
-│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L20'>Method: is_python</a>
+│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L25'>Method: is_node</a>
+│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L21'>Method: is_python</a>
+│  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L37'>Method: is_summary</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/files/definitions/license.py#L6'>Class: license_file</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_api.py#L88'>Property: localmodule</a>
 │  ├─ <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_api.py#L54'>Method: localmodule_available</a>
@@ -340,22 +342,22 @@ Please hold off on submitting pull requests until all the necessary legal issues
 
 | Module                                                                                                                                                      | Message                                                                                                                                                                                                          |
 |:------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_api.py#L1'>packager_api.py</a>                              | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_api.py#L43'>Check that every API has create an *_available method</a>                                            |
-| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L1'>packager_files.py</a>                          | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L9'>Fix create_blank, it overwrites current projects pip install.</a>                                   |
 | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_github.py#L1'>packager_github.py</a>                        | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_github.py#L44'>Setup env vars for project.</a>                                                                   |
+| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_api.py#L1'>packager_api.py</a>                              | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_api.py#L43'>Check that every API has create an *_available method</a>                                            |
 | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/files/definitions/readme.py#L1'>readme.py</a>             | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/files/definitions/readme.py#L166'>Sort todos by name to decrease automatic commit changes.</a>                 |
-| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L1'>target.py</a>                               | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L39'>Generate Python file in generalpackager containing general packages.</a>                        |
+| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L1'>target.py</a>                               | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/shared/target.py#L44'>Generate Python file in generalpackager containing general packages.</a>                        |
 | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/package_hosts/github.py#L1'>github.py</a>                        | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/package_hosts/github.py#L15'>Get and Set GitHub repo private.</a>                                                     |
 | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/package_hosts/pypi.py#L1'>pypi.py</a>                            | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/package_hosts/pypi.py#L13'>Move download to it's own package.</a>                                                     |
 | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/package_hosts/pypi.py#L1'>pypi.py</a>                            | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/package_hosts/pypi.py#L78'>Find a faster fetch for latest PyPI version and datetime.</a>                              |
 | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/localrepo/base/localrepo.py#L1'>localrepo.py</a>                 | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/localrepo/base/localrepo.py#L22'>Search for imports to list dependencies.</a>                                         |
 | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/localrepo/python/localrepo_python.py#L1'>localrepo_python.py</a> | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/localrepo/python/localrepo_python.py#L77'>Make sure twine is installed when trying to upload to pypi.</a>             |
 | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/localrepo/python/localrepo_python.py#L1'>localrepo_python.py</a> | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/api/localrepo/python/localrepo_python.py#L78'>Look into private PyPI server where we could also do dry runs for test.</a> |
+| <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L1'>packager_files.py</a>                          | <a href='https://github.com/ManderaGeneral/generalpackager/blob/master/generalpackager/packager_files.py#L9'>Fix create_blank, it overwrites current projects pip install.</a>                                   |
 </details>
 
 
 <sup>
-Generated 2023-04-29 02:39 CEST for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
+Generated 2023-04-29 02:56 CEST for commit <a href='https://github.com/ManderaGeneral/generalpackager/commit/master'>master</a>.
 </sup>
 </details>
 
