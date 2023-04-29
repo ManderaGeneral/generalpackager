@@ -1,5 +1,5 @@
 from generalfile import Path
-from generallibrary import Terminal
+from generallibrary import Terminal, Log
 from generalpackager.api.shared.decos import deco_path_as_working_dir
 
 
@@ -35,6 +35,7 @@ class _LocalRepo_Git:
         """ Tries to commit. If credentials are missing then it sets them and tries once more.
 
             :param generalpackager.LocalRepo self: """
+        Log(__name__).debug(f"Commiting for {self} in working dir {Path.get_working_dir()}")
         terminal = Terminal("git", "commit", "-a", "-m", message or "No commit message", error=False)
         if terminal.success:
             return True
