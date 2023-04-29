@@ -15,3 +15,4 @@ from generalpackager.api.package_hosts.pypi import PyPI
 from generalpackager.api.venv import Venv
 
 interconnect(Packager, LocalRepo, LocalModule, GitHub, PyPI)
+
