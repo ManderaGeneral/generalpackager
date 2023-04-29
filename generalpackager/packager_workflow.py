@@ -55,7 +55,7 @@ class _PackagerWorkflow:
             lambda packager: packager.localrepo.run_tests(),  # Will set coverage percentage
             lambda packager, msg=msg1: packager.localrepo.commit(message=msg),  # Will update commit_sha
             lambda packager: packager.generate_localfiles(include_aesthetic=True),  # With coverage number and commit_sha
-            lambda packager, msg=msg2: packager.commit_and_push(message=msg, tag=packager.is_bumped()),
+            lambda packager, msg=msg2: packager.commit_and_push(message=msg, version=packager.is_bumped()),
             lambda packager: packager.if_publish_upload(),
             lambda packager: packager.sync_github_metadata(),
         )

@@ -13,6 +13,9 @@ class _PackagerGitHub:
 
     def push(self, version=None):
         """ :param generalpackager.Packager self: """
+        if version is True:
+            version = self.localrepo.metadata.version
+
         version = self.GitHub.format_version(version=version)
         self.localrepo.push(url=self.github.ssh_url, tag=version)
 
