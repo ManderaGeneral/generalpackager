@@ -98,7 +98,7 @@ class WorkflowFile(File):
 
     def _step_clone_repos(self):
         """ Supply Packagers to create git install steps for. """
-        packagers = self.packager.workflow_packagers()
+        packagers = self.packager.get_ordered_packagers(include_private=False, include_summary_packagers=True)
         step = CodeLine(f"- name: Clone {len(packagers)} repos")
         run = step.add_node(f"run: |")
         run.add_node("mkdir repos")
