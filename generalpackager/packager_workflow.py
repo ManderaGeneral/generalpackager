@@ -17,7 +17,7 @@ class _PackagerWorkflow:
     @deco_cache()
     def workflow_packagers(cls):
         """ :param generalpackager.Packager cls: """
-        return cls.get_ordered_packagers(include_private=False, include_summary_packagers=True)
+        return cls.get_ordered_packagers(include_private=False, include_summary_packagers=False)
 
     def run_ordered_methods(self, *funcs):
         """ :param generalpackager.Packager self: """
@@ -49,8 +49,6 @@ class _PackagerWorkflow:
 
         any_bumped = any(self.general_bumped_set())
 
-
-        # HERE **
         self.run_ordered_methods(
             lambda packager: packager.if_publish_bump(any_bumped=any_bumped),
             lambda packager: packager.generate_localfiles(include_aesthetic=False),
