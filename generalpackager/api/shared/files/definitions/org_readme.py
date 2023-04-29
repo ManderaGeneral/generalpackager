@@ -4,7 +4,7 @@ from generalpackager.api.shared.files.file import File
 
 
 class OrgReadmeFile(File):
-    target = File.targets.summary
+    target = File.targets.python
 
     @property
     def _relative_path(self):

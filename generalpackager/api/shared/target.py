@@ -10,7 +10,6 @@ class Targets(DataClass):
     node = "node"
     django = "django"
     exe = "exe"
-    summary = "summary"
 
 _DEFAULT_TARGET = Targets.python
 
@@ -33,10 +32,6 @@ class _SharedTarget:
     def is_exe(self):
         """ :param generalpackager.Packager or generalpackager.LocalRepo self: """
         return self.target == Targets.exe
-
-    def is_summary(self):
-        """ :param generalpackager.Packager or generalpackager.LocalRepo self: """
-        return self.target == Targets.summary
 
 
 class Packages(Targets):
