@@ -34,6 +34,15 @@ class File:
         self.owner = owner
 
     @property
+    def name(self):
+        return self.fullname[:-4] if self.fullname.endswith("File") else self.fullname
+        # return self.fullname.removesuffix("File") # 3.9+
+
+    @property
+    def fullname(self):
+        return type(self).__name__
+
+    @property
     @deco_cache()
     def packager(self):
         return self.owner if type(self.owner).__name__ == "Packager" else None
@@ -56,7 +65,7 @@ class File:
 
     def _cant_write(self, msg):
         logger = getLogger(__name__)
-        logger.info(f"Can't write '{type(self).__name__}' - {msg}")
+        logger.info(f"Can't write '{self.fullname}' - {msg}")
         return False
 
     def can_write(self):
