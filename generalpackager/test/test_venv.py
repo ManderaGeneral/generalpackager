@@ -3,8 +3,10 @@ from generallibrary import Log
 from generalpackager.api.venv import Venv
 
 
-class TestPyPI(PathTest):
+class TestVenv(PathTest):
     def test_create_venv(self):
+        prev_venv = Venv.get_active_venv().path
+
         venv = Venv("new_venv")
         self.assertEqual(False, venv.exists())
 
@@ -17,8 +19,11 @@ class TestPyPI(PathTest):
             self.assertIn(venv.path, venv.list_venv_paths())
         self.assertEqual(False, venv.active())
 
+        self.assertEqual(prev_venv, Venv.get_active_venv().path)
         venv.upgrade()
         venv.python_version()
+        self.assertEqual(prev_venv, Venv.get_active_venv().path)
+
 
     def test_list_python_versions(self):
         Log("root").configure_stream()  # Would be nice to configure artifact for github actions https://github.com/ManderaGeneral/generallibrary/issues/25
