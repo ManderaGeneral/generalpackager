@@ -9,14 +9,15 @@ class WorkflowFile(File):
     _relative_path = ".github/workflows/workflow.yml"
     aesthetic = False
 
-    REPOS_PATH = "repos"
-
-    def _generate(self):
+    def codeline(self):
         workflow = CodeLine()
         workflow.indent_str = " " * 2
+        return workflow
 
+    def _generate(self):
+        workflow = self.codeline()
         workflow.add_node(self._get_name())
-        workflow.add_node(self._get_triggers())
+        workflow.add_node(self._get_triggers(on_master=True))
         workflow.add_node(self._get_defaults())
 
         jobs = workflow.add_node("jobs:")
@@ -37,6 +38,12 @@ class WorkflowFile(File):
         "wheel",
         "twine",
     )
+    REPOS_PATH = "repos"
+    MASTER_BRANCHES = (
+        "master",
+        "main",
+    )
+
 
     def _step_install_necessities(self):
         run = CodeLine("run: |")
@@ -55,11 +62,16 @@ class WorkflowFile(File):
         return f"if: {' && '.join(checks)}"
 
     def _get_name(self):
-        name = CodeLine("name: workflow")
+        name = CodeLine(f"name: {self.name}")
         return name
 
-    def _get_triggers(self):
-        on = CodeLine("on: push", space_after=1)
+    def _get_triggers(self, on_master):
+        on_branch_key = "branches" if on_master else "branches-ignore"
+
+        on = CodeLine("on:", space_after=1)
+        branches = on.add_node("push:").add_node(f"{on_branch_key}:")
+        for branch in self.MASTER_BRANCHES:
+            branches.add_node(f"- {branch}")
         return on
 
     def _get_defaults(self):
@@ -150,7 +162,7 @@ class WorkflowFile(File):
 
     def _get_unittest_job(self):
         job = CodeLine("unittest:")
-        job.add_node(self._commit_msg_if("github.ref == 'refs/heads/master'", SKIP=False, AUTO=False))
+        job.add_node(self._commit_msg_if(SKIP=False, AUTO=False))
         job.add_node(f"runs-on: {self._var(self._matrix_os)}")
         job.add_node(self._get_strategy())
 
