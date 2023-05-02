@@ -125,7 +125,7 @@ class WorkflowFile(File):
         env = CodeLine("env:")
         for packager in self.packager.get_all():
             for env_var in packager.localmodule.get_env_vars(error=False):
-                if env_var.actions_name and env_var.name not in str(env):  # Coupled to generallibrary.EnvVar
+                if env_var.actions_name and env_var.name not in str(env):
                     env.add_node(f"{env_var.name}: {env_var.actions_name}")
         if not env.get_children():
             return None
