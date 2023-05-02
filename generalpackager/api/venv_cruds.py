@@ -30,7 +30,9 @@ class Crud_sys_path(Crud):
         self.obj.insert(0, str(self.value))
 
     def unset(self):
-        sys.path.remove(str(self.value))
+        value = str(self.value)
+        if value in sys.path:
+            sys.path.remove(value)
 
 
 class Crud_Path_Lines(Crud):
