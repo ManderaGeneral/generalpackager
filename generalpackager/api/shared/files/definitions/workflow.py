@@ -9,6 +9,9 @@ class WorkflowFile(File):
     _relative_path = ".github/workflows/workflow.yml"
     aesthetic = False
 
+    ON_MASTER = True
+    INCLUDE_ENVS = True
+
     def codeline(self):
         workflow = CodeLine()
         workflow.indent_str = " " * 2
@@ -17,7 +20,7 @@ class WorkflowFile(File):
     def _generate(self):
         workflow = self.codeline()
         workflow.add_node(self._get_name())
-        workflow.add_node(self._get_triggers(on_master=True))
+        workflow.add_node(self._get_triggers())
         workflow.add_node(self._get_defaults())
 
         jobs = workflow.add_node("jobs:")
@@ -65,10 +68,10 @@ class WorkflowFile(File):
         name = CodeLine(f"name: {self.name}")
         return name
 
-    def _get_triggers(self, on_master):
-        on_branch_key = "branches" if on_master else "branches-ignore"
+    def _get_triggers(self):
+        on_branch_key = "branches" if self.ON_MASTER else "branches-ignore"
 
-        on = CodeLine("on:", space_after=1)
+        on = CodeLine("on:")
         branches = on.add_node("push:").add_node(f"{on_branch_key}:")
         for branch in self.MASTER_BRANCHES:
             branches.add_node(f"- {branch}")
@@ -76,7 +79,7 @@ class WorkflowFile(File):
 
     def _get_defaults(self):
         defaults = CodeLine("defaults:")
-        defaults.add_node("run:").add_node("working-directory: ../../main", space_after=1)
+        defaults.add_node("run:").add_node("working-directory: ../../main")
         return defaults
 
     def _get_step(self, name, *codelines):
@@ -108,9 +111,9 @@ class WorkflowFile(File):
         run = CodeLine(f"run: pip install {' '.join(names)}")
         return self._get_step(f"Install pip packages {comma_and_and(*names, period=False)}", run)
 
-    def _step_clone_repos(self):
+    def _step_clone_repos(self, include_summary_packagers):
         """ Supply Packagers to create git install steps for. """
-        packagers = self.packager.get_ordered_packagers(include_private=False, include_summary_packagers=True)
+        packagers = self.packager.get_ordered_packagers(include_private=False, include_summary_packagers=include_summary_packagers)
         step = CodeLine(f"- name: Clone {len(packagers)} repos")
         run = step.add_node(f"run: |")
         run.add_node("mkdir repos")
@@ -143,13 +146,13 @@ class WorkflowFile(File):
             return None
         return env
 
-    def _steps_setup(self, python_version):
+    def _steps_setup(self, python_version, include_summary_packagers):
         steps = CodeLine("steps:")
         steps.add_node(self._step_make_workdir())
         steps.add_node(self._step_setup_ssh())
         steps.add_node(self._step_setup_python(version=python_version))
         steps.add_node(self._step_install_necessities())
-        steps.add_node(self._step_clone_repos())
+        steps.add_node(self._step_clone_repos(include_summary_packagers=include_summary_packagers))
         steps.add_node(self._step_install_repos())
         return steps
 
@@ -167,7 +170,7 @@ class WorkflowFile(File):
         job.add_node(self._get_strategy())
 
         python_version = self._var(self._matrix_python_version)
-        steps = job.add_node(self._steps_setup(python_version=python_version))
+        steps = job.add_node(self._steps_setup(python_version=python_version, include_summary_packagers=False))
         steps.add_node(self._step_run_packager_method("workflow_unittest"))
         return job
 
@@ -175,13 +178,18 @@ class WorkflowFile(File):
         job = CodeLine("sync:")
         job.add_node("needs: unittest")
         job.add_node(f"runs-on: ubuntu-latest")
-        steps = job.add_node(self._steps_setup(python_version=self.packager.python[-1]))
+        steps = job.add_node(self._steps_setup(python_version=self.packager.python[-1], include_summary_packagers=True))
         steps.add_node(self._step_run_packager_method("workflow_sync"))
         return job
 
     def _step_run_packager_method(self, method):
-        run = CodeLine(f'run: |')
+        step = self._get_step(f"Run Packager method '{method}'")
+
+        run = step.add_node(f'run: |')
         run.add_node(f"cd {self.REPOS_PATH}")
         run.add_node(f'python -c "from generalpackager import Packager; Packager().{method}()"')
-        return self._get_step(f"Run Packager method '{method}'", run, self._get_env())
+
+        if self.INCLUDE_ENVS:
+            step.add_node(self._get_env())
+        return step
 

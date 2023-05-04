@@ -1,7 +1,7 @@
 from logging import getLogger
 
 from generalfile import Path
-from generallibrary import deco_cache
+from generallibrary import deco_cache, CodeLine
 from generalpackager.api.shared.target import Targets
 
 
@@ -27,7 +27,7 @@ class File:
     target = Targets.python  # Should probably default to None, and then I put python on most files
 
     def _generate(self):
-        return ""
+        return "" or CodeLine()
 
     def __init__(self, owner):
         """ :param generalpackager.Packager or generalpackager.LocalRepo owner: """
@@ -87,16 +87,25 @@ class File:
         else:
             return True
 
+    def get_generate_text(self):
+        """ Make all top children have one space after. """
+        text = self._generate()
+        if type(text) is CodeLine:
+            for codeline in text.get_children():
+                last_child = codeline.get_child(depth=-1, index=-1, include_self=True)
+                last_child.space_after = 1
+        return text
+
     def generate(self):
         logger = getLogger(__name__)
+
         if self.can_write():
             logger.info(f"Writing to '{self.relative_path}' for '{self.owner.name}'")
-            return self.path.text.write(text=f"{self._generate()}\n", overwrite=self.overwrite)
+            return self.path.text.write(text=f"{self.get_generate_text()}\n", overwrite=self.overwrite)
+
         elif self.remove:
             logger.info(f"Deleting '{self.relative_path}' for '{self.owner.name}'")
             self.path.delete()
-        # else:
-        #     logger.warning(f"Generate for '{self.path}' could neither write nor remove.")
 
     def __str__(self):
         return f"<File: {self.owner.name} - {self.relative_path}>"
