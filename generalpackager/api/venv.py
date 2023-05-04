@@ -21,6 +21,12 @@ class Venv(DecoContext, _Venv_Cruds):
             return Venv(path=active_venv_path)
 
     @classmethod
+    def get_active_venv_path(cls):
+        active_venv = cls.get_active_venv()
+        if active_venv:
+            return active_venv.path
+
+    @classmethod
     def get_active_python(cls, local):
         active_venv = cls.get_active_venv()
         if active_venv is None:
