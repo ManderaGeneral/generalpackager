@@ -5,7 +5,7 @@ from generalpackager.api.venv import Venv
 
 class TestVenv(PathTest):
     def test_create_venv(self):
-        prev_venv = Venv.get_active_venv().path
+        prev_venv_path = Venv.get_active_venv_path()
 
         venv = Venv("new_venv")
         self.assertEqual(False, venv.exists())
@@ -19,10 +19,10 @@ class TestVenv(PathTest):
             self.assertIn(venv.path, venv.list_venv_paths())
         self.assertEqual(False, venv.active())
 
-        self.assertEqual(prev_venv, Venv.get_active_venv().path)
+        self.assertEqual(prev_venv_path, Venv.get_active_venv_path())
         venv.upgrade()
         venv.python_version()
-        self.assertEqual(prev_venv, Venv.get_active_venv().path)
+        self.assertEqual(prev_venv_path, Venv.get_active_venv_path())
 
 
     def test_list_python_versions(self):
