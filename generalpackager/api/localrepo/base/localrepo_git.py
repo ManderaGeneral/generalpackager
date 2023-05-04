@@ -36,12 +36,16 @@ class _LocalRepo_Git:
 
             :param generalpackager.LocalRepo self: """
         Log(__name__).debug(f"Commiting for {self} in working dir {Path.get_working_dir()}")
+        Terminal("git", "add", ".")
         terminal = Terminal("git", "commit", "-a", "-m", message or "No commit message", error=False)
         if terminal.success:
+            Log(__name__).debug(f"Commit success")
             return True
         elif self.git_nothing_to_commit(terminal=terminal):
+            Log(__name__).debug(f"Nothing to commit")
             return False
         elif _recurse and self.git_missing_credentials(terminal=terminal):
+            Log(__name__).debug(f"Missing credentials for commit, trying again")
             self.git_config()
             return self.commit(message=message, _recurse=False)
         else:
