@@ -33,7 +33,7 @@ class TestGitHub(unittest.TestCase):
         self.assertEqual(True, github.set_description(description).ok)
 
     def test_commands(self):
-        self.assertIn("generalpackager", GitHub().git_clone_command)
+        self.assertIn("generalpackager", GitHub().git_clone_command())
         self.assertIn("generalpackager", GitHub().pip_install_command)
 
     def test_request_kwargs(self):

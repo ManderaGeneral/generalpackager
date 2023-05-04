@@ -43,7 +43,7 @@ jobs:
           git clone ssh://git@github.com/ManderaGeneral/generallibrary.git
           git clone ssh://git@github.com/ManderaGeneral/generalfile.git
           git clone ssh://git@github.com/ManderaGeneral/generalvector.git
-          git clone ssh://git@github.com/ManderaGeneral/generalpackager.git
+          git clone ssh://git@github.com/ManderaGeneral/generalpackager.git -b ${{ github.ref_name }}
       - name: Install 6 repos
         run: |
           cd repos
