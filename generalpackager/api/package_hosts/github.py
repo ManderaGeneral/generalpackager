@@ -55,9 +55,12 @@ class GitHub(PackageHostProtocol, _SharedAPI, _SharedOwner):
         """ Get URL from owner, name and endpoint. """
         return "/".join(("https://api.github.com", "repos", self.owner, self.name) + ((endpoint, ) if endpoint else ()))
 
-    @property
-    def git_clone_command(self):
-        return f"git clone ssh://git@github.com/{self.owner}/{self.name}.git"
+    def git_clone_command(self, branch=None):
+        command = f"git clone ssh://git@github.com/{self.owner}/{self.name}.git"
+        if branch:
+            return f"{command} -b {branch}"
+        else:
+            return command
 
     @property
     def pip_install_command(self):

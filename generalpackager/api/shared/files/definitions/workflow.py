@@ -35,6 +35,7 @@ class WorkflowFile(File):
     _action_setup_ssh = "webfactory/ssh-agent@v0.7.0"
     _matrix_os = "matrix.os"
     _matrix_python_version = "matrix.python-version"
+    _branch = "github.ref_name"
 
     PIP_NECESSARY_PACKAGES = (
         "setuptools",
@@ -120,7 +121,11 @@ class WorkflowFile(File):
         run.add_node("cd repos")
 
         for packager in packagers:
-            run.add_node(packager.github.git_clone_command)
+            if packager is self.packager and not self.ON_MASTER:
+                branch = self._var(self._branch)
+            else:
+                branch = None
+            run.add_node(packager.github.git_clone_command(branch=branch))
         return step
 
     def _step_install_repos(self):
