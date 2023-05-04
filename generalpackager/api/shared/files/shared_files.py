@@ -52,6 +52,7 @@ class _Files:
     test_js_file = FileFetcher()
     test_template_file = FileFetcher()
     workflow_file = FileFetcher()
+    workflow_dev_file = FileFetcher()
 
 
 
