@@ -36,6 +36,7 @@ class _Files:
     exetarget_file = FileFetcher()
     generate_file = FileFetcher()
     git_exclude_file = FileFetcher()
+    gitignore_file = FileFetcher()
     index_js_file = FileFetcher()
     init_file = FileFetcher()
     license_file = FileFetcher()

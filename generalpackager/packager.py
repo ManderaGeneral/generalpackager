@@ -26,11 +26,6 @@ class Packager(NetworkDiagram,
     python = "3.8", "3.9", "3.10", "3.11"  # Only supports basic definition with tuple of major.minor
     os = "windows", "ubuntu"  # , "macos"
 
-    git_exclude_lines = npm_ignore_lines = ".idea/", "dist/", ".git/", "**test/tests/", ".coverage", "htmlcov/"
-    git_exclude_lines += "build/", "*.egg-info/", "__pycache__/", "PKG-INFO/", "setup.cfg"
-    npm_ignore_lines += "node_modules/", ".parcel-cache/"
-
-
     def __init__(self, name=None, path=None, target: _TARGETS_LITERAL = None, github_owner=None, pypi_owner=None):
         """ Storing pars as is. Name and target have some custom properties. """
         self._target = target
