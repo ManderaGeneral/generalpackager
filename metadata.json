@@ -22,5 +22,5 @@
     "manifest": [
         "generalpackager/licenses/*"
     ],
-    "contribute": false
+    "contribute": true
 }
