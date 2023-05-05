@@ -51,6 +51,7 @@ node_modules/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+#Pipfile.locktarget/
 .idea/
 .python-version
 __pypackages__/
