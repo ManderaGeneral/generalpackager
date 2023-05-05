@@ -9,5 +9,5 @@ class LicenseFile(File):
 
     def _generate(self):
         """ Generate LICENSE by using Packager.license. """
-        return License(self.packager).mit()
+        return License(self.packager).apache2()
 
