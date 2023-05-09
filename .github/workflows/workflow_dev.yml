@@ -30,15 +30,17 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install --upgrade setuptools wheel twine
-      - name: Clone
+      - name: Clone 1 repo
         run: |
           mkdir repos
           cd repos
-          git clone https://github.com/${{ github.repository }}.git -b ${{ github.ref_name }}
-      - name: Install
+          git clone ssh://git@github.com/${{ github.repository }}.git -b ${{ github.ref_name }}
+      - name: Install 1 repo
         run: |
-          cd repos/generalimport
+          cd repos
+          cd generalpackager
           pip install .[full]
-      - name: Unittest
+      - name: Run Packager method 'workflow_unittest'
         run: |
-          python -m unittest discover repos/generalimport/generalimport/test
+          python -m unittest discover repos/generalpackager/generalpackager/test
+
