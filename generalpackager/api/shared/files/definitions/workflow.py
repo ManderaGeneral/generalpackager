@@ -1,5 +1,5 @@
 from generalpackager.api.shared.target import Targets
-from generallibrary import CodeLine, comma_and_and
+from generallibrary import CodeLine, comma_and_and, plur_sing
 
 from generalpackager.api.shared.files.file import File
 
@@ -36,6 +36,7 @@ class WorkflowFile(File):
     _matrix_os = "matrix.os"
     _matrix_python_version = "matrix.python-version"
     _branch = "github.ref_name"
+    _repository = "github.repository"
 
     PIP_NECESSARY_PACKAGES = (
         "setuptools",
@@ -112,33 +113,49 @@ class WorkflowFile(File):
         run = CodeLine(f"run: pip install {' '.join(names)}")
         return self._get_step(f"Install pip packages {comma_and_and(*names, period=False)}", run)
 
+    def _packagers(self, include_summary_packagers=None, target=None):
+        if self.ON_MASTER:
+            packagers = self.packager.get_ordered_packagers(include_private=False, include_summary_packagers=include_summary_packagers)
+            if target is not None:
+                packagers = [packager for packager in packagers if packager.target == target]
+            return packagers
+        else:
+            return [self.packager]
+
     def _step_clone_repos(self, include_summary_packagers):
         """ Supply Packagers to create git install steps for. """
-        packagers = self.packager.get_ordered_packagers(include_private=False, include_summary_packagers=include_summary_packagers)
-        step = CodeLine(f"- name: Clone {len(packagers)} repos")
+        packagers = self._packagers(include_summary_packagers=include_summary_packagers)
+
+        step = CodeLine(f"- name: Clone {plur_sing(len(packagers), 'repo')}")
         run = step.add_node(f"run: |")
-        run.add_node("mkdir repos")
-        run.add_node("cd repos")
+        run.add_node(f"mkdir {self.REPOS_PATH}")
+        run.add_node(f"cd {self.REPOS_PATH}")
 
         for packager in packagers:
+            repo = None
+            branch = None
             if packager is self.packager and not self.ON_MASTER:
+                repo = self._var(self._repository)
                 branch = self._var(self._branch)
-            else:
-                branch = None
-            run.add_node(packager.github.git_clone_command(branch=branch))
+            run.add_node(packager.github.git_clone_command(repo=repo, branch=branch))
         return step
 
     def _step_install_repos(self):
         """ Supply Packagers to create git install steps for. """
-        packagers = [packager for packager in self.packager.workflow_packagers() if packager.target == Targets.python]
+        packagers = self._packagers(target=Targets.python)
 
-        step = CodeLine(f"- name: Install {len(packagers)} repos")
+        step = CodeLine(f"- name: Install {plur_sing(len(packagers), 'repo')}")
         run = step.add_node(f"run: |")
         run.add_node(f"cd {self.REPOS_PATH}")
+        if not self.ON_MASTER:
+            run.add_node(f"cd {self.packager.name}")
 
         for packager in packagers:
             if packager.target == Targets.python:
-                run.add_node(f"pip install -e {packager.name}[full]")
+                if self.ON_MASTER:
+                    run.add_node(f"pip install -e {packager.name}[full]")
+                else:
+                    run.add_node(f"pip install .[full]")
         return step
 
     def _get_env(self):
@@ -154,7 +171,8 @@ class WorkflowFile(File):
     def _steps_setup(self, python_version, include_summary_packagers):
         steps = CodeLine("steps:")
         steps.add_node(self._step_make_workdir())
-        steps.add_node(self._step_setup_ssh())
+        if self.ON_MASTER:
+            steps.add_node(self._step_setup_ssh())
         steps.add_node(self._step_setup_python(version=python_version))
         steps.add_node(self._step_install_necessities())
         steps.add_node(self._step_clone_repos(include_summary_packagers=include_summary_packagers))
@@ -191,8 +209,11 @@ class WorkflowFile(File):
         step = self._get_step(f"Run Packager method '{method}'")
 
         run = step.add_node(f'run: |')
-        run.add_node(f"cd {self.REPOS_PATH}")
-        run.add_node(f'python -c "from generalpackager import Packager; Packager().{method}()"')
+        if self.ON_MASTER:
+            run.add_node(f"cd {self.REPOS_PATH}")
+            run.add_node(f'python -c "from generalpackager import Packager; Packager().{method}()"')
+        else:
+            run.add_node(f'python -m unittest discover {self.REPOS_PATH}/{self.packager.name}/{self.packager.name}/test')
 
         if self.INCLUDE_ENVS:
             step.add_node(self._get_env())

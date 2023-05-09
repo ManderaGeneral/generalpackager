@@ -55,8 +55,10 @@ class GitHub(PackageHostProtocol, _SharedAPI, _SharedOwner):
         """ Get URL from owner, name and endpoint. """
         return "/".join(("https://api.github.com", "repos", self.owner, self.name) + ((endpoint, ) if endpoint else ()))
 
-    def git_clone_command(self, branch=None):
-        command = f"git clone ssh://git@github.com/{self.owner}/{self.name}.git"
+    def git_clone_command(self, repo=None, branch=None):
+        if repo is None:
+            repo = f"{self.owner}/{self.name}"
+        command = f"git clone ssh://git@github.com/{repo}.git"
         if branch:
             return f"{command} -b {branch}"
         else:
