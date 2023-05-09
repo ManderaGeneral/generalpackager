@@ -137,7 +137,7 @@ class WorkflowFile(File):
             if packager is self.packager and not self.ON_MASTER:
                 repo = self._var(self._repository)
                 branch = self._var(self._branch)
-            run.add_node(packager.github.git_clone_command(repo=repo, branch=branch))
+            run.add_node(packager.github.git_clone_command(repo=repo, branch=branch, ssh=self.ON_MASTER))
         return step
 
     def _step_install_repos(self):

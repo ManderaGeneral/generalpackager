@@ -34,7 +34,7 @@ jobs:
         run: |
           mkdir repos
           cd repos
-          git clone ssh://git@github.com/${{ github.repository }}.git -b ${{ github.ref_name }}
+          git clone https://github.com/${{ github.repository }}.git -b ${{ github.ref_name }}
       - name: Install 1 repo
         run: |
           cd repos
