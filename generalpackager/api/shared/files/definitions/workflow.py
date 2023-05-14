@@ -36,7 +36,8 @@ class WorkflowFile(File):
     _matrix_os = "matrix.os"
     _matrix_python_version = "matrix.python-version"
     _branch = "github.ref_name"
-    _repository = "github.repository"
+    _owner = "github.repository_owner"  # The repository owner's username. For example, octocat.
+    _repository = "github.repository"  # The owner and repository name. For example, octocat/Hello-World.
 
     PIP_NECESSARY_PACKAGES = (
         "setuptools",
@@ -116,11 +117,16 @@ class WorkflowFile(File):
     def _packagers(self, include_summary_packagers=None, target=None):
         if self.ON_MASTER:
             packagers = self.packager.get_ordered_packagers(include_private=False, include_summary_packagers=include_summary_packagers)
-            if target is not None:
-                packagers = [packager for packager in packagers if packager.target == target]
-            return packagers
         else:
-            return [self.packager]
+            packagers = self.packager.get_dependencies(only_general=True)
+            packagers.append(self.packager)
+
+        if target is not None:
+            packagers = [packager for packager in packagers if packager.target == target]
+        return packagers
+
+    def _chain_bash(self, *commands):
+        return " || ".join(commands)
 
     def _step_clone_repos(self, include_summary_packagers):
         """ Supply Packagers to create git install steps for. """
@@ -131,13 +137,22 @@ class WorkflowFile(File):
         run.add_node(f"mkdir {self.REPOS_PATH}")
         run.add_node(f"cd {self.REPOS_PATH}")
 
+
+        owner = self._var(self._owner)
+        branch = self._var(self._branch)
+
         for packager in packagers:
-            repo = None
-            branch = None
-            if packager is self.packager and not self.ON_MASTER:
-                repo = self._var(self._repository)
-                branch = self._var(self._branch)
-            run.add_node(packager.github.git_clone_command(repo=repo, branch=branch, ssh=self.ON_MASTER))
+            if self.ON_MASTER:
+                run.add_node(packager.github.git_clone_command(ssh=self.ON_MASTER))
+            else:
+                clone_commands = (
+                    packager.github.git_clone_command(ssh=self.ON_MASTER, owner=owner, branch=branch),
+                    packager.github.git_clone_command(ssh=self.ON_MASTER, owner=owner),
+                    packager.github.git_clone_command(ssh=self.ON_MASTER, branch=branch),
+                    packager.github.git_clone_command(ssh=self.ON_MASTER),
+                )
+                run.add_node(self._chain_bash(*clone_commands))
+
         return step
 
     def _step_install_repos(self):

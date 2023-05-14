@@ -33,7 +33,7 @@ class _PackagerRelations:
         if self.target == self.Targets.python:
             names.update(self.localrepo.metadata.install_requires)
 
-        return {type(self)(name) for name in names if not only_general or self.name_is_general(name)}
+        return [type(self)(name) for name in names if not only_general or self.name_is_general(name)]
 
     def get_dependants(self, only_general=False):
         """ Get a list of dependants as Packagers.
