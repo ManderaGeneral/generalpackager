@@ -115,11 +115,10 @@ class WorkflowFile(File):
         return self._get_step(f"Install pip packages {comma_and_and(*names, period=False)}", run)
 
     def _packagers(self, include_summary_packagers=None, target=None):
-        if self.ON_MASTER:
-            packagers = self.packager.get_ordered_packagers(include_private=False, include_summary_packagers=include_summary_packagers)
-        else:
-            packagers = self.packager.get_dependencies(only_general=True)
-            packagers.append(self.packager)
+        packagers = self.packager.get_ordered_packagers(include_private=False, include_summary_packagers=include_summary_packagers)
+        if not self.ON_MASTER:
+            dependencies = self.packager.get_parents(-1, include_self=True)
+            packagers = [packager for packager in packagers if packager in dependencies]
 
         if target is not None:
             packagers = [packager for packager in packagers if packager.target == target]
