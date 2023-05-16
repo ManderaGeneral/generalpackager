@@ -163,15 +163,10 @@ class WorkflowFile(File):
         step = CodeLine(f"- name: Install {plur_sing(len(packagers), 'repo')}")
         run = step.add_node(f"run: |")
         run.add_node(f"cd {self.REPOS_PATH}")
-        if not self.ON_MASTER:
-            run.add_node(f"cd {self.packager.name}")
 
         for packager in packagers:
             if packager.target == Targets.python:
-                if self.ON_MASTER:
-                    run.add_node(f"pip install -e {packager.name}[full]")
-                else:
-                    run.add_node(f"pip install .[full]")
+                run.add_node(f"pip install -e {packager.name}[full]")
         return step
 
     def _get_env(self):
