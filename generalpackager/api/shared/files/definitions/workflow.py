@@ -200,7 +200,7 @@ class WorkflowFile(File):
         return strategy
 
     def _get_unittest_job(self):
-        job = CodeLine("unittest:")
+        job = CodeLine("unittest:" if self.ON_MASTER else "dev_unittest:")
         job.add_node(self._commit_msg_if(SKIP=False, AUTO=False))
         job.add_node(f"runs-on: {self._var(self._matrix_os)}")
         job.add_node(self._get_strategy())
