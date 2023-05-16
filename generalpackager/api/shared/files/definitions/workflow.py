@@ -207,7 +207,10 @@ class WorkflowFile(File):
 
         python_version = self._var(self._matrix_python_version)
         steps = job.add_node(self._steps_setup(python_version=python_version, include_summary_packagers=False))
-        steps.add_node(self._step_run_packager_method("workflow_unittest"))
+        if self.ON_MASTER:
+            steps.add_node(self._step_run_packager_method("workflow_unittest"))
+        else:
+            steps.add_node(self._step_run_simple_unittest())
         return job
 
     def _get_sync_job(self):
@@ -222,13 +225,37 @@ class WorkflowFile(File):
         step = self._get_step(f"Run Packager method '{method}'")
 
         run = step.add_node(f'run: |')
-        if self.ON_MASTER:
-            run.add_node(f"cd {self.REPOS_PATH}")
-            run.add_node(f'python -c "from generalpackager import Packager; Packager().{method}()"')
-        else:
-            run.add_node(f'python -m unittest discover {self.REPOS_PATH}/{self.packager.name}/{self.packager.name}/test')
+        run.add_node(f"cd {self.REPOS_PATH}")
+        run.add_node(f'python -c "from generalpackager import Packager; Packager().{method}()"')
 
         if self.INCLUDE_ENVS:
             step.add_node(self._get_env())
         return step
+
+    def _step_run_simple_unittest(self):
+        step = self._get_step(f"Run unittests")
+
+        run = step.add_node(f'run: |')
+        run.add_node(f"cd {self.REPOS_PATH}/{self.packager.name}/{self.packager.name}/test")
+
+        run.add_node(f'python -m unittest discover')
+        return step
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
