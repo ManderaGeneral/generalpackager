@@ -152,7 +152,9 @@ class WorkflowFile(File):
                     packager.github.git_clone_command(ssh=self.ON_MASTER, branch=branch),
                     packager.github.git_clone_command(ssh=self.ON_MASTER),
                 )
-                run.add_node(self._chain_bash(*clone_commands))
+                # new_line not working on windows
+                # https://stackoverflow.com/questions/59954185/github-action-split-long-command-into-multiple-lines
+                run.add_node(self._chain_bash(*clone_commands, new_line=False))
 
         return step
 
