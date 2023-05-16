@@ -124,8 +124,10 @@ class WorkflowFile(File):
             packagers = [packager for packager in packagers if packager.target == target]
         return packagers
 
-    def _chain_bash(self, *commands):
-        return " || ".join(commands)
+    @staticmethod
+    def _chain_bash(*commands, new_line=True):
+        delimiter = " || \\\n" if new_line else " || "
+        return delimiter.join(commands)
 
     def _step_clone_repos(self, include_summary_packagers):
         """ Supply Packagers to create git install steps for. """
