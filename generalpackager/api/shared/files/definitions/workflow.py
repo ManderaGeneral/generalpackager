@@ -238,7 +238,7 @@ class WorkflowFile(File):
         run = step.add_node(f'run: |')
         run.add_node(f"cd {self.REPOS_PATH}/{self.packager.name}/{self.packager.name}/test")
 
-        run.add_node(f'python -m unittest discover')
+        run.add_node(f'python -m unittest discover -v')
         return step
 
 
