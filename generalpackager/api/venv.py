@@ -156,7 +156,7 @@ class Venv(DecoContext, _Venv_Cruds):
             path = Path(path=path_str)
             if not path.is_file():
                 continue
-            if not re.search("python(\d\.\d+)?$", path_str):
+            if not re.search(r"python(\d\.\d+)?$", path_str):
                 continue
             terminal = Terminal(path, "--version", error=False)
             if terminal.fail:

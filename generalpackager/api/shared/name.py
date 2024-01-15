@@ -18,7 +18,7 @@ class _SharedName:
     @deco_cache()
     def _trim_partial(cls, name):
         if name:
-            return re.match("(\w|[-.])+", name).group()
+            return re.match(r"(\w|[-.])+", name).group()
 
     @classmethod
     @deco_cache()
