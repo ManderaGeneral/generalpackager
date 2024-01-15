@@ -23,11 +23,11 @@ jobs:
         working-directory: ../../
         run: mkdir main
       - name: Set up Git SSH
-        uses: webfactory/ssh-agent@v0.7.0
+        uses: webfactory/ssh-agent@v0.8.0
         with:
           ssh-private-key: ${{ secrets.GIT_SSH }}
       - name: Set up python version ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '${{ matrix.python-version }}'
       - name: Install necessities
@@ -67,11 +67,11 @@ jobs:
         working-directory: ../../
         run: mkdir main
       - name: Set up Git SSH
-        uses: webfactory/ssh-agent@v0.7.0
+        uses: webfactory/ssh-agent@v0.8.0
         with:
           ssh-private-key: ${{ secrets.GIT_SSH }}
       - name: Set up python version 3.12
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - name: Install necessities
