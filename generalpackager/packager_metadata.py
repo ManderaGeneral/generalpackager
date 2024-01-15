@@ -71,6 +71,7 @@ class _PackagerMetadata:
         "file-manager": "Topic :: Desktop Environment :: File Managers",
 
         "mit-license": "License :: OSI Approved :: MIT License",
+        "apache2-license": "License :: OSI Approved :: Apache Software License",
 
         "windows": "Operating System :: Microsoft :: Windows",
         "macos": "Operating System :: MacOS",
