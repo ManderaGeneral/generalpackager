@@ -22,8 +22,8 @@ class Packager(NetworkDiagram,
 
     author = 'Rickard "Mandera" Abraham'
     email = "rickard.abraham@gmail.com"
-    license = "mit"
-    python = "3.8", "3.9", "3.10", "3.11"  # Only supports basic definition with tuple of major.minor
+    license = "apache2"  # Todo: Define license in one place
+    python = "3.8", "3.9", "3.10", "3.11", "3.12"  # Only supports basic definition with tuple of major.minor
     os = "windows", "ubuntu"  # , "macos"
 
     def __init__(self, name=None, path=None, target: _TARGETS_LITERAL = None, github_owner=None, pypi_owner=None):
