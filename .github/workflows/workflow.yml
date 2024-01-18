@@ -38,11 +38,11 @@ jobs:
         run: |
           mkdir repos
           cd repos
-          git clone ssh://git@github.com/ManderaGeneral/generalimport.git
-          git clone ssh://git@github.com/ManderaGeneral/generaltool.git
-          git clone ssh://git@github.com/ManderaGeneral/generallibrary.git
-          git clone ssh://git@github.com/ManderaGeneral/generalfile.git
-          git clone ssh://git@github.com/ManderaGeneral/generalpackager.git
+          git clone https://oauth2:${{ secrets.PACKAGER_GITHUB_API }}@github.com/ManderaGeneral/generalimport.git
+          git clone https://oauth2:${{ secrets.PACKAGER_GITHUB_API }}@github.com/ManderaGeneral/generaltool.git
+          git clone https://oauth2:${{ secrets.PACKAGER_GITHUB_API }}@github.com/ManderaGeneral/generallibrary.git
+          git clone https://oauth2:${{ secrets.PACKAGER_GITHUB_API }}@github.com/ManderaGeneral/generalfile.git
+          git clone https://oauth2:${{ secrets.PACKAGER_GITHUB_API }}@github.com/ManderaGeneral/generalpackager.git
       - name: Install 5 repos
         run: |
           cd repos
@@ -82,13 +82,13 @@ jobs:
         run: |
           mkdir repos
           cd repos
-          git clone ssh://git@github.com/ManderaGeneral/generalimport.git
-          git clone ssh://git@github.com/ManderaGeneral/generaltool.git
-          git clone ssh://git@github.com/ManderaGeneral/generallibrary.git
-          git clone ssh://git@github.com/ManderaGeneral/generalfile.git
-          git clone ssh://git@github.com/ManderaGeneral/generalpackager.git
-          git clone ssh://git@github.com/Mandera/Mandera.git
-          git clone ssh://git@github.com/ManderaGeneral/.github.git
+          git clone https://oauth2:${{ secrets.PACKAGER_GITHUB_API }}@github.com/ManderaGeneral/generalimport.git
+          git clone https://oauth2:${{ secrets.PACKAGER_GITHUB_API }}@github.com/ManderaGeneral/generaltool.git
+          git clone https://oauth2:${{ secrets.PACKAGER_GITHUB_API }}@github.com/ManderaGeneral/generallibrary.git
+          git clone https://oauth2:${{ secrets.PACKAGER_GITHUB_API }}@github.com/ManderaGeneral/generalfile.git
+          git clone https://oauth2:${{ secrets.PACKAGER_GITHUB_API }}@github.com/ManderaGeneral/generalpackager.git
+          git clone https://oauth2:${{ secrets.PACKAGER_GITHUB_API }}@github.com/Mandera/Mandera.git
+          git clone https://oauth2:${{ secrets.PACKAGER_GITHUB_API }}@github.com/ManderaGeneral/.github.git
       - name: Install 5 repos
         run: |
           cd repos

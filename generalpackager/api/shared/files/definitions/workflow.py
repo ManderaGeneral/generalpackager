@@ -2,6 +2,7 @@ from generalpackager.api.shared.target import Targets
 from generallibrary import CodeLine, comma_and_and, plur_sing
 
 from generalpackager.api.shared.files.file import File
+from generalpackager.other.envvars import GH_TOKEN
 
 
 class WorkflowFile(File):
@@ -144,7 +145,7 @@ class WorkflowFile(File):
 
         for packager in packagers:
             if self.ON_MASTER:
-                run.add_node(packager.github.git_clone_command(ssh=self.ON_MASTER))
+                run.add_node(packager.github.git_clone_command(token=GH_TOKEN.actions_name))
             else:
                 clone_commands = (
                     packager.github.git_clone_command(ssh=self.ON_MASTER, owner=owner, branch=branch),
