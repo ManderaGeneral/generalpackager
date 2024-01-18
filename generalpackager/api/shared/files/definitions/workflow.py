@@ -100,7 +100,7 @@ class WorkflowFile(File):
 
     def _step_setup_ssh(self):
         with_ = CodeLine("with:")
-        with_.add_node("ssh-private-key: ${{ secrets.GIT_SSH }}")
+        with_.add_node("ssh-private-key: ${{ secrets.ACTIONS_PRIVATE_KEY }}")
         return self._get_step(f"Set up Git SSH", f"uses: {self._action_setup_ssh}", with_)
 
     def _step_setup_python(self, version):
